@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Agro.Interfaces.Base\Agro.Interfaces.Base.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,9 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Agro.DAL\Agro.DAL.csproj" />
+    <ProjectReference Include="..\Agro.Domain.Base\Agro.Domain.Base.csproj" />
+    <ProjectReference Include="..\Agro.Interfaces.Base\Agro.Interfaces.Base.csproj" />
+    <ProjectReference Include="..\Agro.Interfaces\Agro.Interfaces.csproj" />
+  </ItemGroup>
 
 </Project>

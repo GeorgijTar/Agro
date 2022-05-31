@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Agro.WPF.Views.Windows;
 
 namespace Agro.WPF
 {
@@ -10,6 +11,11 @@ namespace Agro.WPF
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void CustomerBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            ContentControl.Content = new ContractorsView();
         }
     }
 }

@@ -6,17 +6,16 @@ namespace Agro.DAL.Entities;
 /// <summary>
 /// Тип (документа, записи и т.д.)
 /// </summary>
-public class Type : NamedEntity
+public class Type : Entity
 {
-    /// <summary>Статус</summary>
-    [Required]
-    public Status Status { get; set; } = null!;
-
+    public string Name { get; set; } = null!;
+    public string TypeApplication { get; set; } = null!;
     public Type() { }
 
-    public Type(string name)
+    public Type(string name, string typeApplication)
     {
         Name = name;
+        TypeApplication = typeApplication;
     }
     public override string ToString() => Name;
 }

@@ -5,8 +5,9 @@ namespace Agro.DAL.Entities;
 /// <summary>
 /// Статус документа
 /// </summary>
-public class Status : NamedEntity
+public class Status : Entity
 {
+    public string Name { get; set; } = null!;
     public Status() { }
 
     public Status(string name) => Name = name;

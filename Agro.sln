@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agro.DAL", "Agro.DAL\Agro.DAL.csproj", "{98003657-8D9F-4FE9-85DA-5D33B83AC592}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agro.DAL", "Agro.DAL\Agro.DAL.csproj", "{98003657-8D9F-4FE9-85DA-5D33B83AC592}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{11B7E68D-9637-414C-9C60-5F7986585946}"
 EndProject
@@ -15,25 +15,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{70E34C77-5F93-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F24FF036-0712-4887-9644-5FD4D7935027}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agro.DAL.Entities", "Agro.DAL.Entities\Agro.DAL.Entities.csproj", "{AD2D72C8-2EB0-4C2A-A1A1-97AF456D12A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agro.DAL.Entities", "Agro.DAL.Entities\Agro.DAL.Entities.csproj", "{AD2D72C8-2EB0-4C2A-A1A1-97AF456D12A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agro.DAL.MySql", "Agro.DAL.MySql\Agro.DAL.MySql.csproj", "{DDD1E9FA-7A07-43C2-94CA-4BB4C1730A91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agro.DAL.MySql", "Agro.DAL.MySql\Agro.DAL.MySql.csproj", "{DDD1E9FA-7A07-43C2-94CA-4BB4C1730A91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agro.DAL.SqLite", "Agro.DAL.SqLite\Agro.DAL.SqLite.csproj", "{F0767EF6-A9E3-470C-8B08-D194DB84FAB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agro.DAL.SqLite", "Agro.DAL.SqLite\Agro.DAL.SqLite.csproj", "{F0767EF6-A9E3-470C-8B08-D194DB84FAB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agro.Interfaces", "Agro.Interfaces\Agro.Interfaces.csproj", "{335EECCF-7F9C-4C37-AF3E-01F33599B166}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agro.Interfaces", "Agro.Interfaces\Agro.Interfaces.csproj", "{335EECCF-7F9C-4C37-AF3E-01F33599B166}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agro.Interfaces.Base", "Agro.Interfaces.Base\Agro.Interfaces.Base.csproj", "{05E374E5-533A-4B7A-99FE-3DA4BA1EBB91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agro.Interfaces.Base", "Agro.Interfaces.Base\Agro.Interfaces.Base.csproj", "{05E374E5-533A-4B7A-99FE-3DA4BA1EBB91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agro.Services", "Agro.Services\Agro.Services.csproj", "{B55DAFFD-E0AD-46C3-8DCF-9F90EB4FA890}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agro.Services", "Agro.Services\Agro.Services.csproj", "{B55DAFFD-E0AD-46C3-8DCF-9F90EB4FA890}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agro.WPF", "Agro.WPF\Agro.WPF.csproj", "{88EDB121-1400-4DF6-917E-26E565489727}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agro.WPF", "Agro.WPF\Agro.WPF.csproj", "{88EDB121-1400-4DF6-917E-26E565489727}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agro.Domain", "Agro.Domain\Agro.Domain.csproj", "{98836ED6-5EFB-48A9-8C21-3D09FA35B44F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agro.Domain", "Agro.Domain\Agro.Domain.csproj", "{98836ED6-5EFB-48A9-8C21-3D09FA35B44F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agro.Domain.Base", "Agro.Domain.Base\Agro.Domain.Base.csproj", "{E5E1459B-1B30-48E5-9180-FDD25C46F8EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agro.Domain.Base", "Agro.Domain.Base\Agro.Domain.Base.csproj", "{E5E1459B-1B30-48E5-9180-FDD25C46F8EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agro.TestConsole", "Agro.TestConsole\Agro.TestConsole.csproj", "{747AD269-2629-449F-B7F0-BBD593D06448}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agro.TestConsole", "Agro.TestConsole\Agro.TestConsole.csproj", "{747AD269-2629-449F-B7F0-BBD593D06448}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agro.DAL.Sql", "Agro.DAL.Sql\Agro.DAL.Sql.csproj", "{0833E186-0DE5-4B78-AA12-78F1EF42AF69}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{55B927AE-D064-4252-A37D-ED49EE289AC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNS.Api", "FNS.Api\FNS.Api.csproj", "{2A6EE94A-38E4-47C0-BCAD-7CEC1BCEB0D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +91,14 @@ Global
 		{747AD269-2629-449F-B7F0-BBD593D06448}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{747AD269-2629-449F-B7F0-BBD593D06448}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{747AD269-2629-449F-B7F0-BBD593D06448}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0833E186-0DE5-4B78-AA12-78F1EF42AF69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0833E186-0DE5-4B78-AA12-78F1EF42AF69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0833E186-0DE5-4B78-AA12-78F1EF42AF69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0833E186-0DE5-4B78-AA12-78F1EF42AF69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A6EE94A-38E4-47C0-BCAD-7CEC1BCEB0D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A6EE94A-38E4-47C0-BCAD-7CEC1BCEB0D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A6EE94A-38E4-47C0-BCAD-7CEC1BCEB0D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A6EE94A-38E4-47C0-BCAD-7CEC1BCEB0D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +115,8 @@ Global
 		{98836ED6-5EFB-48A9-8C21-3D09FA35B44F} = {41591E4D-B651-4D04-B872-768325C8B23B}
 		{E5E1459B-1B30-48E5-9180-FDD25C46F8EA} = {41591E4D-B651-4D04-B872-768325C8B23B}
 		{747AD269-2629-449F-B7F0-BBD593D06448} = {F24FF036-0712-4887-9644-5FD4D7935027}
+		{0833E186-0DE5-4B78-AA12-78F1EF42AF69} = {11B7E68D-9637-414C-9C60-5F7986585946}
+		{2A6EE94A-38E4-47C0-BCAD-7CEC1BCEB0D7} = {55B927AE-D064-4252-A37D-ED49EE289AC2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6E6A70F1-2363-412C-94D7-61A9E8AE1ABB}

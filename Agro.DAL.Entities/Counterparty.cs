@@ -1,12 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Agro.DAL.Entities.Base;
+using Microsoft.EntityFrameworkCore;
 
-namespace Agro.DAL.Entities.Base;
+namespace Agro.DAL.Entities;
 
 /// <summary>
 /// Контрагент
 /// </summary>
-public class Counterparty : NamedEntity
+[Index(nameof(Inn), IsUnique = true, Name = "NameIndex")]
+public class Counterparty : Entity
 {
+    public string Name { get; set; } = null!;
+
     /// <summary>Статус контрагента</summary>
     [Required]
     public Status Status { get; set; } = null!;
@@ -32,6 +37,13 @@ public class Counterparty : NamedEntity
     /// <summary>ОГРН контрагента</summary>
     public string? Ogrn { get; set; }
 
+    /// <summary>ОКПО контрагента</summary>
     public string? Okpo { get; set; }
+
+    /// <summary>Фактический адрес контрагента</summary>
+    //public Address? ActualAddress { get; set; }
+
+    public ICollection<BankDetails> BankDetails { get; set; } = new HashSet<BankDetails>();
+
 }
 
