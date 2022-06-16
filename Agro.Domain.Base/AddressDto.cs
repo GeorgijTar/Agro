@@ -12,14 +12,4 @@ public class AddressDto: EntityDto
     /// <summary> </summary>
     public string StringAddress { get; set; } = null!;
 
-    public AddressDto()
-    {
-        
-    }
-
-    public AddressDto(string postalCode, string stringAddress)
-    {
-        PostalCode = postalCode;
-        StringAddress = stringAddress;
-    }
 }

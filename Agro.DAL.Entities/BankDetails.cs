@@ -29,17 +29,7 @@ public class BankDetails : Entity
     [Required, MaxLength(20)]
     public string Ks { get; set; } = null!;
 
-    public BankDetails() { }
 
-    public BankDetails(string name, string nameBank, string bs, string bik, string ks)
-    {
-        NameBank = nameBank;
-        Bs = bs;
-        Bik = bik;
-        Ks = ks;
-        Name = name;
-    }
-
-    public override string ToString() => $"{Bs} в {NameBank}";
+   public override string ToString() => $"{Bs} в {NameBank}";
 }
 

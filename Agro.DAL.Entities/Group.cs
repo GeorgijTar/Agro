@@ -15,13 +15,7 @@ public class Group : Entity
     /// <summary>Дочерние группы</summary>
     public ICollection<Group>? ChildGroups { get; set; }
 
-    public Group(){}
-
-    public Group(string name, Group? parentGroup=null)
-    {
-        Name=name;
-        ParentGroup=parentGroup;
-    }
+    
     public override string ToString() => Name;
 }
 

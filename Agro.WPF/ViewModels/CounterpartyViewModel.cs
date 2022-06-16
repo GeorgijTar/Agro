@@ -22,12 +22,14 @@ namespace Agro.WPF.ViewModels
         private readonly IMapper<GroupDto> _mapperGroup;
         private readonly IRepository<Type> _typeRepository;
         private readonly IMapper<TypeDto> _mapperType;
+        private readonly IMapper<Counterparty> _mapperCounterpaty;
+        private readonly IRepository<Counterparty> _CounterpartyRepository;
 
-        private string kpp;
+        private string? kpp;
 
         public string Kpp
         {
-            get => kpp;
+            get => kpp!;
             set
             {
                 Set(ref kpp, value);
@@ -35,11 +37,11 @@ namespace Agro.WPF.ViewModels
             }
         }
 
-        private string ogrn;
+        private string? ogrn;
 
         public string Ogrn
         {
-            get => ogrn;
+            get => ogrn!;
             set
             {
                 Set(ref ogrn, value);
@@ -47,10 +49,10 @@ namespace Agro.WPF.ViewModels
             }
         }
 
-    private string okpo;
+    private string? okpo;
         public string Okpo
         {
-            get => okpo;
+            get => okpo!;
             set
             {
                 Set(ref okpo, value); 
@@ -58,10 +60,10 @@ namespace Agro.WPF.ViewModels
             }
         }
 
-        private string inn;
+        private string? inn;
         public string Inn
         {
-            get => inn;
+            get => inn!;
             set
             {
                 Set(ref inn, value);
@@ -69,10 +71,10 @@ namespace Agro.WPF.ViewModels
             }
         }
 
-        private string name;
+        private string? name;
         public string Name
         {
-            get => name;
+            get => name!;
             set
             {
                 Set(ref name, value);
@@ -80,10 +82,10 @@ namespace Agro.WPF.ViewModels
             }
         }
 
-        private string payName;
+        private string? payName;
         public string PayName
         {
-            get => payName;
+            get => payName!;
             set
             {
                 Set(ref payName, value);
@@ -91,32 +93,36 @@ namespace Agro.WPF.ViewModels
             }
         }
 
-        private string messeg;
+        private string? messeg;
 
         public string Messeg
         {
-            get => messeg;
+            get => messeg!;
             set => Set(ref messeg, value);
         }
         public CounterpartyViewModel(
             IRepository<Group> groupRepository,
             IRepository<Type> typeRepository,
             IMapper<GroupDto> mapperGroup,
-            IMapper<TypeDto> mapperType)
+            IMapper<TypeDto> mapperType, 
+            IMapper<Counterparty> mapperCounterpaty, 
+            IRepository<Counterparty> counterpartyRepository)
         {
             _groupRepository = groupRepository;
             _mapperGroup = mapperGroup;
             _typeRepository = typeRepository;
             _mapperType = mapperType;
+            _mapperCounterpaty = mapperCounterpaty;
+            _CounterpartyRepository = counterpartyRepository;
             LoadGr();
             SelectedCounterparty = new CounterpartyDto();
         }
         public ObservableCollection<GroupDto> Groups { get; set; } = new ObservableCollection<GroupDto>();
         public ObservableCollection<TypeDto> Types { get; set; } = new ObservableCollection<TypeDto>();
         //public ObservableCollection<CounterpartyDto> CounterpartiesCollection { get; set; }
-        private TypeDto selectedType;
+        private TypeDto? selectedType;
         public TypeDto SelectedType { 
-            get=>selectedType;
+            get=>selectedType!;
             set
             {
                 Set(ref selectedType, value); 
@@ -124,10 +130,10 @@ namespace Agro.WPF.ViewModels
             }
         }
 
-        public GroupDto selectedGroup;
+        private GroupDto? selectedGroup;
         public GroupDto SelectedGroup
         {
-            get=> selectedGroup;
+            get=> selectedGroup!;
             set
             {
                 Set(ref selectedGroup, value);
@@ -161,7 +167,7 @@ namespace Agro.WPF.ViewModels
 
         #region Command
 
-        private ICommand _LoadServersCommand;
+        private ICommand? _LoadServersCommand;
 
         public ICommand LoadDataCommand => _LoadServersCommand
             ??= new RelayCommand(OnLoadServersCommandExecuted, Can);
@@ -198,16 +204,36 @@ namespace Agro.WPF.ViewModels
                 return;
             }
             Kpp = countr.Kpp;
-            Ogrn= countr.Ogrn;
+            Ogrn= countr.Ogrn!;
             Name= countr.Name;
             PayName= countr.PayName;
-            Okpo= countr.Okpo;
+            Okpo= countr.Okpo!;
             }
             catch (InvalidOperationException e)
             {
                 Messeg=e.Message;
                 return;
             }
+
+        }
+
+
+        private ICommand? _saveCommand;
+
+        public ICommand SaveCommand => _saveCommand
+            ??= new RelayCommand(OnSaveCommandExecuted, CanSave);
+
+        private bool CanSave(object arg)
+        {
+            return true;
+        }
+
+        private async void OnSaveCommandExecuted(object obj)
+        {
+            if (SelectedCounterparty.Status is null) 
+                SelectedCounterparty.Status = new() { Id = 1,Name = "Черновик"};
+            var countr = _mapperCounterpaty.Map(SelectedCounterparty);
+           await _CounterpartyRepository.AddAsync(countr);
 
         }
 

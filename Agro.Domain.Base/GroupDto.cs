@@ -14,13 +14,6 @@ public class GroupDto : EntityDto
     /// <summary>Дочерние группы</summary>
     public ICollection<GroupDto>? ChildGroups { get; set; }
 
-    public GroupDto(){}
-
-    public GroupDto(string name, GroupDto? parentGroup=null)
-    {
-        Name=name;
-        ParentGroup=parentGroup;
-    }
     public override string ToString() => Name;
 }
 

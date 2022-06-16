@@ -1,4 +1,5 @@
-﻿using Agro.Domain.Base.Base;
+﻿using System.ComponentModel.DataAnnotations;
+using Agro.Domain.Base.Base;
 
 namespace Agro.Domain.Base;
 
@@ -7,11 +8,9 @@ namespace Agro.Domain.Base;
 /// </summary>
 public class StatusDto : EntityDto
 {
+    [Required]
     public string Name { get; set; } = null!;
-    public StatusDto() { }
-
-    public StatusDto(string name) => Name = name;
-
+  
     public override string ToString() => Name;
 }
 

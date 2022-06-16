@@ -8,9 +8,7 @@ namespace Agro.DAL.Entities;
 public class Status : Entity
 {
     public string Name { get; set; } = null!;
-    public Status() { }
-
-    public Status(string name) => Name = name;
+    
 
     public override string ToString() => Name;
 }

@@ -108,7 +108,7 @@
                     <TextBox Grid.Row="7" Grid.Column="3"  Margin="0,1" Text="{Binding Ogrn}"/>
 
                     <Button Grid.Row="10" Grid.Column="3" Template="{StaticResource ButtonTemplate}"
-                            Width="145">
+                            Width="145" Command="{Binding SaveCommand}">
                         <StackPanel Orientation="Horizontal">
                         <fa5:ImageAwesome Height="14" Icon="Solid_Save"
                                           Margin="6,5"

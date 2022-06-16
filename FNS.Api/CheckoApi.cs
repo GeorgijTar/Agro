@@ -17,7 +17,7 @@ public static class CheckoApi
         var result = await response.Content.ReadAsStringAsync();
         JsonNode? json = JsonValue.Parse(result);
         var ss = json["meta"]["message"];
-        if (json["meta"]["message"].ToString() != null)
+        if (ss != null)
             throw new InvalidOperationException(json["meta"]["message"].ToString());
         counterparty.Kpp = json["data"]["КПП"].ToString();
         counterparty.Ogrn = json["data"]["ОГРН"].ToString();
@@ -40,7 +40,9 @@ public static class CheckoApi
         var response = await client.GetAsync(uri);
         string? result = await response.Content.ReadAsStringAsync();
         JsonNode? json = JsonValue.Parse(result);
-
+        var ss = json["meta"]["message"];
+        if (ss != null)
+            throw new InvalidOperationException(json["meta"]["message"].ToString());
         counterparty.Kpp = "";
         counterparty.Ogrn = json["data"]["ОГРНИП"].ToString();
         counterparty.Name = json["data"]["ФИО"].ToString();
