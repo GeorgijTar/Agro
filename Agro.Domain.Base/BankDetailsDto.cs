@@ -1,5 +1,6 @@
 ﻿using Agro.Domain.Base.Base;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Agro.Domain.Base;
 
@@ -11,7 +12,10 @@ public class BankDetailsDto : EntityDto
     public string Name { get; set; } = null!;
 
     /// <summary>Статус реквизитов</summary>
+    //[ForeignKey("StatusDtoId")]
     public StatusDto Status { get; set; } = null!;
+
+    //public int StatusDtoId { get; set; }
 
     /// <summary>Наименование банка</summary>
     [Required]

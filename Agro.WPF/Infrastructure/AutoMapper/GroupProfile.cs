@@ -13,7 +13,7 @@ namespace Agro.WPF.Infrastructure.AutoMapper
     {
         public GroupProfile()
         {
-            CreateMap<GroupDto, Group>().ReverseMap();
+            CreateMap<GroupDto, GroupDoc>().ReverseMap();
         }
      
     }

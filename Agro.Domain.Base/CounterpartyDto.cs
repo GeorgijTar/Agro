@@ -1,5 +1,6 @@
 ﻿using Agro.Domain.Base.Base;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Agro.Domain.Base;
 
@@ -12,15 +13,19 @@ public class CounterpartyDto : EntityDto
 
     public string Name { get; set; } = null!;
     /// <summary>Статус контрагента</summary>
-    [Required]
-    public StatusDto Status { get; set; } = null!;
-
+    //[ForeignKey("StatusDtoId")]
+   public StatusDto Status { get; set; } = null!;
+    //public int StatusDtoId { get; set; }
     /// <summary>Тип контрагента</summary>
-    [Required]
-    public TypeDto Type { get; set; } = null!;
+    //[ForeignKey("TypeDocId")]
+    public TypeDocDto TypeDoc { get; set; } = null!;
+    //public int TypeDocId { get; set; }
 
     /// <summary>Группа</summary>
+    //[ForeignKey("GroupId")]
     public GroupDto? Group { get; set; }
+    //public int GroupId { get; set; }
+
     /// <summary>Платежное наименование контрагента</summary>
     [Required, MaxLength(255)]
     public string PayName { get; set; } = null!;
@@ -42,7 +47,7 @@ public class CounterpartyDto : EntityDto
     /// <summary>Фактический адрес контрагента</summary>
     //public AddressDto? ActualAddress { get; set; }
 
-    public ICollection<BankDetailsDto> BankDetails { get; set; } = new HashSet<BankDetailsDto>();
+    //public ICollection<BankDetailsDto> BankDetails { get; set; } = new HashSet<BankDetailsDto>();
 
 }
 

@@ -11,6 +11,8 @@ public static class Registrator
         services.AddDbContext<AgroDB>(opt => opt
             .UseMySql(ConnectionString, serverVersion,
                 o => o.MigrationsAssembly(typeof(Registrator).Assembly.FullName)));
+        services.AddDbContext<AgroDB>(opt => opt.EnableSensitiveDataLogging(true));
+
 
 
         return services;

@@ -16,7 +16,7 @@ namespace Agro.DAL.MySql.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.5")
+                .HasAnnotation("ProductVersion", "6.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Agro.DAL.Entities.BankDetails", b =>
@@ -35,9 +35,6 @@ namespace Agro.DAL.MySql.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
 
-                    b.Property<int?>("CounterpartyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Ks")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -55,8 +52,6 @@ namespace Agro.DAL.MySql.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CounterpartyId");
 
                     b.HasIndex("StatusId");
 
@@ -100,7 +95,7 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TypeId")
+                    b.Property<int?>("TypeDocId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -109,7 +104,7 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.HasIndex("TypeId");
+                    b.HasIndex("TypeDocId");
 
                     b.HasIndex(new[] { "Inn" }, "NameIndex")
                         .IsUnique();
@@ -117,7 +112,7 @@ namespace Agro.DAL.MySql.Migrations
                     b.ToTable("Counterparties");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.Group", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.GroupDoc", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -196,7 +191,7 @@ namespace Agro.DAL.MySql.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.Type", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.TypeDoc", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -261,10 +256,6 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.BankDetails", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Counterparty", null)
-                        .WithMany("BankDetails")
-                        .HasForeignKey("CounterpartyId");
-
                     b.HasOne("Agro.DAL.Entities.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
@@ -276,7 +267,7 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Counterparty", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Group", "Group")
+                    b.HasOne("Agro.DAL.Entities.GroupDoc", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId");
 
@@ -286,34 +277,27 @@ namespace Agro.DAL.MySql.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Agro.DAL.Entities.Type", "Type")
+                    b.HasOne("Agro.DAL.Entities.TypeDoc", "TypeDoc")
                         .WithMany()
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TypeDocId");
 
                     b.Navigation("Group");
 
                     b.Navigation("Status");
 
-                    b.Navigation("Type");
+                    b.Navigation("TypeDoc");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.Group", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.GroupDoc", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Group", "ParentGroup")
+                    b.HasOne("Agro.DAL.Entities.GroupDoc", "ParentGroup")
                         .WithMany("ChildGroups")
                         .HasForeignKey("ParentGroupId");
 
                     b.Navigation("ParentGroup");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.Counterparty", b =>
-                {
-                    b.Navigation("BankDetails");
-                });
-
-            modelBuilder.Entity("Agro.DAL.Entities.Group", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.GroupDoc", b =>
                 {
                     b.Navigation("ChildGroups");
                 });

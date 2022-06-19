@@ -10,7 +10,7 @@ public class AutoMapperService<T>:IMapper<T>
 
     public AutoMapperService(IMapper baseMapper)=>_baseMapper = baseMapper;
 
-    public T Map(object source) => _baseMapper.Map<T>(source);
+    public T? Map(object? source) => _baseMapper.Map<T>(source);
 }
 
 public class AutoMapperService<TIn, TOut> : IMapper<TIn, TOut>

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Agro.DAL.Entities.Base;
 
 namespace Agro.DAL.Entities;
@@ -11,7 +12,11 @@ public class BankDetails : Entity
     public string Name { get; set; } = null!;
 
     /// <summary>Статус реквизитов</summary>
+
+    //[ForeignKey("StatusId")]
     public Status Status { get; set; } = null!;
+
+    //public int StatusId { get; set; }
 
     /// <summary>Наименование банка</summary>
     [Required]

@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Agro.Domain.Base;
 using AutoMapper;
-using Type = Agro.DAL.Entities.Type;
+using TypeDoc = Agro.DAL.Entities.TypeDoc;
 
 namespace Agro.WPF.Infrastructure.AutoMapper;
 internal class TypeProfile : Profile
 {
     public TypeProfile()
     {
-        CreateMap<TypeDto, Type>().ReverseMap();
+        CreateMap<TypeDocDto, TypeDoc>().ReverseMap();
     }
 
 }

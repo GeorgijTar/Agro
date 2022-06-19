@@ -3,58 +3,57 @@ using System;
 using Agro.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Agro.DAL.SqLite.Migrations
+namespace Agro.DAL.MySql.Migrations
 {
     [DbContext(typeof(AgroDB))]
-    partial class AgroDBModelSnapshot : ModelSnapshot
+    [Migration("20220617104828_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.5");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "6.0.6")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Agro.DAL.Entities.BankDetails", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Bik")
                         .IsRequired()
                         .HasMaxLength(9)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("varchar(9)");
 
                     b.Property<string>("Bs")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("CounterpartyId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("varchar(20)");
 
                     b.Property<string>("Ks")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("varchar(20)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("NameBank")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("StatusId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CounterpartyId");
 
                     b.HasIndex("StatusId");
 
@@ -65,41 +64,41 @@ namespace Agro.DAL.SqLite.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int?>("GroupId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Inn")
                         .IsRequired()
                         .HasMaxLength(12)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("varchar(12)");
 
                     b.Property<string>("Kpp")
                         .IsRequired()
                         .HasMaxLength(9)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("varchar(9)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Ogrn")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Okpo")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PayName")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("StatusId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
-                    b.Property<int>("TypeId")
-                        .HasColumnType("INTEGER");
+                    b.Property<int?>("TypeDocId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -107,7 +106,7 @@ namespace Agro.DAL.SqLite.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.HasIndex("TypeId");
+                    b.HasIndex("TypeDocId");
 
                     b.HasIndex(new[] { "Inn" }, "NameIndex")
                         .IsUnique();
@@ -115,18 +114,18 @@ namespace Agro.DAL.SqLite.Migrations
                     b.ToTable("Counterparties");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.Group", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.GroupDoc", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.Property<int?>("ParentGroupId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -156,11 +155,11 @@ namespace Agro.DAL.SqLite.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -194,19 +193,19 @@ namespace Agro.DAL.SqLite.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.Type", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.TypeDoc", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("TypeApplication")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -259,10 +258,6 @@ namespace Agro.DAL.SqLite.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.BankDetails", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Counterparty", null)
-                        .WithMany("BankDetails")
-                        .HasForeignKey("CounterpartyId");
-
                     b.HasOne("Agro.DAL.Entities.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
@@ -274,7 +269,7 @@ namespace Agro.DAL.SqLite.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Counterparty", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Group", "Group")
+                    b.HasOne("Agro.DAL.Entities.GroupDoc", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId");
 
@@ -284,34 +279,27 @@ namespace Agro.DAL.SqLite.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Agro.DAL.Entities.Type", "Type")
+                    b.HasOne("Agro.DAL.Entities.TypeDoc", "TypeDoc")
                         .WithMany()
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TypeDocId");
 
                     b.Navigation("Group");
 
                     b.Navigation("Status");
 
-                    b.Navigation("Type");
+                    b.Navigation("TypeDoc");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.Group", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.GroupDoc", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Group", "ParentGroup")
+                    b.HasOne("Agro.DAL.Entities.GroupDoc", "ParentGroup")
                         .WithMany("ChildGroups")
                         .HasForeignKey("ParentGroupId");
 
                     b.Navigation("ParentGroup");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.Counterparty", b =>
-                {
-                    b.Navigation("BankDetails");
-                });
-
-            modelBuilder.Entity("Agro.DAL.Entities.Group", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.GroupDoc", b =>
                 {
                     b.Navigation("ChildGroups");
                 });

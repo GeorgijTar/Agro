@@ -21,8 +21,15 @@ public static class CheckoApi
             throw new InvalidOperationException(json["meta"]["message"].ToString());
         counterparty.Kpp = json["data"]["КПП"].ToString();
         counterparty.Ogrn = json["data"]["ОГРН"].ToString();
-        counterparty.Name = json["data"]["НаимСокр"].ToString();
         counterparty.PayName = json["data"]["НаимПолн"].ToString();
+        if (json["data"]["НаимСокр"] == null)
+        {
+            counterparty.Name = counterparty.PayName;
+        }
+        else
+        {
+            counterparty.Name = json["data"]["НаимСокр"].ToString();
+        }
         counterparty.Okpo = json["data"]["ОКПО"].ToString();
 
         return counterparty;

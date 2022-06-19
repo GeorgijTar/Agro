@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Windows;
 using Agro.DAL.Entities;
 using Agro.DAL.Sql;
 using Agro.DAL.SqLite;
-using Agro.Domain.Base;
 using Agro.Interfaces;
 using Agro.Interfaces.Base.Repositories;
 using Agro.Services.Repositories;
@@ -15,10 +13,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Agro.WPF
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    public partial class App
     {
         private static IHost? _hosting;
         public static IHost Hosting => _hosting ??= CreateHostBuilder(Environment.GetCommandLineArgs()).Build();
@@ -49,14 +44,23 @@ namespace Agro.WPF
                     break;
             }
 
-            services.AddTransient<CounterpartyViewModel>();
+            services.AddScoped<CounterpartyViewModel>();
+
             services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
-            
-            services
-                .AddAutoMapper(
-                    typeof(CounterpartyProfile)) // маппинг-профайлы перпедавать через запятую typeof(AppMappingProfile), typeof(MappingProfile2)
-                .AddTransient(typeof(IMapper<>), typeof(AutoMapperService<>))
-                .AddTransient(typeof(IMapper<,>), typeof(AutoMapperService<,>));
+
+            services.AddScoped(typeof(IGroupRepository<GroupDoc>), typeof(GroupRepository));
+
+            services.AddScoped(typeof(ITypeRepository<TypeDoc>), typeof(TypeRepository));
+
+            services.AddScoped(typeof(ICounterpertyRepository<Counterparty>), typeof(CounterpartyRepository));
+           
+            services.AddAutoMapper(
+                    typeof(CounterpartyProfile), 
+                    typeof(GroupProfile), 
+                    typeof(TypeProfile), 
+                    typeof(StatusProfile)) // маппинг-профайлы перпедавать через запятую typeof(AppMappingProfile), typeof(MappingProfile2)
+                .AddScoped(typeof(IMapper<>), typeof(AutoMapperService<>))
+                .AddScoped(typeof(IMapper<,>), typeof(AutoMapperService<,>));
         }
     }
 }

@@ -78,7 +78,7 @@ internal interface ICounterpartyManager
     Task<CounterpartyDto> CreateCounterpartyAsync(
         string name,
         string payName,
-        TypeDto type,
+        TypeDocDto type,
         string inn,
         string kpp,
         CancellationToken cancel = default
@@ -95,7 +95,7 @@ internal interface ICounterpartyManager
     /// <param name="newType">Новый тип контрагента</param>
     /// <param name="cancel">Токен отмены</param>
     /// <returns></returns>
-    Task<bool> ChangeCounterpartyTypeAsync(int id, TypeDto newType, CancellationToken cancel = default);
+    Task<bool> ChangeCounterpartyTypeAsync(int id, TypeDocDto newType, CancellationToken cancel = default);
 
     /// <summary>
     /// Метод замены группы контрагента

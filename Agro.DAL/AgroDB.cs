@@ -1,7 +1,7 @@
 ﻿using Agro.DAL.Entities;
 using Agro.DAL.Entities.DefaultData;
 using Microsoft.EntityFrameworkCore;
-using Type = Agro.DAL.Entities.Type;
+using TypeDoc = Agro.DAL.Entities.TypeDoc;
 
 namespace Agro.DAL;
 public class AgroDB : DbContext
@@ -9,9 +9,9 @@ public class AgroDB : DbContext
     #region DbSet
     public DbSet<Status> Statuses { get; set; } = null!;
 
-    public DbSet<Group> Groups { get; set; } = null!;
+    public DbSet<GroupDoc> Groups { get; set; } = null!;
 
-    public DbSet<Type> Types { get; set; } = null!;
+    public DbSet<TypeDoc> Types { get; set; } = null!;
 
     public DbSet<BankDetails> BankDetails { get; set; } = null!;
 
@@ -25,8 +25,8 @@ public class AgroDB : DbContext
     protected override void OnModelCreating(ModelBuilder db)
     {
         db.Entity<Status>().HasData(GetDefaultData.DefaultStatus());
-        db.Entity<Group>().HasData(GetDefaultData.DefaultGroup());
-        db.Entity<Type>().HasData(GetDefaultData.DefaultType());
+        db.Entity<GroupDoc>().HasData(GetDefaultData.DefaultGroup());
+        db.Entity<TypeDoc>().HasData(GetDefaultData.DefaultType());
     }
 
     

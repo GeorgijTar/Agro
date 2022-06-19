@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Agro.DAL.Entities.Base;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,15 +14,21 @@ public class Counterparty : Entity
     public string Name { get; set; } = null!;
 
     /// <summary>Статус контрагента</summary>
-    [Required]
+    //[ForeignKey("StatusId")]
     public Status Status { get; set; } = null!;
 
+    //public  int StatusId { get; set; }
+
     /// <summary>Тип контрагента</summary>
-    [Required]
-    public Type Type { get; set; } = null!;
+   //[ForeignKey("TypeDocId")]
+    public TypeDoc? TypeDoc { get; set; } = null!;
+
+    //public  int? TypeDocId { get; set; }
 
     /// <summary>Группа</summary>
-    public Group? Group { get; set; }
+    //[ForeignKey("GroupId")]
+    public GroupDoc? Group { get; set; }
+    //public int GroupId { get; set; }
     /// <summary>Платежное наименование контрагента</summary>
     [Required, MaxLength(255)]
     public string PayName { get; set; } = null!;
@@ -43,7 +50,7 @@ public class Counterparty : Entity
     /// <summary>Фактический адрес контрагента</summary>
     //public Address? ActualAddress { get; set; }
 
-    public ICollection<BankDetails> BankDetails { get; set; } = new HashSet<BankDetails>();
+    //public ICollection<BankDetails> BankDetails { get; set; } = new HashSet<BankDetails>();
 
 }
 
