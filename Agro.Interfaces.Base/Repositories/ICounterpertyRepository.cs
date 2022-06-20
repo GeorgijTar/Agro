@@ -2,8 +2,8 @@
 
 namespace Agro.Interfaces.Base.Repositories
 {
-    public interface ICounterpertyRepository<Counterparty>:IBaseRepository<Counterparty>
+    public interface ICounterpertyRepository<CounterpartyDto>:IBaseRepository<CounterpartyDto>
     {
-        public Task<IEnumerable<Counterparty>?> GetAllByStatusAsync(int statusId, CancellationToken cancel = default);
+        public Task<IEnumerable<CounterpartyDto>?> GetAllByStatusAsync(int statusId, CancellationToken cancel = default);
     }
 }

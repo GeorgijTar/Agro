@@ -12,13 +12,11 @@ public class BankDetails : Entity
     public string Name { get; set; } = null!;
 
     /// <summary>Статус реквизитов</summary>
-
-    //[ForeignKey("StatusId")]
     public Status Status { get; set; } = null!;
 
-    //public int StatusId { get; set; }
+    public Counterparty Counterparty { get; set; }= null!;
 
-    /// <summary>Наименование банка</summary>
+   /// <summary>Наименование банка</summary>
     [Required]
     public string NameBank { get; set; } = null!;
 

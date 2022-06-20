@@ -12,5 +12,11 @@ public class StatusDto : EntityDto
     public string Name { get; set; } = null!;
   
     public override string ToString() => Name;
+
+    public StatusDto()
+    {
+        Id = 1;
+        Name = "Черновик";
+    }
 }
 

@@ -19,9 +19,15 @@ public static class CheckoApi
         var ss = json["meta"]["message"];
         if (ss != null)
             throw new InvalidOperationException(json["meta"]["message"].ToString());
+        if (json["data"]["Статус"]["Код"].ToString()=="000")
+            throw new InvalidOperationException(
+                $"Организация имеет статус: {json["data"]["Статус"]["Наим"]} ликвидировано" +
+                $" {json["data"]["Ликвид"]["Дата"]} с формулировкой {json["data"]["Ликвид"]["Наим"]}");
+
         counterparty.Kpp = json["data"]["КПП"].ToString();
         counterparty.Ogrn = json["data"]["ОГРН"].ToString();
         counterparty.PayName = json["data"]["НаимПолн"].ToString();
+        counterparty.Inn= json["data"]["ИНН"].ToString();
         if (json["data"]["НаимСокр"] == null)
         {
             counterparty.Name = counterparty.PayName;
@@ -55,6 +61,7 @@ public static class CheckoApi
         counterparty.Name = json["data"]["ФИО"].ToString();
         counterparty.PayName = json["data"]["ФИО"].ToString();
         counterparty.Okpo = json["data"]["ОКПО"].ToString();
+        counterparty.Inn= json["data"]["ИНН"].ToString();
 
         return counterparty;
     }

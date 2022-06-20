@@ -50,7 +50,7 @@ public class Counterparty : Entity
     /// <summary>Фактический адрес контрагента</summary>
     //public Address? ActualAddress { get; set; }
 
-    //public ICollection<BankDetails> BankDetails { get; set; } = new HashSet<BankDetails>();
+    public ICollection<BankDetails>? BankDetails { get; set; } = new HashSet<BankDetails>();
 
 }
 

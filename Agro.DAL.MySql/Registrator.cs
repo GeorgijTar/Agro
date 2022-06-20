@@ -10,11 +10,7 @@ public static class Registrator
         var serverVersion = new MySqlServerVersion(new Version(8, 0, 28));
         services.AddDbContext<AgroDB>(opt => opt
             .UseMySql(ConnectionString, serverVersion,
-                o => o.MigrationsAssembly(typeof(Registrator).Assembly.FullName)));
-        services.AddDbContext<AgroDB>(opt => opt.EnableSensitiveDataLogging(true));
-
-
-
+                o => o.MigrationsAssembly(typeof(Registrator).Assembly.FullName).EnableRetryOnFailure(5)));
         return services;
     }
 }

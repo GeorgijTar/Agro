@@ -1,7 +1,7 @@
 ﻿using System;
-using Agro.DAL.Entities;
 using Agro.DAL.Sql;
 using Agro.DAL.SqLite;
+using Agro.Domain.Base;
 using Agro.Interfaces;
 using Agro.Interfaces.Base.Repositories;
 using Agro.Services.Repositories;
@@ -44,21 +44,23 @@ namespace Agro.WPF
                     break;
             }
 
+            services.AddScoped<ContractorsViewModel>();
             services.AddScoped<CounterpartyViewModel>();
 
             services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
 
-            services.AddScoped(typeof(IGroupRepository<GroupDoc>), typeof(GroupRepository));
+            services.AddScoped(typeof(IGroupRepository<GroupDto>), typeof(GroupRepository));
 
-            services.AddScoped(typeof(ITypeRepository<TypeDoc>), typeof(TypeRepository));
+            services.AddScoped(typeof(ITypeRepository<TypeDocDto>), typeof(TypeRepository));
 
-            services.AddScoped(typeof(ICounterpertyRepository<Counterparty>), typeof(CounterpartyRepository));
+            services.AddScoped(typeof(ICounterpertyRepository<CounterpartyDto>), typeof(CounterpartyRepository));
            
             services.AddAutoMapper(
                     typeof(CounterpartyProfile), 
                     typeof(GroupProfile), 
                     typeof(TypeProfile), 
-                    typeof(StatusProfile)) // маппинг-профайлы перпедавать через запятую typeof(AppMappingProfile), typeof(MappingProfile2)
+                    typeof(StatusProfile),
+                    typeof(BankDetailsProfile)) // маппинг-профайлы перпедавать через запятую typeof(AppMappingProfile), typeof(MappingProfile2)
                 .AddScoped(typeof(IMapper<>), typeof(AutoMapperService<>))
                 .AddScoped(typeof(IMapper<,>), typeof(AutoMapperService<,>));
         }

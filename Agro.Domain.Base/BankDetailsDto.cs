@@ -12,11 +12,10 @@ public class BankDetailsDto : EntityDto
     public string Name { get; set; } = null!;
 
     /// <summary>Статус реквизитов</summary>
-    //[ForeignKey("StatusDtoId")]
     public StatusDto Status { get; set; } = null!;
 
-    //public int StatusDtoId { get; set; }
-
+    public CounterpartyDto Counterparty { get; set; } = null!;
+    
     /// <summary>Наименование банка</summary>
     [Required]
     public string NameBank { get; set; } = null!;

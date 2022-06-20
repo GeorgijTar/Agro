@@ -10,6 +10,13 @@ namespace Agro.Domain.Base;
 
 public class CounterpartyDto : EntityDto
 {
+    public CounterpartyDto()
+    {
+        Status = new StatusDto();
+        TypeDoc = new TypeDocDto();
+        Group = new GroupDto();
+    }
+
 
     public string Name { get; set; } = null!;
     /// <summary>Статус контрагента</summary>
@@ -47,7 +54,8 @@ public class CounterpartyDto : EntityDto
     /// <summary>Фактический адрес контрагента</summary>
     //public AddressDto? ActualAddress { get; set; }
 
-    //public ICollection<BankDetailsDto> BankDetails { get; set; } = new HashSet<BankDetailsDto>();
+    public ICollection<BankDetailsDto> BankDetails { get; set; } = new HashSet<BankDetailsDto>();
 
+    
 }
 

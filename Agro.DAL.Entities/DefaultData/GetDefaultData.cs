@@ -8,6 +8,7 @@ public static class GetDefaultData
         new () { Id = 3, Name = "Действующий" },
         new () { Id = 4, Name = "Заблокировано"},
         new () { Id = 5, Name = "Актуально"},
+        new () { Id = 6, Name = "Удален"},
     };
 
     public static TypeDoc[] DefaultType() => new TypeDoc[]
