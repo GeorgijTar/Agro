@@ -16,6 +16,8 @@ public class BankDetails : Entity
 
     public Counterparty Counterparty { get; set; }= null!;
 
+
+
    /// <summary>Наименование банка</summary>
     [Required]
     public string NameBank { get; set; } = null!;

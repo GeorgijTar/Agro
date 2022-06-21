@@ -4,6 +4,7 @@ using Agro.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Agro.DAL.Sql.Migrations
 {
     [DbContext(typeof(AgroDB))]
-    partial class AgroDBModelSnapshot : ModelSnapshot
+    [Migration("20220621053826_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,14 +156,12 @@ namespace Agro.DAL.Sql.Migrations
                         new
                         {
                             Id = 2,
-                            Name = "Покупатели",
-                            ParentId = 1
+                            Name = "Покупатели"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Поставщики",
-                            ParentId = 1
+                            Name = "Поставщики"
                         });
                 });
 

@@ -61,10 +61,10 @@ public class CounterpartyViewModel : ViewModel
     private async void LoadList()
     {
         var groups = await _groupRep.GetAllAsync().ConfigureAwait(false);
-        Groups = groups.ToList();
+        Groups = groups!.ToList();
 
         var types = await _typeRep.GetAllAsync().ConfigureAwait(false);
-        Types = types.ToList();
+        Types = types!.ToList();
     }
 
     #region Property
@@ -172,7 +172,7 @@ public class CounterpartyViewModel : ViewModel
         {
             Set(ref _group, value);
             SelectedCounterpartyDto.Group = value;
-        }
+        } 
     }
 
     private TypeDocDto _typeDoc;

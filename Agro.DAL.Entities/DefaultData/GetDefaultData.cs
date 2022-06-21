@@ -25,7 +25,7 @@ public static class GetDefaultData
     public static GroupDoc[] DefaultGroup() => new GroupDoc[]
     {   
         new () { Id = 1, Name = "Контрагенты"},
-        new () { Id = 2, Name = "Покупатели" },
-        new () { Id = 3, Name = "Поставщики" },
+        new () { Id = 2, Name = "Покупатели", ParentId = 1},
+        new () { Id = 3, Name = "Поставщики", ParentId = 1},
     };
 }

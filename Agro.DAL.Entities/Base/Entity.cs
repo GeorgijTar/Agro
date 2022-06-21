@@ -1,4 +1,5 @@
-﻿using Agro.Interfaces.Base.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using Agro.Interfaces.Base.Entities;
 
 namespace Agro.DAL.Entities.Base;
 
@@ -7,7 +8,8 @@ namespace Agro.DAL.Entities.Base;
 public abstract class Entity<TKey> : IEntity<TKey>, IEquatable<Entity<TKey>> where TKey : IEquatable<TKey>
 {
     /// <summary>Первичный ключ</summary>
-    public TKey Id { get; set; } = default!;
+    [Key]
+    public TKey Id { get; set; }
 
     protected Entity() { }
 

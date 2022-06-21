@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Agro.DAL.Sql.Migrations
 {
     [DbContext(typeof(AgroDB))]
-    [Migration("20220620104747_Initial")]
-    partial class Initial
+    [Migration("20220621063924_EdeteDefaultData")]
+    partial class EdeteDefaultData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -78,7 +78,7 @@ namespace Agro.DAL.Sql.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("GroupId")
+                    b.Property<int>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<string>("Inn")
@@ -138,12 +138,12 @@ namespace Agro.DAL.Sql.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ParentGroupId")
+                    b.Property<int?>("ParentId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ParentGroupId");
+                    b.HasIndex("ParentId");
 
                     b.ToTable("Groups");
 
@@ -156,12 +156,14 @@ namespace Agro.DAL.Sql.Migrations
                         new
                         {
                             Id = 2,
-                            Name = "Покупатели"
+                            Name = "Покупатели",
+                            ParentId = 1
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Поставщики"
+                            Name = "Поставщики",
+                            ParentId = 1
                         });
                 });
 
@@ -288,7 +290,7 @@ namespace Agro.DAL.Sql.Migrations
                         .IsRequired();
 
                     b.HasOne("Agro.DAL.Entities.Status", "Status")
-                        .WithMany()
+                        .WithMany("BankDetails")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -302,10 +304,12 @@ namespace Agro.DAL.Sql.Migrations
                 {
                     b.HasOne("Agro.DAL.Entities.GroupDoc", "Group")
                         .WithMany()
-                        .HasForeignKey("GroupId");
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Agro.DAL.Entities.Status", "Status")
-                        .WithMany()
+                        .WithMany("Counterparties")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -325,7 +329,7 @@ namespace Agro.DAL.Sql.Migrations
                 {
                     b.HasOne("Agro.DAL.Entities.GroupDoc", "ParentGroup")
                         .WithMany("ChildGroups")
-                        .HasForeignKey("ParentGroupId");
+                        .HasForeignKey("ParentId");
 
                     b.Navigation("ParentGroup");
                 });
@@ -338,6 +342,13 @@ namespace Agro.DAL.Sql.Migrations
             modelBuilder.Entity("Agro.DAL.Entities.GroupDoc", b =>
                 {
                     b.Navigation("ChildGroups");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Status", b =>
+                {
+                    b.Navigation("BankDetails");
+
+                    b.Navigation("Counterparties");
                 });
 #pragma warning restore 612, 618
         }

@@ -23,7 +23,8 @@ namespace Agro.Services.Repositories
         public async Task<IEnumerable<GroupDto>?> GetAllAsync(CancellationToken cancel = default)
         {
            var groups= await _db.Set<GroupDoc>().ToArrayAsync(cancel).ConfigureAwait(false);
-           return groups.Select(g => _map.Map(g)).ToArray();
+           var grDto= groups.Select(g => _map.Map(g)).ToArray();
+           return grDto;
         }
 
         public async Task<GroupDto?> GetByIdAsync(int id, CancellationToken cancel = default)

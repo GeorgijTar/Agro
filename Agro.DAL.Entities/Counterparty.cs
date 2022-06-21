@@ -14,21 +14,23 @@ public class Counterparty : Entity
     public string Name { get; set; } = null!;
 
     /// <summary>Статус контрагента</summary>
-    //[ForeignKey("StatusId")]
+    [ForeignKey("StatusId")]
     public Status Status { get; set; } = null!;
 
-    //public  int StatusId { get; set; }
+    public  int StatusId { get; set; }
 
     /// <summary>Тип контрагента</summary>
-   //[ForeignKey("TypeDocId")]
+   [ForeignKey("TypeDocId")]
     public TypeDoc? TypeDoc { get; set; } = null!;
 
-    //public  int? TypeDocId { get; set; }
+    public  int? TypeDocId { get; set; }
 
     /// <summary>Группа</summary>
-    //[ForeignKey("GroupId")]
+    [ForeignKey("GroupId")]
     public GroupDoc? Group { get; set; }
-    //public int GroupId { get; set; }
+
+    public int GroupId { get; set; }
+
     /// <summary>Платежное наименование контрагента</summary>
     [Required, MaxLength(255)]
     public string PayName { get; set; } = null!;

@@ -60,7 +60,7 @@ namespace Agro.WPF
                     typeof(GroupProfile), 
                     typeof(TypeProfile), 
                     typeof(StatusProfile),
-                    typeof(BankDetailsProfile)) // маппинг-профайлы перпедавать через запятую typeof(AppMappingProfile), typeof(MappingProfile2)
+                    typeof(BankDetailsProfile)) // маппинг-профайлы передавать через запятую typeof(AppMappingProfile), typeof(MappingProfile2)
                 .AddScoped(typeof(IMapper<>), typeof(AutoMapperService<>))
                 .AddScoped(typeof(IMapper<,>), typeof(AutoMapperService<,>));
         }

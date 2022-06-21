@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Agro.DAL;
+﻿using Agro.DAL;
 using Agro.DAL.Entities;
 using Agro.Domain.Base;
 using Agro.Interfaces;
@@ -42,9 +36,9 @@ namespace Agro.Services.Repositories
         public async Task<bool> AddAsync(CounterpartyDto item, CancellationToken cancel = default)
         {
             if (item is null)
-                throw new ArgumentNullException(nameof(item));
-            _db.Entry(_map.Map(item)).State = EntityState.Added;
-            await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
+                throw new ArgumentNullException(nameof(item)); 
+            await _db.Set<Counterparty>().AddAsync(_map.Map(item), cancel).ConfigureAwait(false);
+            await _db.SaveChangesAsync(cancel);
             return true;
         }
 
@@ -52,8 +46,12 @@ namespace Agro.Services.Repositories
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
+            Counterparty? dbCounterparty = _db.Counterparties.FirstOrDefault(c => c.Id == item.Id);
+            if (dbCounterparty is null)
+                throw new InvalidOperationException($" Контрагент с id {item.Id} в базе не найден");
+            _db.Counterparties.Local.Remove(dbCounterparty); // если сущность есть в БД, то она отслеживается в контексте, поэтому удаляем ее перед обновлением
             var it = _map.Map(item);
-            _db.Entry(it).State = EntityState.Modified;
+            _db.Counterparties.Update(it);
             await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
             return true;
         }
