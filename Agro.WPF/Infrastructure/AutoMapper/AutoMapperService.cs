@@ -24,4 +24,6 @@ public class AutoMapperService<TIn, TOut> : IMapper<TIn, TOut>
     public TOut? Map(TIn? source) => _baseMapper.Map<TOut>(source);
 
     public TOut Map(TIn source, TOut destination) => _baseMapper.Map<TIn,TOut>(source, destination);
+
+    public TIn Map(TOut source, TIn destination) => _baseMapper.Map<TOut, TIn>(source, destination);
 }

@@ -11,6 +11,8 @@ public class ViewModelLocator
 
     public BankDetailsViewModel BankDetailsModel => App.Services.GetRequiredService<BankDetailsViewModel>();
 
+    public ProductsViewModel ProductsModel => App.Services.GetRequiredService<ProductsViewModel>();
+
 
 
 }

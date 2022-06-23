@@ -45,7 +45,7 @@ public abstract class Entity<TKey> : IEntity<TKey>, IEquatable<Entity<TKey>> whe
     /// <summary>Оператор проверки на неравенство двух сущностей</summary>
     /// <param name="left">Левый операнд</param><param name="right">Правый операнд</param>
     /// <returns>Истина, если значение левого операнда не равно значению правого операнда</returns>
-    public static bool operator !=(Entity<TKey> left, Entity<TKey> right) => !Equals(left, right);
+    public static bool operator !=(Entity<TKey>? left, Entity<TKey> right) => !Equals(left, right);
 }
 
 /// <summary>Сущность</summary>

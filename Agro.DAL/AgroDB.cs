@@ -15,6 +15,12 @@ public class AgroDB : DbContext
 
     public DbSet<BankDetails> BankDetails { get; set; } = null!;
 
+    public DbSet<Product> Products { get; set; } = null!;
+
+    public DbSet<UnitOkei> UnitsOkei { get; set; } = null!;
+
+    public DbSet<Nds>  Ndses { get; set; } = null!;
+
     //public DbSet<Address> Addresses { get; set; } = null!;
 
     public DbSet<Counterparty> Counterparties { get; set; } = null!;

@@ -43,11 +43,14 @@ namespace Agro.WPF
                     services.AddAgroDbMySql(configuration.GetConnectionString("MySql"));
                     break;
             }
-
+            
+            //Регистрация вью-моделей
             services.AddScoped<ContractorsViewModel>();
             services.AddTransient<CounterpartyViewModel>();
             services.AddTransient<BankDetailsViewModel>();
 
+
+            //Регистрация репозиториев
             services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
 
             services.AddScoped(typeof(IGroupRepository<GroupDto>), typeof(GroupRepository));
@@ -58,12 +61,23 @@ namespace Agro.WPF
 
             services.AddScoped(typeof(IBankDetailsRepository<BankDetailsDto>), typeof(BankDetailsRepository));
 
+            services.AddScoped(typeof(IProductRepository<ProductDto>), typeof(ProductRepository));
+
+            services.AddScoped(typeof(IUnitRepository<>), typeof(UnitRepository));
+
+            services.AddScoped(typeof(INdsRepository<>), typeof(NdsRepository));
+
+
+            // Регистрация мапера
             services.AddAutoMapper(
                     typeof(CounterpartyProfile), 
                     typeof(GroupProfile), 
                     typeof(TypeProfile), 
                     typeof(StatusProfile),
-                    typeof(BankDetailsProfile)) // маппинг-профайлы передавать через запятую typeof(AppMappingProfile), typeof(MappingProfile2)
+                    typeof(BankDetailsProfile),
+                    typeof(ProductProfile),
+                    typeof(UnitProfile),
+                    typeof(NdsProfile)) // маппинг-профайлы передавать через запятую typeof(AppMappingProfile), typeof(MappingProfile2)
                 .AddScoped(typeof(IMapper<>), typeof(AutoMapperService<>))
                 .AddScoped(typeof(IMapper<,>), typeof(AutoMapperService<,>));
         }

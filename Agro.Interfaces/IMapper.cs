@@ -17,4 +17,6 @@ public interface IMapper<TIn, TOut>
     TIn? Map(TOut? source);
 
     TOut Map(TIn source, TOut destination) ;
+
+    TIn Map(TOut source, TIn destination);
 }
