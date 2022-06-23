@@ -15,4 +15,6 @@ public interface IMapper<TIn, TOut>
 
     [return: NotNullIfNotNull("source")]
     TIn? Map(TOut? source);
+
+    TOut Map(TIn source, TOut destination) ;
 }

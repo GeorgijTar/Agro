@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Agro.DAL.Sql.Migrations
 {
     [DbContext(typeof(AgroDB))]
-    [Migration("20220621053826_Initial")]
-    partial class Initial
+    [Migration("20220621144905_BankDetailsSity")]
+    partial class BankDetailsSity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,6 +41,10 @@ namespace Agro.DAL.Sql.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CounterpartyId")
                         .HasColumnType("int");
@@ -134,16 +138,20 @@ namespace Agro.DAL.Sql.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int?>("GroupDocId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("int");
+                    b.Property<string>("TypeApplication")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ParentId");
+                    b.HasIndex("GroupDocId");
 
                     b.ToTable("Groups");
 
@@ -151,17 +159,14 @@ namespace Agro.DAL.Sql.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Контрагенты"
+                            Name = "Покупатели",
+                            TypeApplication = "Контрагенты"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Покупатели"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Поставщики"
+                            Name = "Поставщики",
+                            TypeApplication = "Контрагенты"
                         });
                 });
 
@@ -239,43 +244,43 @@ namespace Agro.DAL.Sql.Migrations
                         {
                             Id = 1,
                             Name = "Юридическое лицо",
-                            TypeApplication = "Counterparty"
+                            TypeApplication = "Контрагенты"
                         },
                         new
                         {
                             Id = 2,
                             Name = "Индивидуальный предприниматель",
-                            TypeApplication = "Counterparty"
+                            TypeApplication = "Контрагенты"
                         },
                         new
                         {
                             Id = 3,
                             Name = "Государственный орган",
-                            TypeApplication = "Counterparty"
+                            TypeApplication = "Контрагенты"
                         },
                         new
                         {
                             Id = 4,
                             Name = "Физическое лицо",
-                            TypeApplication = "Counterparty"
+                            TypeApplication = "Контрагенты"
                         },
                         new
                         {
                             Id = 5,
                             Name = "Юридический адрес",
-                            TypeApplication = "Address"
+                            TypeApplication = "Адреса"
                         },
                         new
                         {
                             Id = 6,
                             Name = "Фактический адрес",
-                            TypeApplication = "Address"
+                            TypeApplication = "Адреса"
                         },
                         new
                         {
                             Id = 7,
                             Name = "Почтовый адрес",
-                            TypeApplication = "Address"
+                            TypeApplication = "Адреса"
                         });
                 });
 
@@ -288,7 +293,7 @@ namespace Agro.DAL.Sql.Migrations
                         .IsRequired();
 
                     b.HasOne("Agro.DAL.Entities.Status", "Status")
-                        .WithMany("BankDetails")
+                        .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -307,7 +312,7 @@ namespace Agro.DAL.Sql.Migrations
                         .IsRequired();
 
                     b.HasOne("Agro.DAL.Entities.Status", "Status")
-                        .WithMany("Counterparties")
+                        .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -325,11 +330,9 @@ namespace Agro.DAL.Sql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.GroupDoc", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.GroupDoc", "ParentGroup")
+                    b.HasOne("Agro.DAL.Entities.GroupDoc", null)
                         .WithMany("ChildGroups")
-                        .HasForeignKey("ParentId");
-
-                    b.Navigation("ParentGroup");
+                        .HasForeignKey("GroupDocId");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Counterparty", b =>
@@ -340,13 +343,6 @@ namespace Agro.DAL.Sql.Migrations
             modelBuilder.Entity("Agro.DAL.Entities.GroupDoc", b =>
                 {
                     b.Navigation("ChildGroups");
-                });
-
-            modelBuilder.Entity("Agro.DAL.Entities.Status", b =>
-                {
-                    b.Navigation("BankDetails");
-
-                    b.Navigation("Counterparties");
                 });
 #pragma warning restore 612, 618
         }

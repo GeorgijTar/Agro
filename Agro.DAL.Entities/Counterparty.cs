@@ -52,6 +52,10 @@ public class Counterparty : Entity
     /// <summary>Фактический адрес контрагента</summary>
     //public Address? ActualAddress { get; set; }
 
+    /// <summary>Примечание</summary>
+    [MaxLength(225)]
+    public string? Description { get; set; }
+
     public ICollection<BankDetails>? BankDetails { get; set; } = new HashSet<BankDetails>();
 
 }

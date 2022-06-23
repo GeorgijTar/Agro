@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         mc:Ignorable="d"
-        Title="{Binding Title}" Width="640" Height="500"
+        Title="{Binding Title}" Width="640" Height="600"
         DataContext="{Binding CounterpartyModel, Source={StaticResource Locator}}"
         WindowStartupLocation="CenterOwner"
-        x:Name="MyWindow">
+        x:Name="MyWindow" WindowStyle="ToolWindow">
     <Window.Resources>
         <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
             <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
@@ -37,7 +37,7 @@
     <Grid Background="AliceBlue">
         <Grid.RowDefinitions>
             <RowDefinition Height="90*"/>
-            <RowDefinition Height="15*"/>
+            <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="1" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
@@ -48,7 +48,7 @@
                     Template="{StaticResource ButtonTemplate}"  Margin="0,2,3,15"
                     Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=MyWindow}" >
                 <StackPanel Orientation="Horizontal">
-                    <fa5:ImageAwesome Height="24" Icon="Solid_Save"
+                    <fa5:ImageAwesome Height="18" Icon="Solid_Save"
                                       Margin="8,5"
                                       Foreground="DarkBlue" />
                     <TextBlock Text="Сохранить" VerticalAlignment="Center" Margin="0,0,5,0"/>
@@ -58,7 +58,7 @@
                     Template="{StaticResource ButtonTemplate}" Margin="3,2,15,15"
                     Click="ButtonBase_OnClick">
                 <StackPanel Orientation="Horizontal">
-                    <fa5:ImageAwesome Height="24" Icon="Solid_DoorOpen"
+                    <fa5:ImageAwesome Height="18" Icon="Solid_DoorOpen"
                                       Margin="8,5"
                                       Foreground="DarkBlue" />
                     <TextBlock Text="Отмена" VerticalAlignment="Center" Margin="0,0,5,0"/>
@@ -77,6 +77,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="45"/>
                 <RowDefinition Height="45"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
@@ -114,22 +116,27 @@
             <TextBlock Grid.Row="4" Grid.Column="0" Text="Входит в группу:" TextWrapping="Wrap" 
                        HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"/>
             <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Margin="4" 
-                      ItemsSource="{Binding Groups}" 
+                      ItemsSource="{Binding Groups, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                       SelectedItem="{Binding GroupDoc}"/>
             <TextBlock Grid.Row="5" Grid.Column="0" Text="Тип контрагента:" VerticalAlignment="Center"
                        HorizontalAlignment="Right" Margin="10,0"/>
             <ComboBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Margin="4" 
                       ItemsSource="{Binding Types}" 
                       SelectedItem="{Binding TypeDoc}"/>
-            <TextBlock Grid.Row="2" Grid.Column="4" Grid.RowSpan="4" TextWrapping="Wrap" Foreground="Red" Text="{Binding Message}"/>
-            <GroupBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="5" Margin="10" Header="Банковские реквизиты" BorderThickness="2">
+            <TextBlock Grid.Row="2" Grid.Column="4" Grid.RowSpan="4" TextWrapping="Wrap" 
+                       Foreground="Red" Text="{Binding Message}"/>
+            <TextBlock Grid.Row="6" Text="Примечание:" Grid.RowSpan="2" 
+                       VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0"/>
+            <TextBox Grid.Row="6" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="4" Margin="5" Text="{Binding Description}"/>
+
+            <GroupBox Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="5" Margin="10" Header="Банковские реквизиты" BorderThickness="2">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <ToolBar>
-                        <Button BorderBrush="DarkBlue" Width="108" Command="{Binding}"
+                        <Button BorderBrush="DarkBlue" Width="108" Command="{Binding AddBankDetailsCommand}"
                                 Template="{StaticResource ButtonTemplate}" Margin="2,0">
                             <StackPanel Orientation="Horizontal">
                                 <fa5:ImageAwesome Height="12" Icon="Solid_PlusCircle"
@@ -139,7 +146,8 @@
                             </StackPanel>
                         </Button>
                         <Button BorderBrush="DarkGreen" Width="108"
-                                Template="{StaticResource ButtonTemplate}" Margin="2,0">
+                                Template="{StaticResource ButtonTemplate}" Margin="2,0"
+                                Command="{Binding EdeteBankDetailsCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <fa5:ImageAwesome Height="12" Icon="Solid_Edit"
                                                   Margin="2,5"
@@ -148,7 +156,8 @@
                             </StackPanel>
                         </Button>
                         <Button BorderBrush="DarkRed" Width="108"
-                                Template="{StaticResource ButtonTemplate}" Margin="2,0">
+                                Template="{StaticResource ButtonTemplate}" Margin="2,0"
+                                Command="{Binding DeleteBankDetailsCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <fa5:ImageAwesome Height="12" Icon="Solid_TrashAlt"
                                                   Margin="8,5"
@@ -157,11 +166,13 @@
                             </StackPanel>
                         </Button>
                     </ToolBar>
-                    <DataGrid Grid.Row="1">
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding BankDetailsCollection, 
+                        UpdateSourceTrigger=PropertyChanged}" CanUserAddRows="False"
+                              SelectedItem="{Binding SelectBankDetails}" AutoGenerateColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Наименование банка" Width="120*"/>
-                                <DataGridTextColumn Header="БИК банка" Width="45*"/>
-                            <DataGridTextColumn Header="Расчетный счет" Width="85*"/>
+                            <DataGridTextColumn Header="Наименование банка" Width="120*" Binding="{Binding NameBank}"/>
+                                <DataGridTextColumn Header="БИК банка" Width="45*" Binding="{Binding Bik}"/>
+                            <DataGridTextColumn Header="Расчетный счет" Width="85*" Binding="{Binding Bs}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

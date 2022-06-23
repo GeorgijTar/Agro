@@ -10,14 +10,7 @@ public class GroupDoc : Entity
 {
     public string Name { get; set; } = null!;
 
-    /// <summary>Вышестоящая группа</summary>
-   [ForeignKey("ParentId")]
-    public GroupDoc? ParentGroup { get; set; }
-    
-    public int? ParentId { get; set; }
-
-    /// <summary>Дочерние группы</summary>
-    public ICollection<GroupDoc>? ChildGroups { get; set; } = new HashSet<GroupDoc>();
+    public string TypeApplication { get; set; } = null!;
 
 
     public override string ToString() => Name;

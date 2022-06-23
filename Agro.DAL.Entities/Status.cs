@@ -10,10 +10,7 @@ public class Status : Entity
 {
     [Required]
     public string Name { get; set; } = null!;
-    
-    public ICollection<Counterparty>? Counterparties { get; set; }= new HashSet<Counterparty>();
 
-    public ICollection<BankDetails>? BankDetails { get; set; }= new HashSet<BankDetails>();
     public override string ToString() => Name;
 }
 

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Agro.DAL.Sql.Migrations
 {
     [DbContext(typeof(AgroDB))]
-    [Migration("20220621063924_EdeteDefaultData")]
-    partial class EdeteDefaultData
+    [Migration("20220621111215_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -290,7 +290,7 @@ namespace Agro.DAL.Sql.Migrations
                         .IsRequired();
 
                     b.HasOne("Agro.DAL.Entities.Status", "Status")
-                        .WithMany("BankDetails")
+                        .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -309,7 +309,7 @@ namespace Agro.DAL.Sql.Migrations
                         .IsRequired();
 
                     b.HasOne("Agro.DAL.Entities.Status", "Status")
-                        .WithMany("Counterparties")
+                        .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -342,13 +342,6 @@ namespace Agro.DAL.Sql.Migrations
             modelBuilder.Entity("Agro.DAL.Entities.GroupDoc", b =>
                 {
                     b.Navigation("ChildGroups");
-                });
-
-            modelBuilder.Entity("Agro.DAL.Entities.Status", b =>
-                {
-                    b.Navigation("BankDetails");
-
-                    b.Navigation("Counterparties");
                 });
 #pragma warning restore 612, 618
         }

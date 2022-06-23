@@ -126,12 +126,7 @@ namespace Agro.DAL.Sql.Migrations
             migrationBuilder.InsertData(
                 table: "Groups",
                 columns: new[] { "Id", "Name", "ParentId" },
-                values: new object[,]
-                {
-                    { 1, "Контрагенты", null },
-                    { 2, "Покупатели", null },
-                    { 3, "Поставщики", null }
-                });
+                values: new object[] { 1, "Контрагенты", null });
 
             migrationBuilder.InsertData(
                 table: "Statuses",
@@ -159,6 +154,16 @@ namespace Agro.DAL.Sql.Migrations
                     { 6, "Фактический адрес", "Address" },
                     { 7, "Почтовый адрес", "Address" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Groups",
+                columns: new[] { "Id", "Name", "ParentId" },
+                values: new object[] { 2, "Покупатели", 1 });
+
+            migrationBuilder.InsertData(
+                table: "Groups",
+                columns: new[] { "Id", "Name", "ParentId" },
+                values: new object[] { 3, "Поставщики", 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BankDetails_CounterpartyId",

@@ -31,12 +31,12 @@ namespace Agro.Services.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<bool> AddAsync(StatusDto item, CancellationToken cancel = default)
+        public Task<StatusDto> AddAsync(StatusDto item, CancellationToken cancel = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> UpdateAsync(StatusDto item, CancellationToken cancel = default)
+        public Task<StatusDto> UpdateAsync(StatusDto item, CancellationToken cancel = default)
         {
             throw new NotImplementedException();
         }

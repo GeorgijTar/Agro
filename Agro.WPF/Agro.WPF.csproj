@@ -29,6 +29,7 @@
     <ProjectReference Include="..\Agro.Domain\Agro.Domain.csproj" />
     <ProjectReference Include="..\Agro.Interfaces\Agro.Interfaces.csproj" />
     <ProjectReference Include="..\Agro.Services\Agro.Services.csproj" />
+    <ProjectReference Include="..\Bank.Api\Bank.Api.csproj" />
     <ProjectReference Include="..\FNS.Api\FNS.Api.csproj" />
   </ItemGroup>
 

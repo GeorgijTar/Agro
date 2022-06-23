@@ -64,7 +64,8 @@
                         </StackPanel>
                     </Button>
                     <Button BorderBrush="DarkRed" Width="108"
-                            Template="{StaticResource ButtonTemplate}" Margin="2,0">
+                            Template="{StaticResource ButtonTemplate}" Margin="2,0"
+                            Command="{Binding DeleteCommand}">
                         <StackPanel Orientation="Horizontal">
                             <fa5:ImageAwesome Height="12" Icon="Solid_TrashAlt"
                                               Margin="8,5"
@@ -85,14 +86,27 @@
                         <ColumnDefinition Width="120"/>
                         <ColumnDefinition Width="80"/>
                         <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="80*"/>
+                        <ColumnDefinition Width="80*"/>
+                        <ColumnDefinition Width="10*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Наименование:" 
                                HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,2"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,2" 
+                             Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                    <StackPanel Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2" Orientation="Horizontal">
+                        <TextBlock Text="Входит в группу:" Margin="10,0" VerticalAlignment="Center"/>
+                        <ComboBox VerticalAlignment="Center" Width="180" ItemsSource="{Binding Groups}" 
+                                  SelectedItem="{Binding SelectedGroup}"/>
+                        <TextBlock Text="Тип контрагента:" Margin="10,0" VerticalAlignment="Center"/>
+                        <ComboBox VerticalAlignment="Center" Width="180" ItemsSource="{Binding Types}"
+                                  SelectedItem="{Binding SelectedType}"/>
+                    </StackPanel>
+                   
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="ИНН:" 
                                HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" Margin="0,2" MaxLength="12"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Margin="0,2" MaxLength="12"
+                             Text="{Binding InnFilter, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock Grid.Row="1" Grid.Column="2" Text="КПП:" 
                                HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
                     <TextBox Grid.Row="1" Grid.Column="3" Margin="0,2" MaxLength="9"/>
@@ -112,7 +126,7 @@
                     <GroupBox Header="Контрагенты" >
                         <DataGrid SelectedItem="{Binding SelectedCounterparty}" 
                                   AutoGenerateColumns="False"
-                                  ItemsSource="{Binding Counterparties}"
+                                  ItemsSource="{Binding CollectionView}"
                                   CanUserAddRows="False">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="10*" Header="ID" Binding="{Binding Id}"/>
@@ -120,7 +134,9 @@
                                 <DataGridTextColumn Width="100*" Header="Сокращенное наименование" Binding="{Binding Name}"/>
                                 <DataGridTextColumn Width="20*" Header="ИНН" Binding="{Binding Inn}"/>
                                 <DataGridTextColumn Width="20*" Header="КПП" Binding="{Binding Kpp}"/>
+                                <DataGridTextColumn Width="50*" Header="Группа" Binding="{Binding Group.Name}"/>
                                 <DataGridTextColumn Width="50*" Header="Тип" Binding="{Binding TypeDoc.Name}"/>
+                                <DataGridTextColumn Width="50*" Header="Примечание" Binding="{Binding Description}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </GroupBox>

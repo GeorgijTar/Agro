@@ -34,12 +34,12 @@ namespace Agro.Services.Repositories
             return types.Select(t => _map.Map(t)).ToArray();
         }
 
-        public Task<bool> AddAsync(TypeDocDto item, CancellationToken cancel = default)
+        public Task<TypeDocDto> AddAsync(TypeDocDto item, CancellationToken cancel = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> UpdateAsync(TypeDocDto item, CancellationToken cancel = default)
+        public Task<TypeDocDto> UpdateAsync(TypeDocDto item, CancellationToken cancel = default)
         {
             throw new NotImplementedException();
         }

@@ -4,7 +4,7 @@ namespace Agro.Domain.Base;
 /// <summary>
 /// 
 /// </summary>
-public class AddressDto: EntityDto
+public class AddressDto: NotifyPropertyChanged
 {
     /// <summary> Индекс </summary>
     public string PostalCode { get; set; } = null!;

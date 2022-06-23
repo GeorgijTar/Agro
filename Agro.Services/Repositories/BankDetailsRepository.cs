@@ -2,7 +2,6 @@
 using Agro.DAL.Entities;
 using Agro.Domain.Base;
 using Agro.Interfaces;
-using Agro.Interfaces.Base.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 
 namespace Agro.Services.Repositories
@@ -45,31 +44,38 @@ namespace Agro.Services.Repositories
                 .ConfigureAwait(false));
         }
 
-        public async Task<bool> AddAsync(BankDetailsDto item, CancellationToken cancel = default)
+        public async Task<BankDetailsDto> AddAsync(BankDetailsDto item, CancellationToken cancel = default)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
-            _db.Entry(_map.Map(item)).State = EntityState.Added;
-            await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
-            return true;
+            var dbItem = _map.Map(item);
+            var x= await _db.BankDetails.AddAsync(dbItem, cancel).ConfigureAwait(false);
+            await _db.SaveChangesAsync(cancel);
+            return _map.Map(x.Entity);
         }
 
-        public async Task<bool> UpdateAsync(BankDetailsDto item, CancellationToken cancel = default)
+        public async Task<BankDetailsDto> UpdateAsync(BankDetailsDto item, CancellationToken cancel = default)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
-            _db.Entry(_map.Map(item)).State = EntityState.Modified;
+            var _dbBankDetails=await _db.BankDetails.FirstOrDefaultAsync(b=>b.Id==item.Id, cancel).ConfigureAwait(false);
+            if (_dbBankDetails is null)
+                throw new InvalidOperationException($" Банковские реквизиты с id {item.Id} в базе не найден");
+            var _bankDetails = _map.Map(item, _dbBankDetails);
+            var resalt= _db.BankDetails.Update(_bankDetails);
             await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
-            return true;
+            return _map.Map(resalt.Entity);
         }
 
         public async Task<bool> DeleteAsync(BankDetailsDto item, CancellationToken cancel = default)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
-            var bd = _map.Map(item);
-            bd.Status = await _db.Statuses.FirstAsync(s => s.Id == 6).ConfigureAwait(false);
-            _db.Entry(bd).State = EntityState.Modified;
+            var bankDb= await _db.BankDetails.FirstOrDefaultAsync(b=>b.Id==item.Id);
+            if (bankDb is null)
+                throw new InvalidOperationException($"Запись с Id={item.Id} в базе данных не найдене, возможно она была удалена ранее");
+            var bd = _map.Map(item, bankDb);
+            _db.BankDetails.Remove(bd);
             await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
             return true;
         }
@@ -78,9 +84,8 @@ namespace Agro.Services.Repositories
         {
             var item = await _db.BankDetails.FirstAsync(i => i.Id == id, cancel).ConfigureAwait(false);
             if (item is null)
-                throw new InvalidOperationException($"Запись с ID {id} в базе данных не найдена.");
-            item.Status = await _db.Statuses.FirstAsync(s => s.Id == 6, cancel).ConfigureAwait(false);
-            _db.Entry(item).State = EntityState.Modified;
+                throw new InvalidOperationException($"Запись с ID {id} в базе данных не найдена, возможно она была удалена ранее");
+            _db.BankDetails.Remove(item);
             await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
             return true;
         }

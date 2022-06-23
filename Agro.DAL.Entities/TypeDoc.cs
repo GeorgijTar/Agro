@@ -9,6 +9,7 @@ namespace Agro.DAL.Entities;
 public class TypeDoc : Entity
 {
     public string Name { get; set; } = null!;
+
     public string TypeApplication { get; set; } = null!;
 
     

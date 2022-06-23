@@ -6,14 +6,12 @@ namespace Agro.Domain.Base;
 /// <summary>
 /// Статус документа
 /// </summary>
-public class StatusDto : EntityDto
+public class StatusDto : NotifyPropertyChanged
 {
+    private string _name;
+
     [Required]
-    public string Name { get; set; }
-
-    public ICollection<CounterpartyDto>? Counterparties { get; set; } = new HashSet<CounterpartyDto>();
-
-    public ICollection<BankDetailsDto>? BankDetails { get; set; } = new HashSet<BankDetailsDto>();
+    public string Name { get=>_name; set=>Set(ref _name, value); }
 
     public override string ToString() => Name;
 

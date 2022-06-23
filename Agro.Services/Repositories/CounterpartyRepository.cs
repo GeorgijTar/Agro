@@ -33,36 +33,37 @@ namespace Agro.Services.Repositories
             return _map.Map(await _db.Set<Counterparty>().FirstAsync(c => c.Id == id, cancel).ConfigureAwait(false));
         }
 
-        public async Task<bool> AddAsync(CounterpartyDto item, CancellationToken cancel = default)
+        public async Task<CounterpartyDto> AddAsync(CounterpartyDto item, CancellationToken cancel = default)
         {
             if (item is null)
-                throw new ArgumentNullException(nameof(item)); 
-            await _db.Set<Counterparty>().AddAsync(_map.Map(item), cancel).ConfigureAwait(false);
-            await _db.SaveChangesAsync(cancel);
-            return true;
+                throw new ArgumentNullException(nameof(item));
+            var dbCounterparty = _map.Map(item);
+            var resalt = await _db.Counterparties.AddAsync(dbCounterparty, cancel).ConfigureAwait(false);
+            await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
+            return _map.Map(resalt.Entity);
         }
 
-        public async Task<bool> UpdateAsync(CounterpartyDto item, CancellationToken cancel = default)
+        public async Task<CounterpartyDto> UpdateAsync(CounterpartyDto item, CancellationToken cancel = default)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
             Counterparty? dbCounterparty = _db.Counterparties.FirstOrDefault(c => c.Id == item.Id);
             if (dbCounterparty is null)
                 throw new InvalidOperationException($" Контрагент с id {item.Id} в базе не найден");
-            _db.Counterparties.Local.Remove(dbCounterparty); // если сущность есть в БД, то она отслеживается в контексте, поэтому удаляем ее перед обновлением
-            var it = _map.Map(item);
-            _db.Counterparties.Update(it);
+            var it = _map.Map(item, dbCounterparty);
+            var resalt= _db.Counterparties.Update(it);
             await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
-            return true;
+            return _map.Map(resalt.Entity);
         }
 
         public async Task<bool> DeleteAsync(CounterpartyDto item, CancellationToken cancel = default)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
-            var it = _map.Map(item);
-            it.Status = await _db.Statuses.FirstAsync(s => s.Id == 6, cancel).ConfigureAwait(false);
-            _db.Entry(it).State = EntityState.Modified;
+            var counterparty= await _db.Counterparties.FirstOrDefaultAsync(c => c.Id == item.Id && c.StatusId!=6, cancel);
+            if (counterparty is null)
+                throw new InvalidOperationException($"Контрагент с ID={item.Id} в базе данных не найден");
+            counterparty.StatusId = 6;
             await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
             return true;
         }

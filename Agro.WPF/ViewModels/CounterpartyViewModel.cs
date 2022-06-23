@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using Agro.Domain.Base;
 using Agro.Interfaces.Base.Repositories;
+using Agro.Services.Repositories;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.Views.Windows;
 using FNS.Api;
 
 namespace Agro.WPF.ViewModels;
@@ -18,53 +21,52 @@ public class CounterpartyViewModel : ViewModel
 
     private ObservableCollection<CounterpartyDto> _counters = new();
 
-    private List<GroupDto> _groups = new();
+    private ObservableCollection<GroupDto> _groups = new();
 
-    public List<GroupDto> Groups { get => _groups; set => Set(ref _groups, value); }
+    public ObservableCollection<GroupDto> Groups { get => _groups; set => Set(ref _groups, value); }
 
-    private List<TypeDocDto> _types = new();
+    private ObservableCollection<TypeDocDto> _types = new();
 
-    public List<TypeDocDto> Types { get => _types; set => Set(ref _types, value); }
+    public ObservableCollection<TypeDocDto> Types { get => _types; set => Set(ref _types, value); }
 
 
     private readonly IGroupRepository<GroupDto> _groupRep;
 
     private readonly ITypeRepository<TypeDocDto> _typeRep;
-    private readonly ICounterpertyRepository<CounterpartyDto> _counterpertyRepository;
+    private readonly ICounterpertyRepository<CounterpartyDto> _counterpartyRepository;
+    private readonly IBankDetailsRepository<BankDetailsDto> _bankDetailsRepository;
 
     private List<BankDetailsDto> _banks = new();
 
     public ObservableCollection<CounterpartyDto> CounterpartyDtoCollection { get; set; }
 
-    public List<BankDetailsDto> BankDetails
-    {
-        get => _banks;
-        set
-        {
-            Set(ref _banks, value);
-            SelectedCounterpartyDto.BankDetails = value;
-        }
-    }
-
     public CounterpartyViewModel(
         IGroupRepository<GroupDto> groupRep,
         ITypeRepository<TypeDocDto> typeRep,
-        ICounterpertyRepository<CounterpartyDto> counterpertyRepository)
+        ICounterpertyRepository<CounterpartyDto> counterpartyRepository,
+        IBankDetailsRepository<BankDetailsDto> bankDetailsRepository)
     {
         _groupRep = groupRep;
         _typeRep = typeRep;
-        _counterpertyRepository = counterpertyRepository;
+        _counterpartyRepository = counterpartyRepository;
+        _bankDetailsRepository = bankDetailsRepository;
         Title = "Новый контрагент";
         LoadList();
     }
 
     private async void LoadList()
     {
-        var groups = await _groupRep.GetAllAsync().ConfigureAwait(false);
-        Groups = groups!.ToList();
+        var groups = await _groupRep.GetAllByTypeApplicationAsync("Контрагенты");
+        foreach (var group in groups)
+        {
+            Groups.Add(group);
+        }
 
-        var types = await _typeRep.GetAllAsync().ConfigureAwait(false);
-        Types = types!.ToList();
+        var types = await _typeRep.GetAllByTypeApplicationAsync("Контрагенты");
+        foreach (var type in types)
+        {
+            Types.Add(type);
+        }
     }
 
     #region Property
@@ -85,10 +87,22 @@ public class CounterpartyViewModel : ViewModel
             Okpo = value.Okpo!;
             GroupDoc = value.Group!;
             TypeDoc = value.TypeDoc;
-            BankDetails = value.BankDetails.ToList();
+            Description = value.Description;
+            BankDetailsCollection = GetBankDetails(value);
         }
     }
 
+    private ObservableCollection<BankDetailsDto> GetBankDetails(CounterpartyDto bankDetails)
+    {
+        ObservableCollection<BankDetailsDto> bankDetailsCollection = new ObservableCollection<BankDetailsDto>();
+        foreach (var res in bankDetails.BankDetails)
+        {
+            bankDetailsCollection.Add(res);
+        }
+
+        return bankDetailsCollection;
+
+    }
     private StatusDto _status;
 
     public StatusDto Status { get => _status; set => Set(ref _status, value); }
@@ -172,7 +186,7 @@ public class CounterpartyViewModel : ViewModel
         {
             Set(ref _group, value);
             SelectedCounterpartyDto.Group = value;
-        } 
+        }
     }
 
     private TypeDocDto _typeDoc;
@@ -187,13 +201,45 @@ public class CounterpartyViewModel : ViewModel
         }
     }
 
+    private string _description;
+
+    public string Description
+    {
+        get => _description;
+        set
+        {
+            Set(ref _description, value);
+            SelectedCounterpartyDto.Description = value;
+
+        }
+    }
+
+    private BankDetailsDto _bankDetails;
+
+    public BankDetailsDto SelectBankDetails
+    {
+        get => _bankDetails;
+        set => Set(ref _bankDetails, value);
+    }
+
+    private ObservableCollection<BankDetailsDto> _bankDetailsCollection;
+    public ObservableCollection<BankDetailsDto> BankDetailsCollection
+    {
+        get => _bankDetailsCollection;
+        set
+        {
+            Set(ref _bankDetailsCollection, value);
+            SelectedCounterpartyDto.BankDetails = value;
+        }
+    }
+
     private string message;
 
     public string Message
     {
         get => message;
-        set => Set(ref message, value); 
-    } 
+        set => Set(ref message, value);
+    }
     #endregion
 
     #region Command
@@ -212,38 +258,27 @@ public class CounterpartyViewModel : ViewModel
 
     private async void OnSaveCommandExecuted(object p)
     {
-        bool result;
         SelectedCounterpartyDto.Status = new() { Id = 5, Name = "Актуально" };
-        //try
-        //{
+        try
+        {
             if (SelectedCounterpartyDto.Id == 0)
-        {
-            
-            result = await _counterpertyRepository.AddAsync(SelectedCounterpartyDto);
-            if (result)
             {
-                CounterpartyDtoCollection.Add(SelectedCounterpartyDto);
+                CounterpartyEvent(await _counterpartyRepository.AddAsync(SelectedCounterpartyDto));
             }
-        }
-        else
-        {
-            result = await _counterpertyRepository.UpdateAsync(SelectedCounterpartyDto);
-            var item = CounterpartyDtoCollection.FirstOrDefault(
-                i => i.Id == SelectedCounterpartyDto.Id);
-            item = SelectedCounterpartyDto;
-        }
-        if (result)
-        {
+            else
+            {
+                CounterpartyEvent(await _counterpartyRepository.UpdateAsync(SelectedCounterpartyDto));
+            }
+
             var window = p as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
             if (window != null)
                 window.Close();
         }
-        //}
-        //catch (InvalidOperationException e)
-        //{
-        //    MessageBox.Show(e.Message);
-        //    return;
-        //}
+        catch (InvalidOperationException e)
+        {
+            MessageBox.Show(e.Message);
+            return;
+        }
 
     }
 
@@ -251,6 +286,112 @@ public class CounterpartyViewModel : ViewModel
 
     #region AddBankDetails
 
+    private ICommand? _addBankDetailsCommand;
+
+    public ICommand AddBankDetailsCommand => _addBankDetailsCommand
+        ??= new RelayCommand(OnAddBankDetailsCommandExecuted, AddBankDetailsCommandCon);
+
+    private bool AddBankDetailsCommandCon(object arg)
+    {
+        if (SelectedCounterpartyDto.Id == 0) return false;
+        return true;
+    }
+
+    private void OnAddBankDetailsCommandExecuted(object obj)
+    {
+        BankDetailsView bankDetailsView = new();
+        var mod = bankDetailsView.DataContext as BankDetailsViewModel;
+        if (mod != null)
+        {
+            mod.Title = $"Добавление банковских реквизитов для {Name}";
+            mod.BankDetails = new();
+            mod.Counterparty = SelectedCounterpartyDto;
+            mod.BankDetailsEvent += Gridrefresh;
+        }
+
+
+        bankDetailsView.Show();
+    }
+
+    private void Gridrefresh(BankDetailsDto bankdetails)
+    {
+        var bank = BankDetailsCollection.FirstOrDefault(b => b.Id == bankdetails.Id);
+        if (bank is null)
+        {
+            BankDetailsCollection.Add(bankdetails);
+        }
+        else
+        {
+            bank = bankdetails;
+
+        }
+    }
+
+    #endregion
+
+    #region EdeteBankDetails
+    private ICommand? _edeteBankDetailsCommand;
+
+    public ICommand EdeteBankDetailsCommand => _edeteBankDetailsCommand
+        ??= new RelayCommand(OnEdeteBankDetailsCommandExecuted, EdeteBankDetailsCommandCon);
+
+    private bool EdeteBankDetailsCommandCon(object arg)
+    {
+        if (SelectBankDetails is null) return false;
+        return true;
+    }
+
+    private void OnEdeteBankDetailsCommandExecuted(object obj)
+    {
+        BankDetailsView bankDetailsView = new();
+        var mod = bankDetailsView.DataContext as BankDetailsViewModel;
+        if (mod != null)
+        {
+            mod.Title = $"Редактирование банковских реквизитов для {Name}";
+            mod.BankDetails = SelectBankDetails;
+            mod.Counterparty = SelectedCounterpartyDto;
+            mod.BankDetailsEvent += Gridrefresh;
+        }
+        bankDetailsView.Show();
+    }
+
+
+    #endregion
+
+    #region Delete
+
+    private ICommand? _deleteBankDetailsCommand;
+
+    public ICommand DeleteBankDetailsCommand => _deleteBankDetailsCommand
+        ??= new RelayCommand(OnDeleteBankDetailsCommandExecuted, DeleteBankDetailsCommandCon);
+
+    private async void OnDeleteBankDetailsCommandExecuted(object obj)
+    {
+        try
+        {
+            var resalt = MessageBox.Show("Вы действительно хотите удалить выделенные реквизиты", 
+                "Контроль", MessageBoxButton.YesNo);
+            if (resalt == MessageBoxResult.Yes)
+            {
+                if (await _bankDetailsRepository.DeleteAsync(SelectBankDetails))
+                {
+                    BankDetailsCollection.Remove(SelectBankDetails);
+                }
+            }
+            else return;
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(e.Message);
+        }
+
+    }
+
+    private bool DeleteBankDetailsCommandCon(object arg)
+    {
+        if (SelectBankDetails is null) return false;
+        return true;
+    }
 
 
     #endregion
@@ -291,12 +432,19 @@ public class CounterpartyViewModel : ViewModel
         }
         catch (InvalidOperationException e)
         {
-           Message=e.Message;
+            Message = e.Message;
         }
     }
 
 
     #endregion
+
+    #endregion
+
+    #region Event
+
+    public delegate void CounterpartyHandler(CounterpartyDto counterparty);
+    public event CounterpartyHandler CounterpartyEvent;
 
     #endregion
 }

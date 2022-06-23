@@ -1,13 +1,16 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Agro.WPF.ViewModels
+namespace Agro.WPF.ViewModels;
+
+public class ViewModelLocator
 {
-    public class ViewModelLocator
-    {
-        public ContractorsViewModel ContractorsModel => App.Services.GetRequiredService<ContractorsViewModel>();
+    public ContractorsViewModel ContractorsModel => App.Services.GetRequiredService<ContractorsViewModel>();
 
-        public CounterpartyViewModel CounterpartyModel => App.Services.GetRequiredService<CounterpartyViewModel>();
+    public CounterpartyViewModel CounterpartyModel => App.Services.GetRequiredService<CounterpartyViewModel>();
 
-       
-    }
+    public BankDetailsViewModel BankDetailsModel => App.Services.GetRequiredService<BankDetailsViewModel>();
+
+
+
 }

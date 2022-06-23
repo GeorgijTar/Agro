@@ -27,17 +27,23 @@ namespace Agro.Services.Repositories
            return grDto;
         }
 
+        public async Task<IEnumerable<GroupDto>> GetAllByTypeApplicationAsync(string typeApplication, CancellationToken cancel = default)
+        {
+            var groups = await _db.Set<GroupDoc>().Where(t => t.TypeApplication == typeApplication).ToArrayAsync(cancel).ConfigureAwait(false);
+            return groups.Select(g => _map.Map(g)).ToArray();
+        }
+
         public async Task<GroupDto?> GetByIdAsync(int id, CancellationToken cancel = default)
         {
             return _map.Map(await _db.Set<GroupDoc>().FirstAsync(g => g.Id == id, cancel).ConfigureAwait(false));
         }
 
-        public Task<bool> AddAsync(GroupDto item, CancellationToken cancel = default)
+        public Task<GroupDto> AddAsync(GroupDto item, CancellationToken cancel = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> UpdateAsync(GroupDto item, CancellationToken cancel = default)
+        public Task<GroupDto> UpdateAsync(GroupDto item, CancellationToken cancel = default)
         {
             throw new NotImplementedException();
         }

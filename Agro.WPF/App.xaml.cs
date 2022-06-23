@@ -45,7 +45,8 @@ namespace Agro.WPF
             }
 
             services.AddScoped<ContractorsViewModel>();
-            services.AddScoped<CounterpartyViewModel>();
+            services.AddTransient<CounterpartyViewModel>();
+            services.AddTransient<BankDetailsViewModel>();
 
             services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
 
@@ -54,7 +55,9 @@ namespace Agro.WPF
             services.AddScoped(typeof(ITypeRepository<TypeDocDto>), typeof(TypeRepository));
 
             services.AddScoped(typeof(ICounterpertyRepository<CounterpartyDto>), typeof(CounterpartyRepository));
-           
+
+            services.AddScoped(typeof(IBankDetailsRepository<BankDetailsDto>), typeof(BankDetailsRepository));
+
             services.AddAutoMapper(
                     typeof(CounterpartyProfile), 
                     typeof(GroupProfile), 
