@@ -90,5 +90,14 @@ namespace Agro.Services.Repositories
             return true;
         }
 
+        public IEnumerable<BankDetailsDto>? GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public BankDetailsDto? GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -79,6 +79,16 @@ namespace Agro.Services.Repositories
             return true;
         }
 
+        public IEnumerable<CounterpartyDto>? GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CounterpartyDto? GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<CounterpartyDto>?> GetAllByStatusAsync(int statusId, CancellationToken cancel = default)
         {
             var col = await _db.Set<Counterparty>()

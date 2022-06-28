@@ -50,6 +50,15 @@ namespace Agro.Services.Repositories
         {
             throw new NotImplementedException();
         }
-        
+
+        public IEnumerable<StatusDto>? GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public StatusDto? GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

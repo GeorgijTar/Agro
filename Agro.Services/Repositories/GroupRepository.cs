@@ -9,12 +9,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Agro.Services.Repositories
 {
-    public class GroupRepository:IGroupRepository<GroupDto>
+    public class GroupRepository : IGroupRepository<GroupDto>
     {
         private readonly AgroDB _db;
         private readonly IMapper<GroupDto, GroupDoc> _map;
 
-        public GroupRepository(AgroDB db, IMapper<GroupDto,GroupDoc> map)
+        public GroupRepository(AgroDB db, IMapper<GroupDto, GroupDoc> map)
         {
             _db = db;
             _map = map;
@@ -22,14 +22,27 @@ namespace Agro.Services.Repositories
 
         public async Task<IEnumerable<GroupDto>?> GetAllAsync(CancellationToken cancel = default)
         {
-           var groups= await _db.Set<GroupDoc>().ToArrayAsync(cancel).ConfigureAwait(false);
-           var grDto= groups.Select(g => _map.Map(g)).ToArray();
-           return grDto;
+            IEnumerable<GroupDoc>? groups = await _db.Groups.ToArrayAsync(cancel).ConfigureAwait(false);
+            var grDto = groups.Select(g => _map.Map(g)).ToArray();
+            return grDto;
         }
 
         public async Task<IEnumerable<GroupDto>> GetAllByTypeApplicationAsync(string typeApplication, CancellationToken cancel = default)
         {
-            var groups = await _db.Set<GroupDoc>().Where(t => t.TypeApplication == typeApplication).ToArrayAsync(cancel).ConfigureAwait(false);
+            try
+            {
+                var groups = await _db.Set<GroupDoc>().Where(t => t.TypeApplication == typeApplication).ToArrayAsync(cancel).ConfigureAwait(false);
+                return groups.Select(g => _map.Map(g)).ToArray();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public IEnumerable<GroupDto>? GetAllByTypeApplication(string typeApplication)
+        {
+            var groups =  _db.Set<GroupDoc>().Where(t => t.TypeApplication == typeApplication).ToArray();
             return groups.Select(g => _map.Map(g)).ToArray();
         }
 
@@ -54,6 +67,18 @@ namespace Agro.Services.Repositories
         }
 
         public Task<bool> DeleteByIdAsync(int id, CancellationToken cancel = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<GroupDto>? GetAll()
+        {
+            IEnumerable<GroupDoc>? groups =  _db.Groups.ToArray();
+            var grDto = groups.Select(g => _map.Map(g)).ToArray();
+            return grDto;
+        }
+
+        public GroupDto? GetById(int id)
         {
             throw new NotImplementedException();
         }

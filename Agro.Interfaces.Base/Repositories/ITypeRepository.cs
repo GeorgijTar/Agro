@@ -8,5 +8,7 @@ namespace Agro.Interfaces.Base.Repositories
     {
         public Task<IEnumerable<TypeDocDto>> GetAllByTypeApplicationAsync(string typeApplication,
             CancellationToken cancel = default);
+
+        public IEnumerable<TypeDocDto> GetAllByTypeApplication(string typeApplication);
     }
 }

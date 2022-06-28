@@ -84,4 +84,17 @@ public class UnitRepository:IUnitRepository<UnitOkeiDto>
         await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
         return true;
     }
+
+    public IEnumerable<UnitOkeiDto>? GetAll()
+    {
+        var unit =  _db.UnitsOkei
+            .Include(u => u.Status)
+            .ToArray();
+        return unit.Select(p => _map.Map(p)).ToArray();
+    }
+
+    public UnitOkeiDto? GetById(int id)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -8,7 +8,7 @@ namespace Agro.Domain.Base;
 /// Контрагент
 /// </summary>
 
-public class CounterpartyDto : NotifyPropertyChanged
+public class CounterpartyDto : EntityDto
 {
     public CounterpartyDto()
     {

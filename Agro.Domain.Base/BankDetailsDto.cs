@@ -6,7 +6,7 @@ namespace Agro.Domain.Base;
 /// <summary>
 /// Банковские реквизиты
 /// </summary>
-public class BankDetailsDto: NotifyPropertyChanged
+public class BankDetailsDto: EntityDto
 {
   
     private string? _title;

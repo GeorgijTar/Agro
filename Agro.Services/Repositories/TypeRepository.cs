@@ -34,6 +34,12 @@ namespace Agro.Services.Repositories
             return types.Select(t => _map.Map(t)).ToArray();
         }
 
+        public IEnumerable<TypeDocDto> GetAllByTypeApplication(string typeApplication)
+        {
+            var types =  _db.Set<TypeDoc>().Where(t => t.TypeApplication == typeApplication).ToArray();
+            return types.Select(t => _map.Map(t)).ToArray();
+        }
+
         public Task<TypeDocDto> AddAsync(TypeDocDto item, CancellationToken cancel = default)
         {
             throw new NotImplementedException();
@@ -50,6 +56,17 @@ namespace Agro.Services.Repositories
         }
 
         public Task<bool> DeleteByIdAsync(int id, CancellationToken cancel = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TypeDocDto>? GetAll()
+        {
+            var types =  _db.Types.ToArray();
+            return types.Select(t => _map.Map(t)).ToArray();
+        }
+
+        public TypeDocDto? GetById(int id)
         {
             throw new NotImplementedException();
         }

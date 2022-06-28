@@ -1,10 +1,12 @@
-﻿using Agro.Interfaces.Base.Entities;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Agro.Interfaces.Base.Entities;
 
 namespace Agro.Domain.Base.Base;
 
 /// <summary>Сущность</summary>
 /// <typeparam name="TKey">Тип первичного ключа</typeparam>
-public abstract class EntityDto<TKey> : IEntity<TKey>, IEquatable<EntityDto<TKey>> where TKey : IEquatable<TKey>
+public abstract class EntityDto<TKey> : INotifyPropertyChanged, IEntity<TKey>, IEquatable<EntityDto<TKey>> where TKey : IEquatable<TKey>
 {
     /// <summary>Первичный ключ</summary>
     public TKey Id { get; set; } = default!;
@@ -43,7 +45,34 @@ public abstract class EntityDto<TKey> : IEntity<TKey>, IEquatable<EntityDto<TKey
     /// <summary>Оператор проверки на неравенство двух сущностей</summary>
     /// <param name="left">Левый операнд</param><param name="right">Правый операнд</param>
     /// <returns>Истина, если значение левого операнда не равно значению правого операнда</returns>
-    public static bool operator !=(EntityDto<TKey> left, EntityDto<TKey> right) => !Equals(left, right);
+    public static bool operator !=(EntityDto<TKey>? left, EntityDto<TKey> right) => !Equals(left, right);
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    public virtual void OnPropertyChanged([CallerMemberName] string? proppertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(proppertyName));
+    }
+
+    /// <summary>
+    /// Универсальный способ применения изменений к полям. 
+    /// </summary>
+    /// <typeparam name="T">Any type of field.</typeparam>
+    /// <param name="field">Reference to the current field.</param>
+    /// <param name="value">New value for field.</param>
+    /// <param name="propertyName">Name of property, that has called this method.</param>
+    /// <returns></returns>
+    public virtual bool Set<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    {
+        if (Equals(field, value))
+            return false;
+
+        field = value;
+        OnPropertyChanged(propertyName);
+        return true;
+    }
+
+
 }
 
 /// <summary>Сущность</summary>

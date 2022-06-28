@@ -4,6 +4,7 @@ using Agro.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Agro.DAL.Sql.Migrations
 {
     [DbContext(typeof(AgroDB))]
-    partial class AgroDBModelSnapshot : ModelSnapshot
+    [Migration("20220624054849_Product")]
+    partial class Product
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,72 +170,6 @@ namespace Agro.DAL.Sql.Migrations
                             Id = 2,
                             Name = "Поставщики",
                             TypeApplication = "Контрагенты"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Зерновые",
-                            TypeApplication = "Готовая продукция"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Масляничные",
-                            TypeApplication = "Готовая продукция"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Технические",
-                            TypeApplication = "Готовая продукция"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Отходы",
-                            TypeApplication = "Готовая продукция"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Средства защиты растений",
-                            TypeApplication = "Материальные запасы"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Удобрения",
-                            TypeApplication = "Материальные запасы"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Семена",
-                            TypeApplication = "Материальные запасы"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Запасные части",
-                            TypeApplication = "Материальные запасы"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Материалы",
-                            TypeApplication = "Материальные запасы"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Name = "Малоценные товары, инвентарь",
-                            TypeApplication = "Материальные запасы"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Name = "ГСМ",
-                            TypeApplication = "Материальные запасы"
                         });
                 });
 
@@ -255,32 +191,6 @@ namespace Agro.DAL.Sql.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Ndses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Без НДС",
-                            Percent = 0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "0%",
-                            Percent = 0
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "10%",
-                            Percent = 10
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "20%",
-                            Percent = 20
-                        });
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Product", b =>
@@ -447,18 +357,6 @@ namespace Agro.DAL.Sql.Migrations
                             Id = 7,
                             Name = "Почтовый адрес",
                             TypeApplication = "Адреса"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Готовая продукция",
-                            TypeApplication = "Товары"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Материальные запасы",
-                            TypeApplication = "Товары"
                         });
                 });
 
@@ -490,136 +388,6 @@ namespace Agro.DAL.Sql.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("UnitsOkei");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Abbreviation = "ч",
-                            Name = "Час",
-                            OkeiCode = "356",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Abbreviation = "мм",
-                            Name = "Миллиметр",
-                            OkeiCode = "003",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Abbreviation = "см",
-                            Name = "Сантиметр",
-                            OkeiCode = "004",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Abbreviation = "м",
-                            Name = "Метр",
-                            OkeiCode = "006",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Abbreviation = "г",
-                            Name = "Грамм",
-                            OkeiCode = "163",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Abbreviation = "кг",
-                            Name = "Килограмм",
-                            OkeiCode = "166",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Abbreviation = "т",
-                            Name = "Тонна; метрическая тонна (1000 кг)",
-                            OkeiCode = "168",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Abbreviation = "м3",
-                            Name = "Кубический метр",
-                            OkeiCode = "113",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Abbreviation = "м2",
-                            Name = "Квадратный метр",
-                            OkeiCode = "055",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Abbreviation = "га",
-                            Name = "Гектар",
-                            OkeiCode = "059",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Abbreviation = "кВт.ч",
-                            Name = "Киловатт-час",
-                            OkeiCode = "245",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Abbreviation = "л.",
-                            Name = "Лист",
-                            OkeiCode = "625",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Abbreviation = "пар",
-                            Name = "Пара (2 шт.)",
-                            OkeiCode = "715",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Abbreviation = "упак",
-                            Name = "Упаковка",
-                            OkeiCode = "778",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Abbreviation = "шт",
-                            Name = "Штука",
-                            OkeiCode = "796",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Abbreviation = "ц",
-                            Name = "Центнер (метрический) (100 кг)",
-                            OkeiCode = "206",
-                            StatusId = 5
-                        });
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.BankDetails", b =>

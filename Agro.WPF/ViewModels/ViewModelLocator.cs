@@ -5,6 +5,7 @@ namespace Agro.WPF.ViewModels;
 
 public class ViewModelLocator
 {
+    public MainWindowViewModel MainWindowModel => App.Services.GetRequiredService<MainWindowViewModel>();
     public ContractorsViewModel ContractorsModel => App.Services.GetRequiredService<ContractorsViewModel>();
 
     public CounterpartyViewModel CounterpartyModel => App.Services.GetRequiredService<CounterpartyViewModel>();
@@ -12,6 +13,9 @@ public class ViewModelLocator
     public BankDetailsViewModel BankDetailsModel => App.Services.GetRequiredService<BankDetailsViewModel>();
 
     public ProductsViewModel ProductsModel => App.Services.GetRequiredService<ProductsViewModel>();
+
+    public ProductViewModel ProductModel => App.Services.GetRequiredService<ProductViewModel>();
+
 
 
 

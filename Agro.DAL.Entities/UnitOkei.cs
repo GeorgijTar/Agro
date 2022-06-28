@@ -20,7 +20,7 @@ public class UnitOkei: Entity
     [Required]
     public string OkeiCode { get; set; } = null!;
 
-
+    public override string ToString() => Abbreviation;
 
 
 }

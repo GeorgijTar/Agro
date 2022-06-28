@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Agro.Domain.Base.Base;
 
 namespace Agro.Domain.Base;
-public class ProductDto: NotifyPropertyChanged
+public class ProductDto: EntityDto
 {
     private string _nameMine=null!;
     [Required] 

@@ -10,4 +10,6 @@ public class Nds: Entity
 
     [Required]
     public int Percent { get; set; }
+
+    public override string ToString() => Name;
 }

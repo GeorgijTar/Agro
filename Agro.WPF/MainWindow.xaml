@@ -8,13 +8,14 @@
         xmlns:local="clr-namespace:Agro.WPF"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="1150" WindowState="Maximized">
+        Title="{Binding Title}" Height="650" Width="1150" WindowState="Maximized" 
+        DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        
+
         <Grid Height="70" Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="35"/>
@@ -22,21 +23,22 @@
             </Grid.RowDefinitions>
             <Menu>
                 <MenuItem Header="Справочники" >
-                        <MenuItem.Icon>
-                            <fa5:ImageAwesome Height="32" Icon="Solid_Book" Foreground="DarkBlue"/>
-                        </MenuItem.Icon>
-                        
-                        <MenuItem Header="Контрагенты" Click="CustomerBtn_OnClick"></MenuItem>
-                    </MenuItem>
-                </Menu>
-           
+                    <MenuItem.Icon>
+                        <fa5:ImageAwesome Height="32" Icon="Solid_Book" Foreground="DarkBlue"/>
+                    </MenuItem.Icon>
+
+                    <MenuItem Header="Контрагенты" Command="{Binding ShowContractors}"/>
+                    <MenuItem Header="Номенклатура" Command="{Binding ShowProduct}"/>
+                </MenuItem>
+            </Menu>
+
             <Grid Grid.Row="1" Background="AliceBlue">
                 <GroupBox>
 
                 </GroupBox>
             </Grid>
         </Grid>
-        
+
         <Grid Row="1" Height ="auto">
             <ContentControl FontSize="12" Name="ContentControl"/>
             <wpf:LoadingIndicator  Name="prgTest"  SpeedRatio="2" IsActive="False" Style="{DynamicResource LoadingIndicatorArcsRingStyle}"/>

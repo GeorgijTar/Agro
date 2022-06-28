@@ -60,4 +60,15 @@ public class NdsRepository:INdsRepository<NdsDto>
     {
         throw new NotImplementedException();
     }
+
+    public IEnumerable<NdsDto>? GetAll()
+    {
+        var nds =  _db.Ndses.ToArray();
+        return nds.Select(n => _map.Map(n)).ToArray();
+    }
+
+    public NdsDto? GetById(int id)
+    {
+        throw new NotImplementedException();
+    }
 }

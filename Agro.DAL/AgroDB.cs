@@ -33,6 +33,8 @@ public class AgroDB : DbContext
         db.Entity<Status>().HasData(GetDefaultData.DefaultStatus());
         db.Entity<GroupDoc>().HasData(GetDefaultData.DefaultGroup());
         db.Entity<TypeDoc>().HasData(GetDefaultData.DefaultType());
+        db.Entity<UnitOkei>().HasData(GetDefaultData.DefaultUnitOkeis());
+        db.Entity<Nds>().HasData(GetDefaultData.DefaultNds());
     }
 
     

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Agro.Domain.Base.Base;
 
 namespace Agro.Domain.Base;
-public class UnitOkeiDto:NotifyPropertyChanged
+public class UnitOkeiDto: EntityDto
 {
     [Required]
     public StatusDto Status { get; set; } = null!;
@@ -16,4 +16,7 @@ public class UnitOkeiDto:NotifyPropertyChanged
 
     [Required]
     public string OkeiCode { get; set; } = null!;
+
+    public override string ToString() => Name;
 }
+

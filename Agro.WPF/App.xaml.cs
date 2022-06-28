@@ -48,6 +48,9 @@ namespace Agro.WPF
             services.AddScoped<ContractorsViewModel>();
             services.AddTransient<CounterpartyViewModel>();
             services.AddTransient<BankDetailsViewModel>();
+            services.AddTransient<ProductsViewModel>();
+            services.AddScoped<MainWindowViewModel>();
+            services.AddTransient<ProductViewModel>();
 
 
             //Регистрация репозиториев
@@ -63,9 +66,9 @@ namespace Agro.WPF
 
             services.AddScoped(typeof(IProductRepository<ProductDto>), typeof(ProductRepository));
 
-            services.AddScoped(typeof(IUnitRepository<>), typeof(UnitRepository));
+            services.AddScoped(typeof(IUnitRepository<UnitOkeiDto>), typeof(UnitRepository));
 
-            services.AddScoped(typeof(INdsRepository<>), typeof(NdsRepository));
+            services.AddScoped(typeof(INdsRepository<NdsDto>), typeof(NdsRepository));
 
 
             // Регистрация мапера

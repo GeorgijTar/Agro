@@ -6,7 +6,7 @@ namespace Agro.Domain.Base;
 /// <summary>
 /// Статус документа
 /// </summary>
-public class StatusDto : NotifyPropertyChanged
+public class StatusDto : EntityDto
 {
     private string _name;
 

@@ -20,14 +20,14 @@ public class ProductRepository:IProductRepository<ProductDto>
 
     public async Task<IEnumerable<ProductDto>?> GetAllAsync(CancellationToken cancel = default)
     {
-        var products = await _db.Products
+        IEnumerable<Product>? products = await _db.Products
             .Include(p=>p.Status)
             .Include(p=>p.Group)
             .Include(p => p.Type)
             .Include(p => p.Unit)
             .Include(p => p.Nds)
             .ToArrayAsync(cancel).ConfigureAwait(false);
-        return products.Select(p=>_map.Map(p)).ToArray();
+       return products.Select(p=>_map.Map(p)).ToArray();
     }
 
     public async Task<IEnumerable<ProductDto>?> GetAllByStatusAsync(int idStatus, CancellationToken cancel = default)
@@ -78,9 +78,10 @@ public class ProductRepository:IProductRepository<ProductDto>
         if (productDb! == null!)
             throw new InvalidOperationException($"Товар с ID {item.Id} в базе данных не найден");
        var pd = _map.Map(item, productDb);
-        _db.Products.Update(pd);
+       Product? prodDb = _db.Products.Update(pd).Entity;
         await _db.SaveChangesAsync(cancel);
-        return _map.Map(pd, item);
+        var mapProd = _map.Map(prodDb, item);
+        return mapProd;
     }
 
     public async Task<bool> DeleteAsync(ProductDto item, CancellationToken cancel = default)
@@ -104,5 +105,22 @@ public class ProductRepository:IProductRepository<ProductDto>
         _db.Entry(item).State = EntityState.Modified;
         await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
         return true;
+    }
+
+    public IEnumerable<ProductDto>? GetAll()
+    {
+        IEnumerable<Product>? products =  _db.Products
+            .Include(p => p.Status)
+            .Include(p => p.Group)
+            .Include(p => p.Type)
+            .Include(p => p.Unit)
+            .Include(p => p.Nds)
+            .ToArray();
+        return products.Select(p => _map.Map(p)).ToArray();
+    }
+
+    public ProductDto? GetById(int id)
+    {
+        throw new NotImplementedException();
     }
 }
