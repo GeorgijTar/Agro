@@ -21,9 +21,19 @@ public class AgroDB : DbContext
 
     public DbSet<Nds>  Ndses { get; set; } = null!;
 
+    public DbSet<AccountingPlan> AccountingPlans { get; set; } = null!;
+
+    public DbSet<Invoice> Invoices { get; set; } = null!;
+
     //public DbSet<Address> Addresses { get; set; } = null!;
 
     public DbSet<Counterparty> Counterparties { get; set; } = null!;
+
+    public DbSet<ScanFile> ScanFiles { get; set; } = null!;
+
+    public DbSet<Contract> Contracts { get; set; } = null!;
+
+    public DbSet<SpecificationContract> Specifications { get; set; } = null!;
 
 #endregion
     public AgroDB(DbContextOptions<AgroDB> options) : base(options) { }

@@ -8,10 +8,17 @@ namespace Agro.Domain.Base;
 /// </summary>
 public class TypeDocDto : EntityDto
 {
+   
+    
+    private string _name;
 
-    public string Name { get; set; } = null!;
+    [Required]
+    public string Name { get=>_name; set=>Set(ref _name, value); }
 
-    public string TypeApplication { get; set; } = null!;
+    private string _typeApplication;
+
+    [Required]
+    public string TypeApplication { get=> _typeApplication; set=>Set(ref _typeApplication, value); }
 
 
     public override string ToString() => Name;
