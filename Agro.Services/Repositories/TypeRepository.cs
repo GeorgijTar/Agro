@@ -23,6 +23,11 @@ namespace Agro.Services.Repositories
             return types.Select(t => _map.Map(t)).ToArray();
         }
 
+        public Task<IEnumerable<TypeDocDto>?> GetAllByStatusAsync(int statusId, CancellationToken cancel = default)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<TypeDocDto?> GetByIdAsync(int id, CancellationToken cancel = default)
         {
             return _map.Map(await _db.Set<TypeDoc>().FirstAsync(t => t.Id == id, cancel).ConfigureAwait(false));
@@ -46,6 +51,11 @@ namespace Agro.Services.Repositories
         }
 
         public Task<TypeDocDto> UpdateAsync(TypeDocDto item, CancellationToken cancel = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TypeDocDto> SaveAsync(TypeDocDto item, CancellationToken cancel = default)
         {
             throw new NotImplementedException();
         }

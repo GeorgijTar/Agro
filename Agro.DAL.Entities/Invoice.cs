@@ -52,4 +52,7 @@ public class Invoice : Entity
     /// <summary>Прикрепленные файлы</summary>
     public ICollection<ScanFile>? ScanFiles { get; set; }
 
+    /// <summary>Платежные реквизиты организации</summary>
+    public BankDetails? BankDetailsOrg { get; set; }
+
 }

@@ -3,21 +3,26 @@ using System;
 using Agro.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Agro.DAL.MySql.Migrations
+namespace Agro.DAL.Sql.Migrations
 {
     [DbContext(typeof(AgroDB))]
-    partial class AgroDBModelSnapshot : ModelSnapshot
+    [Migration("20220708195641_UpdateDefaultDate")]
+    partial class UpdateDefaultDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.6")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Agro.DAL.Entities.AccountingPlan", b =>
                 {
@@ -25,16 +30,18 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsSelect")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ParentPlanId")
                         .HasColumnType("int");
@@ -467,7 +474,7 @@ namespace Agro.DAL.MySql.Migrations
                             Id = 47,
                             Code = "20-1",
                             IsSelect = true,
-                            Name = "Основное производство - Растениеводство",
+                            Name = "Основное производство-Растениеводства",
                             ParentPlanId = 46,
                             StatusId = 5
                         },
@@ -519,760 +526,10 @@ namespace Agro.DAL.MySql.Migrations
                         new
                         {
                             Id = 53,
-                            Code = "23-4",
+                            Code = "23-3",
                             IsSelect = true,
-                            Name = "Водоснаюжение",
+                            Name = "Электроснабжение",
                             ParentPlanId = 50,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 54,
-                            Code = "23-5",
-                            IsSelect = true,
-                            Name = "Автотранспорт",
-                            ParentPlanId = 50,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 55,
-                            Code = "23-6",
-                            IsSelect = true,
-                            Name = "Газоснабжение",
-                            ParentPlanId = 50,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 56,
-                            Code = "25",
-                            IsSelect = false,
-                            Name = "Общепроизводственные расходы",
-                            ParentPlanId = 45,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 57,
-                            Code = "25-1",
-                            IsSelect = true,
-                            Name = "Общепроизводственные расходы - Растениеводства",
-                            ParentPlanId = 56,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 58,
-                            Code = "26",
-                            IsSelect = true,
-                            Name = "Общехозяйственные расходы",
-                            ParentPlanId = 45,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 59,
-                            Code = "Раздел IV",
-                            IsSelect = false,
-                            Name = "Готовая продукция и товары",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 60,
-                            Code = "40",
-                            IsSelect = true,
-                            Name = "Выпуск продукции (Продукция с поля)",
-                            ParentPlanId = 59,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 61,
-                            Code = "41",
-                            IsSelect = false,
-                            Name = "Товары",
-                            ParentPlanId = 59,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 62,
-                            Code = "41-1",
-                            IsSelect = true,
-                            Name = "Товары на складах",
-                            ParentPlanId = 61,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 63,
-                            Code = "41-2",
-                            IsSelect = true,
-                            Name = "Товары к продаже",
-                            ParentPlanId = 61,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 64,
-                            Code = "43",
-                            IsSelect = false,
-                            Name = "Готовая продукция",
-                            ParentPlanId = 59,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 65,
-                            Code = "43-1",
-                            IsSelect = true,
-                            Name = "Готовая продукция - Растениеводства",
-                            ParentPlanId = 64,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 66,
-                            Code = "Раздел V",
-                            IsSelect = false,
-                            Name = "Денежные средства",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 67,
-                            Code = "50",
-                            IsSelect = true,
-                            Name = "Касса",
-                            ParentPlanId = 66,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 68,
-                            Code = "51",
-                            IsSelect = false,
-                            Name = "Расчетные счета",
-                            ParentPlanId = 66,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 69,
-                            Code = "51-1",
-                            IsSelect = true,
-                            Name = "Расчетный счет в Россельхозбанке",
-                            ParentPlanId = 68,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 70,
-                            Code = "51-2",
-                            IsSelect = true,
-                            Name = "Расчетный счет в ОТП",
-                            ParentPlanId = 68,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 71,
-                            Code = "51-3",
-                            IsSelect = true,
-                            Name = "Расчетный счет в Сбербанке",
-                            ParentPlanId = 68,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 72,
-                            Code = "52",
-                            IsSelect = false,
-                            Name = "Валютные счета",
-                            ParentPlanId = 66,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 73,
-                            Code = "52-1",
-                            IsSelect = true,
-                            Name = "Валютные счета внутри страны",
-                            ParentPlanId = 72,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 74,
-                            Code = "55",
-                            IsSelect = false,
-                            Name = "Специальные счета в банках",
-                            ParentPlanId = 66,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 75,
-                            Code = "55-3",
-                            IsSelect = true,
-                            Name = "Депозитные счета",
-                            ParentPlanId = 74,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 76,
-                            Code = "57",
-                            IsSelect = true,
-                            Name = "Переводы в пути",
-                            ParentPlanId = 66,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 77,
-                            Code = "Раздел VI",
-                            IsSelect = false,
-                            Name = "Расчеты",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 78,
-                            Code = "60",
-                            IsSelect = false,
-                            Name = "Расчеты с поставщиками и подрядчиками",
-                            ParentPlanId = 77,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 79,
-                            Code = "60-1",
-                            IsSelect = true,
-                            Name = "Расчеты с поставщиками и подрядчиками",
-                            ParentPlanId = 78,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 80,
-                            Code = "60-2",
-                            IsSelect = true,
-                            Name = "Расчеты с поставщиками и подрядчиками по авансам выданным",
-                            ParentPlanId = 78,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 81,
-                            Code = "62",
-                            IsSelect = false,
-                            Name = "Расчеты с покупателями, заказчиками",
-                            ParentPlanId = 77,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 82,
-                            Code = "62-1",
-                            IsSelect = true,
-                            Name = "Расчеты с покупателями, заказчиками",
-                            ParentPlanId = 81,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 137,
-                            Code = "62-2",
-                            IsSelect = true,
-                            Name = "Расчеты с покупателями, заказчиками по авансам полученным",
-                            ParentPlanId = 81,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 83,
-                            Code = "66",
-                            IsSelect = false,
-                            Name = "Расчеты по краткосрочным кредитам и займам",
-                            ParentPlanId = 77,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 84,
-                            Code = "67",
-                            IsSelect = false,
-                            Name = "Расчеты по долгосрочным кредитам и займам",
-                            ParentPlanId = 77,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 85,
-                            Code = "68",
-                            IsSelect = false,
-                            Name = "Расчеты по налогам и сборам",
-                            ParentPlanId = 77,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 86,
-                            Code = "68-1",
-                            IsSelect = true,
-                            Name = "НДС с реализованной продукции",
-                            ParentPlanId = 85,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 87,
-                            Code = "68-3",
-                            IsSelect = true,
-                            Name = "Налог на доходы физических лиц",
-                            ParentPlanId = 85,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 88,
-                            Code = "68-3Д",
-                            IsSelect = true,
-                            Name = "Налог на доходы физических лиц с дивидендов",
-                            ParentPlanId = 85,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 89,
-                            Code = "68-4",
-                            IsSelect = true,
-                            Name = "Налог на прибыль организаций",
-                            ParentPlanId = 85,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 90,
-                            Code = "68-5",
-                            IsSelect = true,
-                            Name = "Транспортный налог с организаций",
-                            ParentPlanId = 85,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 91,
-                            Code = "68-6",
-                            IsSelect = true,
-                            Name = "Налог на имущество организаций",
-                            ParentPlanId = 85,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 92,
-                            Code = "68-7",
-                            IsSelect = true,
-                            Name = "Земельный налог с организаций",
-                            ParentPlanId = 85,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 93,
-                            Code = "69",
-                            IsSelect = false,
-                            Name = "Расчеты по социальному страхованию и обеспечению",
-                            ParentPlanId = 77,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 94,
-                            Code = "69-1",
-                            IsSelect = false,
-                            Name = "Расчеты по социальному страхованию",
-                            ParentPlanId = 93,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 95,
-                            Code = "69-1-1",
-                            IsSelect = true,
-                            Name = "Расчеты по обязательному социальному страхованию",
-                            ParentPlanId = 94,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 96,
-                            Code = "69-1-2",
-                            IsSelect = true,
-                            Name = "Расчеты по обязательному социальному страхованию от несчастных случаев",
-                            ParentPlanId = 94,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 97,
-                            Code = "69-2",
-                            IsSelect = true,
-                            Name = "Расчеты по пенсионному обеспечению",
-                            ParentPlanId = 93,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 98,
-                            Code = "69-3",
-                            IsSelect = true,
-                            Name = "Расчеты по обязательному медицинскому страхованию",
-                            ParentPlanId = 93,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 99,
-                            Code = "70",
-                            IsSelect = true,
-                            Name = "Расчеты с персоналом по оплате труда",
-                            ParentPlanId = 77,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 100,
-                            Code = "71",
-                            IsSelect = true,
-                            Name = "Расчеты с подотчетными лицами",
-                            ParentPlanId = 77,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 101,
-                            Code = "73",
-                            IsSelect = true,
-                            Name = "Расчеты с персоналом по прочим операциям",
-                            ParentPlanId = 77,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 102,
-                            Code = "75",
-                            IsSelect = true,
-                            Name = "Расчеты с учредителями",
-                            ParentPlanId = 77,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 103,
-                            Code = "76",
-                            IsSelect = true,
-                            Name = "Расчеты с разными дебиторами и кредиторами",
-                            ParentPlanId = 77,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 104,
-                            Code = "76АВ",
-                            IsSelect = true,
-                            Name = "Расчеты с разными дебиторами и кредиторами по авансам полученным",
-                            ParentPlanId = 103,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 105,
-                            Code = "76ВА",
-                            IsSelect = true,
-                            Name = "Расчеты с разными дебиторами и кредиторами по авансам выданным",
-                            ParentPlanId = 103,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 106,
-                            Code = "Раздел VII",
-                            IsSelect = false,
-                            Name = "Капитал",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 107,
-                            Code = "80",
-                            IsSelect = true,
-                            Name = "Уставный капитал",
-                            ParentPlanId = 106,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 108,
-                            Code = "83",
-                            IsSelect = true,
-                            Name = "Нераспределенная прибыль (непокрытый убыток)",
-                            ParentPlanId = 106,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 109,
-                            Code = "84",
-                            IsSelect = true,
-                            Name = "Добавочный капитал",
-                            ParentPlanId = 106,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 110,
-                            Code = "86",
-                            IsSelect = true,
-                            Name = "Целевое финансирование",
-                            ParentPlanId = 106,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 111,
-                            Code = "Раздел VIII",
-                            IsSelect = false,
-                            Name = "Финансовые результаты",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 112,
-                            Code = "90",
-                            IsSelect = false,
-                            Name = "Продажи",
-                            ParentPlanId = 111,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 113,
-                            Code = "90-1",
-                            IsSelect = true,
-                            Name = "Реализацйия продукции растениеводства",
-                            ParentPlanId = 112,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 114,
-                            Code = "90-3",
-                            IsSelect = true,
-                            Name = "Реализацйия прочей продукции и ТМЦ",
-                            ParentPlanId = 112,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 115,
-                            Code = "91",
-                            IsSelect = false,
-                            Name = "Прочие доходы и расходы",
-                            ParentPlanId = 111,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 116,
-                            Code = "91-1",
-                            IsSelect = true,
-                            Name = "Прочие доходы",
-                            ParentPlanId = 115,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 117,
-                            Code = "91-2",
-                            IsSelect = true,
-                            Name = "Прочие расходы",
-                            ParentPlanId = 115,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 118,
-                            Code = "91-9",
-                            IsSelect = true,
-                            Name = "Сальдо прочих доходов и расходов",
-                            ParentPlanId = 115,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 119,
-                            Code = "94",
-                            IsSelect = true,
-                            Name = "Недостачи и потери от порчи ценностей",
-                            ParentPlanId = 111,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 120,
-                            Code = "96",
-                            IsSelect = false,
-                            Name = "Резервы предстоящих расходов",
-                            ParentPlanId = 111,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 121,
-                            Code = "96-1",
-                            IsSelect = true,
-                            Name = "Резерв на оплату отпусков",
-                            ParentPlanId = 120,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 122,
-                            Code = "97",
-                            IsSelect = true,
-                            Name = "Расходы будущих периодов",
-                            ParentPlanId = 111,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 123,
-                            Code = "99",
-                            IsSelect = true,
-                            Name = "Прибыли и убытки",
-                            ParentPlanId = 111,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 124,
-                            Code = "Раздел IX",
-                            IsSelect = false,
-                            Name = "Забалансовые счета",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 125,
-                            Code = "001",
-                            IsSelect = true,
-                            Name = "Арендованные основные средства",
-                            ParentPlanId = 124,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 126,
-                            Code = "002",
-                            IsSelect = true,
-                            Name = "Товарно-материальные ценности, принятые на ответственное хранение",
-                            ParentPlanId = 124,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 127,
-                            Code = "003",
-                            IsSelect = true,
-                            Name = "Материалы, принятые в переработку",
-                            ParentPlanId = 124,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 128,
-                            Code = "004",
-                            IsSelect = true,
-                            Name = "Товары, принятые на комиссию",
-                            ParentPlanId = 124,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 129,
-                            Code = "005",
-                            IsSelect = true,
-                            Name = "Оборудование, принятое для монтажа",
-                            ParentPlanId = 124,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 130,
-                            Code = "006",
-                            IsSelect = true,
-                            Name = "Бланки строгой отчетности",
-                            ParentPlanId = 124,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 131,
-                            Code = "007",
-                            IsSelect = true,
-                            Name = "Списанная в убыток задолженность неплатежеспособных дебиторов",
-                            ParentPlanId = 124,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 132,
-                            Code = "008",
-                            IsSelect = true,
-                            Name = "Обеспечение обязательств и платежей (полученные)",
-                            ParentPlanId = 124,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 133,
-                            Code = "009",
-                            IsSelect = true,
-                            Name = "Обеспечение обязательств и платежей (выданные)",
-                            ParentPlanId = 124,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 134,
-                            Code = "010",
-                            IsSelect = true,
-                            Name = "Износ основных средств",
-                            ParentPlanId = 124,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 135,
-                            Code = "011",
-                            IsSelect = true,
-                            Name = "Основные средства, сданные в аренду",
-                            ParentPlanId = 124,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 136,
-                            Code = "012",
-                            IsSelect = true,
-                            Name = "Земельные угодья",
-                            ParentPlanId = 124,
                             StatusId = 5
                         });
                 });
@@ -1283,42 +540,44 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<string>("Bik")
                         .IsRequired()
                         .HasMaxLength(9)
-                        .HasColumnType("varchar(9)");
+                        .HasColumnType("nvarchar(9)");
 
                     b.Property<string>("Bs")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CounterpartyId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasMaxLength(225)
-                        .HasColumnType("varchar(225)");
+                        .HasColumnType("nvarchar(225)");
 
                     b.Property<string>("Ks")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("NameBank")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1335,8 +594,10 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("BankDetailsId")
                         .HasColumnType("int");
@@ -1345,24 +606,24 @@ namespace Agro.DAL.MySql.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
                     b.Property<string>("Subject")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TypeId")
                         .HasColumnType("int");
@@ -1388,9 +649,11 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<string>("Description")
                         .HasMaxLength(225)
-                        .HasColumnType("varchar(225)");
+                        .HasColumnType("nvarchar(225)");
 
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
@@ -1398,27 +661,27 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<string>("Inn")
                         .IsRequired()
                         .HasMaxLength(12)
-                        .HasColumnType("varchar(12)");
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<string>("Kpp")
                         .IsRequired()
                         .HasMaxLength(9)
-                        .HasColumnType("varchar(9)");
+                        .HasColumnType("nvarchar(9)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Ogrn")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Okpo")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PayName")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
@@ -1446,12 +709,15 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TypeApplication")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1544,8 +810,10 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("BankDetailsId")
                         .HasColumnType("int");
@@ -1554,14 +822,14 @@ namespace Agro.DAL.MySql.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateInvoce")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
@@ -1588,9 +856,11 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Percent")
                         .HasColumnType("int");
@@ -1632,23 +902,25 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<string>("ArticleNumber")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasMaxLength(225)
-                        .HasColumnType("varchar(225)");
+                        .HasColumnType("nvarchar(225)");
 
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NameMini")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("NdsId")
                         .HasColumnType("int");
@@ -1683,22 +955,24 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<byte[]>("BodyBytes")
                         .IsRequired()
-                        .HasColumnType("longblob");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<int?>("ContractId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("InvoiceId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("SpecificationContractId")
                         .HasColumnType("int");
@@ -1720,21 +994,23 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ContractId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TypeId")
                         .HasColumnType("int");
@@ -1754,9 +1030,11 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1806,13 +1084,15 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TypeApplication")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1881,17 +1161,19 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<string>("Abbreviation")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OkeiCode")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StatusId")
                         .HasColumnType("int");

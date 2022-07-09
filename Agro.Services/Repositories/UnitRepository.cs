@@ -25,6 +25,11 @@ public class UnitRepository:IUnitRepository<UnitOkeiDto>
         return unit.Select(p => _map.Map(p)).ToArray();
     }
 
+    public Task<IEnumerable<UnitOkeiDto>?> GetAllByStatusAsync(int statusId, CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<UnitOkeiDto?> GetByIdAsync(int id, CancellationToken cancel = default)
     {
         UnitOkei? unit = await _db.UnitsOkei
@@ -60,6 +65,11 @@ public class UnitRepository:IUnitRepository<UnitOkeiDto>
         _db.UnitsOkei.Update(uo);
         await _db.SaveChangesAsync(cancel);
         return _map.Map(uo, item);
+    }
+
+    public Task<UnitOkeiDto> SaveAsync(UnitOkeiDto item, CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<bool> DeleteAsync(UnitOkeiDto item, CancellationToken cancel = default)

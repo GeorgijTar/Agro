@@ -56,6 +56,20 @@ namespace Agro.Services.Repositories
             return _map.Map(resalt.Entity);
         }
 
+        public async Task<CounterpartyDto> SaveAsync(CounterpartyDto item, CancellationToken cancel = default)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (item.Id != 0)
+            {
+                return await AddAsync(item, cancel);
+            }
+            else
+            {
+                return await UpdateAsync(item, cancel);
+            }
+        }
+
         public async Task<bool> DeleteAsync(CounterpartyDto item, CancellationToken cancel = default)
         {
             if (item is null)

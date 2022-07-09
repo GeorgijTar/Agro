@@ -27,6 +27,11 @@ namespace Agro.Services.Repositories
             return grDto;
         }
 
+        public Task<IEnumerable<GroupDto>?> GetAllByStatusAsync(int statusId, CancellationToken cancel = default)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<GroupDto>> GetAllByTypeApplicationAsync(string typeApplication, CancellationToken cancel = default)
         {
             try
@@ -57,6 +62,11 @@ namespace Agro.Services.Repositories
         }
 
         public Task<GroupDto> UpdateAsync(GroupDto item, CancellationToken cancel = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<GroupDto> SaveAsync(GroupDto item, CancellationToken cancel = default)
         {
             throw new NotImplementedException();
         }

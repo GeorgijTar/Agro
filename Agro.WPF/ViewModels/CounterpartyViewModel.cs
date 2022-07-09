@@ -271,7 +271,7 @@ public class CounterpartyViewModel : ViewModel
             }
 
             var window = p as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
-            if (window != null)
+            if (window != null!)
                 window.Close();
         }
         catch (InvalidOperationException e)

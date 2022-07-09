@@ -4,6 +4,7 @@ using Agro.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Agro.DAL.Sql.Migrations
 {
     [DbContext(typeof(AgroDB))]
-    partial class AgroDBModelSnapshot : ModelSnapshot
+    [Migration("20220702105623_AddDefaultData")]
+    partial class AddDefaultData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,7 +79,7 @@ namespace Agro.DAL.Sql.Migrations
                         {
                             Id = 3,
                             Code = "01-1",
-                            IsSelect = true,
+                            IsSelect = false,
                             Name = "Основные средства в организации (Недвижимое имущество)",
                             ParentPlanId = 2,
                             StatusId = 5
@@ -86,7 +88,7 @@ namespace Agro.DAL.Sql.Migrations
                         {
                             Id = 4,
                             Code = "01-2",
-                            IsSelect = true,
+                            IsSelect = false,
                             Name = "Основные средства в организации (Движимое имущество)",
                             ParentPlanId = 2,
                             StatusId = 5
@@ -95,7 +97,7 @@ namespace Agro.DAL.Sql.Migrations
                         {
                             Id = 5,
                             Code = "01-6",
-                            IsSelect = true,
+                            IsSelect = false,
                             Name = "Земельные участки",
                             ParentPlanId = 2,
                             StatusId = 5
@@ -104,7 +106,7 @@ namespace Agro.DAL.Sql.Migrations
                         {
                             Id = 6,
                             Code = "01-4",
-                            IsSelect = true,
+                            IsSelect = false,
                             Name = "Выбытие основных спедств",
                             ParentPlanId = 2,
                             StatusId = 5
@@ -122,7 +124,7 @@ namespace Agro.DAL.Sql.Migrations
                         {
                             Id = 8,
                             Code = "02-1",
-                            IsSelect = true,
+                            IsSelect = false,
                             Name = "Амортизация основных средств, являющихся недвижимым имуществом",
                             ParentPlanId = 7,
                             StatusId = 5
@@ -131,403 +133,9 @@ namespace Agro.DAL.Sql.Migrations
                         {
                             Id = 9,
                             Code = "02-2",
-                            IsSelect = true,
+                            IsSelect = false,
                             Name = "Амортизация основных средств, являющихся движимым имуществом",
                             ParentPlanId = 7,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Code = "02-3",
-                            IsSelect = true,
-                            Name = "Амортизация арендованных основных средств",
-                            ParentPlanId = 7,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Code = "03",
-                            IsSelect = true,
-                            Name = "Доходные вложения в материальные ценности",
-                            ParentPlanId = 1,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Code = "04",
-                            IsSelect = true,
-                            Name = "Нематериальные активы",
-                            ParentPlanId = 1,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Code = "05",
-                            IsSelect = true,
-                            Name = "Амортизация нематериальных активов",
-                            ParentPlanId = 1,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Code = "07",
-                            IsSelect = true,
-                            Name = "Оборудование к установке",
-                            ParentPlanId = 1,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Code = "08",
-                            IsSelect = false,
-                            Name = "Вложения во внеоборотные активы",
-                            ParentPlanId = 1,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Code = "08-1",
-                            IsSelect = true,
-                            Name = "Приобретение земельных участков",
-                            ParentPlanId = 15,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Code = "08-2",
-                            IsSelect = true,
-                            Name = "Приобретение объектов природопользования",
-                            ParentPlanId = 15,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Code = "08-3",
-                            IsSelect = true,
-                            Name = "Строительство объектов основных средств",
-                            ParentPlanId = 15,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Code = "08-3-1",
-                            IsSelect = true,
-                            Name = "Строительство объектов основных средств (Ангар)",
-                            ParentPlanId = 18,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Code = "08-4",
-                            IsSelect = true,
-                            Name = "Приобретение объектов основных средств",
-                            ParentPlanId = 15,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 21,
-                            Code = "08-5",
-                            IsSelect = true,
-                            Name = "Приобретение нематериальных активов",
-                            ParentPlanId = 15,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 22,
-                            Code = "08-6",
-                            IsSelect = true,
-                            Name = "Закладка и выращивание многолетних насаждений",
-                            ParentPlanId = 15,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 23,
-                            Code = "08-7",
-                            IsSelect = true,
-                            Name = "Выполнение научно-исследовательских, опытно-конструкторских и технологических работ",
-                            ParentPlanId = 15,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 24,
-                            Code = "09",
-                            IsSelect = true,
-                            Name = "Отложенные налоговые активы",
-                            ParentPlanId = 1,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 25,
-                            Code = "10",
-                            IsSelect = false,
-                            Name = "Материалы",
-                            ParentPlanId = 44,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 26,
-                            Code = "10-1",
-                            IsSelect = true,
-                            Name = "Сырье и материалы",
-                            ParentPlanId = 25,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 27,
-                            Code = "10-2",
-                            IsSelect = true,
-                            Name = "Семена и посадочный материал",
-                            ParentPlanId = 25,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 28,
-                            Code = "10-3",
-                            IsSelect = true,
-                            Name = "Топливо (ГСМ)",
-                            ParentPlanId = 25,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 29,
-                            Code = "10-4",
-                            IsSelect = true,
-                            Name = "Покупные полуфабрикаты и комплектующие изделия, конструкции и детали",
-                            ParentPlanId = 25,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 30,
-                            Code = "10-5",
-                            IsSelect = true,
-                            Name = "Запасные части",
-                            ParentPlanId = 25,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 31,
-                            Code = "10-6",
-                            IsSelect = true,
-                            Name = "Удобрения, средства защиты растений",
-                            ParentPlanId = 25,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 32,
-                            Code = "10-8",
-                            IsSelect = true,
-                            Name = "Тара и тарные материалы",
-                            ParentPlanId = 25,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 33,
-                            Code = "10-9",
-                            IsSelect = true,
-                            Name = "Инвентарь и хозяйственные принадлежности",
-                            ParentPlanId = 25,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 34,
-                            Code = "10-10",
-                            IsSelect = true,
-                            Name = "Специальная одежда, средства индивидуальной защиты",
-                            ParentPlanId = 25,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 35,
-                            Code = "10-11",
-                            IsSelect = true,
-                            Name = "Материалы и сырье, переданные в переработку на сторону",
-                            ParentPlanId = 25,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 36,
-                            Code = "10-12",
-                            IsSelect = true,
-                            Name = "Прочие материалы",
-                            ParentPlanId = 25,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 37,
-                            Code = "14",
-                            IsSelect = false,
-                            Name = "Резервы под снижение стоимости материальных ценностей",
-                            ParentPlanId = 44,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 38,
-                            Code = "14-1",
-                            IsSelect = true,
-                            Name = "Резервы под снижение стоимости материалов",
-                            ParentPlanId = 37,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 39,
-                            Code = "14-2",
-                            IsSelect = true,
-                            Name = "Резервы под снижение стоимости товаров",
-                            ParentPlanId = 37,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 40,
-                            Code = "14-3",
-                            IsSelect = true,
-                            Name = "Резервы под снижение стоимости готовой продукции",
-                            ParentPlanId = 37,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 41,
-                            Code = "19",
-                            IsSelect = false,
-                            Name = "НДС по приобретенным ценностям",
-                            ParentPlanId = 44,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 42,
-                            Code = "19-1",
-                            IsSelect = true,
-                            Name = "НДС по приобретенным товарно-материальным ценностям, работам, услугам",
-                            ParentPlanId = 41,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 43,
-                            Code = "19-2",
-                            IsSelect = true,
-                            Name = "НДС по приобретённым продуктам питания",
-                            ParentPlanId = 41,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 44,
-                            Code = "Раздел II",
-                            IsSelect = false,
-                            Name = "Производственные запасы",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 45,
-                            Code = "Раздел III",
-                            IsSelect = false,
-                            Name = "Затраты на производство",
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 46,
-                            Code = "20",
-                            IsSelect = false,
-                            Name = "Основное производство",
-                            ParentPlanId = 45,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 47,
-                            Code = "20-1",
-                            IsSelect = true,
-                            Name = "Основное производство-Растениеводства",
-                            ParentPlanId = 46,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 48,
-                            Code = "20-3",
-                            IsSelect = true,
-                            Name = "Сортировка сельхоз продукции",
-                            ParentPlanId = 46,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 49,
-                            Code = "21",
-                            IsSelect = true,
-                            Name = "Полуфабрикаты собственного производства",
-                            ParentPlanId = 45,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 50,
-                            Code = "23",
-                            IsSelect = false,
-                            Name = "Вспомогательные производства",
-                            ParentPlanId = 45,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 51,
-                            Code = "23-2",
-                            IsSelect = true,
-                            Name = "Ремонт зданий, сооружений и сельхоз техники",
-                            ParentPlanId = 50,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 52,
-                            Code = "23-3",
-                            IsSelect = true,
-                            Name = "Электроснабжение",
-                            ParentPlanId = 50,
-                            StatusId = 5
-                        },
-                        new
-                        {
-                            Id = 53,
-                            Code = "23-3",
-                            IsSelect = true,
-                            Name = "Электроснабжение",
-                            ParentPlanId = 50,
                             StatusId = 5
                         });
                 });

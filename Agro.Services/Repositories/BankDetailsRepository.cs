@@ -26,6 +26,15 @@ namespace Agro.Services.Repositories
             return bd.Select(c => _map.Map(c)).ToArray();
         }
 
+        public async Task<IEnumerable<BankDetailsDto>?> GetAllByStatusAsync(int statusId, CancellationToken cancel = default)
+        {
+            var bd = await _db.Set<BankDetails>().Where(b=>b.StatusId==statusId)
+                .Include(b => b.Status)
+                .Include(b => b.Counterparty)
+                .ToArrayAsync(cancel).ConfigureAwait(false);
+            return bd.Select(c => _map.Map(c)).ToArray();
+        }
+
         public async Task<IEnumerable<BankDetailsDto>?> GetAllByCounterpartyAsync(
             int idCounterparty,
             CancellationToken cancel = default)
@@ -67,16 +76,30 @@ namespace Agro.Services.Repositories
             return _map.Map(resalt.Entity);
         }
 
+        public async Task<BankDetailsDto> SaveAsync(BankDetailsDto item, CancellationToken cancel = default)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (item.Id != 0)
+            {
+                return await AddAsync(item, cancel);
+            }
+            else
+            {
+                return await UpdateAsync(item, cancel);
+            }
+        }
+
         public async Task<bool> DeleteAsync(BankDetailsDto item, CancellationToken cancel = default)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
-            var bankDb= await _db.BankDetails.FirstOrDefaultAsync(b=>b.Id==item.Id);
+            var bankDb= await _db.BankDetails.FirstOrDefaultAsync(b=>b.Id==item.Id).ConfigureAwait(false);
             if (bankDb is null)
                 throw new InvalidOperationException($"Запись с Id={item.Id} в базе данных не найдене, возможно она была удалена ранее");
             var bd = _map.Map(item, bankDb);
             _db.BankDetails.Remove(bd);
-            await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
+            await _db.SaveChangesAsync(cancel);
             return true;
         }
 

@@ -16,7 +16,9 @@ public class ViewModelLocator
 
     public ProductViewModel ProductModel => App.Services.GetRequiredService<ProductViewModel>();
 
+    public AccountingPlansViewModel AccountingPlansModel => App.Services.GetRequiredService<AccountingPlansViewModel>();
 
+    public AccountingPlanViewModel AccountingPlanModel => App.Services.GetRequiredService<AccountingPlanViewModel>();
 
 
 }

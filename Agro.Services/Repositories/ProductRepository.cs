@@ -84,6 +84,20 @@ public class ProductRepository:IProductRepository<ProductDto>
         return mapProd;
     }
 
+    public async Task<ProductDto> SaveAsync(ProductDto item, CancellationToken cancel = default)
+    {
+        if (item is null)
+            throw new ArgumentNullException(nameof(item));
+        if (item.Id != 0)
+        {
+            return await AddAsync(item, cancel);
+        }
+        else
+        {
+            return await UpdateAsync(item, cancel);
+        }
+    }
+
     public async Task<bool> DeleteAsync(ProductDto item, CancellationToken cancel = default)
     {
         if (item is null)

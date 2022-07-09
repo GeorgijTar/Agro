@@ -1,5 +1,7 @@
 ﻿
+using System.Reflection;
 using System.Windows.Input;
+using Agro.DAL.Entities;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.Views.Windows;
@@ -13,7 +15,7 @@ public class MainWindowViewModel : ViewModel
 
     }
 
-    private string _title;
+    private string _title = $"Агро-2022 версия: {Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
     public string Title { get => _title; set => Set(ref _title, value); }
 
 
@@ -45,6 +47,21 @@ public class MainWindowViewModel : ViewModel
     {
         ProductsView productsView = new ProductsView();
         productsView.Show();
+    }
+
+    #endregion
+
+    #region ShowAccountingPlans
+
+    private ICommand? _showAccountingPlans;
+
+    public ICommand ShowAccountingPlans => _showAccountingPlans
+        ??= new RelayCommand(OnShowAccountingPlansCommandExecuted);
+
+    private void OnShowAccountingPlansCommandExecuted(object obj)
+{
+    AccountingPlansView view = new AccountingPlansView();
+        view.Show();
     }
 
     #endregion

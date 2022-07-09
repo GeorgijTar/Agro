@@ -29,6 +29,7 @@
 
                     <MenuItem Header="Контрагенты" Command="{Binding ShowContractors}"/>
                     <MenuItem Header="Номенклатура" Command="{Binding ShowProduct}"/>
+                    <MenuItem Header="План счетов" Command="{Binding ShowAccountingPlans}"/>
                 </MenuItem>
             </Menu>
 

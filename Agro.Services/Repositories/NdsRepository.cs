@@ -25,6 +25,11 @@ public class NdsRepository:INdsRepository<NdsDto>
         return nds.Select(n => _map.Map(n)).ToArray();
     }
 
+    public Task<IEnumerable<NdsDto>?> GetAllByStatusAsync(int statusId, CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<NdsDto?> GetByIdAsync(int id, CancellationToken cancel = default)
     {
         Nds? unit = await _db.Ndses
@@ -47,6 +52,11 @@ public class NdsRepository:INdsRepository<NdsDto>
     }
 
     public Task<NdsDto> UpdateAsync(NdsDto item, CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<NdsDto> SaveAsync(NdsDto item, CancellationToken cancel = default)
     {
         throw new NotImplementedException();
     }

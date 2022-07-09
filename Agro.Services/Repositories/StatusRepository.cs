@@ -26,6 +26,11 @@ namespace Agro.Services.Repositories
             return statuses.Select(s => _map.Map(s)).ToArray();
         }
 
+        public Task<IEnumerable<StatusDto>?> GetAllByStatusAsync(int statusId, CancellationToken cancel = default)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<StatusDto?> GetByIdAsync(int id, CancellationToken cancel = default)
         {
             throw new NotImplementedException();
@@ -37,6 +42,11 @@ namespace Agro.Services.Repositories
         }
 
         public Task<StatusDto> UpdateAsync(StatusDto item, CancellationToken cancel = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<StatusDto> SaveAsync(StatusDto item, CancellationToken cancel = default)
         {
             throw new NotImplementedException();
         }

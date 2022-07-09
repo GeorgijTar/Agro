@@ -1,0 +1,108 @@
+﻿<Window x:Class="Agro.WPF.Views.Windows.AccountingPlanView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fa5="http://schemas.fontawesome.com/icons/"
+        mc:Ignorable="d"
+        x:Name="MyWindow" 
+        Title="{Binding Title}" Height="250" Width="700"
+        DataContext="{Binding AccountingPlanModel, Source={StaticResource Locator}}">
+    <Window.Resources>
+        <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
+            <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
+                <ContentPresenter RecognizesAccessKey="True"></ContentPresenter>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Background" Value="DarkGreen"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter  Property="Background" Value="Azure" />
+                    <Setter  Property="BorderBrush" Value="DarkBlue" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <Style TargetType="{x:Type TextBox}"
+               BasedOn="{StaticResource TextBoxStyle}">
+            <Setter Property="Margin" Value="4 4"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75*"/>
+            <RowDefinition Height="25*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,58" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20*"/>
+                <ColumnDefinition Width="80*"/>
+                <ColumnDefinition Width="10"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Код:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Width="120" HorizontalAlignment="Left"
+                     Text="{Binding AccountingPlanDto.Code}"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Наименование:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"
+                     Text="{Binding AccountingPlanDto.Name}"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Вышестоящий счет:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                <TextBox Width="100" VerticalAlignment="Center" 
+                         Text="{Binding AccountingPlanDto.ParentPlan.Code, 
+                    UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <TextBox VerticalAlignment="Center" MinWidth="400" 
+                         Text="{Binding AccountingPlanDto.ParentPlan.Name, 
+                    UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <Button VerticalAlignment="Center" fa5:Awesome.Content="Solid_Book" 
+                        Width="20" Height="20" Foreground="DarkBlue" />
+            </StackPanel>
+            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+                <CheckBox Grid.Row="3" Grid.Column="1" 
+                          HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0"
+                          IsChecked="{Binding AccountingPlanDto.IsSelect}"/>
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Допускается выбирать счет в документах" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1" HorizontalAlignment="Right" Grid.Column="1" Margin="183,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" BorderBrush="DarkBlue" Width="108"
+                Template="{StaticResource ButtonTemplate}"  Margin="0,2,3,15"
+                Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=MyWindow}">
+                <StackPanel Orientation="Horizontal">
+                    <fa5:ImageAwesome Height="18" Icon="Solid_Save"
+                                  Margin="8,5"
+                                  Foreground="DarkBlue" />
+                    <TextBlock Text="Сохранить" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="1" BorderBrush="DarkBlue" Width="108"
+                Template="{StaticResource ButtonTemplate}" Margin="3,2,15,15">
+                <StackPanel Orientation="Horizontal">
+                    <fa5:ImageAwesome Height="18" Icon="Solid_DoorOpen"
+                                  Margin="8,5"
+                                  Foreground="DarkBlue" />
+                    <TextBlock Text="Отмена" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

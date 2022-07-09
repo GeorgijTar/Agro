@@ -24,10 +24,10 @@ public class AccountingPlan : Entity
     public string Code { get; set; } = null!;
 
     /// <summary>Вышестоящий счет</summary>
-    [ForeignKey("AccountingPlanId")]
+    [ForeignKey("ParentPlanId")]
     public AccountingPlan? ParentPlan { get; set; }
 
-    public int AccountingPlanId { get; set; }
+    public int? ParentPlanId { get; set; }
 
     /// <summary>Можно ли счет выбирать</summary>
     public bool IsSelect { get; set; }

@@ -45,6 +45,8 @@ public class AgroDB : DbContext
         db.Entity<TypeDoc>().HasData(GetDefaultData.DefaultType());
         db.Entity<UnitOkei>().HasData(GetDefaultData.DefaultUnitOkeis());
         db.Entity<Nds>().HasData(GetDefaultData.DefaultNds());
+        db.Entity<AccountingPlan>().HasData(GetDefaultData.DefaultAccountingPlans());
+        
     }
 
     

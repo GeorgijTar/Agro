@@ -11,8 +11,8 @@ public class GroupDto : EntityDto
     private string _name = null!;
     public string Name { get => _name; set => Set(ref _name, value); }
 
-    private string _typeApplication = null!;
-    public string TypeApplication { get => _typeApplication; set => Set(ref _typeApplication, value); }
+    private string? _typeApplication;
+    public string? TypeApplication { get => _typeApplication; set => Set(ref _typeApplication, value); }
 
     public override string ToString() => Name;
 }

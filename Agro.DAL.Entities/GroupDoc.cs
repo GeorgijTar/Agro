@@ -10,7 +10,7 @@ public class GroupDoc : Entity
 {
     public string Name { get; set; } = null!;
 
-    public string TypeApplication { get; set; } = null!;
+    public string? TypeApplication { get; set; }
 
 
     public override string ToString() => Name;

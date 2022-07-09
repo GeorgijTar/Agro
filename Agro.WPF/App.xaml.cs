@@ -4,6 +4,7 @@ using Agro.DAL.SqLite;
 using Agro.Domain.Base;
 using Agro.Interfaces;
 using Agro.Interfaces.Base.Repositories;
+using Agro.Interfaces.Base.Repositories.Base;
 using Agro.Services.Repositories;
 using Agro.WPF.Infrastructure.AutoMapper;
 using Agro.WPF.ViewModels;
@@ -51,6 +52,8 @@ namespace Agro.WPF
             services.AddTransient<ProductsViewModel>();
             services.AddScoped<MainWindowViewModel>();
             services.AddTransient<ProductViewModel>();
+            services.AddTransient<AccountingPlansViewModel>();
+            services.AddTransient<AccountingPlanViewModel>();
 
 
             //Регистрация репозиториев
@@ -70,6 +73,8 @@ namespace Agro.WPF
 
             services.AddScoped(typeof(INdsRepository<NdsDto>), typeof(NdsRepository));
 
+            services.AddScoped(typeof(IBaseRepository<AccountingPlanDto>), typeof(AccountingPlanRepository));
+
 
             // Регистрация мапера
             services.AddAutoMapper(
@@ -80,7 +85,8 @@ namespace Agro.WPF
                     typeof(BankDetailsProfile),
                     typeof(ProductProfile),
                     typeof(UnitProfile),
-                    typeof(NdsProfile)) // маппинг-профайлы передавать через запятую typeof(AppMappingProfile), typeof(MappingProfile2)
+                    typeof(NdsProfile),
+                    typeof(AccountingPlanProfile)) // маппинг-профайлы передавать через запятую typeof(AppMappingProfile), typeof(MappingProfile2)
                 .AddScoped(typeof(IMapper<>), typeof(AutoMapperService<>))
                 .AddScoped(typeof(IMapper<,>), typeof(AutoMapperService<,>));
         }

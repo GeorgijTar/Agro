@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Agro.WPF.Views.Windows"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         mc:Ignorable="d" 
-        d:DesignHeight="650" d:DesignWidth="1100" 
+        Height="650" Width="1100" 
         DataContext="{Binding ContractorsModel, Source={StaticResource Locator}}">
     <Window.Resources>
         <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">

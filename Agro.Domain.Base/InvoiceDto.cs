@@ -51,4 +51,7 @@ public class InvoiceDto : EntityDto
     /// <summary>Прикрепленные файлы</summary>
     private ICollection<ScanFileDto>? _scanFiles;
     public ICollection<ScanFileDto>? ScanFiles { get=> _scanFiles; set=>Set(ref _scanFiles, value); }
+
+    /// <summary>Платежные реквизиты организации</summary>
+    public BankDetailsDto? BankDetailsOrg { get; set; }
 }
