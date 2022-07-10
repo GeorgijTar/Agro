@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Agro.Domain.Base\Agro.Domain.Base.csproj" />
+    <ProjectReference Include="..\Agro.DAL.Entities\Agro.DAL.Entities.csproj" />
   </ItemGroup>
 
 </Project>

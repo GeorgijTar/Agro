@@ -1,12 +1,11 @@
 ﻿<Application x:Class="Agro.WPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Agro.WPF"
-             xmlns:viewModels="clr-namespace:Agro.WPF.ViewModels"
+             xmlns:base="clr-namespace:Agro.WPF.ViewModels.Base"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <viewModels:ViewModelLocator x:Key="Locator"/>
+            <base:ViewModelLocator x:Key="Locator"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles\TextBoxStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>

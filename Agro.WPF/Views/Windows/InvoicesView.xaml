@@ -4,9 +4,128 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Agro.WPF.Views.Windows"
+        xmlns:fa5="http://schemas.fontawesome.com/icons/"
         mc:Ignorable="d"
-        Title="InvoicesView" Height="450" Width="800">
+        Title="{Binding Title}" Height="450" Width="1000"
+        DataContext="{Binding InvoicesModel, Source={StaticResource Locator}}">
+    <Window.Resources>
+        <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
+            <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
+                <ContentPresenter RecognizesAccessKey="True"></ContentPresenter>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Background" Value="DarkGreen"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter  Property="Background" Value="Azure" />
+                    <Setter  Property="BorderBrush" Value="DarkBlue" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style TargetType="{x:Type TextBox}"
+               BasedOn="{StaticResource TextBoxStyle}">
+            <Setter Property="Margin" Value="4 4"/>
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="95"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <ToolBar>
+                <Button BorderBrush="DarkBlue" Width="108" Command="{Binding AddCommand}"
+                            Template="{StaticResource ButtonTemplate}" Margin="2,0">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Solid_PlusCircle"
+                                              Margin="8,5"
+                                              Foreground="DarkBlue" />
+                        <TextBlock Text="Создать" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+                <Button BorderBrush="DarkGreen" Width="108" Command="{Binding EdeteCommand}"
+                            Template="{StaticResource ButtonTemplate}" Margin="2,0">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Solid_Edit"
+                                              Margin="2,5"
+                                              Foreground="DarkGreen"/>
+                        <TextBlock Text="Редактировать" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+                <Button BorderBrush="DarkRed" Width="108"
+                            Template="{StaticResource ButtonTemplate}" Margin="2,0"
+                            Command="{Binding DeleteCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Solid_TrashAlt"
+                                              Margin="8,5"
+                                              Foreground="DarkRed"/>
+                        <TextBlock Text="Удалить" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+            <GroupBox Grid.Row="1" Header="Фильтр" Height="100" VerticalAlignment ="Top">
+                <Grid Background="AliceBlue">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="80*"/>
+                        <ColumnDefinition Width="80*"/>
+                        <ColumnDefinition Width="10*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Номер:" 
+                               HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
+                    <TextBox Grid.Row="0" Grid.Column="1"  Margin="0,2" 
+                             Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="Дата:" VerticalAlignment="Center" 
+                               HorizontalAlignment="Right" Margin="5,0"/>
+                    <DatePicker Grid.Row="0" Grid.Column="3"></DatePicker>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="ИНН контрагента:" 
+                               HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Margin="0,2" MaxLength="12"
+                             Text="{Binding InnFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="Контрагент:" 
+                               HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
+                    <TextBox Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Margin="0,2" MaxLength="9"/>
+                </Grid>
+            </GroupBox>
+            <GroupBox Grid.Row="2">
+                <Grid>
+                    <GroupBox Header="Контрагенты" >
+                        <DataGrid SelectedItem="{Binding SelectedInvoice}" 
+                                  AutoGenerateColumns="False"
+                                  ItemsSource="{Binding Invoices}"
+                                  CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="10*" Header="ID" Binding="{Binding Id}"/>
+                                <DataGridTextColumn Width="20*" Header="Статус" Binding="{Binding Status.Name}"/>
+                                <DataGridTextColumn Width="20*" Header="Номер" Binding="{Binding Number}"/>
+                                <DataGridTextColumn Width="20*" Header="Дата" Binding="{Binding DateInvoce.Date}"/>
+                                <DataGridTextColumn Width="30*" Header="Сумма" Binding="{Binding Amount}"/>
+                                <DataGridTextColumn Width="80*" Header="Контрагент" Binding="{Binding Counterparty.Name}"/>
+                                <DataGridTextColumn Width="50*" Header="Примечание" Binding="{Binding Description}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                </Grid>
+            </GroupBox>
+        </Grid>
     </Grid>
 </Window>

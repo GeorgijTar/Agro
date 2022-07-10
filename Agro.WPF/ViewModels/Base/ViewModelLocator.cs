@@ -1,7 +1,6 @@
-﻿
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Agro.WPF.ViewModels;
+namespace Agro.WPF.ViewModels.Base;
 
 public class ViewModelLocator
 {
@@ -20,5 +19,7 @@ public class ViewModelLocator
 
     public AccountingPlanViewModel AccountingPlanModel => App.Services.GetRequiredService<AccountingPlanViewModel>();
 
+    public InvoicesViewModel InvoicesModel => App.Services.GetRequiredService<InvoicesViewModel>();
 
+    public InvoiceViewModel InvoiceModel => App.Services.GetRequiredService<InvoiceViewModel>();
 }

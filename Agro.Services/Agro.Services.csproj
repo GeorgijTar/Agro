@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Agro.DAL\Agro.DAL.csproj" />
-    <ProjectReference Include="..\Agro.Domain.Base\Agro.Domain.Base.csproj" />
     <ProjectReference Include="..\Agro.Interfaces.Base\Agro.Interfaces.Base.csproj" />
     <ProjectReference Include="..\Agro.Interfaces\Agro.Interfaces.csproj" />
   </ItemGroup>

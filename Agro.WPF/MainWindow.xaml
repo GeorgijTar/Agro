@@ -22,6 +22,18 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Menu>
+                <MenuItem Header="Бухгалтерия">
+                    <MenuItem.Icon>
+                        <fa5:ImageAwesome Height="32" Icon="Solid_PiggyBank" Foreground="DarkBlue"/>
+                    </MenuItem.Icon>
+                    <MenuItem Header="Счета">
+                        <MenuItem.Icon>
+                            <fa5:ImageAwesome Height="14" Icon="Solid_DollarSign" Foreground="DarkBlue"/>
+                        </MenuItem.Icon>
+                        <MenuItem Header="Счета выставленные" Command="{Binding ShowInvoices}"/>
+                        <MenuItem Header="Счета полученные"/>
+                    </MenuItem>
+                </MenuItem>
                 <MenuItem Header="Справочники" >
                     <MenuItem.Icon>
                         <fa5:ImageAwesome Height="32" Icon="Solid_Book" Foreground="DarkBlue"/>

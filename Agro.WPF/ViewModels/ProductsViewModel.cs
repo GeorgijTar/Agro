@@ -1,6 +1,4 @@
 ﻿
-
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -8,8 +6,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Agro.Domain.Base;
-using Agro.Interfaces.Base.Repositories;
+using Agro.DAL.Entities;
+using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.Views.Windows;
@@ -18,19 +16,19 @@ namespace Agro.WPF.ViewModels;
 
 public class ProductsViewModel : ViewModel
 {
-    private readonly IProductRepository<ProductDto> _repository;
-    private readonly IGroupRepository<GroupDto> _groupRepository;
-    private readonly ITypeRepository<TypeDocDto> _typeRepository;
+    private readonly IBaseRepository<Product> _repository;
+    private readonly IBaseRepository<GroupDoc> _groupRepository;
+    private readonly IBaseRepository<TypeDoc> _typeRepository;
 
     public ProductsViewModel(
-        IProductRepository<ProductDto> repository,
-        IGroupRepository<GroupDto> groupRepository,
-        ITypeRepository<TypeDocDto> typeRepository)
+        IBaseRepository<Product> repository,
+        IBaseRepository<GroupDoc> groupRepository,
+        IBaseRepository<TypeDoc> typeRepository)
     {
         _repository = repository;
         _groupRepository = groupRepository;
         _typeRepository = typeRepository;
-        ProductsCollection = new ObservableCollection<ProductDto>();
+        ProductsCollection = new ObservableCollection<Product>();
         LoadData();
     }
 
@@ -39,18 +37,18 @@ public class ProductsViewModel : ViewModel
     private string _title = "Номенклатура";
     public string Title { get => _title; set => Set(ref _title, value); }
 
-    private ObservableCollection<ProductDto>? _products;
-    public ObservableCollection<ProductDto>? ProductsCollection { get => _products; set => Set(ref _products, value); }
+    private ObservableCollection<Product>? _products;
+    public ObservableCollection<Product>? ProductsCollection { get => _products; set => Set(ref _products, value); }
 
-    private ProductDto? _product;
-    public ProductDto? Product { get => _product; set => Set(ref _product, value); }
+    private Product? _product;
+    public Product? Product { get => _product; set => Set(ref _product, value); }
 
-    private ObservableCollection<GroupDto>? _groups;
-    public ObservableCollection<GroupDto> GroupFilter { get => _groups; set => Set(ref _groups, value); }
+    private ObservableCollection<GroupDoc>? _groups;
+    public ObservableCollection<GroupDoc> GroupFilter { get => _groups; set => Set(ref _groups, value); }
 
-    private GroupDto _group;
+    private GroupDoc _group;
 
-    public GroupDto SelectedGroup
+    public GroupDoc SelectedGroup
     {
         get => _group;
         set
@@ -63,13 +61,13 @@ public class ProductsViewModel : ViewModel
         }
     }
 
-    private ObservableCollection<TypeDocDto>? _type;
+    private ObservableCollection<TypeDoc>? _type;
 
-    public ObservableCollection<TypeDocDto> TypeFilter { get => _type; set => Set(ref _type, value); }
+    public ObservableCollection<TypeDoc> TypeFilter { get => _type; set => Set(ref _type, value); }
 
-    private TypeDocDto _selecteType;
+    private TypeDoc _selecteType;
 
-    public TypeDocDto SelectedType
+    public TypeDoc SelectedType
     {
         get => _selecteType;
         set
@@ -116,19 +114,21 @@ public class ProductsViewModel : ViewModel
 
     private async Task LoadFilterData()
     {
-        GroupFilter = new ObservableCollection<GroupDto>();
-        SelectedGroup = new GroupDto() { Id = 0, Name = "Все" };
+        GroupFilter = new ObservableCollection<GroupDoc>();
+        SelectedGroup = new GroupDoc() { Id = 0, Name = "Все" };
         GroupFilter.Add(SelectedGroup);
-        var groups = await _groupRepository.GetAllByTypeApplicationAsync("Товары");
+        var groups = await _groupRepository.GetAllAsync();
+        groups=groups!.Where(group => group.TypeApplication == "Товары");
         foreach (var group in groups)
         {
             GroupFilter.Add(group);
         }
 
-        TypeFilter = new ObservableCollection<TypeDocDto>();
-        SelectedType = new TypeDocDto() { Id = 0, Name = "Все" };
+        TypeFilter = new ObservableCollection<TypeDoc>();
+        SelectedType = new TypeDoc() { Id = 0, Name = "Все" };
         TypeFilter.Add(SelectedType);
-        var types = await _typeRepository.GetAllByTypeApplicationAsync("Товары");
+        var types = await _typeRepository.GetAllAsync();
+        types = types!.Where(type => type.TypeApplication == "Товары");
         foreach (var type in types)
         {
             TypeFilter.Add(type);
@@ -150,7 +150,7 @@ public class ProductsViewModel : ViewModel
     {
         if (!string.IsNullOrEmpty(NameFilter))
         {
-            ProductDto? dto = obj as ProductDto;
+            Product? dto = obj as Product;
             return dto!.Name.Contains(NameFilter);
         }
         return true;
@@ -159,7 +159,7 @@ public class ProductsViewModel : ViewModel
     private bool FilterByType(object obj)
     {
         string qer;
-        if (SelectedType == null || SelectedType.Id == 0)
+        if (SelectedType == null! || SelectedType.Id == 0)
         {
             qer = string.Empty;
         }
@@ -169,7 +169,7 @@ public class ProductsViewModel : ViewModel
 
         if (!string.IsNullOrEmpty(qer))
         {    
-            ProductDto? dto = obj as ProductDto;
+            Product? dto = obj as Product;
             return dto!.Type.Name.Contains(qer);
         }
         return true;
@@ -178,7 +178,7 @@ public class ProductsViewModel : ViewModel
     private bool FilterByGroup(object obj)
     {
         string qer;
-        if (SelectedGroup == null || SelectedGroup.Id == 0)
+        if (SelectedGroup == null! || SelectedGroup.Id == 0)
         {
             qer = string.Empty;
         }
@@ -186,7 +186,7 @@ public class ProductsViewModel : ViewModel
 
         if (!string.IsNullOrEmpty(qer))
         {
-            ProductDto? dto = obj as ProductDto;
+            Product? dto = obj as Product;
             return dto!.Group.Name.Contains(qer);
         }
         return true;
@@ -209,7 +209,7 @@ public class ProductsViewModel : ViewModel
         product.Show();
     }
 
-    private void GridRefreh(ProductDto product)
+    private void GridRefreh(Product product)
     {
         var productCol = ProductsCollection.FirstOrDefault(c => c.Id == product.Id);
         if (productCol is null)

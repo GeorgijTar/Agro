@@ -1,16 +1,16 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Nodes;
-using Agro.Domain.Base;
+using Agro.DAL.Entities;
 
 namespace FNS.Api;
 public static class CheckoApi
 {
-    public static async Task<CounterpartyDto> GetUl(string inn)
+    public static async Task<Counterparty> GetUl(string inn)
     {
      if (inn.Length!=10)
          throw new InvalidOperationException(nameof(inn));
 
-        var counterparty=new CounterpartyDto();
+        var counterparty=new Counterparty();
         var client = new HttpClient();
         var uri=new Uri($"https://api.checko.ru/v2/company?key=zpKipA8XmoNldFmM&inn={inn}");
         var response = await client.GetAsync(uri);
@@ -42,11 +42,11 @@ public static class CheckoApi
     }
 
 
-    public static async Task<CounterpartyDto> GetIp(string inn)
+    public static async Task<Counterparty> GetIp(string inn)
     {
         if(inn.Length != 12)
         throw new InvalidOperationException(nameof(inn));
-        CounterpartyDto counterparty = new CounterpartyDto();
+        Counterparty counterparty = new Counterparty();
         HttpClient client = new HttpClient();
         Uri? uri= new Uri($"https://api.checko.ru/v2/entrepreneur?key=zpKipA8XmoNldFmM&inn={inn}");
       

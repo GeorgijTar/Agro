@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows;
-using Agro.Domain.Base;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
@@ -15,31 +14,32 @@ namespace Agro.WPF.ViewModels;
 
 public class AccountingPlansViewModel : ViewModel
 {
-    private readonly IBaseRepository<AccountingPlanDto> _repository;
+    private readonly IBaseRepository<AccountingPlan> _repository;
     private string _title = "План счетов";
     
     public string Title { get=>_title; set=>Set(ref _title, value); } 
 
-    private ObservableCollection<AccountingPlanDto> _accounts= new ();
+    private ObservableCollection<AccountingPlan> _accounts= new ();
 
-    public ObservableCollection<AccountingPlanDto> Accounts { get=>_accounts; set=>Set(ref _accounts, value); }
+    public ObservableCollection<AccountingPlan> Accounts { get=>_accounts; set=>Set(ref _accounts, value); }
 
-    private AccountingPlanDto _selectAccountingPlan;
+    private AccountingPlan _selectAccountingPlan;
 
-    public AccountingPlanDto SelectAccountingPlan { get=>_selectAccountingPlan; 
+    public AccountingPlan SelectAccountingPlan { get=>_selectAccountingPlan; 
         set=>Set( ref _selectAccountingPlan, value); }
-    public AccountingPlansViewModel(IBaseRepository<AccountingPlanDto> repository)
+    public AccountingPlansViewModel(IBaseRepository<AccountingPlan> repository)
     {
         _repository = repository;
-        SelectAccountingPlan=new AccountingPlanDto();
+        SelectAccountingPlan=new AccountingPlan();
         LoadData();
     }
 
     private async void LoadData()
     {
         Accounts.Clear();
-        var accounts = await _repository.GetAllByStatusAsync(5);
-        foreach (var account in accounts!)
+        var accounts = await _repository.GetAllAsync();
+        accounts = accounts!.Where(a => a.StatusId == 5); 
+        foreach (var account in accounts)
         {
             if (account.ParentPlan! == null!)
             {
@@ -80,7 +80,7 @@ public class AccountingPlansViewModel : ViewModel
     {
         var view = new AccountingPlanView();
         var model = view.DataContext as AccountingPlanViewModel;
-        model!.AccountingPlanDto.ParentPlan = SelectAccountingPlan;
+        model!.AccountingPlan.ParentPlan = SelectAccountingPlan;
         view.Show();
     }
 
@@ -100,7 +100,7 @@ public class AccountingPlansViewModel : ViewModel
         var view = new AccountingPlanView();
         var model = view.DataContext as AccountingPlanViewModel;
         model.Title = $"Редактирование счета {SelectAccountingPlan.Code} {SelectAccountingPlan.Name}";
-        model!.AccountingPlanDto = SelectAccountingPlan;
+        model!.AccountingPlan = SelectAccountingPlan;
         view.Show();
     }
 

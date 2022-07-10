@@ -49,10 +49,16 @@ public class Invoice : Entity
     /// <summary>Описание счета</summary>
     public string? Description { get; set; }
 
+    /// <summary>Список товаров, услуг</summary>
+    public ICollection<ProductInvoice>? ProductsInvoice { get; set; }
+    
     /// <summary>Прикрепленные файлы</summary>
     public ICollection<ScanFile>? ScanFiles { get; set; }
 
     /// <summary>Платежные реквизиты организации</summary>
+    [ForeignKey("BankDetailsOrgId")]
     public BankDetails? BankDetailsOrg { get; set; }
+
+    public int BankDetailsOrgId { get; set; }
 
 }

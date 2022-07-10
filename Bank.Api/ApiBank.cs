@@ -1,14 +1,15 @@
-﻿using Agro.Domain.Base;
+﻿
 using System.Text.Json.Nodes;
+using Agro.DAL.Entities;
 
 namespace Bank.Api;
 public static class ApiBank
 {
-    public static async Task<BankDetailsDto> GetBankByBik(string bik)
+    public static async Task<BankDetails> GetBankByBik(string bik)
     {
         if (bik.Length != 9)
             throw new InvalidOperationException($"Неверный формат БИК {bik}");
-        var bank = new BankDetailsDto();
+        var bank = new BankDetails();
 
         var client = new HttpClient();
         var uri = new Uri($"https://bik-info.ru/api.html?type=json&bik={bik}");

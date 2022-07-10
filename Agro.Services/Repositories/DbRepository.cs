@@ -1,12 +1,13 @@
 ﻿using Agro.DAL;
 using Agro.DAL.Entities.Base;
 using Agro.Interfaces.Base.Repositories;
+using Agro.Interfaces.Base.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace Agro.Services.Repositories
 {
-    public class DbRepository<T> : IRepository<T> where T : Entity
+    public class DbRepository<T> : IBaseRepository<T> where T : Entity
     {
         private readonly AgroDB _db;
 
@@ -294,6 +295,36 @@ namespace Agro.Services.Repositories
             table.Remove(item);
             _db.SaveChanges();
             return item;
+        }
+
+        public async Task<IEnumerable<T>?> GetAllByStatusAsync(int statusId, CancellationToken cancel = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<T> SaveAsync(T item, CancellationToken cancel = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<bool> IBaseRepository<T>.DeleteAsync(T item, CancellationToken cancel)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<bool> IBaseRepository<T>.DeleteByIdAsync(int id, CancellationToken cancel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T>? GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public T? GetById(int id)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

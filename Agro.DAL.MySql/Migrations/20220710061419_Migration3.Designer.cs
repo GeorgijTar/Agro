@@ -3,6 +3,7 @@ using System;
 using Agro.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Agro.DAL.MySql.Migrations
 {
     [DbContext(typeof(AgroDB))]
-    partial class AgroDBModelSnapshot : ModelSnapshot
+    [Migration("20220710061419_Migration3")]
+    partial class Migration3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1682,44 +1684,6 @@ namespace Agro.DAL.MySql.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.ProductInvoice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<int>("InvoiceId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NdsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InvoiceId");
-
-                    b.HasIndex("NdsId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductInvoice");
-                });
-
             modelBuilder.Entity("Agro.DAL.Entities.ScanFile", b =>
                 {
                     b.Property<int>("Id")
@@ -1919,13 +1883,13 @@ namespace Agro.DAL.MySql.Migrations
                         new
                         {
                             Id = 10,
-                            Name = "Выставленные",
+                            Name = "Выставленный",
                             TypeApplication = "Счета"
                         },
                         new
                         {
                             Id = 11,
-                            Name = "Полученные",
+                            Name = "Полученный",
                             TypeApplication = "Счета"
                         });
                 });
@@ -2276,33 +2240,6 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("Unit");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.ProductInvoice", b =>
-                {
-                    b.HasOne("Agro.DAL.Entities.Invoice", "Invoice")
-                        .WithMany("ProductsInvoice")
-                        .HasForeignKey("InvoiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Agro.DAL.Entities.Nds", "Nds")
-                        .WithMany()
-                        .HasForeignKey("NdsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Agro.DAL.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Invoice");
-
-                    b.Navigation("Nds");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("Agro.DAL.Entities.ScanFile", b =>
                 {
                     b.HasOne("Agro.DAL.Entities.Contract", null)
@@ -2365,8 +2302,6 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Invoice", b =>
                 {
-                    b.Navigation("ProductsInvoice");
-
                     b.Navigation("ScanFiles");
                 });
 

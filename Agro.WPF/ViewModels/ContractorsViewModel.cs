@@ -7,9 +7,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Agro.DAL.Entities;
-using Agro.Domain.Base;
-using Agro.Interfaces;
-using Agro.Interfaces.Base.Repositories;
+using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.Views.Windows;
@@ -20,16 +18,16 @@ namespace Agro.WPF.ViewModels;
 public class ContractorsViewModel : ViewModel
 {
 
-    private readonly ICounterpertyRepository<CounterpartyDto> _counterpartyRepository;
-    private readonly IGroupRepository<GroupDto> _groupRepository;
-    private readonly ITypeRepository<TypeDocDto> _typeRepository;
-    private readonly IStatusRepository<StatusDto> _statusRepository;
+    private readonly IBaseRepository<Counterparty> _counterpartyRepository;
+    private readonly IBaseRepository<GroupDoc> _groupRepository;
+    private readonly IBaseRepository<TypeDoc> _typeRepository;
+    private readonly IBaseRepository<Status> _statusRepository;
 
 
     public ContractorsViewModel(
-        ICounterpertyRepository<CounterpartyDto> counterpartyRepository,
-        IGroupRepository<GroupDto> groupRepository, 
-        ITypeRepository<TypeDocDto> typeRepository)
+        IBaseRepository<Counterparty> counterpartyRepository,
+        IBaseRepository<GroupDoc> groupRepository,
+        IBaseRepository<TypeDoc> typeRepository)
     {
         _counterpartyRepository = counterpartyRepository;
         _groupRepository = groupRepository;
@@ -44,19 +42,19 @@ public class ContractorsViewModel : ViewModel
        
     }
 
-    private ObservableCollection<GroupDto> _groups;
-    public ObservableCollection<GroupDto> Groups { get=>_groups; set=>Set(ref _groups, value); }
+    private ObservableCollection<GroupDoc> _groups;
+    public ObservableCollection<GroupDoc> Groups { get=>_groups; set=>Set(ref _groups, value); }
 
-    private ObservableCollection<TypeDocDto> _types;
-    public ObservableCollection<TypeDocDto> Types { get=>_types; set=>Set(ref _types, value); }
-    public ObservableCollection<CounterpartyDto> Counterparties { get; set; } = new ObservableCollection<CounterpartyDto>();
+    private ObservableCollection<TypeDoc> _types;
+    public ObservableCollection<TypeDoc> Types { get=>_types; set=>Set(ref _types, value); }
+    public ObservableCollection<Counterparty> Counterparties { get; set; } = new ObservableCollection<Counterparty>();
 
-    private CounterpartyDto? _counterpartyDto;
-    public CounterpartyDto? SelectedCounterparty
+    private Counterparty? _Counterparty;
+    public Counterparty? SelectedCounterparty
 
     {
-        get => _counterpartyDto;
-        set => Set(ref _counterpartyDto, value);
+        get => _Counterparty;
+        set => Set(ref _Counterparty, value);
     }
     
     private string? _selectedStatus;
@@ -86,16 +84,16 @@ public class ContractorsViewModel : ViewModel
         }
     }
     
-    private TypeDocDto ? _selecteType;
-    public TypeDocDto? SelectedType
+    private TypeDoc ? _selecteType;
+    public TypeDoc? SelectedType
     {
         get => _selecteType;
         set => Set(ref _selecteType, value);
     }
 
-    private GroupDto? _selectedGroup;
+    private GroupDoc? _selectedGroup;
 
-    public GroupDto? SelectedGroup
+    public GroupDoc? SelectedGroup
     {
         get => _selectedGroup;
         set => Set(ref _selectedGroup, value);
@@ -103,18 +101,20 @@ public class ContractorsViewModel : ViewModel
 
     private async Task LoadFiltr()
     {
-        Groups = new ObservableCollection<GroupDto>();
-        SelectedGroup = new GroupDto() { Id = 0, Name = "Все" };
+        Groups = new ObservableCollection<GroupDoc>();
+        SelectedGroup = new GroupDoc() { Id = 0, Name = "Все" };
         Groups.Add(SelectedGroup);
-        var groups = await _groupRepository.GetAllByTypeApplicationAsync("Контрагенты");
+        var groups = await _groupRepository.GetAllAsync();
+        groups= groups.Where(g => g.TypeApplication == "Контрагенты");
         foreach (var group in groups)
         {
             Groups.Add(group);
         }
 
-        Types = new ObservableCollection<TypeDocDto>();
-        Types.Add(new TypeDocDto() { Id = 0, Name = "Все" });
-        var types = await _typeRepository.GetAllByTypeApplicationAsync("Контрагенты");
+        Types = new ObservableCollection<TypeDoc>();
+        Types.Add(new TypeDoc() { Id = 0, Name = "Все" });
+        var types = await _typeRepository.GetAllAsync();
+        types = types.Where(t => t.TypeApplication == "Контрагенты");
         foreach (var type in types)
         {
             Types.Add(type);
@@ -176,14 +176,14 @@ public class ContractorsViewModel : ViewModel
     {
         CounterpartyView counterpartyView = new();
         var mod= counterpartyView.DataContext as CounterpartyViewModel;
-        mod.SelectedCounterpartyDto = new();
-        mod.CounterpartyDtoCollection = Counterparties;
+        mod.SelectedCounterparty = new();
+        mod.CounterpartyCollection = Counterparties;
         mod.Title = "Создание нового контрагента";
         mod.CounterpartyEvent += GridRefreh;
         counterpartyView.Show();
     }
 
-    private void GridRefreh(CounterpartyDto counterparty)
+    private void GridRefreh(Counterparty counterparty)
     {
         var counterpartyCol = Counterparties.FirstOrDefault(c => c.Id == counterparty.Id);
         if (counterpartyCol is null)
@@ -213,8 +213,8 @@ public class ContractorsViewModel : ViewModel
         CounterpartyView counterpartyView = new();
         var mod = counterpartyView.DataContext as CounterpartyViewModel;
         mod.Title = "Редактирование контрагента";
-        mod.SelectedCounterpartyDto = SelectedCounterparty;
-        mod.CounterpartyDtoCollection = Counterparties;
+        mod.SelectedCounterparty = SelectedCounterparty;
+        mod.CounterpartyCollection = Counterparties;
         mod.CounterpartyEvent += GridRefreh;
         counterpartyView.Show();
     }
@@ -257,7 +257,7 @@ public class ContractorsViewModel : ViewModel
     {
         if (!String.IsNullOrEmpty(NameFilter))
         {
-            CounterpartyDto? dto = count as CounterpartyDto;
+            Counterparty? dto = count as Counterparty;
             return  dto!.Name.Contains(NameFilter);
         }
         return true;
@@ -267,7 +267,7 @@ public class ContractorsViewModel : ViewModel
     {
         if (!String.IsNullOrEmpty(InnFilter))
         {
-            CounterpartyDto? dto = count as CounterpartyDto;
+            Counterparty? dto = count as Counterparty;
             return dto!.Inn.Contains(InnFilter);
         }
         return true;

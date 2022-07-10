@@ -1,12 +1,9 @@
 ﻿using System;
 using Agro.DAL.Sql;
 using Agro.DAL.SqLite;
-using Agro.Domain.Base;
 using Agro.Interfaces;
-using Agro.Interfaces.Base.Repositories;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.Services.Repositories;
-using Agro.WPF.Infrastructure.AutoMapper;
 using Agro.WPF.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,41 +51,26 @@ namespace Agro.WPF
             services.AddTransient<ProductViewModel>();
             services.AddTransient<AccountingPlansViewModel>();
             services.AddTransient<AccountingPlanViewModel>();
-
+            services.AddScoped<InvoicesViewModel>();
+            services.AddTransient<InvoiceViewModel>();
 
             //Регистрация репозиториев
-            services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
-
-            services.AddScoped(typeof(IGroupRepository<GroupDto>), typeof(GroupRepository));
-
-            services.AddScoped(typeof(ITypeRepository<TypeDocDto>), typeof(TypeRepository));
-
-            services.AddScoped(typeof(ICounterpertyRepository<CounterpartyDto>), typeof(CounterpartyRepository));
-
-            services.AddScoped(typeof(IBankDetailsRepository<BankDetailsDto>), typeof(BankDetailsRepository));
-
-            services.AddScoped(typeof(IProductRepository<ProductDto>), typeof(ProductRepository));
-
-            services.AddScoped(typeof(IUnitRepository<UnitOkeiDto>), typeof(UnitRepository));
-
-            services.AddScoped(typeof(INdsRepository<NdsDto>), typeof(NdsRepository));
-
-            services.AddScoped(typeof(IBaseRepository<AccountingPlanDto>), typeof(AccountingPlanRepository));
-
+            services.AddScoped(typeof(IBaseRepository<>), typeof(DbRepository<>));
 
             // Регистрация мапера
-            services.AddAutoMapper(
-                    typeof(CounterpartyProfile), 
-                    typeof(GroupProfile), 
-                    typeof(TypeProfile), 
-                    typeof(StatusProfile),
-                    typeof(BankDetailsProfile),
-                    typeof(ProductProfile),
-                    typeof(UnitProfile),
-                    typeof(NdsProfile),
-                    typeof(AccountingPlanProfile)) // маппинг-профайлы передавать через запятую typeof(AppMappingProfile), typeof(MappingProfile2)
-                .AddScoped(typeof(IMapper<>), typeof(AutoMapperService<>))
-                .AddScoped(typeof(IMapper<,>), typeof(AutoMapperService<,>));
+            //services.AddAutoMapper(
+            //        typeof(CounterpartyProfile), 
+            //        typeof(GroupProfile), 
+            //        typeof(TypeProfile), 
+            //        typeof(StatusProfile),
+            //        typeof(BankDetailsProfile),
+            //        typeof(ProductProfile),
+            //        typeof(UnitProfile),
+            //        typeof(NdsProfile),
+            //        typeof(AccountingPlanProfile),
+            //        typeof(InvoiceProfile)) // маппинг-профайлы передавать через запятую typeof(AppMappingProfile), typeof(MappingProfile2)
+            //    .AddScoped(typeof(IMapper<>), typeof(AutoMapperService<>))
+            //    .AddScoped(typeof(IMapper<,>), typeof(AutoMapperService<,>));
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using Agro.Domain.Base;
-using Agro.Interfaces.Base.Repositories;
+using Agro.DAL.Entities;
+using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.Views.Windows;
@@ -13,25 +14,25 @@ namespace Agro.WPF.ViewModels;
 
 public class ProductViewModel : ViewModel
 {
-    private readonly IProductRepository<ProductDto> _productRepository;
-    private readonly IGroupRepository<GroupDto> _groupRepository;
-    private readonly ITypeRepository<TypeDocDto> _typeRepository;
-    private readonly IUnitRepository<UnitOkeiDto> _unitRepository;
-    private readonly INdsRepository<NdsDto> _ndsRepository;
+    private readonly IBaseRepository<Product> _productRepository;
+    private readonly IBaseRepository<GroupDoc> _groupRepository;
+    private readonly IBaseRepository<TypeDoc> _typeRepository;
+    private readonly IBaseRepository<UnitOkei> _unitRepository;
+    private readonly IBaseRepository<Nds> _ndsRepository;
 
     public ProductViewModel(
-        IProductRepository<ProductDto> productRepository,
-        IGroupRepository<GroupDto> groupRepository,
-        ITypeRepository<TypeDocDto> typeRepository,
-        IUnitRepository<UnitOkeiDto> unitRepository,
-        INdsRepository<NdsDto> ndsRepository)
+        IBaseRepository<Product> productRepository,
+        IBaseRepository<GroupDoc> groupRepository,
+        IBaseRepository<TypeDoc> typeRepository,
+        IBaseRepository<UnitOkei> unitRepository,
+        IBaseRepository<Nds> ndsRepository)
     {
         _productRepository = productRepository;
         _groupRepository = groupRepository;
         _typeRepository = typeRepository;
         _unitRepository = unitRepository;
         _ndsRepository = ndsRepository;
-        Product = new ProductDto();
+        Product = new Product();
         LoadData();
     }
 
@@ -42,8 +43,8 @@ public class ProductViewModel : ViewModel
 
     public string Title { get => _title; set => Set(ref _title, value); }
 
-    private ProductDto _product = null!;
-    public ProductDto Product
+    private Product _product = null!;
+    public Product Product
     {
         get => _product;
         set
@@ -56,12 +57,12 @@ public class ProductViewModel : ViewModel
         }
     }
 
-    private ObservableCollection<GroupDto> _groups;
-    public ObservableCollection<GroupDto> Groups { get => _groups; set => Set(ref _groups, value); }
+    private ObservableCollection<GroupDoc> _groups;
+    public ObservableCollection<GroupDoc> Groups { get => _groups; set => Set(ref _groups, value); }
 
-    private GroupDto _group;
+    private GroupDoc _group;
 
-    public GroupDto SelectGroup
+    public GroupDoc SelectGroup
     {
         get => _group;
         set
@@ -71,8 +72,8 @@ public class ProductViewModel : ViewModel
         }
     }
 
-    private UnitOkeiDto _unit;
-    public UnitOkeiDto SelectUnit
+    private UnitOkei _unit;
+    public UnitOkei SelectUnit
     {
         get => _unit;
         set
@@ -82,9 +83,9 @@ public class ProductViewModel : ViewModel
         }
     }
 
-    private NdsDto? _selectNds;
+    private Nds? _selectNds;
 
-    public NdsDto? SelectNds
+    public Nds? SelectNds
     {
         get => _selectNds;
         set
@@ -95,14 +96,14 @@ public class ProductViewModel : ViewModel
     }
 
 
-    private ObservableCollection<TypeDocDto> _types;
+    private ObservableCollection<TypeDoc> _types;
 
-    public ObservableCollection<TypeDocDto> Types { get => _types; set => Set(ref _types, value); }
+    public ObservableCollection<TypeDoc> Types { get => _types; set => Set(ref _types, value); }
 
 
 
-    private TypeDocDto _type;
-    public TypeDocDto SelectType
+    private TypeDoc _type;
+    public TypeDoc SelectType
     {
         get => _type;
         set
@@ -117,44 +118,46 @@ public class ProductViewModel : ViewModel
         }
     }
 
-    private ObservableCollection<NdsDto> _nds;
+    private ObservableCollection<Nds> _nds;
 
-    public ObservableCollection<NdsDto> NdsCollection { get => _nds; set => Set(ref _nds, value); }
+    public ObservableCollection<Nds> NdsCollection { get => _nds; set => Set(ref _nds, value); }
 
-    private ObservableCollection<UnitOkeiDto> _units;
+    private ObservableCollection<UnitOkei> _units;
 
-    public ObservableCollection<UnitOkeiDto> UnitsCollection { get => _units; set => Set(ref _units, value); }
+    public ObservableCollection<UnitOkei> UnitsCollection { get => _units; set => Set(ref _units, value); }
 
 
-    private void LoadGroups(string typeApplication)
+    private async void LoadGroups(string typeApplication)
     {
-        Groups = new ObservableCollection<GroupDto>();
-        var groups = _groupRepository.GetAllByTypeApplication(typeApplication);
+        Groups = new ObservableCollection<GroupDoc>();
+        var groups = await _groupRepository.GetAllAsync();
+        groups = groups.Where(x => x.TypeApplication == typeApplication);
         foreach (var group in groups)
         {
             Groups.Add(group);
         }
     }
-    private void LoadData()
+    private async void LoadData()
     {
         try
         {
-            Types = new ObservableCollection<TypeDocDto>();
+            Types = new ObservableCollection<TypeDoc>();
 
-            var types = _typeRepository.GetAllByTypeApplication("Товары");
+            var types = await _typeRepository.GetAllAsync();
+            types = types.Where(x => x.TypeApplication == "Товары");
             foreach (var type in types)
             {
                 Types.Add(type);
             }
 
-            NdsCollection = new ObservableCollection<NdsDto>();
+            NdsCollection = new ObservableCollection<Nds>();
             var nds = _ndsRepository.GetAll();
             foreach (var nd in nds!)
             {
                 NdsCollection.Add(nd);
             }
 
-            UnitsCollection = new ObservableCollection<UnitOkeiDto>();
+            UnitsCollection = new ObservableCollection<UnitOkei>();
             var units = _unitRepository.GetAll();
             foreach (var unit in units!)
             {
@@ -184,8 +187,8 @@ public class ProductViewModel : ViewModel
     {
         try
         {
-            ProductDto product;
-            Product.Status = new StatusDto() { Id = 5, Name = "Актуально" };
+            Product product;
+            Product.Status = new Status() { Id = 5, Name = "Актуально" };
             if (Product.Id == 0)
             {
                 product = await _productRepository.AddAsync(Product);
@@ -221,7 +224,7 @@ public class ProductViewModel : ViewModel
 
     #region Event
 
-    public delegate void ProductHandler(ProductDto product);
+    public delegate void ProductHandler(Product product);
     public event ProductHandler ProductEvent;
 
     #endregion

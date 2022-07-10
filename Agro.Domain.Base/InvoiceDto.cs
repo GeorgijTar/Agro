@@ -48,6 +48,10 @@ public class InvoiceDto : EntityDto
     private string? _description;
     public string? Description { get=>_description; set=>Set(ref _description, value); }
 
+    /// <summary>Список товаров, услуг</summary>
+    private ICollection<ProductInvoiceDto>? _productsInvoice;
+    public ICollection<ProductInvoiceDto>? ProductsInvoice { get=>_productsInvoice; set=>Set(ref _productsInvoice, value); }
+
     /// <summary>Прикрепленные файлы</summary>
     private ICollection<ScanFileDto>? _scanFiles;
     public ICollection<ScanFileDto>? ScanFiles { get=> _scanFiles; set=>Set(ref _scanFiles, value); }

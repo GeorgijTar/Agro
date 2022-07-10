@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Agro.Domain.Base;
+using Agro.DAL.Entities;
+using Agro.Interfaces.Base.Repositories;
+using Agro.Interfaces.Base.Repositories.Base;
 using Agro.Services.Repositories;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
@@ -15,7 +13,7 @@ using Bank.Api;
 namespace Agro.WPF.ViewModels;
 public class BankDetailsViewModel : ViewModel
 {
-    private readonly IBankDetailsRepository<BankDetailsDto> _repository;
+    private readonly IBaseRepository<BankDetails> _repository;
 
     #region Property
 
@@ -26,9 +24,9 @@ public class BankDetailsViewModel : ViewModel
         set => Set(ref _title, value);
     }
 
-    private BankDetailsDto _details;
+    private BankDetails _details;
 
-    public BankDetailsDto BankDetails
+    public BankDetails BankDetails
     {
         get => _details;
         set
@@ -111,7 +109,7 @@ public class BankDetailsViewModel : ViewModel
         try
         {
             if (value == null || value.Length != 9) return;
-            var bank = new BankDetailsDto();
+            var bank = new BankDetails();
             bank = await ApiBank.GetBankByBik(value);
             Name = bank.NameBank;
             City = bank.City;
@@ -147,9 +145,9 @@ public class BankDetailsViewModel : ViewModel
         }
     }
 
-    private StatusDto _status;
+    private Status _status;
 
-    public StatusDto Status
+    public Status Status
     {
         get => _status;
         set
@@ -159,9 +157,9 @@ public class BankDetailsViewModel : ViewModel
         }
     }
 
-    private CounterpartyDto _counterparty;
+    private Counterparty _counterparty;
 
-    public CounterpartyDto Counterparty
+    public Counterparty Counterparty
     {
         get => _counterparty;
         set
@@ -173,7 +171,7 @@ public class BankDetailsViewModel : ViewModel
 
     #endregion
 
-    public BankDetailsViewModel(IBankDetailsRepository<BankDetailsDto> repository)
+    public BankDetailsViewModel(IBaseRepository<BankDetails> repository)
     {
         _repository = repository;
         Title = "Бфнковские реквизиты контрагента";
@@ -244,7 +242,7 @@ public class BankDetailsViewModel : ViewModel
 
     #region Event
 
-   public delegate void BankdetailsHandler(BankDetailsDto bankDetails);
+   public delegate void BankdetailsHandler(BankDetails bankDetails);
    public event BankdetailsHandler BankDetailsEvent;
 
     #endregion

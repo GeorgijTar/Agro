@@ -1,5 +1,4 @@
-﻿
-namespace Agro.DAL.Entities.DefaultData;
+﻿namespace Agro.DAL.Entities.DefaultData;
 
 public static class GetDefaultData
 {
@@ -25,6 +24,8 @@ public static class GetDefaultData
         new() { Id = 7, Name = "Почтовый адрес", TypeApplication = "Адреса" },
         new() { Id = 8, Name = "Готовая продукция", TypeApplication = "Товары" },
         new() { Id = 9, Name = "Материальные запасы", TypeApplication = "Товары" },
+        new() { Id = 10, Name = "Выставленные", TypeApplication = "Счета" },
+        new() { Id = 11, Name = "Полученные", TypeApplication = "Счета" },
     };
 
     public static GroupDoc[] DefaultGroup() => new GroupDoc[]

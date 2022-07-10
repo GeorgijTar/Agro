@@ -56,17 +56,17 @@
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Код:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Width="120" HorizontalAlignment="Left"
-                     Text="{Binding AccountingPlanDto.Code}"/>
+                     Text="{Binding AccountingPlan.Code}"/>
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Наименование:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"
-                     Text="{Binding AccountingPlanDto.Name}"/>
+                     Text="{Binding AccountingPlan.Name}"/>
             <TextBlock Grid.Row="2" Grid.Column="0" Text="Вышестоящий счет:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
                 <TextBox Width="100" VerticalAlignment="Center" 
-                         Text="{Binding AccountingPlanDto.ParentPlan.Code, 
+                         Text="{Binding AccountingPlan.ParentPlan.Code, 
                     UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 <TextBox VerticalAlignment="Center" MinWidth="400" 
-                         Text="{Binding AccountingPlanDto.ParentPlan.Name, 
+                         Text="{Binding AccountingPlan.ParentPlan.Name, 
                     UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 <Button VerticalAlignment="Center" fa5:Awesome.Content="Solid_Book" 
                         Width="20" Height="20" Foreground="DarkBlue" />
@@ -74,7 +74,7 @@
             <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
                 <CheckBox Grid.Row="3" Grid.Column="1" 
                           HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0"
-                          IsChecked="{Binding AccountingPlanDto.IsSelect}"/>
+                          IsChecked="{Binding AccountingPlan.IsSelect}"/>
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Допускается выбирать счет в документах" VerticalAlignment="Center"/>
             </StackPanel>
         </Grid>

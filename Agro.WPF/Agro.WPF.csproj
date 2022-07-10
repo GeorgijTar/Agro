@@ -33,8 +33,6 @@
     <ProjectReference Include="..\Agro.DAL.MySql\Agro.DAL.MySql.csproj" />
     <ProjectReference Include="..\Agro.DAL.SqLite\Agro.DAL.SqLite.csproj" />
     <ProjectReference Include="..\Agro.DAL.Sql\Agro.DAL.Sql.csproj" />
-    <ProjectReference Include="..\Agro.Domain.Base\Agro.Domain.Base.csproj" />
-    <ProjectReference Include="..\Agro.Domain\Agro.Domain.csproj" />
     <ProjectReference Include="..\Agro.Interfaces\Agro.Interfaces.csproj" />
     <ProjectReference Include="..\Agro.Services\Agro.Services.csproj" />
     <ProjectReference Include="..\Bank.Api\Bank.Api.csproj" />
@@ -45,6 +43,10 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Infrastructure\" />
   </ItemGroup>
 
 </Project>
