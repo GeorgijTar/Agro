@@ -9,19 +9,19 @@ public class Contract : Entity
 {
     /// <summary>Статус договора</summary>
     [Required, ForeignKey("StatusId")]
-    public Status Status { get; set; } = null!;
+    public virtual Status Status { get; set; } = null!;
 
     public int StatusId { get; set; }
 
     /// <summary>Тип договора</summary>
     [Required, ForeignKey("TypeId")]
-    public TypeDoc Type { get; set; } = null!;
+    public virtual TypeDoc Type { get; set; } = null!;
 
     public int TypeId { get; set; }
 
     /// <summary>Группа договора</summary>
     [Required, ForeignKey("GroupId")]
-    public GroupDoc Group { get; set; } = null!;
+    public virtual GroupDoc Group { get; set; } = null!;
 
     public int GroupId { get; set; }
 
@@ -33,13 +33,13 @@ public class Contract : Entity
 
     /// <summary>Контрагент по договору</summary>
     [Required, ForeignKey("CounterpartyId")]
-    public Counterparty Counterparty { get; set; } = null!;
+    public virtual Counterparty Counterparty { get; set; } = null!;
 
     public int CounterpartyId { get; set; }
 
     /// <summary>Платежные реквизиты контрагента договора</summary>
     [Required, ForeignKey("BankDetailsId")]
-    public BankDetails BankDetails { get; set; } = null!;
+    public virtual BankDetails BankDetails { get; set; } = null!;
 
     public int BankDetailsId { get; set; }
 
@@ -53,6 +53,6 @@ public class Contract : Entity
     public string? Description { get; set; }
 
     /// <summary>Прикрепленные файлы</summary>
-    public ICollection<ScanFile>? ScanFiles { get; set; } 
+    public virtual ICollection<ScanFile>? ScanFiles { get; set; } 
 
 }

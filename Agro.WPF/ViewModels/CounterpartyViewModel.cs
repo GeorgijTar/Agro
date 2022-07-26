@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using Agro.DAL.Entities;
@@ -15,18 +13,7 @@ using FNS.Api;
 namespace Agro.WPF.ViewModels;
 public class CounterpartyViewModel : ViewModel
 {
-    private string _title;
-    public string Title { get => _title; set => Set(ref _title, value); }
-
-    private ObservableCollection<Counterparty> _counters = new();
-
-    private ObservableCollection<GroupDoc> _groups = new();
-
-    public ObservableCollection<GroupDoc> Groups { get => _groups; set => Set(ref _groups, value); }
-
-    private ObservableCollection<TypeDoc> _types = new();
-
-    public ObservableCollection<TypeDoc> Types { get => _types; set => Set(ref _types, value); }
+   
 
 
     private readonly IBaseRepository<GroupDoc> _groupRep;
@@ -34,21 +21,20 @@ public class CounterpartyViewModel : ViewModel
     private readonly IBaseRepository<TypeDoc> _typeRep;
     private readonly IBaseRepository<Counterparty> _counterpartyRepository;
     private readonly IBaseRepository<BankDetails> _bankDetailsRepository;
-
-    private List<BankDetails> _banks = new();
-
-    public ObservableCollection<Counterparty> CounterpartyCollection { get; set; }
+    private readonly IBaseRepository<Status> _statusRepository;
 
     public CounterpartyViewModel(
         IBaseRepository<GroupDoc> groupRep,
         IBaseRepository<TypeDoc> typeRep,
         IBaseRepository<Counterparty> counterpartyRepository,
-        IBaseRepository<BankDetails> bankDetailsRepository)
+        IBaseRepository<BankDetails> bankDetailsRepository,
+        IBaseRepository<Status> statusRepository)
     {
         _groupRep = groupRep;
         _typeRep = typeRep;
         _counterpartyRepository = counterpartyRepository;
         _bankDetailsRepository = bankDetailsRepository;
+        _statusRepository = statusRepository;
         Title = "Новый контрагент";
         LoadList();
     }
@@ -64,7 +50,7 @@ public class CounterpartyViewModel : ViewModel
         }
 
         var types = await _typeRep.GetAllAsync();
-        types = types.Where(g => g.TypeApplication == "Контрагенты");
+        types = types!.Where(g => g.TypeApplication == "Контрагенты");
         foreach (var type in types)
         {
             Types.Add(type);
@@ -73,178 +59,30 @@ public class CounterpartyViewModel : ViewModel
 
     #region Property
 
-    private Counterparty _selectedCounterparty = new();
-    public Counterparty SelectedCounterparty
-    {
-        get => _selectedCounterparty;
-        set
-        {
-            Set(ref _selectedCounterparty, value);
-            Status = value.Status;
-            Name = value.Name;
-            PayName = value.PayName;
-            Inn = value.Inn;
-            Kpp = value.Kpp;
-            Ogrn = value.Ogrn!;
-            Okpo = value.Okpo!;
-            GroupDoc = value.Group!;
-            TypeDoc = value.TypeDoc;
-            Description = value.Description;
-            BankDetailsCollection = GetBankDetails(value);
-        }
-    }
+    private string _title = "";
+    public string Title { get => _title; set => Set(ref _title, value); }
 
-    private ObservableCollection<BankDetails> GetBankDetails(Counterparty bankDetails)
-    {
-        ObservableCollection<BankDetails> bankDetailsCollection = new ObservableCollection<BankDetails>();
-        foreach (var res in bankDetails.BankDetails)
-        {
-            bankDetailsCollection.Add(res);
-        }
 
-        return bankDetailsCollection;
+    private ObservableCollection<GroupDoc> _groups = new();
 
-    }
-    private Status _status;
+    public ObservableCollection<GroupDoc> Groups { get => _groups; set => Set(ref _groups, value); }
 
-    public Status Status { get => _status; set => Set(ref _status, value); }
+    private ObservableCollection<TypeDoc> _types = new();
 
-    private string _name;
-    public string Name
-    {
-        get => _name;
-        set
-        {
-            Set(ref _name, value);
-            SelectedCounterparty.Name = value;
-        }
-    }
+    public ObservableCollection<TypeDoc> Types { get => _types; set => Set(ref _types, value); }
 
-    private string _payName;
-    public string PayName
-    {
-        get => _payName;
-        set
-        {
-            Set(ref _payName, value);
-            SelectedCounterparty.PayName = value;
-        }
-    }
+    private Counterparty _counterparty = new();
+    public Counterparty Counterparty { get => _counterparty; set=> Set(ref _counterparty, value); }
 
-    private string _inn = string.Empty;
+    private BankDetails _selectBankDetails = null!;
+    public BankDetails SelectBankDetails { get => _selectBankDetails; set => Set( ref _selectBankDetails, value); }
 
-    public string Inn
-    {
-        get => _inn;
-        set
-        {
-            Set(ref _inn, value);
-            SelectedCounterparty.Inn = value;
-        }
-    }
+    private string _message =null!;
+    public string Message { get => _message; set => Set(ref _message, value); }
 
-    private string _kpp;
-
-    public string Kpp
-    {
-        get => _kpp;
-        set
-        {
-            Set(ref _kpp, value);
-            SelectedCounterparty.Kpp = value;
-        }
-    }
-
-    private string _ogrn;
-
-    public string Ogrn
-    {
-        get => _ogrn;
-        set
-        {
-            Set(ref _ogrn, value);
-            SelectedCounterparty.Ogrn = value;
-        }
-    }
-
-    private string _okpo;
-
-    public string Okpo
-    {
-        get => _okpo;
-        set
-        {
-            Set(ref _okpo, value);
-            SelectedCounterparty.Okpo = value;
-        }
-    }
-
-    private GroupDoc _group;
-
-    public GroupDoc GroupDoc
-    {
-        get => _group;
-        set
-        {
-            Set(ref _group, value);
-            SelectedCounterparty.Group = value;
-        }
-    }
-
-    private TypeDoc _typeDoc;
-
-    public TypeDoc TypeDoc
-    {
-        get => _typeDoc;
-        set
-        {
-            Set(ref _typeDoc, value);
-            SelectedCounterparty.TypeDoc = value;
-        }
-    }
-
-    private string _description;
-
-    public string Description
-    {
-        get => _description;
-        set
-        {
-            Set(ref _description, value);
-            SelectedCounterparty.Description = value;
-
-        }
-    }
-
-    private BankDetails _bankDetails;
-
-    public BankDetails SelectBankDetails
-    {
-        get => _bankDetails;
-        set => Set(ref _bankDetails, value);
-    }
-
-    private ObservableCollection<BankDetails> _bankDetailsCollection;
-    public ObservableCollection<BankDetails> BankDetailsCollection
-    {
-        get => _bankDetailsCollection;
-        set
-        {
-            Set(ref _bankDetailsCollection, value);
-            SelectedCounterparty.BankDetails = value;
-        }
-    }
-
-    private string message;
-
-    public string Message
-    {
-        get => message;
-        set => Set(ref message, value);
-    }
     #endregion
 
-    #region Command
+    #region Commands
 
     #region Save
 
@@ -255,23 +93,34 @@ public class CounterpartyViewModel : ViewModel
 
     private bool SaveCan(object arg)
     {
-        return true;
+        return Counterparty.Group!.Name != null! 
+               && Counterparty.TypeDoc!.Name != null! 
+               && Counterparty.Name != null!
+               && Counterparty.Inn != null!
+               && Counterparty.Inn.Length >= 10
+               && Counterparty.PayName != null!
+               && Counterparty.PayName.Length > 5;
     }
 
     private async void OnSaveCommandExecuted(object p)
     {
-        SelectedCounterparty.Status = new() { Id = 5, Name = "Актуально" };
+        var ctr = await _counterpartyRepository.GetAllAsync();
+        var ct =  ctr!.
+            Where(c=>c.Inn==Counterparty.Inn).
+            Where(c=>c.Id != Counterparty.Id)
+            .Where(c=>c.Status.Id==5);
+        if (ct.Any())
+        {
+            MessageBox.Show($"Контрагент с ИНН {Counterparty.Inn} уже есть в базе данных!", "Редактор контрагентов");
+            return;
+        }
+
+        var status = await _statusRepository.GetByIdAsync(5);
+        Counterparty.Status = status!;
         try
         {
-            if (SelectedCounterparty.Id == 0)
-            {
-                CounterpartyEvent(await _counterpartyRepository.AddAsync(SelectedCounterparty));
-            }
-            else
-            {
-                CounterpartyEvent(await _counterpartyRepository.UpdateAsync(SelectedCounterparty));
-            }
-
+            CounterpartyEvent(await _counterpartyRepository.SaveAsync(Counterparty));
+           
             var window = p as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
             if (window != null!)
                 window.Close();
@@ -279,7 +128,6 @@ public class CounterpartyViewModel : ViewModel
         catch (InvalidOperationException e)
         {
             MessageBox.Show(e.Message);
-            return;
         }
 
     }
@@ -291,43 +139,18 @@ public class CounterpartyViewModel : ViewModel
     private ICommand? _addBankDetailsCommand;
 
     public ICommand AddBankDetailsCommand => _addBankDetailsCommand
-        ??= new RelayCommand(OnAddBankDetailsCommandExecuted, AddBankDetailsCommandCon);
+        ??= new RelayCommand(OnAddBankDetailsCommandExecuted);
 
-    private bool AddBankDetailsCommandCon(object arg)
+   private void OnAddBankDetailsCommandExecuted(object obj)
     {
-        if (SelectedCounterparty.Id == 0) return false;
-        return true;
+        BankDetailsView view = new();
+        BankDetailsViewModel? viewModel = view.DataContext as BankDetailsViewModel;
+        viewModel!.ViewSender = this;
+        viewModel.BankDetails.Guid = Guid.NewGuid();
+        viewModel.Title = $"Добавление банковских реквизитов для {Counterparty.Name}";
+        view.ShowDialog();
     }
-
-    private void OnAddBankDetailsCommandExecuted(object obj)
-    {
-        BankDetailsView bankDetailsView = new();
-        var mod = bankDetailsView.DataContext as BankDetailsViewModel;
-        if (mod != null)
-        {
-            mod.Title = $"Добавление банковских реквизитов для {Name}";
-            mod.BankDetails = new();
-            mod.Counterparty = SelectedCounterparty;
-            mod.BankDetailsEvent += Gridrefresh;
-        }
-
-
-        bankDetailsView.Show();
-    }
-
-    private void Gridrefresh(BankDetails bankdetails)
-    {
-        var bank = BankDetailsCollection.FirstOrDefault(b => b.Id == bankdetails.Id);
-        if (bank is null)
-        {
-            BankDetailsCollection.Add(bankdetails);
-        }
-        else
-        {
-            bank = bankdetails;
-
-        }
-    }
+    
 
     #endregion
 
@@ -339,7 +162,7 @@ public class CounterpartyViewModel : ViewModel
 
     private bool EdeteBankDetailsCommandCon(object arg)
     {
-        if (SelectBankDetails is null) return false;
+        if (SelectBankDetails == null!) return false;
         return true;
     }
 
@@ -349,10 +172,9 @@ public class CounterpartyViewModel : ViewModel
         var mod = bankDetailsView.DataContext as BankDetailsViewModel;
         if (mod != null)
         {
-            mod.Title = $"Редактирование банковских реквизитов для {Name}";
+            mod.Title = $"Редактирование банковских реквизитов для {Counterparty.Name}";
             mod.BankDetails = SelectBankDetails;
-            mod.Counterparty = SelectedCounterparty;
-            mod.BankDetailsEvent += Gridrefresh;
+            mod.ViewSender = this;
         }
         bankDetailsView.Show();
     }
@@ -377,10 +199,9 @@ public class CounterpartyViewModel : ViewModel
             {
                 if (await _bankDetailsRepository.DeleteAsync(SelectBankDetails))
                 {
-                    BankDetailsCollection.Remove(SelectBankDetails);
+                   Counterparty.BankDetails!.Remove(SelectBankDetails);
                 }
             }
-            else return;
         }
         catch (Exception e)
         {
@@ -391,7 +212,7 @@ public class CounterpartyViewModel : ViewModel
 
     private bool DeleteBankDetailsCommandCon(object arg)
     {
-        if (SelectBankDetails is null) return false;
+        if (SelectBankDetails == null!) return false;
         return true;
     }
 
@@ -407,10 +228,10 @@ public class CounterpartyViewModel : ViewModel
 
     private bool LoadCan(object arg)
     {
-        if (Inn is null) { return false; }
+        if (Counterparty.Inn == null!) { return false; }
         else
         {
-            if (Inn.Length == 10 || Inn.Length == 12) return true;
+            if (Counterparty.Inn.Length == 10 || Counterparty.Inn.Length == 12) return true;
         }
         return false;
 
@@ -421,15 +242,18 @@ public class CounterpartyViewModel : ViewModel
         Counterparty load;
         try
         {
-            if (Inn.Length == 10)
+            if (Counterparty.Inn.Length == 10)
             {
-                load = await CheckoApi.GetUl(Inn);
+                load = await CheckoApi.GetUl(Counterparty.Inn);
             }
             else
             {
-                load = await CheckoApi.GetIp(Inn);
+                load = await CheckoApi.GetIp(Counterparty.Inn);
             }
-            SelectedCounterparty = load;
+
+            var id = Counterparty.Id;
+            Counterparty = load;
+            Counterparty.Id = id;
             Message = "";
         }
         catch (InvalidOperationException e)

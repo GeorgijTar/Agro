@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         xmlns:local="clr-namespace:Agro.WPF.ViewModels"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="450" Width="1100"
-        DataContext="{Binding ProductsModel, Source={StaticResource Locator}}">
+        DataContext="{Binding ProductsModel, Source={StaticResource Locator}}"
+        x:Name="ProductsWindow">
     <Window.Resources>
             
         <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
@@ -121,13 +123,27 @@
                                   AutoGenerateColumns="False"
                                   ItemsSource="{Binding CollectionView}"
                                   CanUserAddRows="False">
+                            <b:Interaction.Triggers>
+                                <b:EventTrigger EventName="MouseDoubleClick">
+                                    <b:InvokeCommandAction Command="{Binding SelectRowCommand}" 
+                                                           CommandParameter="{Binding ElementName=ProductsWindow}"/>
+                                </b:EventTrigger>
+                            </b:Interaction.Triggers>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Width="10*" Header="ID" Binding="{Binding Id }"/>
-                                <DataGridTextColumn Width="40*" Header="Статус" Binding="{Binding Status.Name}"/>
+                                <DataGridTextColumn Width="20*" Header="ИД" Binding="{Binding Id }"/>
+                                <DataGridTextColumn Width="35*" Header="Статус" Binding="{Binding Status.Name}"/>
+                                <DataGridTextColumn Width="50*" Header="Артикул" Binding="{Binding ArticleNumber}"/>
                                 <DataGridTextColumn Width="150*" Header="Сокращенное наименование" Binding="{Binding NameMini}"/>
-                                <DataGridTextColumn Width="50*" Header="Группа" Binding="{Binding Group.Name}"/>
-                                <DataGridTextColumn Width="50*" Header="Тип" Binding="{Binding Type.Name}"/>
-                                <DataGridTextColumn Width="50*" Header="Примечание" Binding="{Binding Description}"/>
+                                <DataGridTextColumn Width="25*" Header="Ед. изм." Binding="{Binding Unit.Abbreviation}">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style>
+                                            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="60*" Header="Группа" Binding="{Binding Group.Name}"/>
+                                <DataGridTextColumn Width="60*" Header="Тип" Binding="{Binding Type.Name}"/>
+                                <DataGridTextColumn Width="80*" Header="Примечание" Binding="{Binding Description}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </GroupBox>

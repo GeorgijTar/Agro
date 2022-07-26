@@ -22,4 +22,10 @@ public class ViewModelLocator
     public InvoicesViewModel InvoicesModel => App.Services.GetRequiredService<InvoicesViewModel>();
 
     public InvoiceViewModel InvoiceModel => App.Services.GetRequiredService<InvoiceViewModel>();
+
+    public OrganizationViewModel OrganizationModel => App.Services.GetRequiredService<OrganizationViewModel>();
+
+    public ProductInvoiceViewModel ProductInvoiceModel => App.Services.GetRequiredService<ProductInvoiceViewModel>();
+
+    public ReestrInvoiceViewModel ReestrInvoiceModel => App.Services.GetRequiredService<ReestrInvoiceViewModel>();
 }

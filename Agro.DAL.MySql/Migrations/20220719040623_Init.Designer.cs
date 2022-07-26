@@ -10,15 +10,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Agro.DAL.MySql.Migrations
 {
-    [DbContext(typeof(AgroDB))]
-    [Migration("20220709063149_Migration2")]
-    partial class Migration2
+    [DbContext(typeof(AgroDb))]
+    [Migration("20220719040623_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.6")
+                .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Agro.DAL.Entities.AccountingPlan", b =>
@@ -1279,6 +1279,36 @@ namespace Agro.DAL.MySql.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Agro.DAL.Entities.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("AddressRf")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("GarId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("Unreliability")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("UnreliabilityDescription")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Addresses");
+                });
+
             modelBuilder.Entity("Agro.DAL.Entities.BankDetails", b =>
                 {
                     b.Property<int>("Id")
@@ -1299,12 +1329,15 @@ namespace Agro.DAL.MySql.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("CounterpartyId")
+                    b.Property<int?>("CounterpartyId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasMaxLength(225)
                         .HasColumnType("varchar(225)");
+
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Ks")
                         .IsRequired()
@@ -1315,20 +1348,126 @@ namespace Agro.DAL.MySql.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("OrganizationId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CounterpartyId");
 
+                    b.HasIndex("OrganizationId");
+
                     b.HasIndex("StatusId");
 
                     b.ToTable("BankDetails");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Classifiers.Okato", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Okato");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Classifiers.Okfs", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Okfs");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Classifiers.Okogy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Okogy");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Classifiers.Okopf", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Okopf");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Classifiers.Oktmo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Oktmo");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Classifiers.Okved", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Okveds");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Contract", b =>
@@ -1390,11 +1529,14 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int?>("ActualAddressId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasMaxLength(225)
                         .HasColumnType("varchar(225)");
 
-                    b.Property<int>("GroupId")
+                    b.Property<int?>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<string>("Inn")
@@ -1429,6 +1571,8 @@ namespace Agro.DAL.MySql.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActualAddressId");
 
                     b.HasIndex("GroupId");
 
@@ -1540,6 +1684,34 @@ namespace Agro.DAL.MySql.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Agro.DAL.Entities.History", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EventDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("EventHistory")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("InvoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("History");
+                });
+
             modelBuilder.Entity("Agro.DAL.Entities.Invoice", b =>
                 {
                     b.Property<int>("Id")
@@ -1549,17 +1721,26 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(65,30)");
 
+                    b.Property<decimal>("AmountNds")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<int>("BankDetailsId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BankDetailsOrgId")
                         .HasColumnType("int");
 
                     b.Property<int>("CounterpartyId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateInvoce")
+                    b.Property<DateTime>("DateInvoice")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
+
+                    b.Property<int>("NdsId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Number")
                         .IsRequired()
@@ -1568,6 +1749,9 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<int>("TypeId")
                         .HasColumnType("int");
 
@@ -1575,7 +1759,11 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.HasIndex("BankDetailsId");
 
+                    b.HasIndex("BankDetailsOrgId");
+
                     b.HasIndex("CounterpartyId");
+
+                    b.HasIndex("NdsId");
 
                     b.HasIndex("StatusId");
 
@@ -1594,6 +1782,9 @@ namespace Agro.DAL.MySql.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<decimal>("OverPercent")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<int>("Percent")
                         .HasColumnType("int");
 
@@ -1606,26 +1797,115 @@ namespace Agro.DAL.MySql.Migrations
                         {
                             Id = 1,
                             Name = "Без НДС",
+                            OverPercent = 1m,
                             Percent = 0
                         },
                         new
                         {
                             Id = 2,
                             Name = "0%",
+                            OverPercent = 1m,
                             Percent = 0
                         },
                         new
                         {
                             Id = 3,
                             Name = "10%",
+                            OverPercent = 1.1m,
                             Percent = 10
                         },
                         new
                         {
                             Id = 4,
                             Name = "20%",
+                            OverPercent = 1.2m,
                             Percent = 20
                         });
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Organization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("AbbreviatedName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("AddressUrId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Inn")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Kpp")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Ogrn")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("OkatoId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OkfsId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OkogyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OkopfId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Okpo")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("OktmoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OkvedId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RegFnsId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RegFssId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RegPfrId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressUrId");
+
+                    b.HasIndex("OkatoId");
+
+                    b.HasIndex("OkfsId");
+
+                    b.HasIndex("OkogyId");
+
+                    b.HasIndex("OkopfId");
+
+                    b.HasIndex("OktmoId");
+
+                    b.HasIndex("OkvedId");
+
+                    b.HasIndex("RegFnsId");
+
+                    b.HasIndex("RegFssId");
+
+                    b.HasIndex("RegPfrId");
+
+                    b.ToTable("Organizations");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Product", b =>
@@ -1677,6 +1957,121 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("UnitId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.ProductInvoice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("AmountNds")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("InvoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NdsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.HasIndex("NdsId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductInvoice");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.RegInfoOrg.RegFns", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("AddressFns")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CodeFns")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("DateReg")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NameFns")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RegFns");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.RegInfoOrg.RegFss", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CodeFss")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("DateReg")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NameFss")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RegNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RegFss");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.RegInfoOrg.RegPfr", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CodePfr")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("DateReg")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NamePfr")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RegNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RegPfr");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.ScanFile", b =>
@@ -1874,6 +2269,18 @@ namespace Agro.DAL.MySql.Migrations
                             Id = 9,
                             Name = "Материальные запасы",
                             TypeApplication = "Товары"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Выставленные",
+                            TypeApplication = "Счета"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Полученные",
+                            TypeApplication = "Счета"
                         });
                 });
 
@@ -2035,6 +2442,17 @@ namespace Agro.DAL.MySql.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Agro.DAL.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
+                });
+
             modelBuilder.Entity("Agro.DAL.Entities.AccountingPlan", b =>
                 {
                     b.HasOne("Agro.DAL.Entities.AccountingPlan", "ParentPlan")
@@ -2056,9 +2474,11 @@ namespace Agro.DAL.MySql.Migrations
                 {
                     b.HasOne("Agro.DAL.Entities.Counterparty", "Counterparty")
                         .WithMany("BankDetails")
-                        .HasForeignKey("CounterpartyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CounterpartyId");
+
+                    b.HasOne("Agro.DAL.Entities.Organization", "Organization")
+                        .WithMany("BankDetails")
+                        .HasForeignKey("OrganizationId");
 
                     b.HasOne("Agro.DAL.Entities.Status", "Status")
                         .WithMany()
@@ -2067,6 +2487,8 @@ namespace Agro.DAL.MySql.Migrations
                         .IsRequired();
 
                     b.Navigation("Counterparty");
+
+                    b.Navigation("Organization");
 
                     b.Navigation("Status");
                 });
@@ -2116,11 +2538,13 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Counterparty", b =>
                 {
+                    b.HasOne("Agro.DAL.Entities.Address", "ActualAddress")
+                        .WithMany()
+                        .HasForeignKey("ActualAddressId");
+
                     b.HasOne("Agro.DAL.Entities.GroupDoc", "Group")
                         .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GroupId");
 
                     b.HasOne("Agro.DAL.Entities.Status", "Status")
                         .WithMany()
@@ -2132,11 +2556,28 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany()
                         .HasForeignKey("TypeDocId");
 
+                    b.Navigation("ActualAddress");
+
                     b.Navigation("Group");
 
                     b.Navigation("Status");
 
                     b.Navigation("TypeDoc");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.History", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Invoice", null)
+                        .WithMany("History")
+                        .HasForeignKey("InvoiceId");
+
+                    b.HasOne("Agro.DAL.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Invoice", b =>
@@ -2147,9 +2588,19 @@ namespace Agro.DAL.MySql.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Agro.DAL.Entities.BankDetails", "BankDetailsOrg")
+                        .WithMany()
+                        .HasForeignKey("BankDetailsOrgId");
+
                     b.HasOne("Agro.DAL.Entities.Counterparty", "Counterparty")
                         .WithMany()
                         .HasForeignKey("CounterpartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Nds", "Nds")
+                        .WithMany()
+                        .HasForeignKey("NdsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2167,11 +2618,80 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.Navigation("BankDetails");
 
+                    b.Navigation("BankDetailsOrg");
+
                     b.Navigation("Counterparty");
+
+                    b.Navigation("Nds");
 
                     b.Navigation("Status");
 
                     b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Organization", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Address", "AddressUr")
+                        .WithMany()
+                        .HasForeignKey("AddressUrId");
+
+                    b.HasOne("Agro.DAL.Entities.Classifiers.Okato", "Okato")
+                        .WithMany()
+                        .HasForeignKey("OkatoId");
+
+                    b.HasOne("Agro.DAL.Entities.Classifiers.Okfs", "Okfs")
+                        .WithMany()
+                        .HasForeignKey("OkfsId");
+
+                    b.HasOne("Agro.DAL.Entities.Classifiers.Okogy", "Okogy")
+                        .WithMany()
+                        .HasForeignKey("OkogyId");
+
+                    b.HasOne("Agro.DAL.Entities.Classifiers.Okopf", "Okopf")
+                        .WithMany()
+                        .HasForeignKey("OkopfId");
+
+                    b.HasOne("Agro.DAL.Entities.Classifiers.Oktmo", "Oktmo")
+                        .WithMany()
+                        .HasForeignKey("OktmoId");
+
+                    b.HasOne("Agro.DAL.Entities.Classifiers.Okved", "Okved")
+                        .WithMany()
+                        .HasForeignKey("OkvedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.RegInfoOrg.RegFns", "RegFns")
+                        .WithMany()
+                        .HasForeignKey("RegFnsId");
+
+                    b.HasOne("Agro.DAL.Entities.RegInfoOrg.RegFss", "RegFss")
+                        .WithMany()
+                        .HasForeignKey("RegFssId");
+
+                    b.HasOne("Agro.DAL.Entities.RegInfoOrg.RegPfr", "RegPfr")
+                        .WithMany()
+                        .HasForeignKey("RegPfrId");
+
+                    b.Navigation("AddressUr");
+
+                    b.Navigation("Okato");
+
+                    b.Navigation("Okfs");
+
+                    b.Navigation("Okogy");
+
+                    b.Navigation("Okopf");
+
+                    b.Navigation("Oktmo");
+
+                    b.Navigation("Okved");
+
+                    b.Navigation("RegFns");
+
+                    b.Navigation("RegFss");
+
+                    b.Navigation("RegPfr");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Product", b =>
@@ -2213,6 +2733,33 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("Type");
 
                     b.Navigation("Unit");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.ProductInvoice", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Invoice", "Invoice")
+                        .WithMany("ProductsInvoice")
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Nds", "Nds")
+                        .WithMany()
+                        .HasForeignKey("NdsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Invoice");
+
+                    b.Navigation("Nds");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.ScanFile", b =>
@@ -2277,7 +2824,16 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Invoice", b =>
                 {
+                    b.Navigation("History");
+
+                    b.Navigation("ProductsInvoice");
+
                     b.Navigation("ScanFiles");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Organization", b =>
+                {
+                    b.Navigation("BankDetails");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.SpecificationContract", b =>

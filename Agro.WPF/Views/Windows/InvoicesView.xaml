@@ -54,7 +54,7 @@
                         <TextBlock Text="Создать" VerticalAlignment="Center" Margin="0,0,5,0"/>
                     </StackPanel>
                 </Button>
-                <Button BorderBrush="DarkGreen" Width="108" Command="{Binding EdeteCommand}"
+                <Button BorderBrush="DarkGreen" Width="108" Command="{Binding EditCommand}"
                             Template="{StaticResource ButtonTemplate}" Margin="2,0">
                     <StackPanel Orientation="Horizontal">
                         <fa5:ImageAwesome Height="12" Icon="Solid_Edit"
@@ -71,6 +71,28 @@
                                               Margin="8,5"
                                               Foreground="DarkRed"/>
                         <TextBlock Text="Удалить" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+                <Button BorderBrush="DarkOrange" Width="108"
+                        Template="{StaticResource ButtonTemplate}" Margin="2,0"
+                        Command="{Binding PrintCommand}"
+                        Visibility="{Binding VisibilityButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Solid_Print"
+                                          Margin="8,5"
+                                          Foreground="DarkOrange"/>
+                        <TextBlock Text="Печать" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+                <Button BorderBrush="DarkOrange" Width="180"
+                        Template="{StaticResource ButtonTemplate}" Margin="2,0"
+                        Command="{Binding PrintCommand}"
+                        Visibility="{Binding VisibilityReestr}">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Solid_FileDownload"
+                                          Margin="8,5"
+                                          Foreground="DarkOrange"/>
+                        <TextBlock Text="Сформировать реестр" VerticalAlignment="Center" Margin="0,0,5,0"/>
                     </StackPanel>
                 </Button>
             </ToolBar>
@@ -108,17 +130,28 @@
             </GroupBox>
             <GroupBox Grid.Row="2">
                 <Grid>
+                    <Grid.Resources>
+                        <ContextMenu x:Key="RowMenu">
+                            <MenuItem Header="Принять" Command="{Binding}"/>
+                            <MenuItem Header="Выставить" Command="{Binding}"/>
+                        </ContextMenu>
+                    </Grid.Resources>
                     <GroupBox Header="Контрагенты" >
                         <DataGrid SelectedItem="{Binding SelectedInvoice}" 
                                   AutoGenerateColumns="False"
                                   ItemsSource="{Binding Invoices}"
                                   CanUserAddRows="False">
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow" >
+                                    <Setter Property="ContextMenu" Value="{StaticResource RowMenu}" />
+                                </Style>
+                            </DataGrid.RowStyle>
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="10*" Header="ID" Binding="{Binding Id}"/>
                                 <DataGridTextColumn Width="20*" Header="Статус" Binding="{Binding Status.Name}"/>
                                 <DataGridTextColumn Width="20*" Header="Номер" Binding="{Binding Number}"/>
-                                <DataGridTextColumn Width="20*" Header="Дата" Binding="{Binding DateInvoce.Date}"/>
-                                <DataGridTextColumn Width="30*" Header="Сумма" Binding="{Binding Amount}"/>
+                                <DataGridTextColumn Width="20*" Header="Дата" Binding="{Binding DateInvoice, ConverterCulture='ru-RU', StringFormat='dd.MM.yyyy'}"/>
+                                <DataGridTextColumn Width="30*" Header="Сумма" Binding="{Binding Amount, ConverterCulture='ru-RU', StringFormat=C}"/>
                                 <DataGridTextColumn Width="80*" Header="Контрагент" Binding="{Binding Counterparty.Name}"/>
                                 <DataGridTextColumn Width="50*" Header="Примечание" Binding="{Binding Description}"/>
                             </DataGrid.Columns>

@@ -10,32 +10,37 @@ namespace Agro.DAL.Entities;
 public class ProductInvoice : Entity
 {
     /// <summary>Товыр, услуга</summary>
-    [Required, ForeignKey("ProductId")]
-    public Product Product { get; set; }= null!;
-
-    public int ProductId { get; set; }
+    private Product _product = new();
+    [Required]
+    public virtual Product Product { get => _product; set => Set(ref _product, value); }
 
     /// <summary>Количество</summary>
-    public decimal Quantity { get; set; }
+    private decimal _quantity;
+    public decimal Quantity { get => _quantity; set => Set(ref _quantity, value); }
 
     /// <summary>Цена</summary>
-    public decimal UnitPrice { get; set; }
+    private decimal _unitPrice;
+    public decimal UnitPrice { get => _unitPrice; set => Set(ref _unitPrice, value); }
 
     /// <summary>Сумма</summary>
-    public decimal Amount { get; set; }
+    private decimal _amount;
+    public decimal Amount { get => _amount; set => Set(ref _amount, value); }
 
     /// <summary>НДС</summary>
-    [Required, ForeignKey("NdsId")]
-    public Nds Nds { get; set; }= null!;
+    private Nds _nds = new();
+    [Required]
+    public virtual Nds Nds { get => _nds; set => Set(ref _nds, value); }
 
-    public int NdsId { get; set; }
+    /// <summary>Сумма НДС</summary>
+    private decimal _amountNds;
+    public decimal AmountNds { get => _amountNds; set => Set(ref _amountNds, value); }
 
     /// <summary>Сумма всего</summary>
-    public decimal TotalAmount { get; set; }
+    private decimal _totalAmount;
+    public decimal TotalAmount { get => _totalAmount; set => Set(ref _totalAmount, value); }
 
     /// <summary>Ссылка на счет</summary>
-    [ForeignKey("InvoiceId")]
-    public Invoice Invoice { get; set; } = null!;
+    private Invoice _invoice = new();
+    public virtual Invoice Invoice { get => _invoice; set => Set(ref _invoice, value); }
 
-    public int InvoiceId { get; set; }
 }

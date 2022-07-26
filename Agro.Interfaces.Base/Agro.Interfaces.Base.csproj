@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Agro.DAL.Entities\Agro.DAL.Entities.csproj" />
+  </ItemGroup>
+
 </Project>

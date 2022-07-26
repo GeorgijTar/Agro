@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -34,6 +35,8 @@ public class ProductsViewModel : ViewModel
 
     #region Property
 
+    public object SenderModel = null!;
+
     private string _title = "Номенклатура";
     public string Title { get => _title; set => Set(ref _title, value); }
 
@@ -44,9 +47,9 @@ public class ProductsViewModel : ViewModel
     public Product? Product { get => _product; set => Set(ref _product, value); }
 
     private ObservableCollection<GroupDoc>? _groups;
-    public ObservableCollection<GroupDoc> GroupFilter { get => _groups; set => Set(ref _groups, value); }
+    public ObservableCollection<GroupDoc>? GroupFilter { get => _groups; set => Set(ref _groups, value); }
 
-    private GroupDoc _group;
+    private GroupDoc _group = new ();
 
     public GroupDoc SelectedGroup
     {
@@ -56,16 +59,14 @@ public class ProductsViewModel : ViewModel
             Set(ref _group, value);
             CollectionView!.Filter = FilterByGroup;
             CollectionView.GroupDescriptions.Add(new PropertyGroupDescription("Type"));
-
-
         }
     }
 
     private ObservableCollection<TypeDoc>? _type;
 
-    public ObservableCollection<TypeDoc> TypeFilter { get => _type; set => Set(ref _type, value); }
+    public ObservableCollection<TypeDoc>? TypeFilter { get => _type; set => Set(ref _type, value); }
 
-    private TypeDoc _selecteType;
+    private TypeDoc _selecteType=null!;
 
     public TypeDoc SelectedType
     {
@@ -77,7 +78,7 @@ public class ProductsViewModel : ViewModel
         }
     }
 
-    private string _nameFilter;
+    private string _nameFilter=null!;
 
     public string NameFilter
     {
@@ -93,7 +94,7 @@ public class ProductsViewModel : ViewModel
 
     #region Metodi
 
-    private async Task LoadData()
+    private async void LoadData()
     {
         await LoadDataProdukt();
         await LoadFilterData();
@@ -103,8 +104,9 @@ public class ProductsViewModel : ViewModel
         if (ProductsCollection != null)
         {
             ProductsCollection.Clear();
-            var products = await _repository.GetAllByStatusAsync(5);
-            foreach (var product in products!)
+            var products = await _repository.GetAllAsync();
+            products = products!.Where(x => x.Status.Id == 5); 
+            foreach (var product in products)
             {
                 ProductsCollection.Add(product);
             }
@@ -205,23 +207,11 @@ public class ProductsViewModel : ViewModel
     {
         ProductView product = new ProductView();
         var viewModel = product.DataContext as ProductViewModel;
-        viewModel.ProductEvent += GridRefreh;
+        viewModel!.SenderModel = this;
         product.Show();
     }
 
-    private void GridRefreh(Product product)
-    {
-        var productCol = ProductsCollection.FirstOrDefault(c => c.Id == product.Id);
-        if (productCol is null)
-        {
-            ProductsCollection.Add(product);
-        }
-        else
-        {
-            productCol = product;
-        }
-    }
-
+    
     private ICommand? _edeteProductCommand;
 
     public ICommand EdeteProductCommand => _edeteProductCommand
@@ -229,7 +219,7 @@ public class ProductsViewModel : ViewModel
 
     private bool EdeteProductCan(object arg)
     {
-        if (Product != null) return true;
+        if (Product != null!) return true;
         return false;
     }
 
@@ -238,7 +228,7 @@ public class ProductsViewModel : ViewModel
         ProductView product = new ProductView();
         var viewModel = product.DataContext as ProductViewModel;
         viewModel!.Product = Product!;
-        viewModel.ProductEvent += GridRefreh;
+        viewModel.SenderModel = this;
         product.Show();
     }
     
@@ -276,7 +266,32 @@ public class ProductsViewModel : ViewModel
      await LoadDataProdukt();
    }
 
-    #endregion
+   
+   private ICommand? _selectRowCommand;
+
+   public ICommand SelectRowCommand => _selectRowCommand
+       ??= new RelayCommand(OnSelectRowExecuted, SelectRowCan);
+
+   private bool SelectRowCan(object arg)
+   {
+       return Product != null!;
+   }
+
+   private void OnSelectRowExecuted(object obj)
+   {
+       if (SenderModel != null!)
+       {
+           if (SenderModel is ProductInvoiceViewModel productInvoiceViewModel)
+           {
+               productInvoiceViewModel.ProductInvoice.Product = Product!;
+           }
+           var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+           if (window != null!)
+               window.Close();
+        }
+   }
+
+   #endregion
 }
 
 

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Agro.DAL.SqLite.Migrations
 {
-    [DbContext(typeof(AgroDB))]
+    [DbContext(typeof(AgroDb))]
     partial class AgroDBModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

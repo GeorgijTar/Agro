@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         mc:Ignorable="d"
-        Title="{Binding Title}" Width="640" Height="600"
+        Title="{Binding Title}" Width="650" Height="700"
         DataContext="{Binding CounterpartyModel, Source={StaticResource Locator}}"
         WindowStartupLocation="CenterOwner"
         x:Name="MyWindow" WindowStyle="ToolWindow">
@@ -72,7 +72,7 @@
                 <ColumnDefinition Width="110"/>
                 <ColumnDefinition Width="130"/>
                 <ColumnDefinition Width="40*"/>
-                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="10"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="45"/>
@@ -81,8 +81,8 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="55"/>
+                <RowDefinition Height="55"/>
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="20*"/>
             </Grid.RowDefinitions>
@@ -90,15 +90,16 @@
                            HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"/>
             <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4"
                          TextAlignment="Left" TextWrapping="Wrap" 
-                         Text="{Binding Name}"/>
+                         Text="{Binding Counterparty.Name}">
+            </TextBox>
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Платежное наименование:" TextWrapping="Wrap"
                            VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0"/>
             <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" 
                      TextAlignment="Left" TextWrapping="Wrap" 
-                     Text="{Binding PayName}"/>
+                     Text="{Binding Counterparty.PayName}"/>
             <TextBlock Grid.Row="2" Grid.Column="0" Text="ИНН:" 
                            HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"/>
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Inn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Counterparty.Inn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal">
                 <Button fa5:Awesome.Content="Solid_Download" Foreground="DarkBlue" 
                         Width="25" Margin="3,3,10,3" ToolTip="Загрузить данные по ИНН"
@@ -106,28 +107,32 @@
                 <TextBlock Text="ОГРН:" HorizontalAlignment="Right" 
                VerticalAlignment="Center" Margin="30,5"/>
             </StackPanel>
-            <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding Ogrn}"/>
+            <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding Counterparty.Ogrn}"/>
             <TextBlock Grid.Row="3" Grid.Column="0" Text="КПП:" Margin="10,0" 
                        HorizontalAlignment="Right" VerticalAlignment="Center"/>
-            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Kpp}"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Counterparty.Kpp}"/>
             <TextBlock Grid.Row="3" Grid.Column="2" Text="ОКПО:" 
                        VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0"/>
-            <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding Okpo}"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Counterparty.Kpp}"/>
+            <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding  Counterparty.Okpo}"/>
             <TextBlock Grid.Row="4" Grid.Column="0" Text="Входит в группу:" TextWrapping="Wrap" 
                        HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"/>
             <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Margin="4" 
                       ItemsSource="{Binding Groups, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
-                      SelectedItem="{Binding GroupDoc}"/>
+                      SelectedItem="{Binding Counterparty.Group}"/>
             <TextBlock Grid.Row="5" Grid.Column="0" Text="Тип контрагента:" VerticalAlignment="Center"
-                       HorizontalAlignment="Right" Margin="10,0"/>
+                       HorizontalAlignment="Right" Margin="5,0"/>
             <ComboBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Margin="4" 
                       ItemsSource="{Binding Types}" 
-                      SelectedItem="{Binding TypeDoc}"/>
+                      SelectedItem="{Binding Counterparty.TypeDoc}"/>
             <TextBlock Grid.Row="2" Grid.Column="4" Grid.RowSpan="4" TextWrapping="Wrap" 
                        Foreground="Red" Text="{Binding Message}"/>
-            <TextBlock Grid.Row="6" Text="Примечание:" Grid.RowSpan="2" 
+            <TextBlock Grid.Column="0" Grid.Row="6" Text="Юредический адрес:"  
+                       VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0" TextWrapping="Wrap"/>
+            <TextBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="4" Margin="5" Text="{Binding Counterparty.ActualAddress.AddressRf}"/>
+            <TextBlock Grid.Column="0" Grid.Row="7" Text="Примечание:"  
                        VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0"/>
-            <TextBox Grid.Row="6" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="4" Margin="5" Text="{Binding Description}"/>
+            <TextBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="4" Margin="5" Text="{Binding Counterparty.Description}"/>
 
             <GroupBox Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="5" Margin="10" Header="Банковские реквизиты" BorderThickness="2">
                 <Grid>
@@ -166,13 +171,13 @@
                             </StackPanel>
                         </Button>
                     </ToolBar>
-                    <DataGrid Grid.Row="1" ItemsSource="{Binding BankDetailsCollection, 
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding Counterparty.BankDetails, 
                         UpdateSourceTrigger=PropertyChanged}" CanUserAddRows="False"
                               SelectedItem="{Binding SelectBankDetails}" AutoGenerateColumns="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Наименование банка" Width="120*" Binding="{Binding NameBank}"/>
-                                <DataGridTextColumn Header="БИК банка" Width="45*" Binding="{Binding Bik}"/>
-                            <DataGridTextColumn Header="Расчетный счет" Width="85*" Binding="{Binding Bs}"/>
+                            <DataGridTextColumn Header="БИК банка" Width="25*" Binding="{Binding Bik}"/>
+                            <DataGridTextColumn Header="Расчетный счет" Width="55*" Binding="{Binding Bs}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

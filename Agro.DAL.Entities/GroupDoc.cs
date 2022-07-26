@@ -8,10 +8,11 @@ namespace Agro.DAL.Entities;
 /// </summary>
 public class GroupDoc : Entity
 {
-    public string Name { get; set; } = null!;
+    private string _name = null!;
+    public string Name { get=> _name; set=>Set(ref _name, value); }
 
-    public string? TypeApplication { get; set; }
-
+    private string? _typeApplication;
+    public string? TypeApplication { get=> _typeApplication; set=>Set(ref _typeApplication, value); }
 
     public override string ToString() => Name;
 }

@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Agro.DAL.Entities.Base;
-using Agro.WPF.ViewModels.Base;
 
 namespace Agro.DAL.Entities;
 
@@ -15,7 +14,7 @@ public class AccountingPlan :  Entity
     private Status _status = null!;
 
     [Required, ForeignKey("StatusId")]
-    public Status Status { get=>_status; set=>Set(ref _status, value); }
+    public virtual Status Status { get=>_status; set=>Set(ref _status, value); }
 
     public int StatusId { get; set; }
 
@@ -32,10 +31,10 @@ public class AccountingPlan :  Entity
     public string Code { get=>_code; set=>Set(ref _code, value); }
 
     /// <summary>Вышестоящий счет</summary>
-    private AccountingPlan? _accountingPlan;
+    private AccountingPlan? _parentPlan;
 
     [ForeignKey("ParentPlanId")]
-    public AccountingPlan? ParentPlan { get=>_accountingPlan; set=>Set(ref _accountingPlan, value); }
+    public virtual AccountingPlan? ParentPlan { get=> _parentPlan; set=>Set(ref _parentPlan, value); }
 
     public int? ParentPlanId { get; set; }
 
@@ -43,7 +42,7 @@ public class AccountingPlan :  Entity
     private bool _isSelect;
     public bool IsSelect { get=>_isSelect; set=>Set(ref _isSelect, value); }
 
-    private ICollection<AccountingPlan> ? _accounts;
-    public ICollection<AccountingPlan>? ChildPlans { get=>_accounts; set=>Set(ref _accounts, value); }
+    private ICollection<AccountingPlan> ? _childPlans;
+    public virtual ICollection<AccountingPlan>? ChildPlans { get=> _childPlans; set=>Set(ref _childPlans, value); }
 
 }

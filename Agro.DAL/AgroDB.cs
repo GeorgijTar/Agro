@@ -1,45 +1,50 @@
 ﻿using Agro.DAL.Entities;
+using Agro.DAL.Entities.Classifiers;
 using Agro.DAL.Entities.DefaultData;
+using Agro.DAL.Entities.RegInfoOrg;
 using Microsoft.EntityFrameworkCore;
-using TypeDoc = Agro.DAL.Entities.TypeDoc;
+
 
 namespace Agro.DAL;
-public class AgroDB : DbContext
+public class AgroDb : DbContext
 {
     #region DbSet
     public DbSet<Status> Statuses { get; set; } = null!;
-
     public DbSet<GroupDoc> Groups { get; set; } = null!;
-
     public DbSet<TypeDoc> Types { get; set; } = null!;
-
     public DbSet<BankDetails> BankDetails { get; set; } = null!;
-
     public DbSet<Product> Products { get; set; } = null!;
-
     public DbSet<UnitOkei> UnitsOkei { get; set; } = null!;
-
     public DbSet<Nds>  Ndses { get; set; } = null!;
-
     public DbSet<AccountingPlan> AccountingPlans { get; set; } = null!;
-
     public DbSet<Invoice> Invoices { get; set; } = null!;
-
-    //public DbSet<Address> Addresses { get; set; } = null!;
-
+    public DbSet<Address> Addresses { get; set; } = null!;
     public DbSet<Counterparty> Counterparties { get; set; } = null!;
-
     public DbSet<ScanFile> ScanFiles { get; set; } = null!;
-
     public DbSet<Contract> Contracts { get; set; } = null!;
-
     public DbSet<SpecificationContract> Specifications { get; set; } = null!;
+    public DbSet<Organization> Organizations { get; set; } = null!;
+    public DbSet<Okved> Okveds { get; set; } = null!;
+    public DbSet<RegFns> RegFns { get; set; } = null!;
+    public DbSet<RegPfr> RegPfr { get; set; } = null!;
+    public DbSet<RegFss> RegFss { get; set; } = null!;
+    public DbSet<Okato> Okato { get; set; } = null!;
+    public DbSet<Okfs> Okfs { get; set; } = null!;
+    public DbSet<Okogy> Okogy { get; set; } = null!;
+    public DbSet<Okopf> Okopf { get; set; } = null!;
+    public DbSet<Oktmo> Oktmo { get; set; } = null!;
+    public DbSet<ProductInvoice> ProductsInvoice { get; set; } = null!;
+    public DbSet<ReestrInvoice> ReestrInvoice { get; set; } = null!;
+    public DbSet<Document> Documents { get; set; } = null!;
+    public DbSet<People> People { get; set; } = null!;
+
 
 #endregion
-    public AgroDB(DbContextOptions<AgroDB> options) : base(options) { }
+    public AgroDb(DbContextOptions<AgroDb> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder db)
     {
+        var v = GetDefaultData.DefaultUnitOkeis();
         db.Entity<Status>().HasData(GetDefaultData.DefaultStatus());
         db.Entity<GroupDoc>().HasData(GetDefaultData.DefaultGroup());
         db.Entity<TypeDoc>().HasData(GetDefaultData.DefaultType());

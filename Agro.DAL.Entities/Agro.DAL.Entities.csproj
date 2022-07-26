@@ -12,8 +12,4 @@
 		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.6" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\Agro.Interfaces.Base\Agro.Interfaces.Base.csproj" />
-	</ItemGroup>
-
 </Project>

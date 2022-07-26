@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Agro.DAL.Sql.Migrations
 {
-    [DbContext(typeof(AgroDB))]
+    [DbContext(typeof(AgroDb))]
     [Migration("20220625073510_DefaultData")]
     partial class DefaultData
     {

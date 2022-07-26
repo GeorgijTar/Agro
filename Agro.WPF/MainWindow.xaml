@@ -30,11 +30,11 @@
                         <MenuItem.Icon>
                             <fa5:ImageAwesome Height="14" Icon="Solid_DollarSign" Foreground="DarkBlue"/>
                         </MenuItem.Icon>
-                        <MenuItem Header="Счета выставленные" Command="{Binding ShowInvoices}"/>
-                        <MenuItem Header="Счета полученные"/>
+                        <MenuItem Header="Счета выставленные" Command="{Binding ShowInvoicesOut}"/>
+                        <MenuItem Header="Счета полученные" Command="{Binding ShowInvoicesIn}"/>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem Header="Справочники" >
+                <MenuItem Header="Справочники">
                     <MenuItem.Icon>
                         <fa5:ImageAwesome Height="32" Icon="Solid_Book" Foreground="DarkBlue"/>
                     </MenuItem.Icon>
@@ -42,6 +42,12 @@
                     <MenuItem Header="Контрагенты" Command="{Binding ShowContractors}"/>
                     <MenuItem Header="Номенклатура" Command="{Binding ShowProduct}"/>
                     <MenuItem Header="План счетов" Command="{Binding ShowAccountingPlans}"/>
+                </MenuItem>
+                <MenuItem Header="Администрирование">
+                    <MenuItem.Icon>
+                        <fa5:ImageAwesome Height="14" Icon="Solid_Bookmark" Foreground="DarkBlue"/>
+                    </MenuItem.Icon>
+                    <MenuItem Header="Настройки организации" Command="{Binding ShowOrganizationSittings}"/>
                 </MenuItem>
             </Menu>
 

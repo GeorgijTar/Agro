@@ -10,7 +10,7 @@ public class SpecificationContract : Entity
 {
     /// <summary>Тип спецификации</summary>
     [Required, ForeignKey("TypeId")]
-    public TypeDoc Type { get; set; } = null!;
+    public virtual TypeDoc Type { get; set; } = null!;
 
     public int TypeId { get; set; }
 
@@ -23,7 +23,7 @@ public class SpecificationContract : Entity
 
     /// <summary>Договор которому пренадлежит спецификация</summary>
     [Required, ForeignKey("ContractId")]
-    public Contract Contract { get; set; } = null!;
+    public virtual Contract Contract { get; set; } = null!;
 
     public int ContractId { get; set; }
 
@@ -34,5 +34,5 @@ public class SpecificationContract : Entity
     public string? Description { get; set; }
 
     /// <summary>Прикрепленные файлы</summary>
-    public ICollection<ScanFile>? ScanFiles { get; set; }
+    public virtual ICollection<ScanFile>? ScanFiles { get; set; }
 }

@@ -37,7 +37,7 @@ public class ContractorsViewModel : ViewModel
 
     private async Task Initial()
     {
-       await LoadGr(5);
+       await LoadGr();
        await LoadFiltr();
        
     }
@@ -49,6 +49,9 @@ public class ContractorsViewModel : ViewModel
     public ObservableCollection<TypeDoc> Types { get=>_types; set=>Set(ref _types, value); }
     public ObservableCollection<Counterparty> Counterparties { get; set; } = new ObservableCollection<Counterparty>();
 
+    private object? _modelSender;
+    public object? ModelSender { get => _modelSender; set => Set(ref _modelSender, value); }
+
     private Counterparty? _Counterparty;
     public Counterparty? SelectedCounterparty
 
@@ -57,33 +60,7 @@ public class ContractorsViewModel : ViewModel
         set => Set(ref _Counterparty, value);
     }
     
-    private string? _selectedStatus;
-
-    public string? SelectedStatus
-    {
-        get => _selectedStatus;
-        set
-        {
-            Set(ref _selectedStatus, value);
-            string str=value.ToString();
-            switch (value.ToString())
-            {
-                default: 
-                    LoadGr(5);
-                    break;
-                case "System.Windows.Controls.ComboBoxItem: Актуально": 
-                    LoadGr(5);
-                    break;
-                case "System.Windows.Controls.ComboBoxItem: Удалено":
-                    LoadGr(6);
-                    break;
-                case "System.Windows.Controls.ComboBoxItem: Черновик":
-                    LoadGr(1);
-                    break;
-            }
-        }
-    }
-    
+   
     private TypeDoc ? _selecteType;
     public TypeDoc? SelectedType
     {
@@ -121,11 +98,12 @@ public class ContractorsViewModel : ViewModel
         }
         
     }
-    private async Task LoadGr(int idStatus)
+    private async Task LoadGr()
     {
         Counterparties.Clear();
-        var counter = await _counterpartyRepository.GetAllByStatusAsync(idStatus);
-        if (counter is null) return;
+        var counter = await _counterpartyRepository.GetAllAsync();
+        counter = counter!.Where(x => x.Status.Id == 5);
+        if (counter == null!) return;
         foreach (var ct in counter)
         {
             Counterparties.Add(ct);
@@ -176,8 +154,7 @@ public class ContractorsViewModel : ViewModel
     {
         CounterpartyView counterpartyView = new();
         var mod= counterpartyView.DataContext as CounterpartyViewModel;
-        mod.SelectedCounterparty = new();
-        mod.CounterpartyCollection = Counterparties;
+        mod!.Counterparty = new();
         mod.Title = "Создание нового контрагента";
         mod.CounterpartyEvent += GridRefreh;
         counterpartyView.Show();
@@ -213,8 +190,7 @@ public class ContractorsViewModel : ViewModel
         CounterpartyView counterpartyView = new();
         var mod = counterpartyView.DataContext as CounterpartyViewModel;
         mod.Title = "Редактирование контрагента";
-        mod.SelectedCounterparty = SelectedCounterparty;
-        mod.CounterpartyCollection = Counterparties;
+        mod.Counterparty = SelectedCounterparty!;
         mod.CounterpartyEvent += GridRefreh;
         counterpartyView.Show();
     }
@@ -249,6 +225,30 @@ public class ContractorsViewModel : ViewModel
         return true;
     }
 
+
+    private ICommand? _selectRowCommand;
+
+    public ICommand SelectRowCommand => _selectRowCommand
+        ??= new RelayCommand(OnSelectRowCommandExecuted, SelectRowCan);
+
+    private bool SelectRowCan(object arg)
+    {
+        return SelectedCounterparty is not null;
+    }
+
+    private void OnSelectRowCommandExecuted(object obj)
+    {
+        if (ModelSender is InvoiceViewModel invoice)
+        {
+            invoice.Invoice.Counterparty = SelectedCounterparty!;
+
+            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+            if (window != null!)
+                window.Close();
+        }
+
+    }
+
     #endregion
 
     #region Filteres
@@ -258,7 +258,7 @@ public class ContractorsViewModel : ViewModel
         if (!String.IsNullOrEmpty(NameFilter))
         {
             Counterparty? dto = count as Counterparty;
-            return  dto!.Name.Contains(NameFilter);
+            return  dto!.Name.ToUpper().Contains(NameFilter.ToUpper());
         }
         return true;
     }
@@ -272,6 +272,22 @@ public class ContractorsViewModel : ViewModel
         }
         return true;
     }
+
+    private bool FilterByGroup(object count)
+    {
+        if (SelectedGroup!.Id != 0)
+        {
+
+        }
+
+        if (!String.IsNullOrEmpty(InnFilter))
+        {
+            Counterparty? dto = count as Counterparty;
+            return dto!.Group!.Name.Contains(SelectedGroup!.Name);
+        }
+        return true;
+    }
+
 
     #endregion
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using Agro.DAL.Entities;
+using Agro.DAL.MySql;
 using Agro.DAL.Sql;
 using Agro.DAL.SqLite;
 using Agro.Interfaces;
@@ -51,11 +53,16 @@ namespace Agro.WPF
             services.AddTransient<ProductViewModel>();
             services.AddTransient<AccountingPlansViewModel>();
             services.AddTransient<AccountingPlanViewModel>();
-            services.AddScoped<InvoicesViewModel>();
+            services.AddTransient<InvoicesViewModel>();
             services.AddTransient<InvoiceViewModel>();
+            services.AddTransient<OrganizationViewModel>();
+            services.AddTransient<ProductInvoiceViewModel>();
+            services.AddTransient<ReestrInvoiceViewModel>();
 
             //Регистрация репозиториев
             services.AddScoped(typeof(IBaseRepository<>), typeof(DbRepository<>));
+            services.AddTransient<IInvoiceRepository<Invoice>, InvoiceRepository>();
+            services.AddTransient<IBaseRepository<Product>, ProductRepository>();
 
             // Регистрация мапера
             //services.AddAutoMapper(

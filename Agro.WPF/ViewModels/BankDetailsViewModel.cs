@@ -1,180 +1,62 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Agro.DAL.Entities;
-using Agro.Interfaces.Base.Repositories;
 using Agro.Interfaces.Base.Repositories.Base;
-using Agro.Services.Repositories;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
-using Agro.WPF.Views.Windows;
 using Bank.Api;
+
 
 namespace Agro.WPF.ViewModels;
 public class BankDetailsViewModel : ViewModel
 {
-    private readonly IBaseRepository<BankDetails> _repository;
+
 
     #region Property
+    private readonly IBaseRepository<BankDetails> _repository;
+    private readonly IBaseRepository<Status> _statusRepository;
 
-    private string _title;
+    private string _title = "Добавление банковских реквизитов";
     public string Title
     {
         get => _title;
         set => Set(ref _title, value);
     }
 
-    private BankDetails _details;
+    private BankDetails _details = new();
 
-    public BankDetails BankDetails
-    {
-        get => _details;
-        set
-        {
-            Set(ref _details, value);
-            Name = value.NameBank;
-            TitleBankDetails = value.Title;
-            Bs = value.Bs;
-            City = value.City;
-            BiK = value.Bik;
-            Ks = value.Ks;
-            Description = value.Description;
-            Status = value.Status;
-            Counterparty = value.Counterparty;
-        }
-    }
+    public BankDetails BankDetails { get => _details; set => Set(ref _details, value); }
 
-    private string _titleBankDetails;
+    private object _viewModelSender;
 
-    public string TitleBankDetails
-    {
-        get => _titleBankDetails;
-        set
-        {
-            Set(ref _titleBankDetails, value);
-            BankDetails.Title = value;
-        }
-    }
-
-    private string _name;
-
-    public string Name
-    {
-        get => _name;
-        set
-        {
-            Set(ref _name, value);
-            BankDetails.NameBank = value;
-        }
-    }
-
-    private string _bs;
-
-    public string Bs
-    {
-        get => _bs;
-        set
-        {
-            Set(ref _bs, value);
-            BankDetails.Bs = value;
-        }
-    }
-
-    private string _city;
-
-    public string City
-    {
-        get => _city;
-        set
-        {
-            Set(ref _city, value);
-            BankDetails.City = value;
-        }
-    }
-
-    private string _bik;
-    public string BiK
-    {
-        get => _bik;
-        set
-        {
-            Set(ref _bik, value);
-            BankDetails.Bik = value;
-            GetBank(value);
-        }
-    }
-
-    private async void GetBank(string value)
-    {
-        try
-        {
-            if (value == null || value.Length != 9) return;
-            var bank = new BankDetails();
-            bank = await ApiBank.GetBankByBik(value);
-            Name = bank.NameBank;
-            City = bank.City;
-            Ks = bank.Ks;
-        }
-        catch (Exception e)
-        {
-            MessageBox.Show(e.Message);
-        }
-       
-    }
-
-    private string _ks;
-    public string Ks
-    {
-        get => _ks;
-        set
-        {
-            Set(ref _ks, value);
-            BankDetails.Ks = value;
-        }
-    }
-
-    private string _description;
-
-    public string Description
-    {
-        get => _description;
-        set
-        {
-            Set(ref _description, value);
-            BankDetails.Description = value;
-        }
-    }
-
-    private Status _status;
-
-    public Status Status
-    {
-        get => _status;
-        set
-        {
-            Set(ref _status, value);
-            BankDetails.Status = value;
-        }
-    }
-
-    private Counterparty _counterparty;
-
-    public Counterparty Counterparty
-    {
-        get => _counterparty;
-        set
-        {
-            Set(ref _counterparty, value);
-            BankDetails.Counterparty = value;
-        }
-    }
+    public object ViewSender { get => _viewModelSender; set => Set(ref _viewModelSender, value); }
 
     #endregion
 
-    public BankDetailsViewModel(IBaseRepository<BankDetails> repository)
+    public BankDetailsViewModel(IBaseRepository<BankDetails> repository, IBaseRepository<Status> statusRepository)
     {
         _repository = repository;
-        Title = "Бфнковские реквизиты контрагента";
+        _statusRepository = statusRepository;
+        Title = "Банковские реквизиты контрагента";
+        BankDetails.PropertyChanged += GetBank;
+    }
+
+    private async void GetBank(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == "Bik")
+        {
+            if (BankDetails.Bik.Length == 9)
+            {
+                var bd = await Get.GetBankByBik(BankDetails.Bik);
+                BankDetails.NameBank = bd.NameBank;
+                BankDetails.City = bd.City;
+                BankDetails.Ks = bd.Ks;
+            }
+
+        }
     }
 
     #region Command
@@ -187,34 +69,51 @@ public class BankDetailsViewModel : ViewModel
         ??= new RelayCommand(OnSaveBankDetailsCommandExecuted, SaveBankDetailsCan);
     private bool SaveBankDetailsCan(object arg)
     {
-        return true;
+       return BankDetails.Bs !=null! && BankDetails.NameBank !=null! && BankDetails.Bik !=null! && BankDetails.Ks !=null!;
     }
 
-    private async void OnSaveBankDetailsCommandExecuted(object obj)
+    private async void OnSaveBankDetailsCommandExecuted(object? obj)
     {
-        BankDetails.Status = new() { Id = 5, Name = "Актуально" };
+        var status = await _statusRepository.GetByIdAsync(5);
+        BankDetails.Status = status!;
 
-        try
+        if (ViewSender is OrganizationViewModel organizationViewModel)
         {
-            if (BankDetails.Id == 0)
+            var bankD = organizationViewModel.Organization.BankDetails.FirstOrDefault(c => c.Guid == BankDetails.Guid);
+            if (bankD is null)
             {
-               
-                BankDetailsEvent(await _repository.AddAsync(BankDetails));
+                organizationViewModel.Organization.BankDetails.Add(BankDetails);
             }
             else
             {
-                BankDetailsEvent(await _repository.UpdateAsync(BankDetails));
-            }
-
-            if (obj is not null)
-            {
-                var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
-                window.Close();
+                bankD = BankDetails;
             }
         }
-        catch (Exception e)
+
+        if (ViewSender is CounterpartyViewModel counterpartyViewModel)
         {
-            MessageBox.Show(e.Message);
+            if (BankDetails.Id == 0)
+            {
+                counterpartyViewModel.Counterparty.BankDetails!.Add(BankDetails);
+            }
+            else
+            {
+                var bankD = counterpartyViewModel.Counterparty.BankDetails!.FirstOrDefault(c => c.Id == BankDetails.Id);
+                if (bankD is null)
+                {
+                    counterpartyViewModel.Counterparty.BankDetails!.Add(BankDetails);
+                }
+                else
+                {
+                    bankD = BankDetails;
+                }
+            }
+        }
+
+        if (obj is not null)
+        {
+            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+            window.Close();
         }
     }
 
@@ -242,8 +141,8 @@ public class BankDetailsViewModel : ViewModel
 
     #region Event
 
-   public delegate void BankdetailsHandler(BankDetails bankDetails);
-   public event BankdetailsHandler BankDetailsEvent;
+    public delegate void BankDetailsHandler(BankDetails bankDetails);
+    public event BankDetailsHandler? BankDetailsEvent;
 
     #endregion
 }

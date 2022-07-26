@@ -11,6 +11,12 @@ public static class GetDefaultData
         new() { Id = 5, Name = "Актуально" },
         new() { Id = 6, Name = "Удален" },
         new() { Id = 7, Name = "Архивный" },
+        new() { Id = 8, Name = "Принят к оплате" },
+        new() { Id = 9, Name = "Готов к оплате" },
+        new() { Id = 10, Name = "Оплачен" },
+        new() { Id = 11, Name = "Выставлен" },
+        new() { Id = 12, Name = "Отправлен" },
+        new() { Id = 13, Name = "Ошибка отправки" },
     };
 
     public static TypeDoc[] DefaultType() => new TypeDoc[]
@@ -26,6 +32,12 @@ public static class GetDefaultData
         new() { Id = 9, Name = "Материальные запасы", TypeApplication = "Товары" },
         new() { Id = 10, Name = "Выставленные", TypeApplication = "Счета" },
         new() { Id = 11, Name = "Полученные", TypeApplication = "Счета" },
+        new() { Id = 12, Name = "Паспорт гражданина РФ", TypeApplication = "УЛ" },
+        new() { Id = 13, Name = "Загранпаспорт гражданина РФ", TypeApplication = "УЛ" },
+        new() { Id = 12, Name = "Свидетельство о рождении", TypeApplication = "УЛ" },
+        new() { Id = 12, Name = "Временное удостоверение личности", TypeApplication = "УЛ" },
+        new() { Id = 12, Name = "Удостоверение личности военнослужащего РФ (военный билет, паспорт моряка)", TypeApplication = "УЛ" },
+        new() { Id = 12, Name = "Вид на жительство", TypeApplication = "УЛ" },
     };
 
     public static GroupDoc[] DefaultGroup() => new GroupDoc[]
@@ -50,30 +62,30 @@ public static class GetDefaultData
 
     public static UnitOkei[] DefaultUnitOkeis() => new UnitOkei[]
     {
-        new () { Id = 1, Name = "Час", Abbreviation = "ч", OkeiCode = "356", StatusId = 5 },
-        new () { Id = 2, Name = "Миллиметр", Abbreviation = "мм", OkeiCode = "003", StatusId = 5 },
-        new () { Id = 3, Name = "Сантиметр", Abbreviation = "см", OkeiCode = "004", StatusId = 5 },
-        new () { Id = 4, Name = "Метр", Abbreviation = "м", OkeiCode = "006", StatusId = 5 },
-        new () { Id = 5, Name = "Грамм", Abbreviation = "г", OkeiCode = "163", StatusId = 5 },
-        new () { Id = 6, Name = "Килограмм", Abbreviation = "кг", OkeiCode = "166", StatusId = 5 },
-        new () { Id = 7, Name = "Тонна; метрическая тонна (1000 кг)", Abbreviation = "т", OkeiCode = "168", StatusId = 5 },
-        new () { Id = 8, Name = "Кубический метр", Abbreviation = "м3", OkeiCode = "113", StatusId = 5 },
-        new () { Id = 9, Name = "Квадратный метр", Abbreviation = "м2", OkeiCode = "055", StatusId = 5 },
-        new () { Id = 10, Name = "Гектар", Abbreviation = "га", OkeiCode = "059", StatusId = 5 },
-        new () { Id = 11, Name = "Киловатт-час", Abbreviation = "кВт.ч", OkeiCode = "245", StatusId = 5 },
-        new () { Id = 12, Name = "Лист", Abbreviation = "л.", OkeiCode = "625", StatusId = 5 },
-        new () { Id = 13, Name = "Пара (2 шт.)", Abbreviation = "пар", OkeiCode = "715", StatusId = 5 },
-        new () { Id = 14, Name = "Упаковка", Abbreviation = "упак", OkeiCode = "778", StatusId = 5 },
-        new () { Id = 15, Name = "Штука", Abbreviation = "шт", OkeiCode = "796", StatusId = 5 },
-        new () { Id = 16, Name = "Центнер (метрический) (100 кг)", Abbreviation = "ц", OkeiCode = "206", StatusId = 5 },
+        new () { Id = 1, Name = "Час", Abbreviation = "ч", OkeiCode = "356"},
+        new () { Id = 2, Name = "Миллиметр", Abbreviation = "мм", OkeiCode = "003"},
+        new () { Id = 3, Name = "Сантиметр", Abbreviation = "см", OkeiCode = "004"},
+        new () { Id = 4, Name = "Метр", Abbreviation = "м", OkeiCode = "006"},
+        new () { Id = 5, Name = "Грамм", Abbreviation = "г", OkeiCode = "163"},
+        new () { Id = 6, Name = "Килограмм", Abbreviation = "кг", OkeiCode = "166"},
+        new () { Id = 7, Name = "Тонна; метрическая тонна (1000 кг)", Abbreviation = "т", OkeiCode = "168"},
+        new () { Id = 8, Name = "Кубический метр", Abbreviation = "м3", OkeiCode = "113"},
+        new () { Id = 9, Name = "Квадратный метр", Abbreviation = "м2", OkeiCode = "055"},
+        new () { Id = 10, Name = "Гектар", Abbreviation = "га", OkeiCode = "059"},
+        new () { Id = 11, Name = "Киловатт-час", Abbreviation = "кВт.ч", OkeiCode = "245"},
+        new () { Id = 12, Name = "Лист", Abbreviation = "л.", OkeiCode = "625"},
+        new () { Id = 13, Name = "Пара (2 шт.)", Abbreviation = "пар", OkeiCode = "715"},
+        new () { Id = 14, Name = "Упаковка", Abbreviation = "упак", OkeiCode = "778"},
+        new () { Id = 15, Name = "Штука", Abbreviation = "шт", OkeiCode = "796"},
+        new () { Id = 16, Name = "Центнер (метрический) (100 кг)", Abbreviation = "ц", OkeiCode = "206"},
     };
 
     public static Nds[] DefaultNds() => new Nds[]
     {
-        new () { Id = 1, Name = "Без НДС", Percent = 0 },
-        new () { Id = 2, Name = "0%", Percent = 0 },
-        new () { Id = 3, Name = "10%", Percent = 10 },
-        new () { Id = 4, Name = "20%", Percent = 20 },
+        new () { Id = 1, Name = "Без НДС", Percent = 0, OverPercent = 1},
+        new () { Id = 2, Name = "0%", Percent = 0, OverPercent = 1},
+        new () { Id = 3, Name = "10%", Percent = 10, OverPercent = (decimal)1.1},
+        new () { Id = 4, Name = "20%", Percent = 20, OverPercent = (decimal)1.2},
     };
 
     public static AccountingPlan[] DefaultAccountingPlans()=> new AccountingPlan[]

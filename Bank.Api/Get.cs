@@ -3,7 +3,7 @@ using System.Text.Json.Nodes;
 using Agro.DAL.Entities;
 
 namespace Bank.Api;
-public static class ApiBank
+public static class Get
 {
     public static async Task<BankDetails> GetBankByBik(string bik)
     {
@@ -15,13 +15,13 @@ public static class ApiBank
         var uri = new Uri($"https://bik-info.ru/api.html?type=json&bik={bik}");
         var response = await client.GetAsync(uri);
         var result = await response.Content.ReadAsStringAsync();
-        JsonNode? json = JsonValue.Parse(result);
-        if (json["error"] != null)
+        JsonNode? json = JsonNode.Parse(result);
+        if (json?["error"] != null)
             throw new InvalidOperationException($"Банк по БИК {bik} не найден");
-        bank.Bik = json["bik"].ToString();
-        bank.NameBank= json["name"].ToString().Replace("&quot;", "\"");
-        bank.Ks= json["ks"].ToString();
-        bank.City = $"г. {json["city"].ToString()}";
+        bank.Bik = json?["bik"]!.ToString()!;
+        bank.NameBank= json?["name"]!.ToString().Replace("&quot;", "\"")!;
+        bank.Ks= json?["ks"]!.ToString()!;
+        bank.City = $"г. {json?["city"]!.ToString()}";
         return bank;
     }
 }

@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Agro.Interfaces.Base.Entities;
-using Agro.WPF.ViewModels.Base;
 
 namespace Agro.DAL.Entities.Base;
 
 /// <summary>Сущность</summary>
 /// <typeparam name="TKey">Тип первичного ключа</typeparam>
-public abstract class Entity<TKey> : NotifyPropertyChanged, IEntity<TKey>, IEquatable<Entity<TKey>> where TKey : IEquatable<TKey>
+public abstract class Entity<TKey> : NotifyPropertyChanged, IEquatable<Entity<TKey>> where TKey : IEquatable<TKey>
 {
     /// <summary>Первичный ключ</summary>
     [Key]
@@ -50,7 +48,7 @@ public abstract class Entity<TKey> : NotifyPropertyChanged, IEntity<TKey>, IEqua
 }
 
 /// <summary>Сущность</summary>
-public abstract class Entity : Entity<int>, IEntity
+public abstract class Entity : Entity<int>
 {
     protected Entity() { }
 

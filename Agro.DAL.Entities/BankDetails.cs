@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Agro.DAL.Entities.Base;
 
 namespace Agro.DAL.Entities;
@@ -9,45 +8,54 @@ namespace Agro.DAL.Entities;
 /// </summary>
 public class BankDetails : Entity
 {
-    public string Title { get; set; } = null!;
+    private Guid _guid;
+    public Guid Guid { get => _guid; set => Set(ref _guid, value); }
+
+    private string? _title;
+    public string? Title { get=>_title; set=>Set(ref _title, value); }
 
     /// <summary>Статус реквизитов</summary>
-   [Required]
-    [ForeignKey("StatusId")]
-    public Status Status { get; set; } = null!;
-
-    public int StatusId { get; set; }
-
+    private  Status _status=null!;
     [Required]
-    [ForeignKey("CounterpartyId")]
-    public Counterparty Counterparty { get; set; }= null!;
+    public virtual Status Status { get=>_status; set=>Set(ref _status, value); }
 
-    public int CounterpartyId { get; set; }
+
+    private Counterparty? _counterparty;
+    public virtual Counterparty? Counterparty { get=> _counterparty; set=>Set(ref _counterparty, value); }
+     
+    private Organization ? _organization;
+    public virtual Organization ? Organization { get=> _organization; set=>Set(ref _organization, value); }
 
     /// <summary>Наименование банка</summary>
+    
+    private string _nameBank=null!;
     [Required]
-    public string NameBank { get; set; } = null!;
+    public string NameBank { get=>_nameBank; set=>Set(ref _nameBank, value); }
 
     /// <summary>Город банка</summary>
-    public string City { get; set; } = null!;
+    private string _city=null!;
+    public string City { get=>_city; set=>Set(ref _city, value); }
 
     /// <summary>Расчетный счет</summary>
+    private string _bs =null!;
     [Required, MaxLength(20)]
-    public string Bs { get; set; } = null!;
+    public string Bs { get=>_bs; set=>Set(ref _bs, value); }
 
     /// <summary>БИК банка</summary>
+    private string _bik =null!;
     [Required, MaxLength(9)]
-    public string Bik { get; set; } = null!;
+    public string Bik { get=>_bik; set=>Set(ref _bik, value); }
 
     /// <summary>Кор. счет</summary>
+    private string _ks = null!;
     [Required, MaxLength(20)]
-    public string Ks { get; set; } = null!;
+    public string Ks { get=>_ks; set=>Set(ref _ks, value); }
 
     /// <summary>Примечание</summary>
+    private string? _description;
     [MaxLength(225)]
-    public string? Description { get; set; }
-
-
+    public string? Description { get=>_description; set=>Set(ref _description, value); }
+    
    public override string ToString() => $"{Bs} в {NameBank}";
 }
 
