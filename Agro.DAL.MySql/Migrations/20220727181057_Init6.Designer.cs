@@ -3,6 +3,7 @@ using System;
 using Agro.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Agro.DAL.MySql.Migrations
 {
     [DbContext(typeof(AgroDb))]
-    partial class AgroDbModelSnapshot : ModelSnapshot
+    [Migration("20220727181057_Init6")]
+    partial class Init6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1943,16 +1945,10 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<int?>("AddressUrId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CashierId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("DirectorId")
                         .HasColumnType("int");
 
                     b.Property<int?>("GeneralAccountantId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("HrId")
                         .HasColumnType("int");
 
                     b.Property<string>("Inn")
@@ -2006,13 +2002,9 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.HasIndex("AddressUrId");
 
-                    b.HasIndex("CashierId");
-
                     b.HasIndex("DirectorId");
 
                     b.HasIndex("GeneralAccountantId");
-
-                    b.HasIndex("HrId");
 
                     b.HasIndex("OkatoId");
 
@@ -2041,13 +2033,14 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("BirthDate")
+                    b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("IdentityDocumentId")
+                    b.Property<int>("IdentityDocumentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Inn")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
@@ -2059,6 +2052,7 @@ namespace Agro.DAL.MySql.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Snils")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("StatusId")
@@ -2955,10 +2949,6 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany()
                         .HasForeignKey("AddressUrId");
 
-                    b.HasOne("Agro.DAL.Entities.Employee", "Cashier")
-                        .WithMany()
-                        .HasForeignKey("CashierId");
-
                     b.HasOne("Agro.DAL.Entities.Employee", "Director")
                         .WithMany()
                         .HasForeignKey("DirectorId");
@@ -2966,10 +2956,6 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasOne("Agro.DAL.Entities.Employee", "GeneralAccountant")
                         .WithMany()
                         .HasForeignKey("GeneralAccountantId");
-
-                    b.HasOne("Agro.DAL.Entities.Employee", "Hr")
-                        .WithMany()
-                        .HasForeignKey("HrId");
 
                     b.HasOne("Agro.DAL.Entities.Classifiers.Okato", "Okato")
                         .WithMany()
@@ -3011,13 +2997,9 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.Navigation("AddressUr");
 
-                    b.Navigation("Cashier");
-
                     b.Navigation("Director");
 
                     b.Navigation("GeneralAccountant");
-
-                    b.Navigation("Hr");
 
                     b.Navigation("Okato");
 
@@ -3042,7 +3024,9 @@ namespace Agro.DAL.MySql.Migrations
                 {
                     b.HasOne("Agro.DAL.Entities.Document", "IdentityDocument")
                         .WithMany()
-                        .HasForeignKey("IdentityDocumentId");
+                        .HasForeignKey("IdentityDocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Agro.DAL.Entities.Status", "Status")
                         .WithMany()

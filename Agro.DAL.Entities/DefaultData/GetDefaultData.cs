@@ -32,24 +32,18 @@ public static class GetDefaultData
         new() { Id = 9, Name = "Материальные запасы", TypeApplication = "Товары" },
         new() { Id = 10, Name = "Выставленные", TypeApplication = "Счета" },
         new() { Id = 11, Name = "Полученные", TypeApplication = "Счета" },
-        new() { Id = 12, Name = "Паспорт гражданина РФ", TypeApplication = "УЛ" },
-        new() { Id = 13, Name = "Загранпаспорт гражданина РФ", TypeApplication = "УЛ" },
-        new() { Id = 12, Name = "Свидетельство о рождении", TypeApplication = "УЛ" },
-        new() { Id = 12, Name = "Временное удостоверение личности", TypeApplication = "УЛ" },
-        new() { Id = 12, Name = "Удостоверение личности военнослужащего РФ (военный билет, паспорт моряка)", TypeApplication = "УЛ" },
-        new() { Id = 12, Name = "Вид на жительство", TypeApplication = "УЛ" },
+        new() { Id = 12, Name = "Удостоверение личности", TypeApplication = "УЛ" },
+
     };
 
     public static GroupDoc[] DefaultGroup() => new GroupDoc[]
     {
         new() { Id = 1, Name = "Покупатели", TypeApplication = "Контрагенты" },
         new() { Id = 2, Name = "Поставщики", TypeApplication = "Контрагенты" },
-
         new() { Id = 3, Name = "Зерновые", TypeApplication = "Готовая продукция" },
         new() { Id = 4, Name = "Масляничные", TypeApplication = "Готовая продукция" },
         new() { Id = 5, Name = "Технические", TypeApplication = "Готовая продукция" },
         new() { Id = 6, Name = "Отходы", TypeApplication = "Готовая продукция" },
-
         new() { Id = 7, Name = "Средства защиты растений", TypeApplication = "Материальные запасы" },
         new() { Id = 8, Name = "Удобрения", TypeApplication = "Материальные запасы" },
         new() { Id = 9, Name = "Семена", TypeApplication = "Материальные запасы" },
@@ -57,7 +51,12 @@ public static class GetDefaultData
         new() { Id = 11, Name = "Материалы", TypeApplication = "Материальные запасы" },
         new() { Id = 12, Name = "Малоценные товары, инвентарь", TypeApplication = "Материальные запасы" },
         new() { Id = 13, Name = "ГСМ", TypeApplication = "Материальные запасы" },
-
+        new() { Id = 14, Name = "Паспорт гражданина РФ", TypeApplication = "УЛ" },
+        new() { Id = 15, Name = "Загранпаспорт гражданина РФ", TypeApplication = "УЛ" },
+        new() { Id = 16, Name = "Свидетельство о рождении", TypeApplication = "УЛ" },
+        new() { Id = 17, Name = "Временное удостоверение личности", TypeApplication = "УЛ" },
+        new() { Id = 18, Name = "Удостоверение личности военнослужащего РФ (военный билет, паспорт моряка)", TypeApplication = "УЛ" },
+        new() { Id = 19, Name = "Вид на жительство", TypeApplication = "УЛ" },
     };
 
     public static UnitOkei[] DefaultUnitOkeis() => new UnitOkei[]

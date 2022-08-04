@@ -28,4 +28,6 @@ public class ViewModelLocator
     public ProductInvoiceViewModel ProductInvoiceModel => App.Services.GetRequiredService<ProductInvoiceViewModel>();
 
     public ReestrInvoiceViewModel ReestrInvoiceModel => App.Services.GetRequiredService<ReestrInvoiceViewModel>();
+
+    public ContractsViewModel ContractsModel => App.Services.GetRequiredService<ContractsViewModel>();
 }

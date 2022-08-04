@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Agro.DAL.Entities;
-using Agro.Interfaces.Base.Repositories.Base;
-using Agro.Services.Repositories;
+using Agro.Interfaces.Base.Repositories;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.Views.Windows;
+using Microsoft.Win32;
+using ReportExcelLib;
 
 namespace Agro.WPF.ViewModels;
 
@@ -141,6 +143,23 @@ public class InvoicesViewModel : ViewModel
             viewModel.VisibilityBankOrg = Visibility.Visible;
         }
         view.Show();
+    }
+
+    private ICommand? _printCommand;
+
+    public ICommand PrintCommand => _printCommand
+        ??= new RelayCommand(OnPrintCommandExecuted, EditCommandExecut);
+
+    private void OnPrintCommandExecuted(object obj)
+    {
+       SaveFileDialog saveFileDialog = new SaveFileDialog();
+       saveFileDialog.DefaultExt = "*.xlsx";
+       saveFileDialog.FileName = $"Счет на оплату № {SelectedInvoice.Number} от {SelectedInvoice.DateInvoice.ToShortDateString()}";
+       saveFileDialog.Filter = "Microsoft Excel (*.xlsx)|*.xlsx";
+       if (saveFileDialog.ShowDialog() == true)
+       {
+           InvoiceReportExcel.Print(saveFileDialog.FileName, SelectedInvoice);
+       }
     }
 
     #endregion

@@ -1,6 +1,6 @@
 ﻿using Agro.DAL;
 using Agro.DAL.Entities;
-using Agro.Interfaces.Base.Repositories.Base;
+using Agro.Interfaces.Base.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Agro.Services.Repositories;
@@ -17,9 +17,11 @@ public class InvoiceRepository : IInvoiceRepository<Invoice>
     {
         return await _db.Invoices
             .Include(i => i.Status)
-            .Include(i => i.Counterparty)
+            .Include(i => i.Counterparty).ThenInclude(c=>c.ActualAddress)
             .Include(i => i.BankDetails)
-            .Include(i => i.BankDetailsOrg)
+            .Include(i => i.BankDetailsOrg).ThenInclude(b=>b.Organization).ThenInclude(o=>o.AddressUr)
+            .Include(i => i.BankDetailsOrg).ThenInclude(b => b.Organization).ThenInclude(o=>o.Director.Post)
+            .Include(i => i.BankDetailsOrg).ThenInclude(b => b.Organization).ThenInclude(o => o.Director.People)
             .Include(i => i.Nds)
             .Include(i => i.ProductsInvoice)
             .ThenInclude(p => p.Product)
@@ -32,10 +34,15 @@ public class InvoiceRepository : IInvoiceRepository<Invoice>
     {
         return await _db.Invoices
             .Include(i => i.Status)
-            .Include(i => i.Counterparty)
+            .Include(i => i.Counterparty).ThenInclude(c => c.ActualAddress)
             .Include(i => i.BankDetails)
-            .Include(i => i.BankDetailsOrg)
+            .Include(i => i.BankDetailsOrg).ThenInclude(b => b.Organization).ThenInclude(o => o.AddressUr)
+            .Include(i => i.BankDetailsOrg).ThenInclude(b => b.Organization).ThenInclude(o => o.Director.Post)
+            .Include(i => i.BankDetailsOrg).ThenInclude(b => b.Organization).ThenInclude(o => o.Director.People)
+            .Include(i => i.Nds)
             .Include(i => i.ProductsInvoice)
+            .ThenInclude(p => p.Product)
+            .ThenInclude(p => p.Unit)
             .Include(i => i.Type)
             .FirstOrDefaultAsync(i => i.Id == id, cancel).ConfigureAwait(false);
     }
@@ -47,7 +54,7 @@ public class InvoiceRepository : IInvoiceRepository<Invoice>
 
         var table = _db.Set<Invoice>();
         await table.AddAsync(item, cancel).ConfigureAwait(false);
-        await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
+        await _db.SaveChangesAsync(cancel);
         return item;
     }
 

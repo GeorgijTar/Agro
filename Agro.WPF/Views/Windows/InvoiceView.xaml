@@ -89,15 +89,15 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="55"/>
-                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="130"/>
                     <RowDefinition Height="60"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
-                    <RowDefinition Height="120"/>
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="110"/>
+                    <RowDefinition Height="40"/>
                     <RowDefinition Height="90"/>
                 </Grid.RowDefinitions>
                 <GroupBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="8" Header="Реквизиты документа">
@@ -131,6 +131,7 @@
                 <GroupBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="8" Header="Контрагент" BorderThickness="2" BorderBrush="CornflowerBlue">
                     <Grid>
                         <Grid.RowDefinitions>
+                            <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
@@ -183,6 +184,23 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                         </GroupBox>
+                        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="7" Orientation="Horizontal">
+                            <TextBlock Text="Договор" VerticalAlignment="Center" Margin="10"/>
+                            <TextBox VerticalAlignment="Center" Width="280" Margin="0,0,5,0" IsReadOnly="True"/>
+                            <Button VerticalAlignment="Center" BorderBrush="DarkBlue" 
+                                    HorizontalAlignment="Left"  Template="{StaticResource ButtonTemplate}"
+                                    Command="{Binding }">
+                                <fa5:ImageAwesome Icon="Solid_Book" Width="18" Height="18" Foreground="DarkBlue"/>
+                            </Button>
+                            <TextBlock Text="Соглашение/Спецификация" VerticalAlignment="Center" Margin="10"/>
+                            <TextBox VerticalAlignment="Center" Width="250" Margin="0,0,5,0" IsReadOnly="True"/>
+                            <Button VerticalAlignment="Center" BorderBrush="DarkBlue" 
+                                    HorizontalAlignment="Left"  Template="{StaticResource ButtonTemplate}"
+                                    Command="{Binding }">
+                                <fa5:ImageAwesome Icon="Solid_Book" Width="18" Height="18" Foreground="DarkBlue"/>
+                            </Button>
+                        </StackPanel>
+                        
                     </Grid>
                 </GroupBox>
                 <GroupBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="8" Header="Реквизиты организации" 
@@ -346,7 +364,8 @@
                     </TabItem>
                 </TabControl>
                 <TextBlock Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" Text="Примечание:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
-                <TextBox Grid.Row="10" Grid.Column="3" Grid.ColumnSpan="6" TextWrapping="Wrap" Margin="0,10"></TextBox>
+                <TextBox Grid.Row="10" Grid.Column="3" Grid.ColumnSpan="6" TextWrapping="Wrap" Margin="0,10"
+                         Text="{Binding Invoice.Description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             </Grid>
         </Grid>
     </Grid>

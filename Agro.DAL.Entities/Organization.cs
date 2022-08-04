@@ -52,22 +52,26 @@ public class Organization : Entity
 
     private Okogy? _okogy ;
     public virtual Okogy? Okogy { get => _okogy; set => Set(ref _okogy, value); }
+    
 
     private Okato? _okato;
     public virtual Okato? Okato { get => _okato; set => Set(ref _okato, value); }
 
+
     private Oktmo? _oktmo;
     public virtual Oktmo? Oktmo { get => _oktmo; set => Set(ref _oktmo, value); }
+
 
     private RegFns? _regFns;
     public virtual RegFns? RegFns { get => _regFns; set => Set(ref _regFns, value); }
 
+
     private RegPfr? _regPfr;
     public virtual RegPfr? RegPfr { get => _regPfr; set => Set(ref _regPfr, value); }
 
+
     private RegFss? _regFss;
     public virtual RegFss? RegFss { get => _regFss; set => Set(ref _regFss, value); }
-
 
 
     private ObservableCollection<BankDetails> _bankDetails =null!;
@@ -76,5 +80,20 @@ public class Organization : Entity
     private  Address? _addressUr;
     public virtual Address? AddressUr { get => _addressUr; set => Set(ref _addressUr, value); }
 
+
+    private Employee? _director ;
+    public Employee? Director { get => _director; set => Set(ref _director, value); }
+
+
+    private Employee? _generalAccountant ;
+    public Employee? GeneralAccountant { get => _generalAccountant; set => Set(ref _generalAccountant, value); }
+
+
+    private Employee? _cashier;
+    public Employee? Cashier { get => _cashier; set => Set(ref _cashier, value); }
+
+    private Employee? _hr;
+
+    public Employee? Hr { get => _hr; set => Set(ref _hr, value); } 
 
 }

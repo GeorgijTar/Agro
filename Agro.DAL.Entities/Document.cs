@@ -1,17 +1,20 @@
-﻿
-
-using Agro.DAL.Entities.Base;
+﻿using Agro.DAL.Entities.Base;
 
 namespace Agro.DAL.Entities;
+
+/// <summary>
+/// Документ
+/// </summary>
 public class Document:Entity
 {
+    /// <summary>Статус</summary>
+    private Status _status = null!;
+    public Status Status { get => _status; set => Set(ref _status, value); } 
+    
     private TypeDoc _typeDoc = null!;
+    public TypeDoc TypeDoc { get => _typeDoc; set => Set(ref _typeDoc, value); } 
 
-    public TypeDoc TypeDoc
-    {
-        get => _typeDoc;
-        set => Set(ref _typeDoc, value);
-    } 
+
 
     /// <summary>Серия</summary>
     private string? _series = null!;

@@ -12,7 +12,11 @@
     <Window.Resources>
         <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
             <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
-                <ContentPresenter RecognizesAccessKey="True"></ContentPresenter>
+                <ContentPresenter RecognizesAccessKey="True" 
+                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+
+                </ContentPresenter>
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="true">
@@ -213,7 +217,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Row="0" Grid.Column="0" Text="Дата регистрации:" 
                                        VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
-                           <DatePicker Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" 
+                            <DatePicker Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" 
                                        SelectedDate="{Binding Organization.RegPfr.DateReg}"/>
                             <TextBlock Grid.Row="0" Grid.Column="2" Text="Регистрационный номер:" 
                                        VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
@@ -315,6 +319,132 @@
                             <DataGridTextColumn Header="Наименование банка" Width="120*" Binding="{Binding NameBank}"/>
                         </DataGrid.Columns>
                     </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Должностные лица">
+                <Grid Margin="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Grid.Row="0" Header="Руководитель" Margin="10,1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="ФИО:" VerticalAlignment="Center" Margin="5,0"/>
+                                <TextBlock VerticalAlignment="Center" Margin="5,0" 
+                                           Text="{Binding Organization.Director.People}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="Должность:" VerticalAlignment="Center" Margin="5,0"/>
+                                <TextBlock VerticalAlignment="Center" Margin="5,0" 
+                                           Text="{Binding Organization.Director.Post.Name}"/>
+                            </StackPanel>
+                            <Button Grid.Row="0" Grid.Column="0" BorderBrush="DarkBlue" Width="25" Height="25"
+                                    Template="{StaticResource ButtonTemplate}"
+                                    Command="{Binding DeleteBankDetailsCommand}"
+                                    ToolTip="Выбрать из справочника" fa5:Awesome.Content="Solid_Book" 
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                    FontSize="18" Foreground="DarkBlue" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            </Button>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Grid.Row="1" Header="Главный бухгалтер" Margin="10,1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="ФИО:" VerticalAlignment="Center" Margin="5,0"/>
+                                <TextBlock VerticalAlignment="Center" Margin="5,0" 
+                                           Text="{Binding Organization.GeneralAccountant.People}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="Должность:" VerticalAlignment="Center" Margin="5,0"/>
+                                <TextBlock VerticalAlignment="Center" Margin="5,0" 
+                                           Text="{Binding Organization.GeneralAccountant.Post.Name}"/>
+                            </StackPanel>
+                            <Button Grid.Row="0" Grid.Column="0" BorderBrush="DarkBlue" Width="25" Height="25"
+                                    Template="{StaticResource ButtonTemplate}"
+                                    Command="{Binding DeleteBankDetailsCommand}"
+                                    ToolTip="Выбрать из справочника" fa5:Awesome.Content="Solid_Book" 
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                    FontSize="18" Foreground="DarkBlue" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            </Button>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Grid.Row="2" Header="Кассир" Margin="10,1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="ФИО:" VerticalAlignment="Center" Margin="5,0"/>
+                                <TextBlock VerticalAlignment="Center" Margin="5,0" 
+                                           Text="{Binding Organization.Cashier.People }"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="Должность:" VerticalAlignment="Center" Margin="5,0"/>
+                                <TextBlock VerticalAlignment="Center" Margin="5,0" 
+                                           Text="{Binding  Organization.Cashier.Post.Name}"/>
+                            </StackPanel>
+                            <Button Grid.Row="0" Grid.Column="0" BorderBrush="DarkBlue" Width="25" Height="25"
+                                    Template="{StaticResource ButtonTemplate}"
+                                    Command="{Binding DeleteBankDetailsCommand}"
+                                    ToolTip="Выбрать из справочника" fa5:Awesome.Content="Solid_Book" 
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                    FontSize="18" Foreground="DarkBlue" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            </Button>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Grid.Row="3" Header="Кадровик" Margin="10,1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="ФИО:" VerticalAlignment="Center" Margin="5,0"/>
+                                <TextBlock VerticalAlignment="Center" Margin="5,0" 
+                                           Text="{Binding Organization.Hr.People }"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="Должность:" VerticalAlignment="Center" Margin="5,0"/>
+                                <TextBlock VerticalAlignment="Center" Margin="5,0" 
+                                           Text="{Binding Organization.Hr.Post.Name}"/>
+                            </StackPanel>
+                            <Button Grid.Row="0" Grid.Column="0" BorderBrush="DarkBlue" Width="25" Height="25"
+                                    Template="{StaticResource ButtonTemplate}"
+                                    Command="{Binding DeleteBankDetailsCommand}"
+                                    ToolTip="Выбрать из справочника" fa5:Awesome.Content="Solid_Book" 
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                    FontSize="18" Foreground="DarkBlue" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            </Button>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
         </TabControl>

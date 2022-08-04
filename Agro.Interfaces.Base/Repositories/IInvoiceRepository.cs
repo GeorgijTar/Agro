@@ -1,7 +1,8 @@
 ﻿using Agro.DAL.Entities;
 using Agro.DAL.Entities.Base;
+using Agro.Interfaces.Base.Repositories.Base;
 
-namespace Agro.Interfaces.Base.Repositories.Base;
+namespace Agro.Interfaces.Base.Repositories;
 
 public interface IInvoiceRepository<Invoice> : IBaseRepository<Invoice> where Invoice : Entity
 {

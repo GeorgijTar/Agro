@@ -1,6 +1,6 @@
 ﻿
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Agro.DAL.Entities.Base;
 
 namespace Agro.DAL.Entities;
@@ -8,51 +8,71 @@ namespace Agro.DAL.Entities;
 public class Contract : Entity
 {
     /// <summary>Статус договора</summary>
-    [Required, ForeignKey("StatusId")]
-    public virtual Status Status { get; set; } = null!;
-
-    public int StatusId { get; set; }
-
+    private Status _status = null!;
+    [Required]
+    public Status Status { get => _status; set => Set(ref _status, value); } 
+    
     /// <summary>Тип договора</summary>
-    [Required, ForeignKey("TypeId")]
-    public virtual TypeDoc Type { get; set; } = null!;
-
-    public int TypeId { get; set; }
+    private TypeDoc _type = null!;
+    [Required]
+    public TypeDoc Type { get => _type; set => Set(ref _type, value); }
 
     /// <summary>Группа договора</summary>
-    [Required, ForeignKey("GroupId")]
-    public virtual GroupDoc Group { get; set; } = null!;
+    private GroupDoc _group = null!;
+    [Required]
+    public GroupDoc Group { get => _group; set => Set(ref _group, value); } 
 
-    public int GroupId { get; set; }
 
     /// <summary>Номер договора</summary>
-    public string Number { get; set; } = null!;
+   private string _number = null!;
+    public string Number { get => _number; set => Set(ref _number, value); } 
 
     /// <summary>Дата договора</summary>
-    public DateTime Date { get; set; }
+ 
+    private DateTime _date;
+    public DateTime Date { get => _date; set => Set(ref _date, value); } 
+
 
     /// <summary>Контрагент по договору</summary>
-    [Required, ForeignKey("CounterpartyId")]
-    public virtual Counterparty Counterparty { get; set; } = null!;
 
-    public int CounterpartyId { get; set; }
+    private Counterparty _counterparty = null!;
+    [Required]
+    public Counterparty Counterparty { get => _counterparty; set => Set(ref _counterparty, value); } 
+
 
     /// <summary>Платежные реквизиты контрагента договора</summary>
-    [Required, ForeignKey("BankDetailsId")]
-    public virtual BankDetails BankDetails { get; set; } = null!;
+    private BankDetails _bankDetails = null!;
+    [Required]
+    public BankDetails BankDetails { get => _bankDetails; set => Set(ref _bankDetails, value); }
 
-    public int BankDetailsId { get; set; }
+    /// <summary>Платежные реквизиты организации</summary>
+    private BankDetails _bankDetailsOrg = null!;
+    public BankDetails BankDetailsOrg { get => _bankDetailsOrg; set => Set(ref _bankDetailsOrg, value); } 
+
 
     /// <summary>Предмет договора</summary>
-    public string Subject { get; set; } = null!;
+    private string _subject = null!;
+    public string Subject { get => _subject; set => Set(ref _subject, value); } 
+
 
     /// <summary>Сумма договора</summary>
-    public decimal Amount { get; set; }
+  
+    private decimal _amount;
+    public decimal Amount { get => _amount; set => Set(ref _amount, value); } 
+
 
     /// <summary>Примечание к договору</summary>
-    public string? Description { get; set; }
+ 
+    private string? _description;
+
+    public string? Description { get => _description; set => Set(ref _description, value); } 
+
 
     /// <summary>Прикрепленные файлы</summary>
-    public virtual ICollection<ScanFile>? ScanFiles { get; set; } 
+
+    private ObservableCollection<ScanFile>? _scanFiles;
+
+    public ObservableCollection<ScanFile>? ScanFiles { get => _scanFiles; set => Set(ref _scanFiles, value); } 
+
 
 }

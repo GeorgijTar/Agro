@@ -4,6 +4,7 @@ using Agro.DAL.MySql;
 using Agro.DAL.Sql;
 using Agro.DAL.SqLite;
 using Agro.Interfaces;
+using Agro.Interfaces.Base.Repositories;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.Services.Repositories;
 using Agro.WPF.ViewModels;
@@ -63,6 +64,8 @@ namespace Agro.WPF
             services.AddScoped(typeof(IBaseRepository<>), typeof(DbRepository<>));
             services.AddTransient<IInvoiceRepository<Invoice>, InvoiceRepository>();
             services.AddTransient<IBaseRepository<Product>, ProductRepository>();
+            services.AddTransient<IBaseRepository<Organization>, OrganizationRepository>();
+            services.AddTransient<IBaseRepository<Contract>, ContractRepository>();
 
             // Регистрация мапера
             //services.AddAutoMapper(

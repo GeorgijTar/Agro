@@ -42,6 +42,12 @@ public class Invoice : Entity
     private BankDetails _bankDetails = null!;
     [Required]
     public virtual BankDetails BankDetails { get=>_bankDetails; set=>Set(ref _bankDetails, value); }
+
+    /// <summary>Договор</summary>
+    private Contract? _contract;
+    public Contract? Contract { get => _contract; set => Set(ref _contract, value); } 
+
+
     
     /// <summary>Сумма счета</summary>
     private decimal _amount;

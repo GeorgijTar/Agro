@@ -37,7 +37,9 @@ public class AgroDb : DbContext
     public DbSet<ReestrInvoice> ReestrInvoice { get; set; } = null!;
     public DbSet<Document> Documents { get; set; } = null!;
     public DbSet<People> People { get; set; } = null!;
-
+    public DbSet<Employee> Employee { get; set; } = null!;
+    public DbSet<StaffList> StaffList { get; set; } = null!;
+    public DbSet<Post> Post { get; set; } = null!;
 
 #endregion
     public AgroDb(DbContextOptions<AgroDb> options) : base(options) { }
