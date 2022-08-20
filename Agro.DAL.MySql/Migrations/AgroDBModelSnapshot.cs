@@ -1307,6 +1307,126 @@ namespace Agro.DAL.MySql.Migrations
                     b.ToTable("Addresses");
                 });
 
+            modelBuilder.Entity("Agro.DAL.Entities.Agronomy.Culture", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("YearHarvest")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("Cultures");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Agronomy.Department", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("AbbreviatedName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Agronomy.Field", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<double>("Areal")
+                        .HasColumnType("double");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("ParentFieldId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("ParentFieldId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("Fields");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Agronomy.LandPlot", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<double>("Area")
+                        .HasColumnType("double");
+
+                    b.Property<decimal>("BalanceValue")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("LandPlots");
+                });
+
             modelBuilder.Entity("Agro.DAL.Entities.BankDetails", b =>
                 {
                     b.Property<int>("Id")
@@ -1480,6 +1600,9 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<int>("BankDetailsId")
                         .HasColumnType("int");
 
+                    b.Property<int>("BankDetailsOrgId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CounterpartyId")
                         .HasColumnType("int");
 
@@ -1509,6 +1632,8 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BankDetailsId");
+
+                    b.HasIndex("BankDetailsOrgId");
 
                     b.HasIndex("CounterpartyId");
 
@@ -1597,23 +1722,37 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<DateTime>("DateIssue")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Issuing")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NameDocument")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Number")
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("PeopleId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Series")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("StatusId")
+                    b.Property<int?>("StatusId")
                         .HasColumnType("int");
 
                     b.Property<int>("TypeDocId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("PeopleId");
 
                     b.HasIndex("StatusId");
 
@@ -1626,6 +1765,9 @@ namespace Agro.DAL.MySql.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("DivisionId")
                         .HasColumnType("int");
 
                     b.Property<int>("PeopleId")
@@ -1642,6 +1784,8 @@ namespace Agro.DAL.MySql.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DivisionId");
 
                     b.HasIndex("PeopleId");
 
@@ -1752,37 +1896,43 @@ namespace Agro.DAL.MySql.Migrations
                         {
                             Id = 14,
                             Name = "Паспорт гражданина РФ",
-                            TypeApplication = "УЛ"
+                            TypeApplication = "Удостоверение личности"
                         },
                         new
                         {
                             Id = 15,
                             Name = "Загранпаспорт гражданина РФ",
-                            TypeApplication = "УЛ"
+                            TypeApplication = "Удостоверение личности"
                         },
                         new
                         {
                             Id = 16,
                             Name = "Свидетельство о рождении",
-                            TypeApplication = "УЛ"
+                            TypeApplication = "Удостоверение личности"
                         },
                         new
                         {
                             Id = 17,
                             Name = "Временное удостоверение личности",
-                            TypeApplication = "УЛ"
+                            TypeApplication = "Удостоверение личности"
                         },
                         new
                         {
                             Id = 18,
                             Name = "Удостоверение личности военнослужащего РФ (военный билет, паспорт моряка)",
-                            TypeApplication = "УЛ"
+                            TypeApplication = "Удостоверение личности"
                         },
                         new
                         {
                             Id = 19,
                             Name = "Вид на жительство",
-                            TypeApplication = "УЛ"
+                            TypeApplication = "Удостоверение личности"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Name = "Прочий документ",
+                            TypeApplication = "Прочие документы"
                         });
                 });
 
@@ -1832,6 +1982,9 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<int?>("BankDetailsOrgId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ContractId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CounterpartyId")
                         .HasColumnType("int");
 
@@ -1865,6 +2018,8 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("BankDetailsId");
 
                     b.HasIndex("BankDetailsOrgId");
+
+                    b.HasIndex("ContractId");
 
                     b.HasIndex("CounterpartyId");
 
@@ -1930,7 +2085,32 @@ namespace Agro.DAL.MySql.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.Organization", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.Organization.Division", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("OrganizationId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("Divisions");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Organization.Organization", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2035,7 +2215,7 @@ namespace Agro.DAL.MySql.Migrations
                     b.ToTable("Organizations");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.People", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.Personnel.People", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2043,9 +2223,6 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<int?>("IdentityDocumentId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Inn")
                         .HasColumnType("longtext");
@@ -2061,7 +2238,7 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<string>("Snils")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("StatusId")
+                    b.Property<int?>("StatusId")
                         .HasColumnType("int");
 
                     b.Property<string>("Surname")
@@ -2070,14 +2247,12 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdentityDocumentId");
-
                     b.HasIndex("StatusId");
 
                     b.ToTable("People");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.Post", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.Personnel.Post", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2087,7 +2262,11 @@ namespace Agro.DAL.MySql.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("StatusId")
+                    b.Property<string>("ShortName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("StatusId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -2095,6 +2274,74 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("Post");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Personnel.StaffList", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("OrderNamber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("StaffList");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Personnel.StaffListPosition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("DivisionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("double");
+
+                    b.Property<int>("StaffListId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DivisionId");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("StaffListId");
+
+                    b.ToTable("StaffListPositions");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Product", b =>
@@ -2369,37 +2616,6 @@ namespace Agro.DAL.MySql.Migrations
                     b.ToTable("Specifications");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.StaffList", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Quantity")
-                        .HasColumnType("double");
-
-                    b.Property<int>("StatusId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("StatusId");
-
-                    b.ToTable("StaffList");
-                });
-
             modelBuilder.Entity("Agro.DAL.Entities.Status", b =>
                 {
                     b.Property<int>("Id")
@@ -2571,7 +2787,25 @@ namespace Agro.DAL.MySql.Migrations
                         {
                             Id = 12,
                             Name = "Удостоверение личности",
-                            TypeApplication = "УЛ"
+                            TypeApplication = "Документ"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "Собственность",
+                            TypeApplication = "ЗУ"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "Аренда",
+                            TypeApplication = "ЗУ"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Name = "Прочие документы",
+                            TypeApplication = "Документ"
                         });
                 });
 
@@ -2723,6 +2957,91 @@ namespace Agro.DAL.MySql.Migrations
                     b.ToTable("User");
                 });
 
+            modelBuilder.Entity("Agro.DAL.Entities.Weight.Driver", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Patronymic")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("Drivers");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Weight.Transport", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CarBrand")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RegNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TrailerNumber")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("Transports");
+                });
+
+            modelBuilder.Entity("DriverTransport", b =>
+                {
+                    b.Property<int>("DriversId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TransportsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DriversId", "TransportsId");
+
+                    b.HasIndex("TransportsId");
+
+                    b.ToTable("DriverTransport");
+                });
+
+            modelBuilder.Entity("FieldLandPlot", b =>
+                {
+                    b.Property<int>("FieldsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LandPlotsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FieldsId", "LandPlotsId");
+
+                    b.HasIndex("LandPlotsId");
+
+                    b.ToTable("FieldLandPlot");
+                });
+
             modelBuilder.Entity("Agro.DAL.Entities.AccountingPlan", b =>
                 {
                     b.HasOne("Agro.DAL.Entities.AccountingPlan", "ParentPlan")
@@ -2740,13 +3059,81 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("Status");
                 });
 
+            modelBuilder.Entity("Agro.DAL.Entities.Agronomy.Culture", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Agronomy.Department", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Agronomy.Field", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Agronomy.Department", "Department")
+                        .WithMany("Fields")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Agronomy.Field", "ParentField")
+                        .WithMany()
+                        .HasForeignKey("ParentFieldId");
+
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.Navigation("Department");
+
+                    b.Navigation("ParentField");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Agronomy.LandPlot", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.TypeDoc", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Status");
+
+                    b.Navigation("Type");
+                });
+
             modelBuilder.Entity("Agro.DAL.Entities.BankDetails", b =>
                 {
                     b.HasOne("Agro.DAL.Entities.Counterparty", "Counterparty")
                         .WithMany("BankDetails")
                         .HasForeignKey("CounterpartyId");
 
-                    b.HasOne("Agro.DAL.Entities.Organization", "Organization")
+                    b.HasOne("Agro.DAL.Entities.Organization.Organization", "Organization")
                         .WithMany("BankDetails")
                         .HasForeignKey("OrganizationId");
 
@@ -2768,6 +3155,12 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasOne("Agro.DAL.Entities.BankDetails", "BankDetails")
                         .WithMany()
                         .HasForeignKey("BankDetailsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.BankDetails", "BankDetailsOrg")
+                        .WithMany()
+                        .HasForeignKey("BankDetailsOrgId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2796,6 +3189,8 @@ namespace Agro.DAL.MySql.Migrations
                         .IsRequired();
 
                     b.Navigation("BankDetails");
+
+                    b.Navigation("BankDetailsOrg");
 
                     b.Navigation("Counterparty");
 
@@ -2837,17 +3232,27 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Document", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.GroupDoc", "Group")
                         .WithMany()
-                        .HasForeignKey("StatusId")
+                        .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Personnel.People", null)
+                        .WithMany("Documents")
+                        .HasForeignKey("PeopleId");
+
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
 
                     b.HasOne("Agro.DAL.Entities.TypeDoc", "TypeDoc")
                         .WithMany()
                         .HasForeignKey("TypeDocId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Group");
 
                     b.Navigation("Status");
 
@@ -2856,13 +3261,19 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Employee", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.People", "People")
+                    b.HasOne("Agro.DAL.Entities.Organization.Division", "Division")
                         .WithMany()
+                        .HasForeignKey("DivisionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Personnel.People", "People")
+                        .WithMany("Employees")
                         .HasForeignKey("PeopleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Agro.DAL.Entities.Post", "Post")
+                    b.HasOne("Agro.DAL.Entities.Personnel.Post", "Post")
                         .WithMany()
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2873,6 +3284,8 @@ namespace Agro.DAL.MySql.Migrations
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Division");
 
                     b.Navigation("People");
 
@@ -2908,6 +3321,10 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany()
                         .HasForeignKey("BankDetailsOrgId");
 
+                    b.HasOne("Agro.DAL.Entities.Contract", "Contract")
+                        .WithMany()
+                        .HasForeignKey("ContractId");
+
                     b.HasOne("Agro.DAL.Entities.Counterparty", "Counterparty")
                         .WithMany()
                         .HasForeignKey("CounterpartyId")
@@ -2940,6 +3357,8 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.Navigation("BankDetailsOrg");
 
+                    b.Navigation("Contract");
+
                     b.Navigation("Counterparty");
 
                     b.Navigation("Nds");
@@ -2949,7 +3368,20 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.Organization", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.Organization.Division", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Organization.Organization", null)
+                        .WithMany("Divisions")
+                        .HasForeignKey("OrganizationId");
+
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Organization.Organization", b =>
                 {
                     b.HasOne("Agro.DAL.Entities.Address", "AddressUr")
                         .WithMany()
@@ -3038,32 +3470,58 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("RegPfr");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.People", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.Personnel.People", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Document", "IdentityDocument")
-                        .WithMany()
-                        .HasForeignKey("IdentityDocumentId");
-
                     b.HasOne("Agro.DAL.Entities.Status", "Status")
                         .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("IdentityDocument");
+                        .HasForeignKey("StatusId");
 
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.Post", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.Personnel.Post", b =>
                 {
                     b.HasOne("Agro.DAL.Entities.Status", "Status")
                         .WithMany()
-                        .HasForeignKey("StatusId")
+                        .HasForeignKey("StatusId");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Personnel.StaffList", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Personnel.StaffListPosition", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Organization.Division", "Division")
+                        .WithMany()
+                        .HasForeignKey("DivisionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Status");
+                    b.HasOne("Agro.DAL.Entities.Personnel.Post", "Post")
+                        .WithMany()
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Personnel.StaffList", "StaffList")
+                        .WithMany("Positions")
+                        .HasForeignKey("StaffListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Division");
+
+                    b.Navigation("Post");
+
+                    b.Navigation("StaffList");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Product", b =>
@@ -3179,28 +3637,62 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.StaffList", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.Weight.Driver", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Post", "Post")
-                        .WithMany()
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Agro.DAL.Entities.Status", "Status")
                         .WithMany()
-                        .HasForeignKey("StatusId")
+                        .HasForeignKey("StatusId");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Weight.Transport", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("DriverTransport", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Weight.Driver", null)
+                        .WithMany()
+                        .HasForeignKey("DriversId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Post");
+                    b.HasOne("Agro.DAL.Entities.Weight.Transport", null)
+                        .WithMany()
+                        .HasForeignKey("TransportsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Navigation("Status");
+            modelBuilder.Entity("FieldLandPlot", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Agronomy.Field", null)
+                        .WithMany()
+                        .HasForeignKey("FieldsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Agronomy.LandPlot", null)
+                        .WithMany()
+                        .HasForeignKey("LandPlotsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.AccountingPlan", b =>
                 {
                     b.Navigation("ChildPlans");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Agronomy.Department", b =>
+                {
+                    b.Navigation("Fields");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Contract", b =>
@@ -3222,9 +3714,23 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("ScanFiles");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.Organization", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.Organization.Organization", b =>
                 {
                     b.Navigation("BankDetails");
+
+                    b.Navigation("Divisions");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Personnel.People", b =>
+                {
+                    b.Navigation("Documents");
+
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Personnel.StaffList", b =>
+                {
+                    b.Navigation("Positions");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.ReestrInvoice", b =>

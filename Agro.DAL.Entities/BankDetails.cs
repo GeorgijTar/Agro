@@ -23,8 +23,8 @@ public class BankDetails : Entity
     private Counterparty? _counterparty;
     public virtual Counterparty? Counterparty { get=> _counterparty; set=>Set(ref _counterparty, value); }
      
-    private Organization ? _organization;
-    public virtual Organization ? Organization { get=> _organization; set=>Set(ref _organization, value); }
+    private Organization.Organization ? _organization;
+    public virtual Organization.Organization ? Organization { get=> _organization; set=>Set(ref _organization, value); }
 
     /// <summary>Наименование банка</summary>
     

@@ -1,14 +1,18 @@
-﻿
-
+﻿using System.Collections.ObjectModel;
 using Agro.DAL.Entities.Base;
 
 namespace Agro.DAL.Entities.Agronomy;
 
 /// <summary>
-/// Поля
+/// Поле
 /// </summary>
 public class Field : Entity
 {
+    public Field()
+    {
+        LandPlots = new ObservableCollection<LandPlot>();
+        Status = new Status();
+    }
     /// <summary>Статус</summary>
     private Status? _status;
     public Status? Status { get => _status; set => Set(ref _status, value); }
@@ -28,6 +32,10 @@ public class Field : Entity
     /// <summary>Родительское поле</summary>
     private Field? _parentField;
     public Field? ParentField { get => _parentField; set => Set(ref _parentField, value); }
+
+    /// <summary>Земельные участки входящие в состав поля</summary>
+    private ObservableCollection<LandPlot>? _landPlots;
+    public ObservableCollection<LandPlot>? LandPlots { get => _landPlots; set => Set(ref _landPlots, value); }
 
     public override string ToString() => $"{Department.AbbreviatedName} п. {Name} ({Areal} га.)";
 }

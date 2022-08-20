@@ -1,0 +1,110 @@
+﻿<Window x:Class="Agro.WPF.Views.Windows.Personnel.DocumentView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Agro.WPF.Views.Windows.Personnel"
+        xmlns:fa5="http://schemas.fontawesome.com/icons/"
+        mc:Ignorable="d"
+        Title="{Binding Title}" Width="850" Height="200"
+        DataContext="{Binding DocumentModel, Source={StaticResource Locator}}"
+        WindowStartupLocation="CenterOwner"
+        x:Name="MyWindow" WindowStyle="ToolWindow">
+    <Window.Resources>
+        <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
+            <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
+                <ContentPresenter RecognizesAccessKey="True"></ContentPresenter>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Background" Value="DarkGreen"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter  Property="Background" Value="Azure" />
+                    <Setter  Property="BorderBrush" Value="DarkBlue" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style TargetType="{x:Type TextBox}"
+               BasedOn="{StaticResource TextBoxStyle}">
+            <Setter Property="Margin" Value="4 4"/>
+        </Style>
+
+    </Window.Resources>
+    <Grid Background="AliceBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="20*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1" HorizontalAlignment="Right">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" BorderBrush="DarkBlue" Width="108"
+                    Template="{StaticResource ButtonTemplate}"  Margin="0,2,3,5"
+                    Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=MyWindow}" >
+                <StackPanel Orientation="Horizontal">
+                    <fa5:ImageAwesome Height="18" Icon="Solid_Save"
+                                      Margin="8,5"
+                                      Foreground="DarkBlue" />
+                    <TextBlock Text="Сохранить" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="1" BorderBrush="DarkBlue" Width="108"
+                    Template="{StaticResource ButtonTemplate}" Margin="3,2,15,5"
+                    Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=MyWindow}">
+                <StackPanel Orientation="Horizontal">
+                    <fa5:ImageAwesome Height="18" Icon="Solid_DoorOpen"
+                                      Margin="8,5"
+                                      Foreground="DarkBlue" />
+                    <TextBlock Text="Отмена" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+        <Grid Grid.Row="0" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="170"/>
+                <ColumnDefinition Width="130*"/>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="120*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Column="0" Text="Тип документа:" VerticalAlignment="Center" Margin="10,0" HorizontalAlignment="Right"/>
+            <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" 
+                      ItemsSource="{Binding Types, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedItem="{Binding Document.TypeDoc}"/>
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="Документ:" TextWrapping="Wrap"
+                           VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0"/>
+            <ComboBox Grid.Row="0" Grid.Column="3" VerticalAlignment="Center"
+                      ItemsSource="{Binding Groups, UpdateSourceTrigger=PropertyChanged}" 
+                      SelectedItem="{Binding Document.Group, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Наименование документа:" Margin="10,0" 
+                       HorizontalAlignment="Right" VerticalAlignment="Center" TextWrapping="Wrap"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding  Document.NameDocument, 
+                UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsReadOnly="{Binding IsReadOnly}"/>
+            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal">
+                <TextBlock Text="Сурия:" TextWrapping="Wrap" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="20,0,5,0"/>
+                <TextBox Width="110" Text="{Binding Document.Series, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="Номер:" TextWrapping="Wrap" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0,5,0"/>
+                <TextBox Width="150" Text="{Binding Document.Number, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="Дата выдачи:" TextWrapping="Wrap" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0,5,0"/>
+                <DatePicker VerticalAlignment="Center" SelectedDate="{Binding Document.DateIssue, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="Код подразделения:" TextWrapping="Wrap" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0,5,0"/>
+                <TextBox Width="90" Text="{Binding Document.CodeIssuing, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Наименование выдавшего органа:" TextWrapping="Wrap" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" Grid.ColumnSpan="3" 
+                     Text="{Binding Document.Issuing, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+    </Grid>
+</Window>

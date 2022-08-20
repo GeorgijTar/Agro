@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.ObjectModel;
 using Agro.DAL.Entities.Base;
 
 namespace Agro.DAL.Entities.Agronomy;
@@ -20,8 +21,8 @@ public class Department : Entity
     public string Name { get => _name; set => Set(ref _name, value); }
 
     /// <summary>Список полей</summary>
-    private IEnumerable<Field>? _fields;
-    public IEnumerable<Field>? Fields { get => _fields; set => Set(ref _fields, value); } 
+    private ObservableCollection<Field>? _fields;
+    public ObservableCollection<Field>? Fields { get => _fields; set => Set(ref _fields, value); } 
 
     public override string ToString() => Name;
 }

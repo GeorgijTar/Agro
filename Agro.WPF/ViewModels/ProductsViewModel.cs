@@ -10,6 +10,7 @@ using System.Windows.Input;
 using Agro.DAL.Entities;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
+using Agro.WPF.ViewModels.Agronomy;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.Views.Windows;
 
@@ -285,6 +286,12 @@ public class ProductsViewModel : ViewModel
            {
                productInvoiceViewModel.ProductInvoice.Product = Product!;
            }
+
+           if (SenderModel is CultureViewModel cultureViewModel)
+           {
+               cultureViewModel.Culture.Product= Product!;
+           }
+
            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
            if (window != null!)
                window.Close();

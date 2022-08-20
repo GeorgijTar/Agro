@@ -136,11 +136,16 @@
 
             <GroupBox Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="5" Margin="10" Header="Банковские реквизиты" BorderThickness="2">
                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="35*"/>
+                        <ColumnDefinition Width="569*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <ToolBar>
+                    <ToolBar Grid.ColumnSpan="3">
                         <Button BorderBrush="DarkBlue" Width="108" Command="{Binding AddBankDetailsCommand}"
                                 Template="{StaticResource ButtonTemplate}" Margin="2,0">
                             <StackPanel Orientation="Horizontal">
@@ -173,7 +178,7 @@
                     </ToolBar>
                     <DataGrid Grid.Row="1" ItemsSource="{Binding Counterparty.BankDetails, 
                         UpdateSourceTrigger=PropertyChanged}" CanUserAddRows="False"
-                              SelectedItem="{Binding SelectBankDetails}" AutoGenerateColumns="False">
+                              SelectedItem="{Binding SelectBankDetails}" AutoGenerateColumns="False" Grid.ColumnSpan="3">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Наименование банка" Width="120*" Binding="{Binding NameBank}"/>
                             <DataGridTextColumn Header="БИК банка" Width="25*" Binding="{Binding Bik}"/>

@@ -8,13 +8,20 @@ namespace Agro.DAL.Entities;
 public class Document:Entity
 {
     /// <summary>Статус</summary>
-    private Status _status = null!;
-    public Status Status { get => _status; set => Set(ref _status, value); } 
+    private Status? _status = null!;
+    public Status? Status { get => _status; set => Set(ref _status, value); } 
     
+
     private TypeDoc _typeDoc = null!;
-    public TypeDoc TypeDoc { get => _typeDoc; set => Set(ref _typeDoc, value); } 
+    public TypeDoc TypeDoc { get => _typeDoc; set => Set(ref _typeDoc, value); }
 
 
+    private GroupDoc _group = null!;
+    public GroupDoc Group { get => _group; set => Set(ref _group, value); }
+
+
+    private string _nameDocument = null!;
+    public string NameDocument { get => _nameDocument; set => Set(ref _nameDocument, value); } 
 
     /// <summary>Серия</summary>
     private string? _series = null!;
@@ -25,7 +32,7 @@ public class Document:Entity
     public string Number { get => _number; set => Set(ref _number, value); }
 
     /// <summary>Дата выдачи</summary>
-    private DateTime _dateIssue;
+    private DateTime _dateIssue= DateTime.Now;
     public DateTime DateIssue { get => _dateIssue; set => Set(ref _dateIssue, value); }
 
     /// <summary>Выдавщий орган</summary>

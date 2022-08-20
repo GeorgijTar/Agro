@@ -21,7 +21,6 @@ public class ContractorsViewModel : ViewModel
     private readonly IBaseRepository<Counterparty> _counterpartyRepository;
     private readonly IBaseRepository<GroupDoc> _groupRepository;
     private readonly IBaseRepository<TypeDoc> _typeRepository;
-    private readonly IBaseRepository<Status> _statusRepository;
 
 
     public ContractorsViewModel(
@@ -35,37 +34,37 @@ public class ContractorsViewModel : ViewModel
         Initial();
     }
 
-    private async Task Initial()
+    private async void Initial()
     {
        await LoadGr();
        await LoadFiltr();
        
     }
 
-    private ObservableCollection<GroupDoc> _groups;
-    public ObservableCollection<GroupDoc> Groups { get=>_groups; set=>Set(ref _groups, value); }
+    private ObservableCollection<GroupDoc>? _groups;
+    public ObservableCollection<GroupDoc>? Groups { get=>_groups; set=>Set(ref _groups, value); }
 
-    private ObservableCollection<TypeDoc> _types;
-    public ObservableCollection<TypeDoc> Types { get=>_types; set=>Set(ref _types, value); }
-    public ObservableCollection<Counterparty> Counterparties { get; set; } = new ObservableCollection<Counterparty>();
+    private ObservableCollection<TypeDoc>? _types;
+    public ObservableCollection<TypeDoc>? Types { get=>_types; set=>Set(ref _types, value); }
+    public ObservableCollection<Counterparty> Counterparties { get; set; } = new ();
 
     private object? _modelSender;
     public object? ModelSender { get => _modelSender; set => Set(ref _modelSender, value); }
 
-    private Counterparty? _Counterparty;
+    private Counterparty? _counterparty;
     public Counterparty? SelectedCounterparty
 
     {
-        get => _Counterparty;
-        set => Set(ref _Counterparty, value);
+        get => _counterparty;
+        set => Set(ref _counterparty, value);
     }
     
    
-    private TypeDoc ? _selecteType;
+    private TypeDoc ? _selectType;
     public TypeDoc? SelectedType
     {
-        get => _selecteType;
-        set => Set(ref _selecteType, value);
+        get => _selectType;
+        set => Set(ref _selectType, value);
     }
 
     private GroupDoc? _selectedGroup;
@@ -82,7 +81,7 @@ public class ContractorsViewModel : ViewModel
         SelectedGroup = new GroupDoc() { Id = 0, Name = "Все" };
         Groups.Add(SelectedGroup);
         var groups = await _groupRepository.GetAllAsync();
-        groups= groups.Where(g => g.TypeApplication == "Контрагенты");
+        groups= groups!.Where(g => g.TypeApplication == "Контрагенты");
         foreach (var group in groups)
         {
             Groups.Add(group);
@@ -91,7 +90,7 @@ public class ContractorsViewModel : ViewModel
         Types = new ObservableCollection<TypeDoc>();
         Types.Add(new TypeDoc() { Id = 0, Name = "Все" });
         var types = await _typeRepository.GetAllAsync();
-        types = types.Where(t => t.TypeApplication == "Контрагенты");
+        types = types!.Where(t => t.TypeApplication == "Контрагенты");
         foreach (var type in types)
         {
             Types.Add(type);
@@ -150,7 +149,7 @@ public class ContractorsViewModel : ViewModel
         return true;
     }
     
-    private async void OnAddCommandExecuted(object p)
+    private void OnAddCommandExecuted(object p)
     {
         CounterpartyView counterpartyView = new();
         var mod= counterpartyView.DataContext as CounterpartyViewModel;
@@ -185,7 +184,7 @@ public class ContractorsViewModel : ViewModel
         return true;
     }
 
-    private async void OnEdeteCommandExecuted(object obj)
+    private void OnEdeteCommandExecuted(object obj)
     {
         CounterpartyView counterpartyView = new();
         var mod = counterpartyView.DataContext as CounterpartyViewModel;
@@ -204,7 +203,7 @@ public class ContractorsViewModel : ViewModel
     {
         try
         {
-            var resalt = MessageBox.Show($"Вы действительно хотите удалить выбранного контрагента: {SelectedCounterparty.Name} ?",
+            var resalt = MessageBox.Show($"Вы действительно хотите удалить выбранного контрагента: {SelectedCounterparty!.Name} ?",
                 "Контроль", MessageBoxButton.YesNo);
             if (resalt == MessageBoxResult.Yes)
             {

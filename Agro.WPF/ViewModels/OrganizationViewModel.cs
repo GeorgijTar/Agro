@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Views.Windows;
 using FNS.Api;
+using Agro.DAL.Entities.Organization;
 
 namespace Agro.WPF.ViewModels;
 

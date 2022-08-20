@@ -42,7 +42,7 @@ public class CounterpartyViewModel : ViewModel
     private async void LoadList()
     {
         var groups = await _groupRep.GetAllAsync();
-        groups = groups!.Where(g => g.TypeApplication == "Контрагенты");
+        groups = groups!.Where(g => g.TypeApplication == "Контрагенты").ToArray();
 
         foreach (var group in groups)
         {
@@ -50,7 +50,7 @@ public class CounterpartyViewModel : ViewModel
         }
 
         var types = await _typeRep.GetAllAsync();
-        types = types!.Where(g => g.TypeApplication == "Контрагенты");
+        types = types!.Where(g => g.TypeApplication == "Контрагенты").ToArray();
         foreach (var type in types)
         {
             Types.Add(type);

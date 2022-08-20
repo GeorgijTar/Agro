@@ -34,6 +34,26 @@
                         <MenuItem Header="Счета полученные" Command="{Binding ShowInvoicesIn}"/>
                     </MenuItem>
                 </MenuItem>
+                <MenuItem Header="Кадры">
+                    <MenuItem.Icon>
+                        <fa5:ImageAwesome Height="32" Icon="Solid_PeopleArrows" Foreground="DarkBlue"/>
+                    </MenuItem.Icon>
+                    <MenuItem Header="Персонал" Command="{Binding ShowEmployees}"/>
+                    <MenuItem Header="Физ. лица" Command="{Binding ShowPeoples}"/>
+                    <MenuItem Header="Штатное расписание" Command="{Binding ShowStaffList}"/>
+
+                </MenuItem>
+                <MenuItem Header="Весовая">
+                    <MenuItem.Icon>
+                        <fa5:ImageAwesome Height="32" Icon="Solid_Kaaba" Foreground="DarkBlue"/>
+                    </MenuItem.Icon>
+                    <MenuItem Header="Приход с поля"></MenuItem>
+                    <Separator  BorderThickness="2"/>
+                    <MenuItem Header="Отпрузка"></MenuItem>
+                    <Separator  BorderThickness="2"/>
+                    <MenuItem Header="Сортировка"></MenuItem>
+                    <MenuItem Header="Отбор семян"></MenuItem>
+                </MenuItem>
                 <MenuItem Header="Справочники">
                     <MenuItem.Icon>
                         <fa5:ImageAwesome Height="32" Icon="Solid_Book" Foreground="DarkBlue"/>
@@ -42,6 +62,19 @@
                     <MenuItem Header="Контрагенты" Command="{Binding ShowContractors}"/>
                     <MenuItem Header="Номенклатура" Command="{Binding ShowProduct}"/>
                     <MenuItem Header="План счетов" Command="{Binding ShowAccountingPlans}"/>
+                    <Separator  BorderThickness="2"/>
+                    <MenuItem Header="Агрономические справочники">
+                        <MenuItem Header="Отделения" Command="{Binding ShowDepartment}"/>
+                        <MenuItem Header="Поля" Command="{Binding ShowFields}"/>
+                        <MenuItem Header="Земельные участки" Command="{Binding ShowLandPlots}"/>
+                        <MenuItem Header="Выращиваемые культуры" Command="{Binding ShowCulture}"/>
+                    </MenuItem>
+                    <Separator  BorderThickness="2"/>
+                    <MenuItem Header="Справочники весовщика">
+                        <MenuItem Header="Водители" Command="{Binding ShowDrivers}"/>
+                        <MenuItem Header="Автотранспорт" Command="{Binding ShowTransports}"/>
+                    </MenuItem>
+                   
                 </MenuItem>
                 <MenuItem Header="Администрирование">
                     <MenuItem.Icon>

@@ -1,7 +1,11 @@
 ﻿using Agro.DAL.Entities;
+using Agro.DAL.Entities.Agronomy;
 using Agro.DAL.Entities.Classifiers;
 using Agro.DAL.Entities.DefaultData;
+using Agro.DAL.Entities.Organization;
+using Agro.DAL.Entities.Personnel;
 using Agro.DAL.Entities.RegInfoOrg;
+using Agro.DAL.Entities.Weight;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -40,6 +44,15 @@ public class AgroDb : DbContext
     public DbSet<Employee> Employee { get; set; } = null!;
     public DbSet<StaffList> StaffList { get; set; } = null!;
     public DbSet<Post> Post { get; set; } = null!;
+    public DbSet<Department> Departments { get; set; } = null!;
+    public DbSet<Field> Fields { get; set; } = null!;
+    public DbSet<Culture> Cultures { get; set; } = null!;
+    public DbSet<LandPlot> LandPlots { get; set; } = null!;
+    public DbSet<Transport> Transports { get; set; } = null!;
+    public DbSet<Driver> Drivers { get; set; } = null!;
+    public DbSet<Division> Divisions { get; set; } = null!;
+    public DbSet<StaffListPosition> StaffListPositions { get; set; } = null!;
+
 
 #endregion
     public AgroDb(DbContextOptions<AgroDb> options) : base(options) { }

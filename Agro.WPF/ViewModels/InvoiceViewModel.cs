@@ -160,7 +160,6 @@ public class InvoiceViewModel : ViewModel
 
     }
 
-
     private async void LoadStaticData()
     {
       

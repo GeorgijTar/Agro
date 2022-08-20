@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Nodes;
 using Agro.DAL.Entities;
+using Agro.DAL.Entities.Organization;
 
 namespace FNS.Api;
 public static class CheckoApi

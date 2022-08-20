@@ -23,9 +23,9 @@ public class AccountingPlansViewModel : ViewModel
 
     public ObservableCollection<AccountingPlan> Accounts { get=>_accounts; set=>Set(ref _accounts, value); }
 
-    private AccountingPlan _selectAccountingPlan;
+    private AccountingPlan? _selectAccountingPlan;
 
-    public AccountingPlan SelectAccountingPlan { get=>_selectAccountingPlan; 
+    public AccountingPlan? SelectAccountingPlan { get=>_selectAccountingPlan; 
         set=>Set( ref _selectAccountingPlan, value); }
     public AccountingPlansViewModel(IBaseRepository<AccountingPlan> repository)
     {

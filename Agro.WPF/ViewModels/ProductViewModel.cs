@@ -9,6 +9,7 @@ using Agro.DAL.Entities;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.Views.Windows;
 
 namespace Agro.WPF.ViewModels;
 
@@ -85,8 +86,6 @@ public class ProductViewModel : ViewModel
             {
                 VisibilityNds=Visibility.Hidden;
             }
-
-            
         }
     }
 
@@ -140,6 +139,34 @@ public class ProductViewModel : ViewModel
                    Product.Group != null! && Product.Unit.Name != null!;
         }
       
+    }
+
+    private ICommand? _closeCommand;
+
+    public ICommand CloseCommand => _closeCommand
+        ??= new RelayCommand(OnCloseExecuted);
+
+    private void OnCloseExecuted(object obj)
+    {
+        var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+        if (window != null!)
+            window.Close();
+    }
+
+
+
+    private ICommand? _showProductCommand;
+
+    public ICommand ShowProductCommand => _showProductCommand
+        ??= new RelayCommand(OnShowProductExecuted);
+
+    private void OnShowProductExecuted(object obj)
+    {
+        ProductsView view = new ProductsView();
+        var model = view.DataContext as ProductsViewModel;
+        model!.SenderModel = this;
+        view.DataContext = model;
+        view.ShowDialog();
     }
 
     #endregion

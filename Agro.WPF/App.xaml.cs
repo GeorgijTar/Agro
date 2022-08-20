@@ -1,5 +1,9 @@
 ﻿using System;
 using Agro.DAL.Entities;
+using Agro.DAL.Entities.Agronomy;
+using Agro.DAL.Entities.Organization;
+using Agro.DAL.Entities.Personnel;
+using Agro.DAL.Entities.Weight;
 using Agro.DAL.MySql;
 using Agro.DAL.Sql;
 using Agro.DAL.SqLite;
@@ -8,6 +12,9 @@ using Agro.Interfaces.Base.Repositories;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.Services.Repositories;
 using Agro.WPF.ViewModels;
+using Agro.WPF.ViewModels.Agronomy;
+using Agro.WPF.ViewModels.Personnel;
+using Agro.WPF.ViewModels.Weight;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -59,6 +66,32 @@ namespace Agro.WPF
             services.AddTransient<OrganizationViewModel>();
             services.AddTransient<ProductInvoiceViewModel>();
             services.AddTransient<ReestrInvoiceViewModel>();
+            services.AddScoped<DepartmentsViewModel>();
+            services.AddTransient<DepartmentViewModel>();
+            services.AddScoped<CulturesViewModel>();
+            services.AddTransient<CultureViewModel>();
+            services.AddScoped<LandPlotsViewModel>();
+            services.AddTransient<LandPlotViewModel>();
+            services.AddScoped<FieldsViewModel>();
+            services.AddTransient<FieldViewModel>();
+            services.AddScoped<TransportsViewModel>();
+            services.AddTransient<TransportViewModel>();
+            services.AddScoped<DriversViewModel>();
+            services.AddTransient<DriverViewModel>();
+            services.AddTransient<PeopleViewModel>();
+            services.AddScoped<PeoplsViewModel>();
+            services.AddTransient<DocumentViewModel>();
+            services.AddTransient<EmployeeViewModel>();
+            services.AddScoped<EmployeesViewModel>();
+            services.AddTransient<PostViewModel>();
+            services.AddScoped<PostsViewModel>();
+            services.AddScoped<StaffListsViewModel>();
+            services.AddTransient<StaffListViewModel>();
+            services.AddTransient<StaffListPositionViewModel>();
+            services.AddScoped<DivisionsViewModel>();
+            services.AddTransient<DivisionViewModel>();
+            services.AddTransient<StafListSprViewModel>();
+
 
             //Регистрация репозиториев
             services.AddScoped(typeof(IBaseRepository<>), typeof(DbRepository<>));
@@ -66,6 +99,14 @@ namespace Agro.WPF
             services.AddTransient<IBaseRepository<Product>, ProductRepository>();
             services.AddTransient<IBaseRepository<Organization>, OrganizationRepository>();
             services.AddTransient<IBaseRepository<Contract>, ContractRepository>();
+            services.AddTransient<IBaseRepository<Department>, DepartmentRepository>();
+            services.AddTransient<IBaseRepository<Culture>, CultureRepository>();
+            services.AddTransient<IBaseRepository<Field>, FieldRepository>();
+            services.AddTransient<IBaseRepository<Driver>, DriverRepository>();
+            services.AddTransient<IBaseRepository<People>, PeopleRepository>();
+            services.AddTransient<IBaseRepository<Employee>, EmployeeRepository>();
+            services.AddTransient<IBaseRepository<StaffListPosition>, StaffListPositionRepository>();
+            
 
             // Регистрация мапера
             //services.AddAutoMapper(

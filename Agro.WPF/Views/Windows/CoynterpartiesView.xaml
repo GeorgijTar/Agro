@@ -8,6 +8,7 @@
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d" 
         Height="650" Width="1100" 
+        Title="Реестр контрагентов"
         DataContext="{Binding ContractorsModel, Source={StaticResource Locator}}"
         x:Name="CoynterpartiesWindow">
     <Window.Resources>
@@ -35,7 +36,6 @@
             <Setter Property="Margin" Value="4 4"/>
         </Style>
     </Window.Resources>
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="400*"/>

@@ -138,11 +138,4 @@ public class BankDetailsViewModel : ViewModel
     #endregion
 
     #endregion
-
-    #region Event
-
-    public delegate void BankDetailsHandler(BankDetails bankDetails);
-    public event BankDetailsHandler? BankDetailsEvent;
-
-    #endregion
 }

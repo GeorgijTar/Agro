@@ -1,0 +1,163 @@
+﻿<Window x:Class="Agro.WPF.Views.Windows.Personnel.StaffListView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Agro.WPF.Views.Windows.Personnel"
+        xmlns:fa5="http://schemas.fontawesome.com/icons/"
+        mc:Ignorable="d"
+   Title="{Binding Title}" Width="850" Height="600"
+        DataContext="{Binding StaffListModel, Source={StaticResource Locator}}"
+        WindowStartupLocation="CenterOwner"
+        x:Name="MyWindow" WindowStyle="ToolWindow">
+    <Window.Resources>
+        <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
+            <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
+                <ContentPresenter RecognizesAccessKey="True"></ContentPresenter>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Background" Value="DarkGreen"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter  Property="Background" Value="Azure" />
+                    <Setter  Property="BorderBrush" Value="DarkBlue" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style TargetType="{x:Type TextBox}"
+               BasedOn="{StaticResource TextBoxStyle}">
+            <Setter Property="Margin" Value="4 4"/>
+        </Style>
+    </Window.Resources>
+    <Grid Background="AliceBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="95*"/>
+            <RowDefinition Height="12*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1" HorizontalAlignment="Right">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" BorderBrush="DarkBlue" Width="108"
+                    Template="{StaticResource ButtonTemplate}"  Margin="0,2,3,15"
+                    Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=MyWindow}" >
+                <StackPanel Orientation="Horizontal">
+                    <fa5:ImageAwesome Height="18" Icon="Solid_Save"
+                                      Margin="8,5"
+                                      Foreground="DarkBlue" />
+                    <TextBlock Text="Сохранить" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="1" BorderBrush="DarkBlue" Width="108"
+                    Template="{StaticResource ButtonTemplate}" Margin="3,2,15,15"
+                    Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=MyWindow}">
+                <StackPanel Orientation="Horizontal">
+                    <fa5:ImageAwesome Height="18" Icon="Solid_DoorOpen"
+                                      Margin="8,5"
+                                      Foreground="DarkBlue" />
+                    <TextBlock Text="Отмена" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+        <Grid Grid.Row="0" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="55"/>
+                <RowDefinition Height="30*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Номер"  TextWrapping="Wrap"
+                       VerticalAlignment="Center" Margin="10,0" HorizontalAlignment="Right"/>
+            <TextBox Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" 
+                     Text="{Binding StaffList.Number, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="Дата:"  TextWrapping="Wrap"
+                       VerticalAlignment="Center" Margin="10,0" HorizontalAlignment="Right"/>
+            <DatePicker Grid.Row="0" Grid.Column="3" SelectedDate="{Binding StaffList.Date}" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="0" Grid.Column="4" Text="Дата начала действия:"  TextWrapping="Wrap"
+                       VerticalAlignment="Center" Margin="10,0" HorizontalAlignment="Right"/>
+            <DatePicker Grid.Row="0" Grid.Column="5" SelectedDate="{Binding StaffList.StartDate}"
+                        VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="0" Grid.Column="6" Text="Дата окончания действия:"  TextWrapping="Wrap"
+                       VerticalAlignment="Center" Margin="10,0" HorizontalAlignment="Right"/>
+            <DatePicker Grid.Row="0" Grid.Column="7" SelectedDate="{Binding StaffList.EndDate}" 
+                        VerticalAlignment="Center"/>
+            <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Header="Приказ об утверждении штатного расписания">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Номер:" VerticalAlignment="Center" Margin="5,0"/>
+                    <TextBox Text="{Binding StaffList.OrderNamber}" Width="80" VerticalAlignment="Center"/>
+                    <TextBlock Text="Дата:" VerticalAlignment="Center" Margin="5,0"/>
+                    <DatePicker SelectedDate="{Binding StaffList.OrderDate}" VerticalAlignment="Center"/>
+                </StackPanel>
+            </GroupBox>
+            <TextBlock Grid.Row="1" Grid.Column="4"  Text="Примечание:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <TextBox Grid.Row="1" Grid.Column="5" Grid.ColumnSpan="3" TextWrapping="Wrap"/>
+            <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="8" Margin="5" 
+                      Header="Позиции штатного расписания" BorderThickness="2">
+                <Grid>
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <ToolBar Grid.ColumnSpan="3">
+                        <Button BorderBrush="DarkBlue" Width="108" Command="{Binding AddPositionCommand}"
+                                Template="{StaticResource ButtonTemplate}" Margin="2,0">
+                            <StackPanel Orientation="Horizontal">
+                                <fa5:ImageAwesome Height="12" Icon="Solid_PlusCircle"
+                                                  Margin="8,5"
+                                                  Foreground="DarkBlue" />
+                                <TextBlock Text="Создать" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            </StackPanel>
+                        </Button>
+                        <Button BorderBrush="DarkGreen" Width="108"
+                                Template="{StaticResource ButtonTemplate}" Margin="2,0"
+                                Command="{Binding EditPositionCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa5:ImageAwesome Height="12" Icon="Solid_Edit"
+                                                  Margin="2,5"
+                                                  Foreground="DarkGreen"/>
+                                <TextBlock Text="Редактировать" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            </StackPanel>
+                        </Button>
+                        <Button BorderBrush="DarkRed" Width="108"
+                                Template="{StaticResource ButtonTemplate}" Margin="2,0"
+                                Command="{Binding DeletePositionCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa5:ImageAwesome Height="12" Icon="Solid_TrashAlt"
+                                                  Margin="8,5"
+                                                  Foreground="DarkRed"/>
+                                <TextBlock Text="Удалить" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            </StackPanel>
+                        </Button>
+                    </ToolBar>
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding StaffList.Positions, 
+                        UpdateSourceTrigger=PropertyChanged}" CanUserAddRows="False"
+                              SelectedItem="{Binding Position}" AutoGenerateColumns="False" Grid.ColumnSpan="3">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Подразделение" Width="120*" Binding="{Binding Division.Name}"/>
+                            <DataGridTextColumn Header="Должность" Width="120*" Binding="{Binding Post.Name}"/>
+                            <DataGridTextColumn Header="Кол. ставок" Width="35*" Binding="{Binding Quantity}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Window>

@@ -32,7 +32,10 @@ public static class GetDefaultData
         new() { Id = 9, Name = "Материальные запасы", TypeApplication = "Товары" },
         new() { Id = 10, Name = "Выставленные", TypeApplication = "Счета" },
         new() { Id = 11, Name = "Полученные", TypeApplication = "Счета" },
-        new() { Id = 12, Name = "Удостоверение личности", TypeApplication = "УЛ" },
+        new() { Id = 12, Name = "Удостоверение личности", TypeApplication = "Документ" },
+        new() { Id = 13, Name = "Собственность", TypeApplication = "ЗУ" },
+        new() { Id = 14, Name = "Аренда", TypeApplication = "ЗУ" },
+        new() { Id = 15, Name = "Прочие документы", TypeApplication = "Документ" },
 
     };
 
@@ -51,12 +54,13 @@ public static class GetDefaultData
         new() { Id = 11, Name = "Материалы", TypeApplication = "Материальные запасы" },
         new() { Id = 12, Name = "Малоценные товары, инвентарь", TypeApplication = "Материальные запасы" },
         new() { Id = 13, Name = "ГСМ", TypeApplication = "Материальные запасы" },
-        new() { Id = 14, Name = "Паспорт гражданина РФ", TypeApplication = "УЛ" },
-        new() { Id = 15, Name = "Загранпаспорт гражданина РФ", TypeApplication = "УЛ" },
-        new() { Id = 16, Name = "Свидетельство о рождении", TypeApplication = "УЛ" },
-        new() { Id = 17, Name = "Временное удостоверение личности", TypeApplication = "УЛ" },
-        new() { Id = 18, Name = "Удостоверение личности военнослужащего РФ (военный билет, паспорт моряка)", TypeApplication = "УЛ" },
-        new() { Id = 19, Name = "Вид на жительство", TypeApplication = "УЛ" },
+        new() { Id = 14, Name = "Паспорт гражданина РФ", TypeApplication = "Удостоверение личности" },
+        new() { Id = 15, Name = "Загранпаспорт гражданина РФ", TypeApplication = "Удостоверение личности" },
+        new() { Id = 16, Name = "Свидетельство о рождении", TypeApplication = "Удостоверение личности" },
+        new() { Id = 17, Name = "Временное удостоверение личности", TypeApplication = "Удостоверение личности" },
+        new() { Id = 18, Name = "Удостоверение личности военнослужащего РФ (военный билет, паспорт моряка)", TypeApplication = "Удостоверение личности" },
+        new() { Id = 19, Name = "Вид на жительство", TypeApplication = "Удостоверение личности" },
+        new() { Id = 20, Name = "Прочий документ", TypeApplication = "Прочие документы" },
     };
 
     public static UnitOkei[] DefaultUnitOkeis() => new UnitOkei[]

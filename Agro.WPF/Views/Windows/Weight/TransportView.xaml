@@ -1,0 +1,89 @@
+﻿<Window x:Class="Agro.WPF.Views.Windows.Weight.TransportView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Agro.WPF.Views.Windows.Weight"
+        xmlns:fa5="http://schemas.fontawesome.com/icons/"
+        mc:Ignorable="d"
+        Title="{Binding Title}" Height="150" Width="500"
+        DataContext="{Binding TransportModel, Source={StaticResource Locator}}"
+        x:Name="TrWindow">
+    <Window.Resources>
+        <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
+            <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
+                <ContentPresenter RecognizesAccessKey="True"></ContentPresenter>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Background" Value="DarkGreen"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter  Property="Background" Value="Azure" />
+                    <Setter  Property="BorderBrush" Value="DarkBlue" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style TargetType="{x:Type TextBox}"
+               BasedOn="{StaticResource TextBoxStyle}">
+            <Setter Property="Margin" Value="4 4"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Right">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" BorderBrush="DarkBlue" Width="108"
+                    Template="{StaticResource ButtonTemplate}"  Margin="0,2,3,15"
+                    Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=TrWindow}" >
+                <StackPanel Orientation="Horizontal">
+                    <fa5:ImageAwesome Height="18" Icon="Solid_Save"
+                                      Margin="8,5"
+                                      Foreground="DarkBlue" />
+                    <TextBlock Text="Сохранить" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="1" BorderBrush="DarkBlue" Width="108"
+                    Template="{StaticResource ButtonTemplate}" Margin="3,2,15,15"
+                    Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=TrWindow}">
+                <StackPanel Orientation="Horizontal">
+                    <fa5:ImageAwesome Height="18" Icon="Solid_DoorOpen"
+                                      Margin="8,5"
+                                      Foreground="DarkBlue" />
+                    <TextBlock Text="Отмена" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Марка автомобиля:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="0" Grid.Column="1"  VerticalAlignment="Center"
+                 Text="{Binding Transport.CarBrand, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Row="0" Grid.Column="2" Text="Рег. №:" 
+                   TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" Margin="5,0"
+                 Text="{Binding Transport.RegNumber, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Номер прицепа:" 
+                   TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="5,0"
+                 Text="{Binding Transport.TrailerNumber, UpdateSourceTrigger=PropertyChanged}"/>
+        
+    </Grid>
+</Window>
