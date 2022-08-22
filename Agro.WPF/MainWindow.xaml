@@ -73,6 +73,7 @@
                     <MenuItem Header="Справочники весовщика">
                         <MenuItem Header="Водители" Command="{Binding ShowDrivers}"/>
                         <MenuItem Header="Автотранспорт" Command="{Binding ShowTransports}"/>
+                        <MenuItem Header="Весовые" Command="{Binding ShowWeights}"/>
                     </MenuItem>
                    
                 </MenuItem>

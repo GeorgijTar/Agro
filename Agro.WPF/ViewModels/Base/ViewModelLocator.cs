@@ -85,4 +85,12 @@ public class ViewModelLocator
 
     public StafListSprViewModel StafListSprModel => App.Services.GetRequiredService<StafListSprViewModel>();
 
+    public WeightViewModel WeightModel => App.Services.GetRequiredService<WeightViewModel>();
+
+    public WeightsViewModel WeightsModel => App.Services.GetRequiredService<WeightsViewModel>();
+
+    public ComingFieldsViewModel ComingFieldsModel => App.Services.GetRequiredService<ComingFieldsViewModel>();
+
+    public ComingFieldViewModel ComingFieldModel => App.Services.GetRequiredService<ComingFieldViewModel>();
+
 }

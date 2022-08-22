@@ -1,0 +1,95 @@
+﻿<Window x:Class="Agro.WPF.Views.Windows.Weight.WeightView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Agro.WPF.Views.Windows.Weight"
+        xmlns:fa5="http://schemas.fontawesome.com/icons/"
+        mc:Ignorable="d"
+          Title="{Binding Title}" Height="170" Width="700"
+        DataContext="{Binding WeightModel, Source={StaticResource Locator}}"
+        x:Name="TrWindow">
+    <Window.Resources>
+        <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
+            <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
+                <ContentPresenter RecognizesAccessKey="True"></ContentPresenter>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Background" Value="DarkGreen"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter  Property="Background" Value="Azure" />
+                    <Setter  Property="BorderBrush" Value="DarkBlue" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style TargetType="{x:Type TextBox}"
+               BasedOn="{StaticResource TextBoxStyle}">
+            <Setter Property="Margin" Value="4 4"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="45"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Right" Margin="0,5,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" BorderBrush="DarkBlue" Width="108"
+                    Template="{StaticResource ButtonTemplate}"  Margin="0,2,3,5"
+                    Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=TrWindow}" >
+                <StackPanel Orientation="Horizontal">
+                    <fa5:ImageAwesome Height="18" Icon="Solid_Save"
+                                      Margin="8,5"
+                                      Foreground="DarkBlue" />
+                    <TextBlock Text="Сохранить" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="1" BorderBrush="DarkBlue" Width="108"
+                    Template="{StaticResource ButtonTemplate}" Margin="3,2,15,5"
+                    Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=TrWindow}">
+                <StackPanel Orientation="Horizontal">
+                    <fa5:ImageAwesome Height="18" Icon="Solid_DoorOpen"
+                                      Margin="8,5"
+                                      Foreground="DarkBlue" />
+                    <TextBlock Text="Отмена" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Наименование:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3"  VerticalAlignment="Center"
+                 Text="{Binding Weight.Name, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Терминал:" 
+                   TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" Margin="5,0"
+                 Text="{Binding Weight.Terminal, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Весовщик:" 
+                   TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="5,0"
+                 Text="{Binding Weight.Weigher.People.Surname, UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" BorderBrush="DarkBlue"  Width="23" Margin="2,0"
+                Template="{StaticResource ButtonTemplate}"
+                Command="{Binding ShowDivisionCommand}">
+            <fa5:ImageAwesome Icon="Solid_Book" Width="18" Height="18" Foreground="DarkBlue"/>
+        </Button>
+
+    </Grid>
+</Window>

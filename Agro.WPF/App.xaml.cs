@@ -91,6 +91,10 @@ namespace Agro.WPF
             services.AddScoped<DivisionsViewModel>();
             services.AddTransient<DivisionViewModel>();
             services.AddTransient<StafListSprViewModel>();
+            services.AddScoped<WeightsViewModel>();
+            services.AddTransient<WeightViewModel>();
+            services.AddScoped<ComingFieldsViewModel>();
+            services.AddTransient<ComingFieldViewModel>();
 
 
             //Регистрация репозиториев

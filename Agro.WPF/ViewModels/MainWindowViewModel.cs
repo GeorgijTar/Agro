@@ -283,6 +283,21 @@ public class MainWindowViewModel : ViewModel
     }
 
     #endregion
+    
+    #region ShowWeights
+
+    private ICommand? _showWeights;
+
+    public ICommand ShowWeights => _showWeights
+        ??= new RelayCommand(OnShowWeightsCommandExecuted);
+
+    private void OnShowWeightsCommandExecuted(object obj)
+    {
+        WeightsView view = new();
+        view.Show();
+    }
+
+    #endregion
 
     #endregion
 
