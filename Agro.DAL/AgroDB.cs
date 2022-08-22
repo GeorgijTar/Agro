@@ -53,6 +53,8 @@ public class AgroDb : DbContext
     public DbSet<Division> Divisions { get; set; } = null!;
     public DbSet<StaffListPosition> StaffListPositions { get; set; } = null!;
 
+    public DbSet<Weight> Weights { get; set; } = null!;
+
 
 #endregion
     public AgroDb(DbContextOptions<AgroDb> options) : base(options) { }

@@ -23,8 +23,8 @@ public class ComingField : Entity
     public DateTime Date { get => _date; set => Set(ref _date, value); }
 
     /// <summary>Весовая</summary>
-    private string _weight = null!;
-    public string Weight { get => _weight; set => Set(ref _weight, value); }
+    private Weight _weight = null!;
+    public Weight Weight { get => _weight; set => Set(ref _weight, value); }
 
     /// <summary>Место хранения</summary>
     private StorageLocation _storageLocation = null!;
