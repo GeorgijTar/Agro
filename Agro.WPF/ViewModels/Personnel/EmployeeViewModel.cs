@@ -5,35 +5,58 @@ using Agro.WPF.Views.Windows.Personnel;
 using System.Windows;
 using System;
 using System.Windows.Input;
+using Agro.DAL.Entities.Personnel;
+using Agro.Services.Repositories;
+using System.Linq;
+using Agro.Interfaces.Base.Repositories.Base;
 
 namespace Agro.WPF.ViewModels.Personnel;
 public class EmployeeViewModel : ViewModel
 {
+    private readonly IBaseRepository<Employee> _employeeRepository;
+    private readonly IBaseRepository<Status> _statusRepository;
     private string _title = null!;
     public string Title { get => _title; set => Set(ref _title, value); }
 
-    
-    private Employee _employee = null!;
-    public Employee Employee { get => _employee; set => Set(ref _employee, value); } 
 
-    public object SenderModel { get; set; }=null!;
+    private Employee _employee = new();
+    public Employee Employee { get => _employee; set => Set(ref _employee, value); }
+
+    public object SenderModel { get; set; } = null!;
+
+    public EmployeeViewModel(IBaseRepository<Employee> employeeRepository, IBaseRepository<Status> statusRepository)
+    {
+        _employeeRepository = employeeRepository;
+        _statusRepository = statusRepository;
+    }
 
     #region Commands
 
-    private ICommand? _addCommand;
+    private ICommand? _saveCommand;
 
-    public ICommand AddCommand => _addCommand
-        ??= new RelayCommand(OnAddCommandExecuted);
+    public ICommand SaveCommand => _saveCommand
+        ??= new RelayCommand(OnSaveCommandExecuted, CanSaveCommandExecuted);
 
-    private void OnAddCommandExecuted(object obj)
+    private bool CanSaveCommandExecuted(object arg)
     {
-        EmployeeView view = new();
-        var mod = view.DataContext as EmployeeViewModel;
-        mod!.Title = "Добавление нового сотрудника";
-        mod.Employee = new();
-        mod.SenderModel = this;
-        view.DataContext = mod;
-        view.Show();
+        return Employee.People != null! && Employee.Division != null! && Employee.Post != null!;
+    }
+
+    private async void OnSaveCommandExecuted(object obj)
+    {
+        Employee.Status = await _statusRepository.GetByIdAsync(5);
+        var eml = await _employeeRepository.SaveAsync(Employee);
+        if (SenderModel is EmployeesViewModel employeesViewModel)
+        {
+            var pld = employeesViewModel.Employees.FirstOrDefault(x => x.Id == eml.Id);
+            if (pld! == null!)
+            {
+                employeesViewModel.Employees.Add(eml);
+            }
+        }
+        var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+        if (window != null!)
+            window.Close();
     }
 
 
@@ -58,8 +81,8 @@ public class EmployeeViewModel : ViewModel
     private void OnClearPostCommandExecuted(object obj)
     {
         Employee.Post = null!;
-        Employee.Division=null!;
-        
+        Employee.Division = null!;
+
     }
 
 
@@ -75,7 +98,7 @@ public class EmployeeViewModel : ViewModel
             window.Close();
     }
 
-    
+
 
     private ICommand? _showPeoplesCommand;
 
@@ -102,8 +125,8 @@ public class EmployeeViewModel : ViewModel
         var view = new StafListSprView();
         var mod = view.DataContext as StafListSprViewModel;
         mod!.Title = "Выбирите должность";
-        mod.SenderModel=this;
-        view.DataContext=mod;
+        mod.SenderModel = this;
+        view.DataContext = mod;
         view.ShowDialog();
     }
 

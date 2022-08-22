@@ -141,8 +141,8 @@
                                 <DataGridTextColumn Width="80*" Header="Фамилия" Binding="{Binding People.Surname}"/>
                                 <DataGridTextColumn Width="80*" Header="Имя" Binding="{Binding People.Name}"/>
                                 <DataGridTextColumn Width="80*" Header="Отчество" Binding="{Binding People.Patronymic}"/>
-                                <DataGridTextColumn Width="90*" Header="Подразделение" Binding="{Binding Division}"/>
-                                <DataGridTextColumn Width="180*" Header="Должность" Binding="{Binding Post}"/>
+                                <DataGridTextColumn Width="90*" Header="Подразделение" Binding="{Binding Division.Name}"/>
+                                <DataGridTextColumn Width="180*" Header="Должность" Binding="{Binding Post.Name}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </GroupBox>

@@ -18,7 +18,7 @@ public class Post : Entity
 
     /// <summary>Краткое наименование должности</summary>
     private string _shortName = null!;
-    public string ShortName { get => _shortName; set => Set(ref _shortName, value); } 
+    public string ShortName { get => _shortName; set => Set(ref _shortName, value); }
 
-
+    public override string ToString() => Name;
 }

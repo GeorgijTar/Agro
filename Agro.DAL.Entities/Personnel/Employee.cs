@@ -10,7 +10,7 @@ public class Employee : Entity
 {
     /// <summary>Статус</summary>
     private Status? _status = null!;
-    public Status Status { get => _status; set => Set(ref _status, value); }
+    public Status? Status { get => _status; set => Set(ref _status, value); }
 
     /// <summary>Табельный номер</summary>
     private string _tabNumber = null!;

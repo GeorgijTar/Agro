@@ -22,6 +22,7 @@ public class EmployeeRepository : IBaseRepository<Employee>
            .Include(e=>e.People)
            .Include(e=>e.Division)
            .Include(e=>e.Status)
+           .Include(e=>e.Post)
            .ToArrayAsync(cancel).ConfigureAwait(false);
     }
 
@@ -31,6 +32,7 @@ public class EmployeeRepository : IBaseRepository<Employee>
             .Include(e => e.People)
             .Include(e => e.Division)
             .Include(e => e.Status)
+            .Include(e => e.Post)
             .FirstOrDefaultAsync(e=>e.Id==id, cancel).ConfigureAwait(false);
     }
 
