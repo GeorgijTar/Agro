@@ -9,7 +9,7 @@
         mc:Ignorable="d"
    Height="450" Width="1100" Title="{Binding Title}"
         DataContext="{Binding EmployeesModel, Source={StaticResource Locator}}"
-        x:Name="PeoplsWindow">
+        x:Name="MyWindow">
     <Window.Resources>
         <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
             <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
@@ -131,7 +131,7 @@
                             <b:Interaction.Triggers>
                                 <b:EventTrigger EventName="MouseDoubleClick">
                                     <b:InvokeCommandAction Command="{Binding SelectRowCommand}" 
-                                                           CommandParameter="{Binding ElementName=PeoplsWindow}"/>
+                                                           CommandParameter="{Binding ElementName=MyWindow}"/>
                                 </b:EventTrigger>
                             </b:Interaction.Triggers>
                             <DataGrid.Columns>

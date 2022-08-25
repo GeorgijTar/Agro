@@ -108,7 +108,7 @@
             </Button>
             <Button Grid.Column="1" BorderBrush="DarkBlue" Width="108"
                     Template="{StaticResource ButtonTemplate}" Margin="3,2,15,15"
-                    Command="{Binding CloseCommand}">
+                    Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=MyWindow}">
                 <StackPanel Orientation="Horizontal">
                     <fa5:ImageAwesome Height="18" Icon="Solid_DoorOpen"
                                       Margin="8,5"

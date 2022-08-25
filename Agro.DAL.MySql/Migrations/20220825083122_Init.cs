@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Agro.DAL.MySql.Migrations
 {
-    public partial class Init1 : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -327,13 +327,93 @@ namespace Agro.DAL.MySql.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Departments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StatusId = table.Column<int>(type: "int", nullable: true),
+                    AbbreviatedName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Departments_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Drivers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StatusId = table.Column<int>(type: "int", nullable: true),
+                    Surname = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Patronymic = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Drivers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Drivers_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "People",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StatusId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Patronymic = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Surname = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    BirthDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    Inn = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Snils = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_People", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_People_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Post",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    StatusId = table.Column<int>(type: "int", nullable: false),
+                    StatusId = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ShortName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -343,8 +423,7 @@ namespace Agro.DAL.MySql.Migrations
                         name: "FK_Post_Statuses_StatusId",
                         column: x => x.StatusId,
                         principalTable: "Statuses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -371,6 +450,83 @@ namespace Agro.DAL.MySql.Migrations
                         principalTable: "Statuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "StaffList",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StatusId = table.Column<int>(type: "int", nullable: true),
+                    Number = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    OrderNamber = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OrderDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Note = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StaffList", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StaffList_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "StorageLocations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StatusId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TypeApplication = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StorageLocations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StorageLocations_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Transports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StatusId = table.Column<int>(type: "int", nullable: true),
+                    CarBrand = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RegNumber = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TrailerNumber = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transports", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Transports_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -427,35 +583,31 @@ namespace Agro.DAL.MySql.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Documents",
+                name: "LandPlots",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     StatusId = table.Column<int>(type: "int", nullable: false),
-                    TypeDocId = table.Column<int>(type: "int", nullable: false),
-                    Series = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Number = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DateIssue = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Issuing = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CodeIssuing = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    Area = table.Column<double>(type: "double", nullable: false),
+                    Cost = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    BalanceValue = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    TypeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Documents", x => x.Id);
+                    table.PrimaryKey("PK_LandPlots", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Documents_Statuses_StatusId",
+                        name: "FK_LandPlots_Statuses_StatusId",
                         column: x => x.StatusId,
                         principalTable: "Statuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Documents_Types_TypeDocId",
-                        column: x => x.TypeDocId,
+                        name: "FK_LandPlots_Types_TypeId",
+                        column: x => x.TypeId,
                         principalTable: "Types",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -518,216 +670,167 @@ namespace Agro.DAL.MySql.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "StaffList",
+                name: "Fields",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    StatusId = table.Column<int>(type: "int", nullable: false),
+                    StatusId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DepartmentId = table.Column<int>(type: "int", nullable: false),
+                    Areal = table.Column<double>(type: "double", nullable: false),
+                    ParentFieldId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Fields", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Fields_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Fields_Fields_ParentFieldId",
+                        column: x => x.ParentFieldId,
+                        principalTable: "Fields",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Fields_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Documents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StatusId = table.Column<int>(type: "int", nullable: true),
+                    TypeDocId = table.Column<int>(type: "int", nullable: false),
+                    GroupId = table.Column<int>(type: "int", nullable: false),
+                    NameDocument = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Series = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Number = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<double>(type: "double", nullable: false)
+                    DateIssue = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Issuing = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CodeIssuing = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PeopleId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StaffList", x => x.Id);
+                    table.PrimaryKey("PK_Documents", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StaffList_Post_PostId",
-                        column: x => x.PostId,
-                        principalTable: "Post",
+                        name: "FK_Documents_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StaffList_Statuses_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "Statuses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "People",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    StatusId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Patronymic = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Surname = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    BirthDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    Inn = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Snils = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IdentityDocumentId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_People", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_People_Documents_IdentityDocumentId",
-                        column: x => x.IdentityDocumentId,
-                        principalTable: "Documents",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_People_Statuses_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "Statuses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Employee",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    StatusId = table.Column<int>(type: "int", nullable: false),
-                    TabNumber = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PeopleId = table.Column<int>(type: "int", nullable: false),
-                    PostId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Employee", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Employee_People_PeopleId",
+                        name: "FK_Documents_People_PeopleId",
                         column: x => x.PeopleId,
                         principalTable: "People",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Employee_Post_PostId",
-                        column: x => x.PostId,
-                        principalTable: "Post",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Employee_Statuses_StatusId",
+                        name: "FK_Documents_Statuses_StatusId",
                         column: x => x.StatusId,
                         principalTable: "Statuses",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Documents_Types_TypeDocId",
+                        column: x => x.TypeDocId,
+                        principalTable: "Types",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Organizations",
+                name: "DriverTransport",
+                columns: table => new
+                {
+                    DriversId = table.Column<int>(type: "int", nullable: false),
+                    TransportsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DriverTransport", x => new { x.DriversId, x.TransportsId });
+                    table.ForeignKey(
+                        name: "FK_DriverTransport_Drivers_DriversId",
+                        column: x => x.DriversId,
+                        principalTable: "Drivers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DriverTransport_Transports_TransportsId",
+                        column: x => x.TransportsId,
+                        principalTable: "Transports",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Cultures",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    AbbreviatedName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    StatusId = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Inn = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Kpp = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Ogrn = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Okpo = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    OkvedId = table.Column<int>(type: "int", nullable: false),
-                    OkopfId = table.Column<int>(type: "int", nullable: true),
-                    OkfsId = table.Column<int>(type: "int", nullable: true),
-                    OkogyId = table.Column<int>(type: "int", nullable: true),
-                    OkatoId = table.Column<int>(type: "int", nullable: true),
-                    OktmoId = table.Column<int>(type: "int", nullable: true),
-                    RegFnsId = table.Column<int>(type: "int", nullable: true),
-                    RegPfrId = table.Column<int>(type: "int", nullable: true),
-                    RegFssId = table.Column<int>(type: "int", nullable: true),
-                    AddressUrId = table.Column<int>(type: "int", nullable: true),
-                    DirectorId = table.Column<int>(type: "int", nullable: true),
-                    GeneralAccountantId = table.Column<int>(type: "int", nullable: true),
-                    CashierId = table.Column<int>(type: "int", nullable: true),
-                    HrId = table.Column<int>(type: "int", nullable: true)
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    YearHarvest = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Organizations", x => x.Id);
+                    table.PrimaryKey("PK_Cultures", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Organizations_Addresses_AddressUrId",
-                        column: x => x.AddressUrId,
-                        principalTable: "Addresses",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Organizations_Employee_CashierId",
-                        column: x => x.CashierId,
-                        principalTable: "Employee",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Organizations_Employee_DirectorId",
-                        column: x => x.DirectorId,
-                        principalTable: "Employee",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Organizations_Employee_GeneralAccountantId",
-                        column: x => x.GeneralAccountantId,
-                        principalTable: "Employee",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Organizations_Employee_HrId",
-                        column: x => x.HrId,
-                        principalTable: "Employee",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Organizations_Okato_OkatoId",
-                        column: x => x.OkatoId,
-                        principalTable: "Okato",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Organizations_Okfs_OkfsId",
-                        column: x => x.OkfsId,
-                        principalTable: "Okfs",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Organizations_Okogy_OkogyId",
-                        column: x => x.OkogyId,
-                        principalTable: "Okogy",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Organizations_Okopf_OkopfId",
-                        column: x => x.OkopfId,
-                        principalTable: "Okopf",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Organizations_Oktmo_OktmoId",
-                        column: x => x.OktmoId,
-                        principalTable: "Oktmo",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Organizations_Okveds_OkvedId",
-                        column: x => x.OkvedId,
-                        principalTable: "Okveds",
+                        name: "FK_Cultures_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Organizations_RegFns_RegFnsId",
-                        column: x => x.RegFnsId,
-                        principalTable: "RegFns",
+                        name: "FK_Cultures_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
                         principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "FieldLandPlot",
+                columns: table => new
+                {
+                    FieldsId = table.Column<int>(type: "int", nullable: false),
+                    LandPlotsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FieldLandPlot", x => new { x.FieldsId, x.LandPlotsId });
                     table.ForeignKey(
-                        name: "FK_Organizations_RegFss_RegFssId",
-                        column: x => x.RegFssId,
-                        principalTable: "RegFss",
-                        principalColumn: "Id");
+                        name: "FK_FieldLandPlot_Fields_FieldsId",
+                        column: x => x.FieldsId,
+                        principalTable: "Fields",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Organizations_RegPfr_RegPfrId",
-                        column: x => x.RegPfrId,
-                        principalTable: "RegPfr",
-                        principalColumn: "Id");
+                        name: "FK_FieldLandPlot_LandPlots_LandPlotsId",
+                        column: x => x.LandPlotsId,
+                        principalTable: "LandPlots",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -763,11 +866,6 @@ namespace Agro.DAL.MySql.Migrations
                         name: "FK_BankDetails_Counterparties_CounterpartyId",
                         column: x => x.CounterpartyId,
                         principalTable: "Counterparties",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_BankDetails_Organizations_OrganizationId",
-                        column: x => x.OrganizationId,
-                        principalTable: "Organizations",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_BankDetails_Statuses_StatusId",
@@ -1053,6 +1151,342 @@ namespace Agro.DAL.MySql.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "ComingFields",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StatusId = table.Column<int>(type: "int", nullable: true),
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    WeightId = table.Column<int>(type: "int", nullable: false),
+                    StorageLocationId = table.Column<int>(type: "int", nullable: false),
+                    FieldId = table.Column<int>(type: "int", nullable: false),
+                    CultureId = table.Column<int>(type: "int", nullable: false),
+                    DriverId = table.Column<int>(type: "int", nullable: false),
+                    TransportId = table.Column<int>(type: "int", nullable: false),
+                    VesBrutto = table.Column<double>(type: "double", nullable: false),
+                    VesTara = table.Column<double>(type: "double", nullable: false),
+                    VesNetto = table.Column<double>(type: "double", nullable: false),
+                    VesNettoAcros = table.Column<double>(type: "double", nullable: false),
+                    VesNettoTucano = table.Column<double>(type: "double", nullable: false),
+                    VesNettoDon = table.Column<double>(type: "double", nullable: false),
+                    Note = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ComingFields", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ComingFields_Cultures_CultureId",
+                        column: x => x.CultureId,
+                        principalTable: "Cultures",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ComingFields_Drivers_DriverId",
+                        column: x => x.DriverId,
+                        principalTable: "Drivers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ComingFields_Fields_FieldId",
+                        column: x => x.FieldId,
+                        principalTable: "Fields",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ComingFields_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ComingFields_StorageLocations_StorageLocationId",
+                        column: x => x.StorageLocationId,
+                        principalTable: "StorageLocations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ComingFields_Transports_TransportId",
+                        column: x => x.TransportId,
+                        principalTable: "Transports",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Divisions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StatusId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OrganizationId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Divisions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Divisions_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Employee",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StatusId = table.Column<int>(type: "int", nullable: true),
+                    TabNumber = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DivisionId = table.Column<int>(type: "int", nullable: false),
+                    PeopleId = table.Column<int>(type: "int", nullable: false),
+                    PostId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employee", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Employee_Divisions_DivisionId",
+                        column: x => x.DivisionId,
+                        principalTable: "Divisions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Employee_People_PeopleId",
+                        column: x => x.PeopleId,
+                        principalTable: "People",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Employee_Post_PostId",
+                        column: x => x.PostId,
+                        principalTable: "Post",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Employee_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "StaffListPositions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StaffListId = table.Column<int>(type: "int", nullable: false),
+                    PostId = table.Column<int>(type: "int", nullable: false),
+                    DivisionId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<double>(type: "double", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StaffListPositions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StaffListPositions_Divisions_DivisionId",
+                        column: x => x.DivisionId,
+                        principalTable: "Divisions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StaffListPositions_Post_PostId",
+                        column: x => x.PostId,
+                        principalTable: "Post",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StaffListPositions_StaffList_StaffListId",
+                        column: x => x.StaffListId,
+                        principalTable: "StaffList",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "OfficialPersons",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StatusId = table.Column<int>(type: "int", nullable: true),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    StorageLocationId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OfficialPersons", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OfficialPersons_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OfficialPersons_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_OfficialPersons_StorageLocations_StorageLocationId",
+                        column: x => x.StorageLocationId,
+                        principalTable: "StorageLocations",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Organizations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    AbbreviatedName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Inn = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Kpp = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Ogrn = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Okpo = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OkvedId = table.Column<int>(type: "int", nullable: false),
+                    OkopfId = table.Column<int>(type: "int", nullable: true),
+                    OkfsId = table.Column<int>(type: "int", nullable: true),
+                    OkogyId = table.Column<int>(type: "int", nullable: true),
+                    OkatoId = table.Column<int>(type: "int", nullable: true),
+                    OktmoId = table.Column<int>(type: "int", nullable: true),
+                    RegFnsId = table.Column<int>(type: "int", nullable: true),
+                    RegPfrId = table.Column<int>(type: "int", nullable: true),
+                    RegFssId = table.Column<int>(type: "int", nullable: true),
+                    AddressUrId = table.Column<int>(type: "int", nullable: true),
+                    DirectorId = table.Column<int>(type: "int", nullable: true),
+                    GeneralAccountantId = table.Column<int>(type: "int", nullable: true),
+                    CashierId = table.Column<int>(type: "int", nullable: true),
+                    HrId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Organizations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Organizations_Addresses_AddressUrId",
+                        column: x => x.AddressUrId,
+                        principalTable: "Addresses",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Organizations_Employee_CashierId",
+                        column: x => x.CashierId,
+                        principalTable: "Employee",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Organizations_Employee_DirectorId",
+                        column: x => x.DirectorId,
+                        principalTable: "Employee",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Organizations_Employee_GeneralAccountantId",
+                        column: x => x.GeneralAccountantId,
+                        principalTable: "Employee",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Organizations_Employee_HrId",
+                        column: x => x.HrId,
+                        principalTable: "Employee",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Organizations_Okato_OkatoId",
+                        column: x => x.OkatoId,
+                        principalTable: "Okato",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Organizations_Okfs_OkfsId",
+                        column: x => x.OkfsId,
+                        principalTable: "Okfs",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Organizations_Okogy_OkogyId",
+                        column: x => x.OkogyId,
+                        principalTable: "Okogy",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Organizations_Okopf_OkopfId",
+                        column: x => x.OkopfId,
+                        principalTable: "Okopf",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Organizations_Oktmo_OktmoId",
+                        column: x => x.OktmoId,
+                        principalTable: "Oktmo",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Organizations_Okveds_OkvedId",
+                        column: x => x.OkvedId,
+                        principalTable: "Okveds",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Organizations_RegFns_RegFnsId",
+                        column: x => x.RegFnsId,
+                        principalTable: "RegFns",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Organizations_RegFss_RegFssId",
+                        column: x => x.RegFssId,
+                        principalTable: "RegFss",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Organizations_RegPfr_RegPfrId",
+                        column: x => x.RegPfrId,
+                        principalTable: "RegPfr",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Weights",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StatusId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    WeigherId = table.Column<int>(type: "int", nullable: true),
+                    Terminal = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Weights", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Weights_Employee_WeigherId",
+                        column: x => x.WeigherId,
+                        principalTable: "Employee",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Weights_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.InsertData(
                 table: "Groups",
                 columns: new[] { "Id", "Name", "TypeApplication" },
@@ -1071,12 +1505,13 @@ namespace Agro.DAL.MySql.Migrations
                     { 11, "Материалы", "Материальные запасы" },
                     { 12, "Малоценные товары, инвентарь", "Материальные запасы" },
                     { 13, "ГСМ", "Материальные запасы" },
-                    { 14, "Паспорт гражданина РФ", "УЛ" },
-                    { 15, "Загранпаспорт гражданина РФ", "УЛ" },
-                    { 16, "Свидетельство о рождении", "УЛ" },
-                    { 17, "Временное удостоверение личности", "УЛ" },
-                    { 18, "Удостоверение личности военнослужащего РФ (военный билет, паспорт моряка)", "УЛ" },
-                    { 19, "Вид на жительство", "УЛ" }
+                    { 14, "Паспорт гражданина РФ", "Удостоверение личности" },
+                    { 15, "Загранпаспорт гражданина РФ", "Удостоверение личности" },
+                    { 16, "Свидетельство о рождении", "Удостоверение личности" },
+                    { 17, "Временное удостоверение личности", "Удостоверение личности" },
+                    { 18, "Удостоверение личности военнослужащего РФ (военный билет, паспорт моряка)", "Удостоверение личности" },
+                    { 19, "Вид на жительство", "Удостоверение личности" },
+                    { 20, "Прочий документ", "Прочие документы" }
                 });
 
             migrationBuilder.InsertData(
@@ -1126,7 +1561,10 @@ namespace Agro.DAL.MySql.Migrations
                     { 9, "Материальные запасы", "Товары" },
                     { 10, "Выставленные", "Счета" },
                     { 11, "Полученные", "Счета" },
-                    { 12, "Удостоверение личности", "УЛ" }
+                    { 12, "Удостоверение личности", "Документ" },
+                    { 13, "Собственность", "ЗУ" },
+                    { 14, "Аренда", "ЗУ" },
+                    { 15, "Прочие документы", "Документ" }
                 });
 
             migrationBuilder.InsertData(
@@ -1348,6 +1786,41 @@ namespace Agro.DAL.MySql.Migrations
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ComingFields_CultureId",
+                table: "ComingFields",
+                column: "CultureId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ComingFields_DriverId",
+                table: "ComingFields",
+                column: "DriverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ComingFields_FieldId",
+                table: "ComingFields",
+                column: "FieldId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ComingFields_StatusId",
+                table: "ComingFields",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ComingFields_StorageLocationId",
+                table: "ComingFields",
+                column: "StorageLocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ComingFields_TransportId",
+                table: "ComingFields",
+                column: "TransportId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ComingFields_WeightId",
+                table: "ComingFields",
+                column: "WeightId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Contracts_BankDetailsId",
                 table: "Contracts",
                 column: "BankDetailsId");
@@ -1404,6 +1877,41 @@ namespace Agro.DAL.MySql.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cultures_ProductId",
+                table: "Cultures",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cultures_StatusId",
+                table: "Cultures",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Departments_StatusId",
+                table: "Departments",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Divisions_OrganizationId",
+                table: "Divisions",
+                column: "OrganizationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Divisions_StatusId",
+                table: "Divisions",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Documents_GroupId",
+                table: "Documents",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Documents_PeopleId",
+                table: "Documents",
+                column: "PeopleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Documents_StatusId",
                 table: "Documents",
                 column: "StatusId");
@@ -1412,6 +1920,21 @@ namespace Agro.DAL.MySql.Migrations
                 name: "IX_Documents_TypeDocId",
                 table: "Documents",
                 column: "TypeDocId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Drivers_StatusId",
+                table: "Drivers",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DriverTransport_TransportsId",
+                table: "DriverTransport",
+                column: "TransportsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employee_DivisionId",
+                table: "Employee",
+                column: "DivisionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employee_PeopleId",
@@ -1426,6 +1949,26 @@ namespace Agro.DAL.MySql.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Employee_StatusId",
                 table: "Employee",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FieldLandPlot_LandPlotsId",
+                table: "FieldLandPlot",
+                column: "LandPlotsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Fields_DepartmentId",
+                table: "Fields",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Fields_ParentFieldId",
+                table: "Fields",
+                column: "ParentFieldId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Fields_StatusId",
+                table: "Fields",
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(
@@ -1477,6 +2020,31 @@ namespace Agro.DAL.MySql.Migrations
                 name: "IX_Invoices_TypeId",
                 table: "Invoices",
                 column: "TypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LandPlots_StatusId",
+                table: "LandPlots",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LandPlots_TypeId",
+                table: "LandPlots",
+                column: "TypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OfficialPersons_EmployeeId",
+                table: "OfficialPersons",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OfficialPersons_StatusId",
+                table: "OfficialPersons",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OfficialPersons_StorageLocationId",
+                table: "OfficialPersons",
+                column: "StorageLocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Organizations_AddressUrId",
@@ -1547,11 +2115,6 @@ namespace Agro.DAL.MySql.Migrations
                 name: "IX_Organizations_RegPfrId",
                 table: "Organizations",
                 column: "RegPfrId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_People_IdentityDocumentId",
-                table: "People",
-                column: "IdentityDocumentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_People_StatusId",
@@ -1634,23 +2197,110 @@ namespace Agro.DAL.MySql.Migrations
                 column: "TypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StaffList_PostId",
-                table: "StaffList",
-                column: "PostId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_StaffList_StatusId",
                 table: "StaffList",
                 column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StaffListPositions_DivisionId",
+                table: "StaffListPositions",
+                column: "DivisionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StaffListPositions_PostId",
+                table: "StaffListPositions",
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StaffListPositions_StaffListId",
+                table: "StaffListPositions",
+                column: "StaffListId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StorageLocations_StatusId",
+                table: "StorageLocations",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transports_StatusId",
+                table: "Transports",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Weights_StatusId",
+                table: "Weights",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Weights_WeigherId",
+                table: "Weights",
+                column: "WeigherId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_BankDetails_Organizations_OrganizationId",
+                table: "BankDetails",
+                column: "OrganizationId",
+                principalTable: "Organizations",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ComingFields_Weights_WeightId",
+                table: "ComingFields",
+                column: "WeightId",
+                principalTable: "Weights",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Divisions_Organizations_OrganizationId",
+                table: "Divisions",
+                column: "OrganizationId",
+                principalTable: "Organizations",
+                principalColumn: "Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Divisions_Statuses_StatusId",
+                table: "Divisions");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Employee_Statuses_StatusId",
+                table: "Employee");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_People_Statuses_StatusId",
+                table: "People");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Post_Statuses_StatusId",
+                table: "Post");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Divisions_Organizations_OrganizationId",
+                table: "Divisions");
+
             migrationBuilder.DropTable(
                 name: "AccountingPlans");
 
             migrationBuilder.DropTable(
+                name: "ComingFields");
+
+            migrationBuilder.DropTable(
+                name: "Documents");
+
+            migrationBuilder.DropTable(
+                name: "DriverTransport");
+
+            migrationBuilder.DropTable(
+                name: "FieldLandPlot");
+
+            migrationBuilder.DropTable(
                 name: "History");
+
+            migrationBuilder.DropTable(
+                name: "OfficialPersons");
 
             migrationBuilder.DropTable(
                 name: "ProductsInvoice");
@@ -1659,13 +2309,31 @@ namespace Agro.DAL.MySql.Migrations
                 name: "ScanFiles");
 
             migrationBuilder.DropTable(
-                name: "StaffList");
+                name: "StaffListPositions");
+
+            migrationBuilder.DropTable(
+                name: "Cultures");
+
+            migrationBuilder.DropTable(
+                name: "Weights");
+
+            migrationBuilder.DropTable(
+                name: "Drivers");
+
+            migrationBuilder.DropTable(
+                name: "Transports");
+
+            migrationBuilder.DropTable(
+                name: "Fields");
+
+            migrationBuilder.DropTable(
+                name: "LandPlots");
 
             migrationBuilder.DropTable(
                 name: "User");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "StorageLocations");
 
             migrationBuilder.DropTable(
                 name: "Invoices");
@@ -1674,10 +2342,13 @@ namespace Agro.DAL.MySql.Migrations
                 name: "Specifications");
 
             migrationBuilder.DropTable(
-                name: "UnitsOkei");
+                name: "StaffList");
 
             migrationBuilder.DropTable(
-                name: "Ndses");
+                name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Departments");
 
             migrationBuilder.DropTable(
                 name: "ReestrInvoice");
@@ -1686,16 +2357,28 @@ namespace Agro.DAL.MySql.Migrations
                 name: "Contracts");
 
             migrationBuilder.DropTable(
+                name: "Ndses");
+
+            migrationBuilder.DropTable(
+                name: "UnitsOkei");
+
+            migrationBuilder.DropTable(
                 name: "BankDetails");
 
             migrationBuilder.DropTable(
                 name: "Counterparties");
 
             migrationBuilder.DropTable(
-                name: "Organizations");
+                name: "Groups");
 
             migrationBuilder.DropTable(
-                name: "Groups");
+                name: "Types");
+
+            migrationBuilder.DropTable(
+                name: "Statuses");
+
+            migrationBuilder.DropTable(
+                name: "Organizations");
 
             migrationBuilder.DropTable(
                 name: "Addresses");
@@ -1731,19 +2414,13 @@ namespace Agro.DAL.MySql.Migrations
                 name: "RegPfr");
 
             migrationBuilder.DropTable(
+                name: "Divisions");
+
+            migrationBuilder.DropTable(
                 name: "People");
 
             migrationBuilder.DropTable(
                 name: "Post");
-
-            migrationBuilder.DropTable(
-                name: "Documents");
-
-            migrationBuilder.DropTable(
-                name: "Statuses");
-
-            migrationBuilder.DropTable(
-                name: "Types");
         }
     }
 }

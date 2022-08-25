@@ -36,7 +36,6 @@ public static class GetDefaultData
         new() { Id = 13, Name = "Собственность", TypeApplication = "ЗУ" },
         new() { Id = 14, Name = "Аренда", TypeApplication = "ЗУ" },
         new() { Id = 15, Name = "Прочие документы", TypeApplication = "Документ" },
-
     };
 
     public static GroupDoc[] DefaultGroup() => new GroupDoc[]

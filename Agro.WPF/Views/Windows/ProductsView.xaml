@@ -35,6 +35,14 @@
                BasedOn="{StaticResource TextBoxStyle}">
             <Setter Property="Margin" Value="4 4"/>
         </Style>
+
+        <ControlTemplate x:Key="MenuTemplate" TargetType="MenuItem">
+            <Border CornerRadius="3" BorderThickness="2" BorderBrush="{TemplateBinding BorderBrush}"/>
+        </ControlTemplate>
+        <Style TargetType="MenuItem">
+            <Setter Property="Width" Value="auto"/>
+        </Style>
+       
     </Window.Resources>
     
     <Grid>
@@ -47,9 +55,16 @@
                 <RowDefinition Height="95"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <ToolBar>
+            <Menu Grid.Row="0" Margin="5,0" VerticalAlignment="Center">
+                <MenuItem Template="{StaticResource MenuTemplate}" Header="Создать" BorderBrush="DarkBlue" BorderThickness="2" Padding="2" Margin="2,0">
+                    <MenuItem.Icon>
+                        <fa5:ImageAwesome Height="32" Icon="Solid_PlusCircle" Foreground="DarkBlue" VerticalAlignment="Center"/>
+                    </MenuItem.Icon>
+                    <MenuItem Header="Готовая продукция"/>
+                    <MenuItem Header="Материальные запасы"/>
+                </MenuItem>
                 <Button BorderBrush="DarkBlue" Width="108" Command="{Binding AddProductCommand}"
-                            Template="{StaticResource ButtonTemplate}" Margin="2,0">
+                        Template="{StaticResource ButtonTemplate}" Margin="2,0">
                     <StackPanel Orientation="Horizontal">
                         <fa5:ImageAwesome Height="12" Icon="Solid_PlusCircle"
                                               Margin="8,5"
@@ -86,7 +101,7 @@
                         <TextBlock Text="Обновить" VerticalAlignment="Center" Margin="0,0,5,0"/>
                     </StackPanel>
                 </Button>
-            </ToolBar>
+            </Menu>
             <GroupBox Grid.Row="1" Header="Фильтр" Height="100" VerticalAlignment ="Top" BorderThickness="2">
                 <Grid Background="AliceBlue">
                     <Grid.RowDefinitions>

@@ -1,5 +1,7 @@
 ﻿using Agro.WPF.ViewModels.Agronomy;
+using Agro.WPF.ViewModels.Organization;
 using Agro.WPF.ViewModels.Personnel;
+using Agro.WPF.ViewModels.Storage;
 using Agro.WPF.ViewModels.Weight;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -92,5 +94,11 @@ public class ViewModelLocator
     public ComingFieldsViewModel ComingFieldsModel => App.Services.GetRequiredService<ComingFieldsViewModel>();
 
     public ComingFieldViewModel ComingFieldModel => App.Services.GetRequiredService<ComingFieldViewModel>();
+
+    public StorageLocationsViewModel StorageLocationsModel => App.Services.GetRequiredService<StorageLocationsViewModel>();
+
+    public StorageLocationViewModel StorageLocationModel => App.Services.GetRequiredService<StorageLocationViewModel>();
+
+    public OfficialPersonViewModel OfficialPersonModel => App.Services.GetRequiredService<OfficialPersonViewModel>();
 
 }

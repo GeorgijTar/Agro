@@ -5,6 +5,7 @@ using Agro.DAL.Entities.DefaultData;
 using Agro.DAL.Entities.Organization;
 using Agro.DAL.Entities.Personnel;
 using Agro.DAL.Entities.RegInfoOrg;
+using Agro.DAL.Entities.Storage;
 using Agro.DAL.Entities.Weight;
 using Microsoft.EntityFrameworkCore;
 
@@ -52,9 +53,10 @@ public class AgroDb : DbContext
     public DbSet<Driver> Drivers { get; set; } = null!;
     public DbSet<Division> Divisions { get; set; } = null!;
     public DbSet<StaffListPosition> StaffListPositions { get; set; } = null!;
-
     public DbSet<Weight> Weights { get; set; } = null!;
-
+    public DbSet<ComingField> ComingFields { get; set; } = null!;
+    public DbSet<StorageLocation> StorageLocations { get; set; } = null!;
+    public DbSet<OfficialPerson> OfficialPersons { get; set; } = null!;
 
 #endregion
     public AgroDb(DbContextOptions<AgroDb> options) : base(options) { }

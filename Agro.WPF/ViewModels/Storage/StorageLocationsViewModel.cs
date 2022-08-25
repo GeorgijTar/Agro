@@ -1,55 +1,55 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Windows;
-using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows;
 using Agro.DAL.Entities;
-using Agro.DAL.Entities.Weight;
+using Agro.DAL.Entities.Storage;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
-using Agro.WPF.Views.Windows.Weight;
+using Agro.WPF.Views.Windows.Storage;
 
-namespace Agro.WPF.ViewModels.Weight;
+namespace Agro.WPF.ViewModels.Storage;
 
-public class ComingFieldsViewModel: ViewModel
+public class StorageLocationsViewModel : ViewModel
 {
-    private readonly IBaseRepository<ComingField> _comingFieldRepository;
+    private readonly IBaseRepository<StorageLocation> _storageLocationRepository;
     private readonly IBaseRepository<Status> _statusRepository;
-    private string _title = "Реестр прихода с поля";
+    private string _title = null!;
     public string Title { get => _title; set => Set(ref _title, value); }
 
-    
-    private ObservableCollection<ComingField> _comingFields = null!;
-    public ObservableCollection<ComingField> ComingFields { get => _comingFields; set => Set(ref _comingFields, value); }
+
+    private ObservableCollection<StorageLocation> _storageLocations = new();
+    public ObservableCollection<StorageLocation> StorageLocations { get => _storageLocations; set => Set(ref _storageLocations, value); }
 
     
-    private ComingField _comingField = null!;
-    public ComingField ComingField { get => _comingField; set => Set(ref _comingField, value); }
+    private StorageLocation _storageLocation = null!;
+    public StorageLocation StorageLocation { get => _storageLocation; set => Set(ref _storageLocation, value); } 
 
-    private ICollectionView _collectionView = null!;
-    public ICollectionView CollectionView { get => _collectionView; set => Set(ref _collectionView, value); }
+    public object SenderModel { get; set; } = null!;
 
-    public ComingFieldsViewModel(IBaseRepository<ComingField> comingFieldRepository, IBaseRepository<Status> statusRepository)
+    public StorageLocationsViewModel(
+        IBaseRepository<StorageLocation> storageLocationRepository, 
+        IBaseRepository<Status> statusRepository)
     {
-        _comingFieldRepository = comingFieldRepository;
+        _storageLocationRepository = storageLocationRepository;
         _statusRepository = statusRepository;
-        CollectionView = CollectionViewSource.GetDefaultView(ComingFields);
         LoadData();
     }
 
     private async void LoadData()
     {
-        var cfs = await _comingFieldRepository.GetAllAsync();
-        cfs = cfs!.Where(c => c.Status!.Id != 6).ToArray();
-        foreach (var comingField in cfs)
-        {
-            ComingFields.Add(comingField);
-        }
+        StorageLocations.Clear();
+       var sls=await _storageLocationRepository.GetAllAsync();
+       sls = sls!.Where(s => s.Status!.Id == 5).ToArray();
+       foreach (var storageLocation in sls)
+       {
+           StorageLocations.Add(storageLocation);
+       }
     }
-
 
     #region Commands
 
@@ -60,11 +60,11 @@ public class ComingFieldsViewModel: ViewModel
 
     private void OnAddExecuted(object obj)
     {
-        var view = new ComingFieldView();
-        var model = view.DataContext as ComingFieldViewModel;
-        model!.Title = "Создание нового прихода с поля";
+        var view = new StorageLocationView();
+        var model = view.DataContext as StorageLocationViewModel;
+        model!.Title = "Создание нового места хранения";
         model.SenderModel = this;
-        model.ComingField = new();
+        model.StorageLocation = new();
         view.DataContext = model;
         view.Show();
     }
@@ -77,16 +77,16 @@ public class ComingFieldsViewModel: ViewModel
 
     private bool CanEditExecuted(object arg)
     {
-        return ComingField != null! && ComingField.Status?.Id==1;
+        return StorageLocation != null!;
     }
 
     private void OnEditExecuted(object obj)
     {
-        var view = new ComingFieldView();
-        var model = view.DataContext as ComingFieldViewModel;
-        model!.Title = "Редактирование прихода с поля";
+        var view = new StorageLocationView();
+        var model = view.DataContext as StorageLocationViewModel;
+        model!.Title = "Создание нового места хранения";
         model.SenderModel = this;
-        model.ComingField = new();
+        model.StorageLocation = StorageLocation;
         view.DataContext = model;
         view.Show();
     }
@@ -100,19 +100,19 @@ public class ComingFieldsViewModel: ViewModel
     {
         var result =
             MessageBox.Show(
-                $"Вы действительно хотите удалит приход с поля:{Environment.NewLine} " +
-                $"№ {ComingField.Number} от {ComingField.Date}",
+                $"Вы действительно хотите удалит место хранения:{Environment.NewLine} " +
+                $"{StorageLocation.Name}",
                 "Редактор", MessageBoxButton.YesNo);
         if (result == MessageBoxResult.Yes)
         {
-            ComingField.Status = await _statusRepository.GetByIdAsync(6);
-            await _comingFieldRepository.UpdateAsync(ComingField);
-            ComingFields.Remove(ComingField);
-            ComingField = null!;
+            StorageLocation.Status = await _statusRepository.GetByIdAsync(6);
+            await _storageLocationRepository.UpdateAsync(StorageLocation);
+            StorageLocations.Remove(StorageLocation);
+            StorageLocation = null!;
         }
     }
 
-    
+
     private ICommand? _refreshCommand;
 
     public ICommand RefreshCommand => _refreshCommand
@@ -120,7 +120,7 @@ public class ComingFieldsViewModel: ViewModel
 
     private void OnRefreshExecuted(object obj)
     {
-      LoadData();
+        LoadData();
     }
 
 
@@ -144,5 +144,4 @@ public class ComingFieldsViewModel: ViewModel
     //}
 
     #endregion
-
 }

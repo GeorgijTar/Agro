@@ -15,6 +15,7 @@ using Agro.DAL.Entities.Personnel;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.ViewModels.Organization;
 using Agro.WPF.Views.Windows.Personnel;
 
 namespace Agro.WPF.ViewModels.Personnel;
@@ -71,13 +72,14 @@ public class EmployeesViewModel : ViewModel
     private string _tabNumberFilter = null!;
     public string TabNumberFilter { get => _tabNumberFilter; set => Set(ref _tabNumberFilter, value); }
 
+    public object SenderModel { get; set; }=null!;
 
     public EmployeesViewModel(IBaseRepository<Employee> employeeRepository, IBaseRepository<Status> statusRepository)
     {
         _employeeRepository = employeeRepository;
         _statusRepository = statusRepository;
         LoadData();
-        Employees.CollectionChanged += RefreshFilter;
+        //Employees.CollectionChanged += RefreshFilter;
         CollectionView = CollectionViewSource.GetDefaultView(Employees);
         this.PropertyChanged += Filter;
     }
@@ -142,7 +144,7 @@ public class EmployeesViewModel : ViewModel
         if (!String.IsNullOrEmpty(TabNumberFilter))
         {
             Employee? dto = obj as Employee;
-            return dto!.TabNumber.ToUpper().Contains(TabNumberFilter.ToUpper());
+            return dto!.TabNumber!.ToUpper().Contains(TabNumberFilter.ToUpper());
         }
         return true;
     }
@@ -250,6 +252,27 @@ public class EmployeesViewModel : ViewModel
     private void OnRefreshCommandExecuted(object obj)
     {
         LoadData();
+    }
+
+
+    
+    private ICommand? _selectRowCommand;
+
+    public ICommand SelectRowCommand => _selectRowCommand
+        ??= new RelayCommand(OnSelectRowExecuted, CanEditCommandExecuted);
+
+    private void OnSelectRowExecuted(object obj)
+    {
+        if (SenderModel != null!)
+        {
+            if (SenderModel is OfficialPersonViewModel officialPerson)
+            {
+                officialPerson.OfficialPerson.Employee = Employee;
+                var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+                if (window != null!)
+                    window.Close();
+            }
+        }
     }
 
     #endregion

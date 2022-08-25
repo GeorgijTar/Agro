@@ -22,7 +22,7 @@ public class Culture : Entity
 
     /// <summary>Год урожая</summary>
     private string _yearHarvest = null!;
-    public string YearHarvest { get => _yearHarvest; set => Set(ref _yearHarvest, value); } 
+    public string YearHarvest { get => _yearHarvest; set => Set(ref _yearHarvest, value); }
 
-
+    public override string ToString() => $"{Name}, {YearHarvest}";
 }

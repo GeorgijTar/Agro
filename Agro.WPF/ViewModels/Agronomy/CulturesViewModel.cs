@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -6,6 +7,7 @@ using Agro.DAL.Entities.Agronomy;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.ViewModels.Weight;
 using Agro.WPF.Views.Windows.Agronomy;
 
 namespace Agro.WPF.ViewModels.Agronomy;
@@ -14,6 +16,7 @@ public class CulturesViewModel : ViewModel
 {
     private readonly IBaseRepository<Culture> _cultureRepository;
 
+    public object SenderModel { get; set; } = null!;
     public CulturesViewModel(IBaseRepository<Culture> cultureRepository)
     {
         Title = "Выращиваемые культуры";
@@ -41,7 +44,7 @@ public class CulturesViewModel : ViewModel
 
 
     private Culture _culture = null!;
-    public Culture Culture { get => _culture; set => Set(ref _culture, value); } 
+    public Culture Culture { get => _culture; set => Set(ref _culture, value); }
 
 
 
@@ -70,7 +73,7 @@ public class CulturesViewModel : ViewModel
 
     private bool CanEditExecuted(object arg)
     {
-       return Culture != null!;
+        return Culture != null!;
     }
 
     private void OnEditExecuted(object obj)
@@ -83,7 +86,7 @@ public class CulturesViewModel : ViewModel
         view.DataContext = model;
         view.ShowDialog();
     }
-    
+
 
     private ICommand? _deleteCommand;
 
@@ -115,6 +118,28 @@ public class CulturesViewModel : ViewModel
     {
         LoadCulture();
     }
+
+
+
+    private ICommand? _doubleClickCommand;
+
+    public ICommand DoubleClickCommand => _doubleClickCommand
+        ??= new RelayCommand(OnDoubleClickExecuted);
+
+    private void OnDoubleClickExecuted(object obj)
+    {
+        if (SenderModel != null!)
+        {
+            if (SenderModel is ComingFieldViewModel comingFieldViewModel)
+            {
+                comingFieldViewModel.ComingField.Culture = Culture;
+            }
+            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+            if (window != null!)
+                window.Close();
+        }
+    }
+
 
 
     #endregion

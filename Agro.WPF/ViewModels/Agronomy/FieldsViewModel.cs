@@ -10,6 +10,7 @@ using Agro.Interfaces.Base.Repositories.Base;
 using Agro.Services.Repositories;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.ViewModels.Weight;
 using Agro.WPF.Views.Windows.Agronomy;
 
 namespace Agro.WPF.ViewModels.Agronomy;
@@ -130,11 +131,18 @@ public class FieldsViewModel : ViewModel
     {
         if (Field is Field field)
         {
-            if (SenderModel is FieldViewModel fieldViewModel)
+            if (SenderModel != null!)
             {
-                fieldViewModel.Field.ParentField=field;
-                fieldViewModel.Field.Department = field.Department;
+                if (SenderModel is FieldViewModel fieldViewModel)
+                {
+                    fieldViewModel.Field.ParentField = field;
+                    fieldViewModel.Field.Department = field.Department;
+                }
 
+                if (SenderModel is ComingFieldViewModel comingFieldViewModel)
+                {
+                    comingFieldViewModel.ComingField.Field = field;
+                }
                 var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
                 if (window != null!)
                     window.Close();

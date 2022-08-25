@@ -27,7 +27,7 @@ public class Driver : Entity
 
     /// <summary>Автомобили</summary>
     private ObservableCollection<Transport>? _transports ;
-    public ObservableCollection<Transport>? Transports { get => _transports; set => Set(ref _transports, value); } 
+    public ObservableCollection<Transport>? Transports { get => _transports; set => Set(ref _transports, value); }
 
-
+    public override string ToString() => $"{Surname} {Name[0]}. {Patronymic[0]}.";
 }

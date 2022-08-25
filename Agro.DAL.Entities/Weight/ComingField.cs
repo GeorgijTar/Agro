@@ -2,6 +2,7 @@
 
 using Agro.DAL.Entities.Agronomy;
 using Agro.DAL.Entities.Base;
+using Agro.DAL.Entities.Storage;
 
 namespace Agro.DAL.Entities.Weight;
 /// <summary>
@@ -11,8 +12,8 @@ public class ComingField : Entity
 
 {
     /// <summary>Статус</summary>
-    private Status _status = null!;
-    public Status Status { get => _status; set => Set(ref _status, value); }
+    private Status? _status;
+    public Status? Status { get => _status; set => Set(ref _status, value); }
 
     /// <summary>Номер документа</summary>
     private int _number;
@@ -56,8 +57,20 @@ public class ComingField : Entity
 
     /// <summary>Вес нетто</summary>
     private double _vesNetto;
-    public double VesNetto { get => _vesNetto; set => Set(ref _vesNetto, value); } 
-    
+    public double VesNetto { get => _vesNetto; set => Set(ref _vesNetto, value); }
+
+    /// <summary>Вес нетто Acros</summary>
+    private double _vesNettoAcros;
+    public double VesNettoAcros { get => _vesNettoAcros; set => Set(ref _vesNettoAcros, value); }
+
+    /// <summary>Вес нетто Claas Tucano</summary>
+    private double _vesNettoTucano;
+    public double VesNettoTucano { get => _vesNettoTucano; set => Set(ref _vesNettoTucano, value); }
+
+    /// <summary>Вес нетто Дон</summary>
+    private double _vesNettoDon;
+    public double VesNettoDon { get => _vesNettoDon; set => Set(ref _vesNettoDon, value); }
+
     /// <summary>Примечание</summary>
     private string _note = null!;
     public string Note { get => _note; set => Set(ref _note, value); }

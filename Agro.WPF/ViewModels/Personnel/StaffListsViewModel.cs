@@ -73,7 +73,7 @@ public class StaffListsViewModel : ViewModel
 
     private bool CanEditCommandExecuted(object arg)
     {
-        return StaffList != null! && StaffList.Status.Id==1;
+        return StaffList != null!;
     }
 
     private void OnEditCommandExecuted(object obj)

@@ -104,5 +104,27 @@ public class DriversViewModel : ViewModel
         }
     }
 
+    
+
+    private ICommand? _selectRowCommand;
+
+    public ICommand SelectRowCommand => _selectRowCommand
+        ??= new RelayCommand(OnSelectRowExecuted, CanEditExecuted);
+
+    private async void OnSelectRowExecuted(object obj)
+    {
+        if (SenderModel != null!)
+        {
+            if (SenderModel is ComingFieldViewModel model)
+            {
+                model.ComingField.Driver=Driver;
+            }
+            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+            if (window != null!)
+                window.Close();
+        }
+
+    }
+
     #endregion
 }

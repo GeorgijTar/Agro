@@ -18,12 +18,25 @@ public class Transport : Entity
     public string RegNumber { get => _regNumber; set => Set(ref _regNumber, value); }
 
     /// <summary>Регистрационный номер прицепа</summary>
-    private string? _trailerNumber = null!;
+    private string? _trailerNumber;
     public string? TrailerNumber { get => _trailerNumber; set => Set(ref _trailerNumber, value); }
 
     /// <summary>Закрепленные водители</summary>
-    private ObservableCollection<Driver>? _drivers = null!;
-    public ObservableCollection<Driver>? Drivers { get => _drivers; set => Set(ref _drivers, value); } 
+    private ObservableCollection<Driver>? _drivers;
+    public ObservableCollection<Driver>? Drivers { get => _drivers; set => Set(ref _drivers, value); }
 
+    public override string ToString()
+    {
+        string rg = "";
+        if (TrailerNumber == null!)
+        {
+            rg = $"{CarBrand} рег.№ {RegNumber}";
+        }
+        else
+        {
+            rg = $"{CarBrand} рег.№ {RegNumber}/{TrailerNumber}";
+        }
 
+        return rg;
+    } 
 }

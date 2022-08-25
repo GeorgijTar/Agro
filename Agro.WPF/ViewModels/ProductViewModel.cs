@@ -37,6 +37,9 @@ public class ProductViewModel : ViewModel
     private IEnumerable<GroupDoc>? _groups = new List<GroupDoc>();
     public IEnumerable<GroupDoc>? Groups { get => _groups; set => Set(ref _groups, value); }
 
+    private IEnumerable<GroupDoc>? _staticGroups = new List<GroupDoc>();
+    public IEnumerable<GroupDoc>? StaticGroups { get => _staticGroups; set => Set(ref _staticGroups, value); }
+
 
     private IEnumerable<TypeDoc>? _types = new List<TypeDoc>();
     public IEnumerable<TypeDoc>? Types { get => _types; set => Set(ref _types, value); }
@@ -66,18 +69,16 @@ public class ProductViewModel : ViewModel
         _unitRepository = unitRepository;
         _ndsRepository = ndsRepository;
         _statusRepository = statusRepository;
-        LoadData();
         Product.PropertyChanged += LoadGroup;
+      LoadData();
+       
     }
-
-  
-
-    private async void LoadGroup(object? sender, PropertyChangedEventArgs e)
+    
+    public void LoadGroup(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == "Type")
         {
-            var groups = await _groupRepository.GetAllAsync();
-            Groups = groups!.Where(x => x.TypeApplication == Product.Type.Name);
+            Groups = StaticGroups!.Where(x => x.TypeApplication == Product.Type.Name);
             if (Product.Type.Id == 8)
             {
                 VisibilityNds = Visibility.Visible;
@@ -92,7 +93,7 @@ public class ProductViewModel : ViewModel
     private async void LoadData()
     {
         UnitsCollection = await _unitRepository.GetAllAsync();
-
+        StaticGroups = await _groupRepository.GetAllAsync();
         var type = await _typeRepository.GetAllAsync();
         Types=type!.Where(x => x.TypeApplication == "Товары");
         NdsCollection = await _ndsRepository.GetAllAsync();

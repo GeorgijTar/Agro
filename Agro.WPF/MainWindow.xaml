@@ -47,7 +47,7 @@
                     <MenuItem.Icon>
                         <fa5:ImageAwesome Height="32" Icon="Solid_Kaaba" Foreground="DarkBlue"/>
                     </MenuItem.Icon>
-                    <MenuItem Header="Приход с поля"></MenuItem>
+                    <MenuItem Header="Приход с поля" Command="{Binding ShowComingFields}"/>
                     <Separator  BorderThickness="2"/>
                     <MenuItem Header="Отпрузка"></MenuItem>
                     <Separator  BorderThickness="2"/>
@@ -61,6 +61,7 @@
 
                     <MenuItem Header="Контрагенты" Command="{Binding ShowContractors}"/>
                     <MenuItem Header="Номенклатура" Command="{Binding ShowProduct}"/>
+                    <MenuItem Header="Места хранения" Command="{Binding ShowStorageLocations}"/>
                     <MenuItem Header="План счетов" Command="{Binding ShowAccountingPlans}"/>
                     <Separator  BorderThickness="2"/>
                     <MenuItem Header="Агрономические справочники">

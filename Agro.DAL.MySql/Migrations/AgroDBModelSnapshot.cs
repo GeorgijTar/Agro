@@ -1780,7 +1780,6 @@ namespace Agro.DAL.MySql.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TabNumber")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -2108,6 +2107,35 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("Divisions");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Organization.OfficialPerson", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StorageLocationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("StorageLocationId");
+
+                    b.ToTable("OfficialPersons");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Organization.Organization", b =>
@@ -2698,6 +2726,29 @@ namespace Agro.DAL.MySql.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Agro.DAL.Entities.Storage.StorageLocation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TypeApplication")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("StorageLocations");
+                });
+
             modelBuilder.Entity("Agro.DAL.Entities.TypeDoc", b =>
                 {
                     b.Property<int>("Id")
@@ -2955,6 +3006,80 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Weight.ComingField", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CultureId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("DriverId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FieldId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StorageLocationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TransportId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("VesBrutto")
+                        .HasColumnType("double");
+
+                    b.Property<double>("VesNetto")
+                        .HasColumnType("double");
+
+                    b.Property<double>("VesNettoAcros")
+                        .HasColumnType("double");
+
+                    b.Property<double>("VesNettoDon")
+                        .HasColumnType("double");
+
+                    b.Property<double>("VesNettoTucano")
+                        .HasColumnType("double");
+
+                    b.Property<double>("VesTara")
+                        .HasColumnType("double");
+
+                    b.Property<int>("WeightId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CultureId");
+
+                    b.HasIndex("DriverId");
+
+                    b.HasIndex("FieldId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("StorageLocationId");
+
+                    b.HasIndex("TransportId");
+
+                    b.HasIndex("WeightId");
+
+                    b.ToTable("ComingFields");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Weight.Driver", b =>
@@ -3407,6 +3532,27 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("Status");
                 });
 
+            modelBuilder.Entity("Agro.DAL.Entities.Organization.OfficialPerson", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.HasOne("Agro.DAL.Entities.Storage.StorageLocation", null)
+                        .WithMany("Storekeepers")
+                        .HasForeignKey("StorageLocationId");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Status");
+                });
+
             modelBuilder.Entity("Agro.DAL.Entities.Organization.Organization", b =>
                 {
                     b.HasOne("Agro.DAL.Entities.Address", "AddressUr")
@@ -3663,6 +3809,72 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("Type");
                 });
 
+            modelBuilder.Entity("Agro.DAL.Entities.Storage.StorageLocation", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Weight.ComingField", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Agronomy.Culture", "Culture")
+                        .WithMany()
+                        .HasForeignKey("CultureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Weight.Driver", "Driver")
+                        .WithMany()
+                        .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Agronomy.Field", "Field")
+                        .WithMany()
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.HasOne("Agro.DAL.Entities.Storage.StorageLocation", "StorageLocation")
+                        .WithMany()
+                        .HasForeignKey("StorageLocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Weight.Transport", "Transport")
+                        .WithMany()
+                        .HasForeignKey("TransportId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Weight.Weight", "Weight")
+                        .WithMany()
+                        .HasForeignKey("WeightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Culture");
+
+                    b.Navigation("Driver");
+
+                    b.Navigation("Field");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("StorageLocation");
+
+                    b.Navigation("Transport");
+
+                    b.Navigation("Weight");
+                });
+
             modelBuilder.Entity("Agro.DAL.Entities.Weight.Driver", b =>
                 {
                     b.HasOne("Agro.DAL.Entities.Status", "Status")
@@ -3782,6 +3994,11 @@ namespace Agro.DAL.MySql.Migrations
             modelBuilder.Entity("Agro.DAL.Entities.SpecificationContract", b =>
                 {
                     b.Navigation("ScanFiles");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Storage.StorageLocation", b =>
+                {
+                    b.Navigation("Storekeepers");
                 });
 #pragma warning restore 612, 618
         }

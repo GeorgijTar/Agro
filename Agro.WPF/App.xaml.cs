@@ -3,6 +3,7 @@ using Agro.DAL.Entities;
 using Agro.DAL.Entities.Agronomy;
 using Agro.DAL.Entities.Organization;
 using Agro.DAL.Entities.Personnel;
+using Agro.DAL.Entities.Storage;
 using Agro.DAL.Entities.Weight;
 using Agro.DAL.MySql;
 using Agro.DAL.Sql;
@@ -13,7 +14,9 @@ using Agro.Interfaces.Base.Repositories.Base;
 using Agro.Services.Repositories;
 using Agro.WPF.ViewModels;
 using Agro.WPF.ViewModels.Agronomy;
+using Agro.WPF.ViewModels.Organization;
 using Agro.WPF.ViewModels.Personnel;
+using Agro.WPF.ViewModels.Storage;
 using Agro.WPF.ViewModels.Weight;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -95,6 +98,9 @@ namespace Agro.WPF
             services.AddTransient<WeightViewModel>();
             services.AddScoped<ComingFieldsViewModel>();
             services.AddTransient<ComingFieldViewModel>();
+            services.AddScoped<StorageLocationsViewModel>();
+            services.AddTransient<StorageLocationViewModel>();
+            services.AddTransient<OfficialPersonViewModel>();
 
 
             //Регистрация репозиториев
@@ -109,8 +115,11 @@ namespace Agro.WPF
             services.AddTransient<IBaseRepository<Driver>, DriverRepository>();
             services.AddTransient<IBaseRepository<People>, PeopleRepository>();
             services.AddTransient<IBaseRepository<Employee>, EmployeeRepository>();
+            services.AddTransient<IBaseRepository<StaffList>, StaffListRepository>();
             services.AddTransient<IBaseRepository<StaffListPosition>, StaffListPositionRepository>();
+            services.AddTransient<IBaseRepository<StorageLocation>, StorageLocationRepository>();
             
+
 
             // Регистрация мапера
             //services.AddAutoMapper(

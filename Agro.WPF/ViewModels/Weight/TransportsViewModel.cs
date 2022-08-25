@@ -119,10 +119,16 @@ public class TransportsViewModel : ViewModel
             if (SenderModel is DriverViewModel driverViewModel)
             {
                 driverViewModel.Driver.Transports!.Add(Transport);
-                var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
-                if (window != null!)
-                    window.Close();
             }
+
+            if (SenderModel is ComingFieldViewModel model)
+            {
+                model.ComingField.Transport=Transport;
+            }
+            
+            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+            if (window != null!)
+                window.Close();
         }
     }
 

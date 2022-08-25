@@ -3,6 +3,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -228,8 +229,10 @@ public class ProductsViewModel : ViewModel
     {
         ProductView product = new ProductView();
         var viewModel = product.DataContext as ProductViewModel;
-        viewModel!.Product = Product!;
+        Product!.PropertyChanged += viewModel!.LoadGroup;
+        viewModel.Product = Product!;
         viewModel.SenderModel = this;
+        product.DataContext = viewModel;
         product.Show();
     }
     

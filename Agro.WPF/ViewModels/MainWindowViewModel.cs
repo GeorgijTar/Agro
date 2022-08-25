@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using Agro.DAL.Entities;
-using Agro.DAL.Entities.Personnel;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
@@ -12,6 +11,7 @@ using Agro.WPF.Views;
 using Agro.WPF.Views.Windows;
 using Agro.WPF.Views.Windows.Agronomy;
 using Agro.WPF.Views.Windows.Personnel;
+using Agro.WPF.Views.Windows.Storage;
 using Agro.WPF.Views.Windows.Weight;
 
 namespace Agro.WPF.ViewModels;
@@ -299,6 +299,37 @@ public class MainWindowViewModel : ViewModel
 
     #endregion
 
+
+    #region ShowComingFields
+
+    private ICommand? _showComingFields;
+
+    public ICommand ShowComingFields => _showComingFields
+        ??= new RelayCommand(OnShowComingFieldsCommandExecuted);
+
+    private void OnShowComingFieldsCommandExecuted(object obj)
+    {
+        ComingFieldsView view = new();
+        view.Show();
+    }
+
+    #endregion
+
+    
+    #region ShowStorageLocations
+
+    private ICommand? _showStorageLocations;
+
+    public ICommand ShowStorageLocations => _showStorageLocations
+        ??= new RelayCommand(OnShowStorageLocationsCommandExecuted);
+
+    private void OnShowStorageLocationsCommandExecuted(object obj)
+    {
+        StorageLocationsView view = new();
+        view.Show();
+    }
+
+    #endregion
     #endregion
 
 }

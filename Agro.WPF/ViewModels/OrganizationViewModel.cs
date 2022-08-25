@@ -8,17 +8,16 @@ using System.Windows.Input;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Views.Windows;
 using FNS.Api;
-using Agro.DAL.Entities.Organization;
 
 namespace Agro.WPF.ViewModels;
 
 public class OrganizationViewModel : ViewModel
 {
-    private readonly IBaseRepository<Organization> _organizationRepository;
+    private readonly IBaseRepository<DAL.Entities.Organization.Organization> _organizationRepository;
     private readonly IBaseRepository<BankDetails> _bankDetailsRepository;
 
-    private Organization _organization = new ();
-    public Organization Organization { get=>_organization; set=>Set(ref _organization, value); }
+    private DAL.Entities.Organization.Organization _organization = new ();
+    public DAL.Entities.Organization.Organization Organization { get=>_organization; set=>Set(ref _organization, value); }
 
     private string _title = "Настройки организации";
     public string Title { get => _title; set => Set(ref _title, value); }
@@ -28,7 +27,7 @@ public class OrganizationViewModel : ViewModel
     public BankDetails SelectedBankDetails {get=>_selectedBankDetails; set=>Set(ref _selectedBankDetails, value);}
 
     public OrganizationViewModel(
-        IBaseRepository<Organization> organizationRepository, 
+        IBaseRepository<DAL.Entities.Organization.Organization> organizationRepository, 
         IBaseRepository<BankDetails> bankDetailsRepository)
     {
         _organizationRepository = organizationRepository;
