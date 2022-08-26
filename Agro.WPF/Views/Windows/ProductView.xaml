@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="370" Width="800"
+        Title="{Binding Title}" Height="330" Width="800"
         DataContext="{Binding ProductModel, Source={StaticResource Locator}}"
         x:Name="MyWindow">
     <Window.Resources>
@@ -35,14 +35,13 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="85*"/>
-            <RowDefinition Height="15*"/>
+            <RowDefinition Height="90*"/>
+            <RowDefinition Height="20*"/>
         </Grid.RowDefinitions>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
-                <RowDefinition Height="35"/>
                 <RowDefinition Height="35"/>
                 <RowDefinition Height="35"/>
                 <RowDefinition Height="65"/>
@@ -59,36 +58,32 @@
                        VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0"/>
             <TextBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" TextWrapping="Wrap"
                      Text="{Binding Product.NameMini}"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="Полное наименование:" 
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Полное наименование (для документов):" TextWrapping="Wrap"
                        VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0"/>
             <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" TextWrapping="Wrap"
                      Text="{Binding Product.Name}"/>
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="Тип номенклатуры:" 
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Входит в группу:" 
                        VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0"/>
-            <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" 
-                      ItemsSource="{Binding Types}" SelectedItem="{Binding Product.Type}"/>
-            <TextBlock Grid.Row="2" Grid.Column="2" Text="Входит в группу:" 
-                       VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0"/>
-            <ComboBox Grid.Row="2" Grid.Column="3" VerticalAlignment="Center"
+            <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"
                       ItemsSource="{Binding Groups}" SelectedItem="{Binding Product.Group}"/>
             <TextBlock Grid.Row="3" Grid.Column="0" Text="Единица измерения:" 
                        VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0"/>
             <ComboBox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Width="190"
                       ItemsSource="{Binding UnitsCollection}" DisplayMemberPath="Name"
                       SelectedItem="{Binding Product.Unit}"/>
-            <TextBlock Grid.Row="3" Grid.Column="2" Text="НДС:" Visibility="{Binding VisibilityNds}"
+            <TextBlock Grid.Row="2" Grid.Column="2" Text="НДС:" Visibility="{Binding VisibilityNds}"
                        VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0"/>
-            <ComboBox Grid.Row="3" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80"
-                      Visibility="{Binding VisibilityNds}" 
+            <ComboBox Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80"
                       ItemsSource="{Binding NdsCollection}"
-                      SelectedItem="{Binding Product.Nds, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-            <TextBlock Grid.Row="4" Grid.Column="0" Text="Артикул:" 
+                      SelectedItem="{Binding Product.Nds, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Grid.Row="3" Grid.Column="2" Text="Артикул:" 
                        VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0"/>
-            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Product.ArticleNumber}"/>
-            <TextBlock Grid.Row="5" Grid.Column="0" Text="Примечание:"
+            <TextBox Grid.Row="3" Grid.Column="3" 
+                     Text="{Binding Product.ArticleNumber, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Примечание:"
                        VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0"/>
-            <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" TextWrapping="Wrap" 
-                     Text="{Binding Product.Description}"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" TextWrapping="Wrap" 
+                     Text="{Binding Product.Description, UpdateSourceTrigger=PropertyChanged}"/>
 
         </Grid>
         <Grid Grid.Row="1" HorizontalAlignment="Right">

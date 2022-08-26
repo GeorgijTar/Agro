@@ -3,7 +3,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -21,16 +20,13 @@ public class ProductsViewModel : ViewModel
 {
     private readonly IBaseRepository<Product> _repository;
     private readonly IBaseRepository<GroupDoc> _groupRepository;
-    private readonly IBaseRepository<TypeDoc> _typeRepository;
 
     public ProductsViewModel(
         IBaseRepository<Product> repository,
-        IBaseRepository<GroupDoc> groupRepository,
-        IBaseRepository<TypeDoc> typeRepository)
+        IBaseRepository<GroupDoc> groupRepository)
     {
         _repository = repository;
         _groupRepository = groupRepository;
-        _typeRepository = typeRepository;
         ProductsCollection = new ObservableCollection<Product>();
         LoadData();
     }
@@ -39,7 +35,7 @@ public class ProductsViewModel : ViewModel
 
     public object SenderModel = null!;
 
-    private string _title = "Номенклатура";
+    private string _title = "Номенклатура готовой продукции";
     public string Title { get => _title; set => Set(ref _title, value); }
 
     private ObservableCollection<Product>? _products;
@@ -64,23 +60,7 @@ public class ProductsViewModel : ViewModel
         }
     }
 
-    private ObservableCollection<TypeDoc>? _type;
-
-    public ObservableCollection<TypeDoc>? TypeFilter { get => _type; set => Set(ref _type, value); }
-
-    private TypeDoc _selecteType=null!;
-
-    public TypeDoc SelectedType
-    {
-        get => _selecteType;
-        set
-        {
-            Set(ref _selecteType, value);
-            CollectionView!.Filter = FilterByType;
-        }
-    }
-
-    private string _nameFilter=null!;
+  private string _nameFilter=null!;
 
     public string NameFilter
     {
@@ -107,13 +87,15 @@ public class ProductsViewModel : ViewModel
         {
             ProductsCollection.Clear();
             var products = await _repository.GetAllAsync();
-            products = products!.Where(x => x.Status.Id == 5); 
+            products = products!.Where(x => x.Status!.Id == 5); 
             foreach (var product in products)
             {
                 ProductsCollection.Add(product);
             }
             CollectionView = CollectionViewSource.GetDefaultView(ProductsCollection);
         }
+
+
     }
 
     private async Task LoadFilterData()
@@ -122,21 +104,12 @@ public class ProductsViewModel : ViewModel
         SelectedGroup = new GroupDoc() { Id = 0, Name = "Все" };
         GroupFilter.Add(SelectedGroup);
         var groups = await _groupRepository.GetAllAsync();
-        groups=groups!.Where(group => group.TypeApplication == "Товары");
+        groups=groups!.Where(group => group.TypeApplication == "Готовая продукция");
         foreach (var group in groups)
         {
             GroupFilter.Add(group);
         }
-
-        TypeFilter = new ObservableCollection<TypeDoc>();
-        SelectedType = new TypeDoc() { Id = 0, Name = "Все" };
-        TypeFilter.Add(SelectedType);
-        var types = await _typeRepository.GetAllAsync();
-        types = types!.Where(type => type.TypeApplication == "Товары");
-        foreach (var type in types)
-        {
-            TypeFilter.Add(type);
-        }
+        
     }
 
     #endregion
@@ -160,26 +133,7 @@ public class ProductsViewModel : ViewModel
         return true;
     }
 
-    private bool FilterByType(object obj)
-    {
-        string qer;
-        if (SelectedType == null! || SelectedType.Id == 0)
-        {
-            qer = string.Empty;
-        }
-        else { qer = SelectedType.Name; }
-            
-       
-
-        if (!string.IsNullOrEmpty(qer))
-        {    
-            Product? dto = obj as Product;
-            return dto!.Type.Name.Contains(qer);
-        }
-        return true;
-    }
-
-    private bool FilterByGroup(object obj)
+   private bool FilterByGroup(object obj)
     {
         string qer;
         if (SelectedGroup == null! || SelectedGroup.Id == 0)
@@ -229,8 +183,7 @@ public class ProductsViewModel : ViewModel
     {
         ProductView product = new ProductView();
         var viewModel = product.DataContext as ProductViewModel;
-        Product!.PropertyChanged += viewModel!.LoadGroup;
-        viewModel.Product = Product!;
+        viewModel!.Product = Product!;
         viewModel.SenderModel = this;
         product.DataContext = viewModel;
         product.Show();

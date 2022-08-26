@@ -28,14 +28,12 @@ public static class GetDefaultData
         new() { Id = 5, Name = "Юридический адрес", TypeApplication = "Адреса" },
         new() { Id = 6, Name = "Фактический адрес", TypeApplication = "Адреса" },
         new() { Id = 7, Name = "Почтовый адрес", TypeApplication = "Адреса" },
-        new() { Id = 8, Name = "Готовая продукция", TypeApplication = "Товары" },
-        new() { Id = 9, Name = "Материальные запасы", TypeApplication = "Товары" },
-        new() { Id = 10, Name = "Выставленные", TypeApplication = "Счета" },
-        new() { Id = 11, Name = "Полученные", TypeApplication = "Счета" },
-        new() { Id = 12, Name = "Удостоверение личности", TypeApplication = "Документ" },
-        new() { Id = 13, Name = "Собственность", TypeApplication = "ЗУ" },
-        new() { Id = 14, Name = "Аренда", TypeApplication = "ЗУ" },
-        new() { Id = 15, Name = "Прочие документы", TypeApplication = "Документ" },
+        new() { Id = 8, Name = "Выставленные", TypeApplication = "Счета" },
+        new() { Id = 9, Name = "Полученные", TypeApplication = "Счета" },
+        new() { Id = 10, Name = "Удостоверение личности", TypeApplication = "Документ" },
+        new() { Id = 11, Name = "Собственность", TypeApplication = "ЗУ" },
+        new() { Id = 12, Name = "Аренда", TypeApplication = "ЗУ" },
+        new() { Id = 13, Name = "Прочие документы", TypeApplication = "Документ" },
     };
 
     public static GroupDoc[] DefaultGroup() => new GroupDoc[]

@@ -19,7 +19,6 @@ public class ProductRepository : IBaseRepository<Product>
     {
         return await _db.Products
             .Include(p=>p.Status)
-            .Include(p=>p.Type)
             .Include(p=>p.Group)
             .Include(p=>p.Unit)
             .Include(p=>p.Nds)

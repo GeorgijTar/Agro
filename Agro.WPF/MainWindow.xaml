@@ -60,7 +60,10 @@
                     </MenuItem.Icon>
 
                     <MenuItem Header="Контрагенты" Command="{Binding ShowContractors}"/>
-                    <MenuItem Header="Номенклатура" Command="{Binding ShowProduct}"/>
+                    <MenuItem Header="Номенклатура">
+                        <MenuItem Header="Готовая продукция" Command="{Binding ShowProduct}"/>
+                        <MenuItem Header="Материальные запасы" Command="{Binding}"/>
+                    </MenuItem>
                     <MenuItem Header="Места хранения" Command="{Binding ShowStorageLocations}"/>
                     <MenuItem Header="План счетов" Command="{Binding ShowAccountingPlans}"/>
                     <Separator  BorderThickness="2"/>
