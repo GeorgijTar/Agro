@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.ObjectModel;
 using Agro.DAL.Entities.Base;
+using Agro.DAL.Entities.Personnel;
 using Agro.DAL.Entities.Storage;
 
 namespace Agro.DAL.Entities.Organization

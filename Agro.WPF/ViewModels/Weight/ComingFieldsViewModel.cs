@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -6,23 +7,25 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Agro.DAL.Entities;
+using Agro.DAL.Entities.Agronomy;
 using Agro.DAL.Entities.Weight;
-using Agro.Interfaces.Base.Repositories.Base;
+using Agro.Interfaces.Base.Repositories;
 using Agro.WPF.Commands;
+using Agro.WPF.ViewModels.Agronomy;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.Views.Windows.Agronomy;
 using Agro.WPF.Views.Windows.Weight;
 
 namespace Agro.WPF.ViewModels.Weight;
 
 public class ComingFieldsViewModel: ViewModel
 {
-    private readonly IBaseRepository<ComingField> _comingFieldRepository;
-    private readonly IBaseRepository<Status> _statusRepository;
+    private readonly IComingFieldRepository<ComingField> _comingFieldRepository;
     private string _title = "Реестр прихода с поля";
     public string Title { get => _title; set => Set(ref _title, value); }
 
     
-    private ObservableCollection<ComingField> _comingFields = null!;
+    private ObservableCollection<ComingField> _comingFields = new();
     public ObservableCollection<ComingField> ComingFields { get => _comingFields; set => Set(ref _comingFields, value); }
 
     
@@ -32,22 +35,59 @@ public class ComingFieldsViewModel: ViewModel
     private ICollectionView _collectionView = null!;
     public ICollectionView CollectionView { get => _collectionView; set => Set(ref _collectionView, value); }
 
-    public ComingFieldsViewModel(IBaseRepository<ComingField> comingFieldRepository, IBaseRepository<Status> statusRepository)
+
+    private IEnumerable<DAL.Entities.Weight.Weight>? _weights;
+    public IEnumerable<DAL.Entities.Weight.Weight>? Weights { get => _weights; set => Set(ref _weights, value); }
+
+    
+    private IEnumerable<Status>? _statuses;
+    public IEnumerable<Status>? Statuses { get => _statuses; set => Set(ref _statuses, value); } 
+
+
+
+    private DAL.Entities.Weight.Weight _weightFilter = null!;
+    public DAL.Entities.Weight.Weight WeightFilter { get => _weightFilter; set => Set(ref _weightFilter, value); }
+
+    
+    private Field _fieldFilter = null!;
+    public Field FieldFilter { get => _fieldFilter; set => Set(ref _fieldFilter, value); }
+
+    
+    private Status _statusFilter = null!;
+    public Status StatusFilter { get => _statusFilter; set => Set(ref _statusFilter, value); } 
+
+
+    private string _cultureFilter = null!;
+    public string CultureFilter { get => _cultureFilter; set => Set(ref _cultureFilter, value); }
+
+
+    private string _driverFilter = null!;
+    public string DriverFilter { get => _driverFilter; set => Set(ref _driverFilter, value); }
+
+
+    private string _transportFilter = null!;
+    public string TransportFilter { get => _transportFilter; set => Set(ref _transportFilter, value); } 
+
+
+    public ComingFieldsViewModel(IComingFieldRepository<ComingField> comingFieldRepository)
     {
         _comingFieldRepository = comingFieldRepository;
-        _statusRepository = statusRepository;
         CollectionView = CollectionViewSource.GetDefaultView(ComingFields);
         LoadData();
     }
 
     private async void LoadData()
-    {
+    { 
+        ComingFields.Clear();
         var cfs = await _comingFieldRepository.GetAllAsync();
         cfs = cfs!.Where(c => c.Status!.Id != 6).ToArray();
         foreach (var comingField in cfs)
         {
             ComingFields.Add(comingField);
         }
+
+        Statuses=cfs.Where(c=>c.Status!.Id!=6).Select(c=>c.Status).Distinct().ToArray()!;
+        Weights = await _comingFieldRepository.GetAllWeight();
     }
 
 
@@ -86,7 +126,7 @@ public class ComingFieldsViewModel: ViewModel
         var model = view.DataContext as ComingFieldViewModel;
         model!.Title = "Редактирование прихода с поля";
         model.SenderModel = this;
-        model.ComingField = new();
+        model.ComingField = ComingField;
         view.DataContext = model;
         view.Show();
     }
@@ -105,7 +145,7 @@ public class ComingFieldsViewModel: ViewModel
                 "Редактор", MessageBoxButton.YesNo);
         if (result == MessageBoxResult.Yes)
         {
-            ComingField.Status = await _statusRepository.GetByIdAsync(6);
+            ComingField.Status = await _comingFieldRepository.GetStatusById(6);
             await _comingFieldRepository.UpdateAsync(ComingField);
             ComingFields.Remove(ComingField);
             ComingField = null!;
@@ -143,6 +183,36 @@ public class ComingFieldsViewModel: ViewModel
     //    }
     //}
 
+    private ICommand? _showFieldsCommand;
+
+    public ICommand ShowFieldsCommand => _showFieldsCommand
+        ??= new RelayCommand(OnShowFieldsExecuted);
+
+    private void OnShowFieldsExecuted(object obj)
+    {
+        var view = new FieldsView();
+        var mod = view.DataContext as FieldsViewModel;
+        mod!.Title = "Выбирите поле";
+        mod.SenderModel = this;
+        view.DataContext = mod;
+        view.ShowDialog();
+    }
+
+
+    private ICommand? _clearFieldCommand;
+
+    public ICommand ClearFieldCommand => _clearFieldCommand
+        ??= new RelayCommand(OnClearFieldExecuted, CanClearFieldExecuted);
+
+    private bool CanClearFieldExecuted(object arg)
+    {
+        return FieldFilter != null!;
+    }
+
+    private void OnClearFieldExecuted(object obj)
+    {
+        FieldFilter = null!;
+    }
     #endregion
 
 }

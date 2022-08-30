@@ -1,8 +1,8 @@
 ﻿
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Agro.DAL.Entities.Base;
+using Agro.DAL.Entities.Counter;
 
 namespace Agro.DAL.Entities;
 
@@ -79,7 +79,7 @@ public class Invoice : Entity
     public virtual ObservableCollection<ScanFile>? ScanFiles { get=> _scanFiles; set=>Set(ref _scanFiles, value); }
 
     /// <summary>Платежные реквизиты организации</summary>
-    private BankDetails? _bankDetailsOrg = null!;
+    private BankDetails? _bankDetailsOrg;
     public virtual BankDetails? BankDetailsOrg { get=> _bankDetailsOrg; set=>Set(ref _bankDetailsOrg, value); }
     
     private ObservableCollection<History> ? _history = new();

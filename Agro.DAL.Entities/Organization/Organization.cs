@@ -2,7 +2,8 @@
 using System.Collections.ObjectModel;
 using Agro.DAL.Entities.Base;
 using Agro.DAL.Entities.Classifiers;
-using Agro.DAL.Entities.RegInfoOrg;
+using Agro.DAL.Entities.Organization.RegInfoOrg;
+using Agro.DAL.Entities.Personnel;
 
 namespace Agro.DAL.Entities.Organization;
 public class Organization : Entity

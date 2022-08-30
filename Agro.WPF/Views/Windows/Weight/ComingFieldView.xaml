@@ -8,7 +8,7 @@
         xmlns:entities="clr-namespace:Agro.DAL.Entities;assembly=Agro.DAL.Entities"
         xmlns:storage="clr-namespace:Agro.DAL.Entities.Storage;assembly=Agro.DAL.Entities"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="550" Width="1000"
+        Title="{Binding Title}" Height="550" Width="850"
         DataContext="{Binding ComingFieldModel, Source={StaticResource Locator}}"
         x:Name="MyWindow">
     <Window.Resources>
@@ -79,8 +79,8 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="35"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="40"/>
@@ -92,10 +92,6 @@
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Text="№:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
             <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" IsReadOnly="True"
@@ -183,7 +179,7 @@
                         <DockPanel>
                             <Button Width="20" Height="20" DockPanel.Dock="Right" Opacity="0.7" 
                                 Content="X" BorderThickness="0" Background="Transparent"
-                                Command="{Binding ClearFieldCommand}"/>
+                                Command="{Binding ClearDriverCommand}"/>
                             <TextBlock DockPanel.Dock="Left" Text="{Binding ComingField.Driver}" 
                                        VerticalAlignment="Center" FontWeight="Bold"/>
                         </DockPanel>
@@ -199,7 +195,7 @@
                         <DockPanel>
                             <Button Width="20" Height="20" DockPanel.Dock="Right" Opacity="0.7" 
                                     Content="X" BorderThickness="0" Background="Transparent"
-                                    Command="{Binding ClearCultureCommand}"/>
+                                    Command="{Binding ClearTransportCommand}"/>
                             <TextBlock DockPanel.Dock="Left" Text="{Binding ComingField.Transport}"
                                        VerticalAlignment="Center" FontWeight="Bold"/>
                         </DockPanel>
@@ -211,7 +207,7 @@
                     </Button>
                 </Grid>
             </GroupBox>
-            <GroupBox Grid.Row="5" Grid.Column="0" Header="Информация о весе" Grid.ColumnSpan="9" Grid.RowSpan="2" BorderThickness="2">
+            <GroupBox Grid.Row="5" Grid.Column="0" Header="Информация о весе (кг.)" Grid.ColumnSpan="9" Grid.RowSpan="2" BorderThickness="2">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="50"/>
@@ -226,30 +222,33 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Grid.Row="0" Text="Брутто:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
                     <TextBox Grid.Row="0" Grid.Column="1"  DockPanel.Dock="Left" 
-                             Text="{Binding ComingField.VesBrutto, StringFormat=N, ConverterCulture='Ru-ru'}" 
+                             Text="{Binding ComingField.VesBrutto, StringFormat=N0, ConverterCulture='Ru-ru', UpdateSourceTrigger=PropertyChanged}" 
                                  VerticalAlignment="Center" FontWeight="Bold"/>
                     <Button Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" BorderBrush="DarkBlue"  Width="23" Margin="2,0"
                             Template="{StaticResource ButtonTemplate}"
-                            Command="{Binding ShowDriversCommand}">
+                            Command="{Binding }">
                         <fa5:ImageAwesome Icon="Solid_Weight" Width="18" Height="18" Foreground="DarkBlue"/>
                     </Button>
                     <TextBlock Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" 
                                Text="Тара:" Margin="5,0"/>
                     <TextBox Grid.Row="0" Grid.Column="4" DockPanel.Dock="Left" 
-                             Text="{Binding ComingField.VesTara, StringFormat=N, ConverterCulture='Ru-ru'}"
+                             Text="{Binding ComingField.VesTara, StringFormat=N0, ConverterCulture='Ru-ru', UpdateSourceTrigger=PropertyChanged}"
                                        VerticalAlignment="Center" FontWeight="Bold"/>
                     <Button Grid.Row="0" Grid.Column="5" VerticalAlignment="Center" BorderBrush="DarkBlue"  Width="23" Margin="2,0"
                             Template="{StaticResource ButtonTemplate}"
-                            Command="{Binding ShowTransportCommand}">
+                            Command="{Binding }">
                         <fa5:ImageAwesome Icon="Solid_Weight" Width="18" Height="18" Foreground="DarkBlue"/>
                     </Button>
                     <TextBlock Grid.Row="0" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Right" Text="Нетто:" Margin="5,0"/>
-                    <TextBox Grid.Row="0" Grid.Column="7"  DockPanel.Dock="Left" 
-                             Text="{Binding ComingField.VesNetto, StringFormat=N, ConverterCulture='Ru-ru'}"
+                    <TextBox Grid.Row="0" Grid.Column="7"  DockPanel.Dock="Left" IsReadOnly="True"
+                             Text="{Binding ComingField.VesNetto, StringFormat=N0, ConverterCulture='Ru-ru', UpdateSourceTrigger=PropertyChanged}"
                                        VerticalAlignment="Center" FontWeight="Bold"/>
                    </Grid>
             </GroupBox>
-            <GroupBox Grid.Row="7" Grid.Column="0" Header="Распределение веса" Grid.ColumnSpan="9" Grid.RowSpan="2" BorderThickness="2">
+            <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Text="Влажность:" HorizontalAlignment="Right" Margin="5,0"/>
+            <TextBox Grid.Row="7" Grid.Column="2" VerticalAlignment="Center" Text="{Binding ComingField.Humidity}"/>
+            <TextBlock Grid.Row="7" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" Text="%" Margin="5,0"/>
+            <GroupBox Grid.Row="8" Grid.Column="0" Header="Распределение веса" Grid.ColumnSpan="9" Grid.RowSpan="2" BorderThickness="2">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="50"/>
@@ -263,36 +262,39 @@
                         <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Grid.Row="0" Text="Acros:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
-                    <TextBox Grid.Row="0" Grid.Column="1"  DockPanel.Dock="Left" 
-                             Text="{Binding ComingField.VesNettoAcros, StringFormat=N, ConverterCulture='Ru-ru'}" 
+                    <TextBox x:Name="Acros" Grid.Row="0" Grid.Column="1"  DockPanel.Dock="Left" 
+                             Text="{Binding ComingField.VesNettoAcros, StringFormat=N0, ConverterCulture='Ru-ru'}" 
                                  VerticalAlignment="Center" FontWeight="Bold"/>
                     <Button Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" BorderBrush="DarkBlue"  Width="23" Margin="2,0"
                             Template="{StaticResource ButtonTemplate}"
-                            Command="{Binding }">
+                            Command="{Binding CopyVesCommand}" CommandParameter="{Binding ElementName=Acros}">
                         <fa5:ImageAwesome Icon="Regular_CheckSquare" Width="18" Height="18" Foreground="DarkBlue"/>
                     </Button>
                     <TextBlock Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" 
                                Text="Claas Tukano:" Margin="5,0"/>
-                    <TextBox Grid.Row="0" Grid.Column="4" DockPanel.Dock="Left" 
-                             Text="{Binding ComingField.VesNettoTucano, StringFormat=N, ConverterCulture='Ru-ru'}"
+                    <TextBox x:Name="Claas" Grid.Row="0" Grid.Column="4" DockPanel.Dock="Left" 
+                             Text="{Binding ComingField.VesNettoTucano, StringFormat=N0, ConverterCulture='Ru-ru'}"
                                        VerticalAlignment="Center" FontWeight="Bold"/>
                     <Button Grid.Row="0" Grid.Column="5" VerticalAlignment="Center" BorderBrush="DarkBlue"  Width="23" Margin="2,0"
                             Template="{StaticResource ButtonTemplate}"
-                            Command="{Binding }">
+                            Command="{Binding CopyVesCommand}" CommandParameter="{Binding ElementName=Claas}">
                         <fa5:ImageAwesome Icon="Regular_CheckSquare" Width="18" Height="18" Foreground="DarkBlue"/>
                     </Button>
                     <TextBlock Grid.Row="0" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Right" 
                                Text="Дон:" Margin="5,0"/>
-                    <TextBox Grid.Row="0" Grid.Column="7"  DockPanel.Dock="Left" 
-                             Text="{Binding ComingField.VesNettoDon, StringFormat=N, ConverterCulture='Ru-ru'}"
+                    <TextBox x:Name="Don" Grid.Row="0" Grid.Column="7"  DockPanel.Dock="Left" 
+                             Text="{Binding ComingField.VesNettoDon, StringFormat=N0, ConverterCulture='Ru-ru'}"
                                        VerticalAlignment="Center" FontWeight="Bold"/>
                     <Button Grid.Row="0" Grid.Column="8" VerticalAlignment="Center" BorderBrush="DarkBlue"  Width="23" Margin="2,0"
                             Template="{StaticResource ButtonTemplate}"
-                            Command="{Binding }">
+                            Command="{Binding CopyVesCommand}" CommandParameter="{Binding ElementName=Don}">
                         <fa5:ImageAwesome Icon="Regular_CheckSquare" Width="18" Height="18" Foreground="DarkBlue"/>
                     </Button>
                 </Grid>
             </GroupBox>
+            <TextBlock Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" Text="Примечание:" Margin="5,0"/>
+            <TextBox Grid.Row="10" Grid.Column="2" Grid.ColumnSpan="7" Grid.RowSpan="2" TextWrapping="Wrap" 
+                     Text="{Binding ComingField.Note}"/>
         </Grid>
     </Grid>
 </Window>

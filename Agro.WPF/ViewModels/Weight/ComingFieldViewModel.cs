@@ -1,68 +1,51 @@
-﻿using Agro.DAL.Entities.Organization;
-using Agro.DAL.Entities.Weight;
+﻿using Agro.DAL.Entities.Weight;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
-using Agro.WPF.ViewModels.Personnel;
 using System.Windows.Input;
 using System.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Agro.DAL.Entities;
+using System.Windows.Controls;
 using Agro.DAL.Entities.Storage;
-using Agro.Interfaces.Base.Repositories.Base;
+using Agro.Interfaces.Base.Repositories;
 using Agro.WPF.ViewModels.Agronomy;
 using Agro.WPF.Views.Windows.Agronomy;
 using Agro.WPF.Views.Windows.Weight;
 
 namespace Agro.WPF.ViewModels.Weight;
 
-public class ComingFieldViewModel: ViewModel
+public class ComingFieldViewModel : ViewModel
 {
-    private readonly IBaseRepository<ComingField> _comingFieldRepository;
-    private readonly IBaseRepository<Status> _statusRepository;
-    private readonly IBaseRepository<DAL.Entities.Weight.Weight> _weightRepository;
-    private readonly IBaseRepository<StorageLocation> _storageLocationRepository;
+    private readonly IComingFieldRepository<ComingField> _comingFieldRepository;
     private string _title = null!;
     public string Title { get => _title; set => Set(ref _title, value); }
 
-    
+
     private ComingField _comingField = new();
     public ComingField ComingField { get => _comingField; set => Set(ref _comingField, value); }
 
-    
-    private IEnumerable<DAL.Entities.Weight.Weight> _weights = null!;
-    public IEnumerable<DAL.Entities.Weight.Weight> Weights { get => _weights; set => Set(ref _weights, value); }
+
+    private IEnumerable<DAL.Entities.Weight.Weight>? _weights;
+    public IEnumerable<DAL.Entities.Weight.Weight>? Weights { get => _weights; set => Set(ref _weights, value); }
 
 
-    private IEnumerable<StorageLocation>? _storageLocations = null!;
-    public IEnumerable<StorageLocation>? StorageLocations { get => _storageLocations; set => Set(ref _storageLocations, value); } 
+    private IEnumerable<StorageLocation>? _storageLocations;
+    public IEnumerable<StorageLocation>? StorageLocations { get => _storageLocations; set => Set(ref _storageLocations, value); }
 
 
     public object SenderModel { get; set; } = null!;
 
-    public ComingFieldViewModel(
-        IBaseRepository<ComingField> comingFieldRepository, 
-        IBaseRepository<Status> statusRepository,
-        IBaseRepository<DAL.Entities.Weight.Weight> weightRepository,
-        IBaseRepository<StorageLocation> storageLocationRepository)
+    public ComingFieldViewModel(IComingFieldRepository<ComingField> comingFieldRepository)
     {
         _comingFieldRepository = comingFieldRepository;
-        _statusRepository = statusRepository;
-        _weightRepository = weightRepository;
-        _storageLocationRepository = storageLocationRepository;
         LoadData();
     }
 
     private async void LoadData()
     {
-        var wes = await _weightRepository.GetAllAsync();
-        wes = wes?.Where(w => w.Status?.Id == 5);
-        Weights = wes!;
-
-        var strLocs = await _storageLocationRepository.GetAllAsync();
-        StorageLocations = strLocs?.Where(str => str.Status?.Id == 5).ToArray();
-
+        Weights = await _comingFieldRepository.GetAllWeight();
+        StorageLocations = await _comingFieldRepository.GetAllStorageLocation();
     }
 
 
@@ -75,25 +58,24 @@ public class ComingFieldViewModel: ViewModel
 
     private bool CanSaveExecuted(object arg)
     {
-        return ComingField != null!;
+        return ComingField.Driver != null! && ComingField.Transport != null! && ComingField.Field != null!
+               && ComingField.Culture != null! && ComingField.VesNetto >= 0 && ComingField.VesBrutto >= 0
+               && ComingField.VesTara >= 0 && ComingField.StorageLocation != null!;
     }
 
     private async void OnSaveExecuted(object obj)
     {
-        ComingField.Status = await _statusRepository.GetByIdAsync(1);
-        var cult = await _comingFieldRepository.SaveAsync(ComingField);
-        //if (SenderModel is DivisionsViewModel divisionsViewModel)
-        //{
-        //    var cl = divisionsViewModel.Divisions.FirstOrDefault(x => x.Id == cult.Id);
-        //    if (cl != null!)
-        //    {
-        //        cl = cult;
-        //    }
-        //    else
-        //    {
-        //        divisionsViewModel.Divisions.Add(cult);
-        //    }
-        //}
+        ComingField.Status = await _comingFieldRepository.GetStatusById(1);
+        if (ComingField.Number==0) ComingField.Number = await _comingFieldRepository.GetNumber(ComingField) + 1;
+        var com = await _comingFieldRepository.SaveAsync(ComingField);
+        if (SenderModel is ComingFieldsViewModel comingFieldsViewModel)
+        {
+            var cl = comingFieldsViewModel.ComingFields.FirstOrDefault(x => x.Id == com.Id);
+            if (cl! == null!)
+            {
+                comingFieldsViewModel.ComingFields.Add(com);
+            }
+        }
 
         var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
         if (window != null!)
@@ -124,10 +106,10 @@ public class ComingFieldViewModel: ViewModel
         var mod = view.DataContext as FieldsViewModel;
         mod!.Title = "Выбирите поле";
         mod.SenderModel = this;
-        view.DataContext= mod;
+        view.DataContext = mod;
         view.ShowDialog();
     }
-    
+
     private ICommand? _showCulturesCommand;
 
     public ICommand ShowCulturesCommand => _showCulturesCommand
@@ -142,7 +124,7 @@ public class ComingFieldViewModel: ViewModel
         view.DataContext = mod;
         view.ShowDialog();
     }
-    
+
     private ICommand? _showDriversCommand;
 
     public ICommand ShowDriversCommand => _showDriversCommand
@@ -158,7 +140,7 @@ public class ComingFieldViewModel: ViewModel
         view.ShowDialog();
     }
 
-    
+
     private ICommand? _showTransportCommand;
 
     public ICommand ShowTransportCommand => _showTransportCommand
@@ -187,7 +169,7 @@ public class ComingFieldViewModel: ViewModel
 
     private void OnClearFieldsExecuted(object obj)
     {
-        ComingField.Field= null!;
+        ComingField.Field = null!;
     }
 
 
@@ -205,8 +187,72 @@ public class ComingFieldViewModel: ViewModel
     {
         ComingField.Culture = null!;
     }
-    
 
 
+
+    private ICommand? _clearDriverCommand;
+
+    public ICommand ClearDriverCommand => _clearDriverCommand
+        ??= new RelayCommand(OnClearDriverExecuted, CanClearDriverExecuted);
+
+    private bool CanClearDriverExecuted(object arg)
+    {
+        return ComingField.Driver != null!;
+    }
+
+    private void OnClearDriverExecuted(object obj)
+    {
+        ComingField.Driver = null!;
+    }
+
+
+
+
+    private ICommand? _clearTransportCommand;
+
+    public ICommand ClearTransportCommand => _clearTransportCommand
+        ??= new RelayCommand(OnClearTransportExecuted, CanClearTransportExecuted);
+
+    private bool CanClearTransportExecuted(object arg)
+    {
+        return ComingField.Transport != null!;
+    }
+
+    private void OnClearTransportExecuted(object obj)
+    {
+        ComingField.Transport = null!;
+    }
+
+
+    private ICommand? _copyVesCommand;
+
+    public ICommand CopyVesCommand => _copyVesCommand
+        ??= new RelayCommand(OnCopyVesExecuted, CanCopyVesExecuted);
+
+    private bool CanCopyVesExecuted(object arg)
+    {
+        return ComingField.VesNetto != 0;
+    }
+
+    private void OnCopyVesExecuted(object obj)
+    {
+        if (obj is TextBox tb)
+        {
+            if (tb.Name == "Acros")
+            {
+                ComingField.VesNettoAcros = ComingField.VesNetto;
+            }
+
+            if (tb.Name == "Claas")
+            {
+                ComingField.VesNettoTucano = ComingField.VesNetto;
+            }
+
+            if (tb.Name == "Don")
+            {
+                ComingField.VesNettoDon = ComingField.VesNetto;
+            }
+        }
+    }
     #endregion
 }

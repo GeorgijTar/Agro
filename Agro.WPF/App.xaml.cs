@@ -1,6 +1,7 @@
 ﻿using System;
 using Agro.DAL.Entities;
 using Agro.DAL.Entities.Agronomy;
+using Agro.DAL.Entities.Counter;
 using Agro.DAL.Entities.Organization;
 using Agro.DAL.Entities.Personnel;
 using Agro.DAL.Entities.Storage;
@@ -8,7 +9,6 @@ using Agro.DAL.Entities.Weight;
 using Agro.DAL.MySql;
 using Agro.DAL.Sql;
 using Agro.DAL.SqLite;
-using Agro.Interfaces;
 using Agro.Interfaces.Base.Repositories;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.Services.Repositories;
@@ -118,7 +118,8 @@ namespace Agro.WPF
             services.AddTransient<IBaseRepository<StaffList>, StaffListRepository>();
             services.AddTransient<IBaseRepository<StaffListPosition>, StaffListPositionRepository>();
             services.AddTransient<IBaseRepository<StorageLocation>, StorageLocationRepository>();
-            
+            services.AddScoped(typeof(IComingFieldRepository<ComingField>), typeof(ComingFieldRepository));
+
 
 
             // Регистрация мапера

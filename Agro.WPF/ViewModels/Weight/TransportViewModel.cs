@@ -1,13 +1,10 @@
 ﻿
 
 using System.Linq;
-using Agro.DAL.Entities.Agronomy;
 using Agro.DAL.Entities.Weight;
 using Agro.WPF.Commands;
-using Agro.WPF.ViewModels.Agronomy;
 using Agro.WPF.ViewModels.Base;
 using System.Windows.Input;
-using System.Windows.Interop;
 using Agro.DAL.Entities;
 using Agro.Interfaces.Base.Repositories.Base;
 using System.Windows;

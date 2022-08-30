@@ -7,7 +7,7 @@
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-      Title="{Binding Title}" Height="750" Width="1300"
+      Title="{Binding Title}" Height="700" Width="1200"
         DataContext="{Binding ComingFieldsModel, Source={StaticResource Locator}}"
         x:Name="TrWindow">
     <Window.Resources>
@@ -42,7 +42,7 @@
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
-                <RowDefinition Height="75"/>
+                <RowDefinition Height="85"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <ToolBar>
@@ -85,33 +85,74 @@
                     </StackPanel>
                 </Button>
             </ToolBar>
-            <GroupBox Grid.Row="1" Header="Фильтр" Height="75" VerticalAlignment ="Top" Margin="5,0">
+            <GroupBox Grid.Row="1" Header="Фильтр" Height="85" VerticalAlignment ="Top" Margin="5,0">
                 <Grid Background="AliceBlue">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="70"/>
                         <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="70"/>
                         <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="35"/>
+                        <ColumnDefinition Width="80"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Фамилия:" 
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Водитель:" 
                                HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
                     <TextBox Grid.Row="0" Grid.Column="1" Margin="0,2" 
-                             Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock Grid.Row="0" Grid.Column="2" Text="ИНН:" 
+                             Text="{Binding DriverFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="Транспорт:" 
                                HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
                     <TextBox Grid.Row="0" Grid.Column="3"  Margin="0,2" 
-                             Text="{Binding InnFilter, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock Grid.Row="0" Grid.Column="4" Text="СНИЛС:" 
+                             Text="{Binding TransportFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="4" Text="Культура:" 
                                HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
                     <TextBox Grid.Row="0" Grid.Column="5" Margin="0,2" MaxLength="12"
-                             Text="{Binding SnilsFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding CultureFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="6" Text="Весовая:" 
+                               HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
+                    <ComboBox Grid.Row="0" Grid.Column="7" ItemsSource="{Binding Weights, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding WeightFilter}"
+                              VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="0" Grid.Column="8" Text="Поле:" 
+                               HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
+                    <Border Grid.Row="0" Grid.Column="9" BorderThickness="0.6" BorderBrush="#5f9ea0" VerticalAlignment="Center" 
+                            CornerRadius="3" Height="22">
+                        <DockPanel >
+                            <Button DockPanel.Dock="Right" Height="20" Width="20" Background="Transparent" 
+                                    Content="X" BorderBrush="Transparent"
+                                    Command="{Binding ClearFieldCommand}"/>
+                            <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"
+                                       Text="{Binding FieldFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DockPanel>
+                    </Border>
+                    <Button Grid.Row="0" Grid.Column="10" VerticalAlignment="Center" BorderBrush="DarkBlue"  Width="23" Margin="2,0"
+                            Template="{StaticResource ButtonTemplate}"
+                            Command="{Binding ShowFieldsCommand}">
+                        <fa5:ImageAwesome Icon="Solid_Book" Width="18" Height="18" Foreground="DarkBlue"/>
+                    </Button>
+                    <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal">
+                        <TextBlock Text="Дата:" VerticalAlignment="Center" Margin="10,0,5,0"/>
+                        <CheckBox x:Name="DateCheck" VerticalAlignment="Center"/>
+                        <TextBlock Text="с " VerticalAlignment="Center" Margin="2,0"></TextBlock>
+                        <DatePicker VerticalAlignment="Center" Margin="2,0" IsEnabled="{Binding ElementName=DateCheck}"/>
+                        <TextBlock Text=" по " VerticalAlignment="Center" Margin="2,0"/>
+                        <DatePicker VerticalAlignment="Center" Margin="2,0" IsEnabled="{Binding ElementName=DateCheck}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Orientation="Horizontal">
+                        <TextBlock Text="Статус" VerticalAlignment="Center" Margin="5,0"/>
+                        <ComboBox VerticalAlignment="Center" Width="150" Margin="5,0" 
+                                  ItemsSource="{Binding Statuses}"
+                                  SelectedItem="{Binding StatusFilter}"/>
+                    </StackPanel>
                 </Grid>
             </GroupBox>
             <GroupBox Grid.Row="2">
@@ -121,20 +162,48 @@
                                   AutoGenerateColumns="False"
                                   ItemsSource="{Binding ComingFields}"
                                   CanUserAddRows="False">
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Создать" Command="{Binding AddCommand}"/>
+                                    <MenuItem Header="Редактировать" Command="{Binding EditCommand}"/>
+                                    <MenuItem></MenuItem>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
                             <b:Interaction.Triggers>
                                 <b:EventTrigger EventName="MouseDoubleClick">
                                     <b:InvokeCommandAction Command="{Binding SelectRowCommand}" 
                                                            CommandParameter="{Binding ElementName=PeoplsWindow}"/>
                                 </b:EventTrigger>
                             </b:Interaction.Triggers>
+                            <DataGrid.ItemContainerStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Setter Property="Background" Value="LightGreen"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Status.Id}" Value="1">
+                                            <Setter Property="Background" Value="LemonChiffon"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding VesTara}" Value="0">
+                                            <Setter Property="Background" Value="LightCoral"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding VesBrutto}" Value="0">
+                                            <Setter Property="Background" Value="LightCoral"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding VesNetto}" Value="0">
+                                            <Setter Property="Background" Value="LightCoral"/>
+                                        </DataTrigger>
+                                        
+                                    </Style.Triggers>
+
+                                </Style>
+                            </DataGrid.ItemContainerStyle>
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="45" Header="ID" Binding="{Binding Id}"/>
                                 <DataGridTextColumn Width="80" Header="Статус" Binding="{Binding Status.Name}"/>
-                                <DataGridTextColumn Width="80" Header="Номер" Binding="{Binding Number}"/>
+                                <DataGridTextColumn Width="50" Header="Номер" Binding="{Binding Number}"/>
                                 <DataGridTextColumn Width="90" Header="Дата" Binding="{Binding Date, StringFormat='dd.MM.yyyy'}"/>
                                 <DataGridTextColumn Width="65" Header="Весовая" Binding="{Binding Weight}"/>
-                                <DataGridTextColumn Width="130*" Header="Водитель" Binding="{Binding Driver}"/>
-                                <DataGridTextColumn Width="120*" Header="Транспорт" Binding="{Binding Transport}"/>
+                                <DataGridTextColumn Width="90*" Header="Водитель" Binding="{Binding Driver}"/>
+                                <DataGridTextColumn Width="150*" Header="Транспорт" Binding="{Binding Transport}"/>
                                 <DataGridTextColumn Width="90" Header="Брутто" Binding="{Binding VesBrutto}"/>
                                 <DataGridTextColumn Width="90" Header="Тара" Binding="{Binding VesTara}"/>
                                 <DataGridTextColumn Width="90" Header="Нетто" Binding="{Binding VesNetto}"/>

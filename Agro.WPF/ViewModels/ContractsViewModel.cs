@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using Agro.DAL.Entities;
+using Agro.DAL.Entities.Counter;
 using Agro.Interfaces.Base.Repositories;
 using Agro.WPF.ViewModels.Base;
 

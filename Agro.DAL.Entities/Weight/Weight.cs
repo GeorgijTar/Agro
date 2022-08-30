@@ -1,4 +1,5 @@
 ﻿using Agro.DAL.Entities.Base;
+using Agro.DAL.Entities.Personnel;
 
 
 namespace Agro.DAL.Entities.Weight;

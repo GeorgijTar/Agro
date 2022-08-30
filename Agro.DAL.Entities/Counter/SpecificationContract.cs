@@ -1,10 +1,8 @@
-﻿
-
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Agro.DAL.Entities.Base;
 
-namespace Agro.DAL.Entities;
+namespace Agro.DAL.Entities.Counter;
 
 public class SpecificationContract : Entity
 {

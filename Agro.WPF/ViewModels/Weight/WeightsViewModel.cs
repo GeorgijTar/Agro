@@ -4,16 +4,11 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows;
 using Agro.DAL.Entities;
-using Agro.DAL.Entities.Personnel;
-using Agro.DAL.Entities.Weight;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
-using Agro.WPF.ViewModels.Personnel;
-using Agro.WPF.Views.Windows.Personnel;
 using Agro.WPF.Views.Windows.Weight;
 
 namespace Agro.WPF.ViewModels.Weight;

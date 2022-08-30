@@ -143,6 +143,12 @@ public class FieldsViewModel : ViewModel
                 {
                     comingFieldViewModel.ComingField.Field = field;
                 }
+
+                if (SenderModel is ComingFieldsViewModel comingFieldsViewModel)
+                {
+                    comingFieldsViewModel.FieldFilter = field;
+                }
+
                 var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
                 if (window != null!)
                     window.Close();

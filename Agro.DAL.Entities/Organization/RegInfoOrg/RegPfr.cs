@@ -1,6 +1,6 @@
 ﻿using Agro.DAL.Entities.Base;
 
-namespace Agro.DAL.Entities.RegInfoOrg;
+namespace Agro.DAL.Entities.Organization.RegInfoOrg;
 public class RegPfr : Entity
 {
     private DateTime? _dateReg;

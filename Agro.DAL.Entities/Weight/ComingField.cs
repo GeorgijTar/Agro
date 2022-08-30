@@ -1,5 +1,6 @@
 ﻿
 
+using System.ComponentModel;
 using Agro.DAL.Entities.Agronomy;
 using Agro.DAL.Entities.Base;
 using Agro.DAL.Entities.Storage;
@@ -11,6 +12,23 @@ namespace Agro.DAL.Entities.Weight;
 public class ComingField : Entity
 
 {
+    public ComingField()
+    {
+        this.PropertyChanged += UpdateCpmingFiled;
+    }
+
+    private void UpdateCpmingFiled(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == "VesBrutto")
+        {
+             VesNetto = VesBrutto - VesTara;
+        }
+        if (e.PropertyName == "VesTara")
+        {
+            VesNetto = VesBrutto - VesTara;
+        }
+    }
+
     /// <summary>Статус</summary>
     private Status? _status;
     public Status? Status { get => _status; set => Set(ref _status, value); }
@@ -71,8 +89,13 @@ public class ComingField : Entity
     private double _vesNettoDon;
     public double VesNettoDon { get => _vesNettoDon; set => Set(ref _vesNettoDon, value); }
 
+    /// <summary>Влажность</summary>
+    private double? _humidity;
+    public double? Humidity { get => _humidity; set => Set(ref _humidity, value); } 
+
+
     /// <summary>Примечание</summary>
-    private string _note = null!;
-    public string Note { get => _note; set => Set(ref _note, value); }
+    private string? _note;
+    public string? Note { get => _note; set => Set(ref _note, value); }
 
 }

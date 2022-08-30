@@ -1,10 +1,8 @@
 ﻿
 using Agro.DAL.Entities;
-using Agro.DAL.Entities.Personnel;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
-using Agro.WPF.ViewModels.Personnel;
 using System.Windows.Input;
 using System.Windows;
 using System;

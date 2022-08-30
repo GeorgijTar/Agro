@@ -111,13 +111,17 @@ public class DriversViewModel : ViewModel
     public ICommand SelectRowCommand => _selectRowCommand
         ??= new RelayCommand(OnSelectRowExecuted, CanEditExecuted);
 
-    private async void OnSelectRowExecuted(object obj)
+    private void OnSelectRowExecuted(object obj)
     {
         if (SenderModel != null!)
         {
             if (SenderModel is ComingFieldViewModel model)
             {
                 model.ComingField.Driver=Driver;
+                if (Driver.Transports!.Count == 1)
+                {
+                    model.ComingField.Transport=Driver.Transports[0];
+                }
             }
             var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
             if (window != null!)

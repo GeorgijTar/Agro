@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Agro.DAL.Entities.Base;
+using Agro.DAL.Entities.Counter;
 
 namespace Agro.DAL.Entities;
 

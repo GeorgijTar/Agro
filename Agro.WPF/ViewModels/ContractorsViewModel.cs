@@ -7,11 +7,11 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Agro.DAL.Entities;
+using Agro.DAL.Entities.Counter;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.Views.Windows;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 
 namespace Agro.WPF.ViewModels;

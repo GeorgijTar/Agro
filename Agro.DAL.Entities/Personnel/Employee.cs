@@ -1,8 +1,7 @@
 ﻿using Agro.DAL.Entities.Base;
 using Agro.DAL.Entities.Organization;
-using Agro.DAL.Entities.Personnel;
 
-namespace Agro.DAL.Entities;
+namespace Agro.DAL.Entities.Personnel;
 /// <summary>
 /// Сотрудник
 /// </summary>
