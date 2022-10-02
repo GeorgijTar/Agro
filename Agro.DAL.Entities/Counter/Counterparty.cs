@@ -16,23 +16,22 @@ public class Counterparty : Entity
         Status = new();
         TypeDoc = new();
         Group = new();
-        ActualAddress = new();
     }
 
     private string _name = null!;
     public string Name { get => _name; set => Set(ref _name, value); }
 
     /// <summary>Статус контрагента</summary>
-    private Status _status = null!;
-    public virtual Status Status { get => _status; set => Set(ref _status, value); }
+    private Status? _status;
+    public  Status? Status { get => _status; set => Set(ref _status, value); }
 
     /// <summary>Тип контрагента</summary>
     private TypeDoc? _typeDoc;
-    public virtual TypeDoc? TypeDoc { get => _typeDoc; set => Set(ref _typeDoc, value); }
+    public  TypeDoc? TypeDoc { get => _typeDoc; set => Set(ref _typeDoc, value); }
 
     /// <summary>Группа</summary>
     private GroupDoc? _group;
-    public virtual GroupDoc? Group { get => _group; set => Set(ref _group, value); }
+    public  GroupDoc? Group { get => _group; set => Set(ref _group, value); }
 
     /// <summary>Платежное наименование контрагента</summary>
     private string _payName = null!;
@@ -59,7 +58,7 @@ public class Counterparty : Entity
 
     /// <summary>Фактический адрес контрагента</summary>
     private Address? _actualAddress;
-    public virtual Address? ActualAddress { get => _actualAddress; set => Set(ref _actualAddress, value); }
+    public  Address? ActualAddress { get => _actualAddress; set => Set(ref _actualAddress, value); }
 
     /// <summary>Примечание</summary>
     private string? _description;
@@ -67,7 +66,7 @@ public class Counterparty : Entity
     public string? Description { get => _description; set => Set(ref _description, value); }
 
     private ObservableCollection<BankDetails>? _bankDetails = new();
-    public virtual ObservableCollection<BankDetails>? BankDetails { get => _bankDetails; set => Set(ref _bankDetails, value); }
+    public  ObservableCollection<BankDetails>? BankDetails { get => _bankDetails; set => Set(ref _bankDetails, value); }
 
 }
 

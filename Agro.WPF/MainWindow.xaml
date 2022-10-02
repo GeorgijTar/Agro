@@ -31,9 +31,11 @@
                             <fa5:ImageAwesome Height="14" Icon="Solid_DollarSign" Foreground="DarkBlue"/>
                         </MenuItem.Icon>
                         <MenuItem Header="Счета выставленные" Command="{Binding ShowInvoicesOut}"/>
+                        <Separator/>
                         <MenuItem Header="Счета полученные" Command="{Binding ShowInvoicesIn}"/>
                     </MenuItem>
-                </MenuItem>
+                    <MenuItem Header="Договора" Command="{Binding ShowContractsCommand}"/>
+                    </MenuItem>
                 <MenuItem Header="Кадры">
                     <MenuItem.Icon>
                         <fa5:ImageAwesome Height="32" Icon="Solid_PeopleArrows" Foreground="DarkBlue"/>
@@ -62,7 +64,7 @@
                     <MenuItem Header="Контрагенты" Command="{Binding ShowContractors}"/>
                     <MenuItem Header="Номенклатура">
                         <MenuItem Header="Готовая продукция" Command="{Binding ShowProduct}"/>
-                        <MenuItem Header="Материальные запасы" Command="{Binding}"/>
+                        <MenuItem Header="Материальные запасы" Command="{Binding ShowTmc}"/>
                     </MenuItem>
                     <MenuItem Header="Места хранения" Command="{Binding ShowStorageLocations}"/>
                     <MenuItem Header="План счетов" Command="{Binding ShowAccountingPlans}"/>

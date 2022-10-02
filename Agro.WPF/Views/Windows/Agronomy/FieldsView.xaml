@@ -82,7 +82,7 @@
         </ToolBar>
         <GroupBox Grid.Row="1" Header="План счетов" >
             <components:ExtendedTreeView ItemsSource="{Binding Departments}" 
-                                   SelectedItem_="{Binding Field, Mode=TwoWay}"
+                                   SelectedItem="{Binding Field, Mode=TwoWay}"
                                    infrastructure:MouseDoubleClick.Command="{Binding DoubleClickCommand}"
                                    infrastructure:MouseDoubleClick.CommandParameter="{Binding ElementName=FieldsWindow}">
                 <TreeView.ItemTemplate>

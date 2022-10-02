@@ -2,12 +2,9 @@
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using System.Windows.Input;
-using System.Windows.Media.Animation;
 using Agro.WPF.Views.Windows.Personnel;
 using System.Windows;
 using System;
-using Agro.DAL.Entities.Organization;
-using System.Linq;
 
 namespace Agro.WPF.ViewModels.Personnel;
 
@@ -21,6 +18,8 @@ public class StaffListPositionViewModel : ViewModel
     public StaffListPosition StaffListPosition { get => _staffListPosition; set => Set(ref _staffListPosition, value); }
 
     public object SenderModel { get; set; }= null!;
+
+    public bool IsEdit { get; set; }
 
     #region Commands
 
@@ -84,7 +83,11 @@ public class StaffListPositionViewModel : ViewModel
         {
             if (SenderModel is StaffListViewModel staffList)
             {
-                staffList.StaffList.Positions!.Add(StaffListPosition);
+                if (!IsEdit)
+                {
+                    staffList.StaffList.Positions!.Add(StaffListPosition);
+                }
+                
             }
         }
 

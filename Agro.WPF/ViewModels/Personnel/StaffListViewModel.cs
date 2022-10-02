@@ -119,6 +119,7 @@ public class StaffListViewModel : ViewModel
         mod!.Title = "Редактирование позиции штатного расписания";
         mod.StaffListPosition = Position;
         mod.SenderModel = this;
+        mod.IsEdit= true;
         view.DataContext = mod;
         view.ShowDialog();
     }

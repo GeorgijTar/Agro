@@ -1,4 +1,5 @@
 ﻿using Agro.DAL.Entities;
+using Agro.DAL.Entities.Accounting;
 using Agro.DAL.Entities.Agronomy;
 using Agro.DAL.Entities.Classifiers;
 using Agro.DAL.Entities.Counter;
@@ -7,6 +8,7 @@ using Agro.DAL.Entities.Organization;
 using Agro.DAL.Entities.Organization.RegInfoOrg;
 using Agro.DAL.Entities.Personnel;
 using Agro.DAL.Entities.Storage;
+using Agro.DAL.Entities.Warehouse;
 using Agro.DAL.Entities.Weight;
 using Microsoft.EntityFrameworkCore;
 
@@ -58,6 +60,8 @@ public class AgroDb : DbContext
     public DbSet<ComingField> ComingFields { get; set; } = null!;
     public DbSet<StorageLocation> StorageLocations { get; set; } = null!;
     public DbSet<OfficialPerson> OfficialPersons { get; set; } = null!;
+    public DbSet<Tmc> Tmc { get; set; } = null!;
+    public DbSet<RulesAccounting> RulesAccounting { get; set; } = null!;
 
 #endregion
     public AgroDb(DbContextOptions<AgroDb> options) : base(options) { }

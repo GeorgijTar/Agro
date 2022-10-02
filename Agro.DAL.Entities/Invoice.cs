@@ -12,9 +12,9 @@ namespace Agro.DAL.Entities;
 public class Invoice : Entity
 {
     /// <summary>Статус счета</summary>
-    private Status _status = new();
+    private Status? _status = new();
     [Required]
-    public virtual Status Status { get=> _status; set=>Set(ref _status, value); } 
+    public virtual Status? Status { get=> _status; set=>Set(ref _status, value); } 
 
 
     /// <summary>Номер счета</summary>

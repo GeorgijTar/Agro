@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Agro.DAL.Entities;
@@ -71,14 +70,9 @@ public class InvoiceViewModel : ViewModel
             Calc();
         }
     }
-
-
+    
     private object _senderModel=null!;
     public object SenderModel { get => _senderModel; set => Set(ref _senderModel, value); }
-
-    private string _number = null;
-    public string Number { get => _number; set => Set(ref _number, value); }
-
     public InvoiceViewModel(
         IInvoiceRepository<Invoice> invoiceRepository)
     {
@@ -87,8 +81,6 @@ public class InvoiceViewModel : ViewModel
         Invoice.PropertyChanged += ChangedPropertyInvoice;
         Invoice.ProductsInvoice!.ItemPropertyChanged += CalcItem;
         Invoice.ProductsInvoice!.CollectionChanged += CalcCol;
-        Number=Invoice.Number;
-       
     }
 
 
@@ -131,7 +123,7 @@ public class InvoiceViewModel : ViewModel
     
     private void ChangedPropertyInvoice(object? sender, PropertyChangedEventArgs e)
     {
-        Number = Invoice.Number;
+        
         switch (e.PropertyName)
         {
             default: return;
@@ -162,9 +154,7 @@ public class InvoiceViewModel : ViewModel
 
     private async void LoadStaticData()
     {
-      
-        Invoice.Status = await _invoiceRepository.GetStatusById(1);
-        BankDetailsOrg = await _invoiceRepository.GetAllBankDetailsOrg();
+       BankDetailsOrg = await _invoiceRepository.GetAllBankDetailsOrg();
     }
 
 
@@ -201,7 +191,7 @@ public class InvoiceViewModel : ViewModel
 
     private async void OnSaveCommandExecuted(object obj)
     {
-        Invoice.Number = Number;
+        Invoice.Status = await _invoiceRepository.GetStatusById(1);
        var inv = await _invoiceRepository.SaveAsync(Invoice);
        if (IsEdit != false)
        {
@@ -209,7 +199,7 @@ public class InvoiceViewModel : ViewModel
            {
                if (SenderModel is InvoicesViewModel invoicesViewModel)
                {
-                   invoicesViewModel.Invoices.Add(Invoice);
+                   invoicesViewModel.Invoices.Add(inv);
                }
            }
        }
@@ -333,11 +323,16 @@ public class InvoiceViewModel : ViewModel
     private ICommand? _numericCommand;
 
     public ICommand NumericCommand => _numericCommand
-        ??= new RelayCommand(OnNumericCommandExecuted);
+        ??= new RelayCommand(OnNumericCommandExecuted, CanNumericComand);
+
+    private bool CanNumericComand(object arg)
+    {
+        return Invoice.Number == null! || Invoice.Number.Length==0;
+    }
 
     private async void OnNumericCommandExecuted(object obj)
     {
-        Number = await _invoiceRepository.GetNumber(Invoice);
+        Invoice.Number = await _invoiceRepository.GetNumber(Invoice);
     }
 
     #endregion

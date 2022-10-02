@@ -1,9 +1,5 @@
-﻿
-using Agro.DAL.Entities.Agronomy;
-using Agro.DAL.Entities.Organization;
-using Agro.Services.Repositories;
+﻿using Agro.DAL.Entities.Organization;
 using Agro.WPF.Commands;
-using Agro.WPF.ViewModels.Agronomy;
 using Agro.WPF.ViewModels.Base;
 using System.Windows.Input;
 using System.Windows;

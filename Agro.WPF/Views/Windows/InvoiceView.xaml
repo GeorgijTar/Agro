@@ -112,7 +112,7 @@
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="Номер:" VerticalAlignment="Center" 
                                    HorizontalAlignment="Right" Margin="5,0"/>
                         <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"
-                         Text="{Binding Number}"/>
+                         Text="{Binding Invoice.Number, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="0" Grid.Column="2" Text="Дата:" VerticalAlignment="Center" 
                           HorizontalAlignment="Right" Margin="5,0"/>
                         <DatePicker Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" SelectedDate="{Binding Invoice.DateInvoice}"/>

@@ -1,7 +1,10 @@
-﻿using Agro.WPF.ViewModels.Agronomy;
+﻿using Agro.WPF.ViewModels.Accounting;
+using Agro.WPF.ViewModels.Agronomy;
+using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.ViewModels.Organization;
 using Agro.WPF.ViewModels.Personnel;
 using Agro.WPF.ViewModels.Storage;
+using Agro.WPF.ViewModels.TMC;
 using Agro.WPF.ViewModels.Weight;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -100,5 +103,15 @@ public class ViewModelLocator
     public StorageLocationViewModel StorageLocationModel => App.Services.GetRequiredService<StorageLocationViewModel>();
 
     public OfficialPersonViewModel OfficialPersonModel => App.Services.GetRequiredService<OfficialPersonViewModel>();
+
+    public TmCsViewModel TmCsModel => App.Services.GetRequiredService<TmCsViewModel>();
+
+   public TmcViewModel TmcModel => App.Services.GetRequiredService<TmcViewModel>();
+
+   public RulesAccountingViewModel RulesAccountingModel => App.Services.GetRequiredService<RulesAccountingViewModel>();
+
+   public ContractViewModel ContractModel => App.Services.GetRequiredService<ContractViewModel>();
+
+   public SpecificationContractViewModel SpecificationContractModel => App.Services.GetRequiredService<SpecificationContractViewModel>();
 
 }

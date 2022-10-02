@@ -8,37 +8,44 @@ using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.Views.Windows;
-using Agro.DAL.Entities;
+using Agro.DAL.Entities.Accounting;
 
-namespace Agro.WPF.ViewModels;
+namespace Agro.WPF.ViewModels.Accounting;
 
 public class AccountingPlansViewModel : ViewModel
 {
     private readonly IBaseRepository<AccountingPlan> _repository;
     private string _title = "План счетов";
-    
-    public string Title { get=>_title; set=>Set(ref _title, value); } 
 
-    private ObservableCollection<AccountingPlan> _accounts= new ();
+    public string Title { get => _title; set => Set(ref _title, value); }
 
-    public ObservableCollection<AccountingPlan> Accounts { get=>_accounts; set=>Set(ref _accounts, value); }
+    private ObservableCollection<AccountingPlan> _accounts = new();
+
+    public ObservableCollection<AccountingPlan> Accounts { get => _accounts; set => Set(ref _accounts, value); }
 
     private AccountingPlan? _selectAccountingPlan;
 
-    public AccountingPlan? SelectAccountingPlan { get=>_selectAccountingPlan; 
-        set=>Set( ref _selectAccountingPlan, value); }
+    public AccountingPlan? SelectAccountingPlan
+    {
+        get => _selectAccountingPlan;
+        set => Set(ref _selectAccountingPlan, value);
+    }
     public AccountingPlansViewModel(IBaseRepository<AccountingPlan> repository)
     {
         _repository = repository;
-        SelectAccountingPlan=new AccountingPlan();
+        SelectAccountingPlan = new AccountingPlan();
         LoadData();
     }
+    
+    public object SenderModel { get; set; }
+
+    public string SenderField { get; set; }
 
     private async void LoadData()
     {
         Accounts.Clear();
         var accounts = await _repository.GetAllAsync();
-        accounts = accounts!.Where(a => a.StatusId == 5); 
+        accounts = accounts!.Where(a => a.StatusId == 5);
         foreach (var account in accounts)
         {
             if (account.ParentPlan! == null!)
@@ -46,7 +53,7 @@ public class AccountingPlansViewModel : ViewModel
                 Accounts.Add(account);
             }
         }
-      
+
     }
 
     #region Commands
@@ -56,9 +63,9 @@ public class AccountingPlansViewModel : ViewModel
     public ICommand IsExpandedTrueCommand => _isExpandedTrueCommand
         ??= new RelayCommand(OnIsExpandedTrueExecuted);
 
-    private  void OnIsExpandedTrueExecuted(object p)
+    private void OnIsExpandedTrueExecuted(object p)
     {
-       
+
     }
 
     private ICommand? _isExpandedFalseCommand;
@@ -66,7 +73,7 @@ public class AccountingPlansViewModel : ViewModel
     public ICommand IsExpandedFalseCommand => _isExpandedFalseCommand
         ??= new RelayCommand(OnIsExpandedFalseExecuted);
 
-    private  void OnIsExpandedFalseExecuted(object p)
+    private void OnIsExpandedFalseExecuted(object p)
     {
 
     }
@@ -132,16 +139,47 @@ public class AccountingPlansViewModel : ViewModel
         var resalt = MessageBox.Show("Вы действительно хотите удалить выбранный счет", "Редактор плана счетов", MessageBoxButton.YesNo);
         if (resalt == MessageBoxResult.Yes)
         {
-           var del= await _repository.DeleteAsync(SelectAccountingPlan);
+            var del = await _repository.DeleteAsync(SelectAccountingPlan);
 
-           if (del)
-           {
-               MessageBox.Show($"Счет {SelectAccountingPlan.Code} помечен как архивный", "Редактор плана счетов");
-               LoadData();
-           }
+            if (del)
+            {
+                MessageBox.Show($"Счет {SelectAccountingPlan.Code} помечен как архивный", "Редактор плана счетов");
+                LoadData();
+            }
         }
     }
 
+    private ICommand? _doubleClickCommand;
+
+    public ICommand DoubleClickCommand => _doubleClickCommand
+        ??= new RelayCommand(OnDoubleClickExecuted, CanDoubleClickExecuted);
+
+    private bool CanDoubleClickExecuted(object arg)
+    {
+        return SelectAccountingPlan!.IsSelect == true;
+    }
+
+    private void OnDoubleClickExecuted(object obj)
+    {
+        if (SenderModel != null!)
+        {
+            if (SenderModel is RulesAccountingViewModel model)
+            {
+                if (SenderField == "AccountingPlan")
+                {
+                    model.RulesAccounting.AccountingPlan = SelectAccountingPlan!;
+                }
+                else if (SenderField== "AccountingPlanNds")
+                {
+                    model.RulesAccounting.AccountingPlanNds = SelectAccountingPlan!;
+                }
+
+                var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+                if (window != null!)
+                    window.Close();
+            }
+        }
+    }
 
     #endregion
 

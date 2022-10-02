@@ -20,6 +20,6 @@ public class StaffListPosition : Entity
     public Division Division { get => _division; set => Set(ref _division, value); } 
 
     /// <summary>Количество ставок</summary>
-    private double _quantity;
-    public double Quantity { get => _quantity; set => Set(ref _quantity, value); }
+    private float _quantity;
+    public float Quantity { get => _quantity; set => Set(ref _quantity, value); }
 }

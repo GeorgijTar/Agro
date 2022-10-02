@@ -1,4 +1,5 @@
 ﻿using Agro.DAL;
+using Agro.DAL.Entities;
 using Agro.DAL.Entities.Counter;
 using Agro.Interfaces.Base.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -69,6 +70,13 @@ public class ContractRepository:IContractRepository<Contract>
         if (item is null)
             throw new ArgumentNullException(nameof(item));
         _db.Contracts.Remove(item);
+        await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
+        return true;
+    }
+
+    public async Task<bool> RemoveFile(ScanFile file, CancellationToken cancel = default)
+    {
+        _db.ScanFiles.Remove(file);
         await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
         return true;
     }

@@ -134,7 +134,7 @@
             <TextBlock Grid.Row="2" Grid.Column="0" Text="Подразделение:" Margin="10,0" 
                        HorizontalAlignment="Right" VerticalAlignment="Center" TextWrapping="Wrap"/>
             <TextBox  Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" IsReadOnly="True"
-                     Text="{Binding Employee.Post.Name, UpdateSourceTrigger=PropertyChanged}"/>
+                     Text="{Binding Employee.Division.Name, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
     </Grid>
 </Window>

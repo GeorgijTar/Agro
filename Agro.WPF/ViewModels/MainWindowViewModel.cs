@@ -10,8 +10,10 @@ using Agro.WPF.ViewModels.Base;
 using Agro.WPF.Views;
 using Agro.WPF.Views.Windows;
 using Agro.WPF.Views.Windows.Agronomy;
+using Agro.WPF.Views.Windows.Contract;
 using Agro.WPF.Views.Windows.Personnel;
 using Agro.WPF.Views.Windows.Storage;
+using Agro.WPF.Views.Windows.TMC;
 using Agro.WPF.Views.Windows.Weight;
 
 namespace Agro.WPF.ViewModels;
@@ -109,7 +111,7 @@ public class MainWindowViewModel : ViewModel
     {
         InvoicesView view = new();
         var model = view.DataContext as InvoicesViewModel;
-        model!.TypeInvoice = Types!.FirstOrDefault(t=>t.Id==10)!;
+        model!.TypeInvoice = Types!.FirstOrDefault(t=>t.Id==8)!;
         model.Title = $"{model.TypeInvoice.Name} счета";
         view.Show();
     }
@@ -127,7 +129,7 @@ public class MainWindowViewModel : ViewModel
     {
         InvoicesView view = new();
         var model = view.DataContext as InvoicesViewModel;
-        model!.TypeInvoice = Types!.FirstOrDefault(t => t.Id == 11)!;
+        model!.TypeInvoice = Types!.FirstOrDefault(t => t.Id == 9)!;
         model.Title = $"{model.TypeInvoice.Name} счета";
         view.Show();
     }
@@ -315,7 +317,6 @@ public class MainWindowViewModel : ViewModel
 
     #endregion
 
-    
     #region ShowStorageLocations
 
     private ICommand? _showStorageLocations;
@@ -326,6 +327,36 @@ public class MainWindowViewModel : ViewModel
     private void OnShowStorageLocationsCommandExecuted(object obj)
     {
         StorageLocationsView view = new();
+        view.Show();
+    }
+
+    #endregion
+
+    #region ShowTMC
+
+    private ICommand? _showTmc;
+
+    public ICommand ShowTmc => _showTmc
+        ??= new RelayCommand(OnShowTMCCommandExecuted);
+
+    private void OnShowTMCCommandExecuted(object obj)
+    {
+        TmCsView view = new();
+        view.Show();
+    }
+
+    #endregion
+
+    #region ShowContracts
+
+    private ICommand? _showContractsCommand;
+
+    public ICommand ShowContractsCommand => _showContractsCommand
+        ??= new RelayCommand(OnShowContractsExecuted);
+
+    private void OnShowContractsExecuted(object obj)
+    {
+        var view = new ContractsView();
         view.Show();
     }
 

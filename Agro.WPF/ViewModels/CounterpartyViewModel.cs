@@ -8,6 +8,7 @@ using Agro.DAL.Entities.Counter;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.Views.Windows;
 using FNS.Api;
 
@@ -81,6 +82,8 @@ public class CounterpartyViewModel : ViewModel
     private string _message =null!;
     public string Message { get => _message; set => Set(ref _message, value); }
 
+    public object SenderModel { get; set; }=null!;
+
     #endregion
 
     #region Commands
@@ -109,7 +112,7 @@ public class CounterpartyViewModel : ViewModel
         var ct =  ctr!.
             Where(c=>c.Inn==Counterparty.Inn).
             Where(c=>c.Id != Counterparty.Id)
-            .Where(c=>c.Status.Id==5);
+            .Where(c=>c.Status!.Id==5);
         if (ct.Any())
         {
             MessageBox.Show($"Контрагент с ИНН {Counterparty.Inn} уже есть в базе данных!", "Редактор контрагентов");
@@ -120,7 +123,17 @@ public class CounterpartyViewModel : ViewModel
         Counterparty.Status = status!;
         try
         {
-            CounterpartyEvent(await _counterpartyRepository.SaveAsync(Counterparty));
+
+            var count = await _counterpartyRepository.SaveAsync(Counterparty);
+              CounterpartyEvent?.Invoke(count);
+
+            if (SenderModel != null!)
+            {
+                if (SenderModel is ContractViewModel contract)
+                {
+                    contract.Contract.Counterparty=count;
+                }
+            }
            
             var window = p as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
             if (window != null!)
@@ -271,7 +284,7 @@ public class CounterpartyViewModel : ViewModel
     #region Event
 
     public delegate void CounterpartyHandler(Counterparty counterparty);
-    public event CounterpartyHandler CounterpartyEvent;
+    public event CounterpartyHandler? CounterpartyEvent;
 
     #endregion
 }

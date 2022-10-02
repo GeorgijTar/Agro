@@ -39,7 +39,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bank.Api", "Bank.Api\Bank.A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Report", "Report", "{35D911D3-3633-47E1-AD32-027C4F9F6DC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportExcelLib", "ReportExcelLib\ReportExcelLib.csproj", "{8F727738-5A81-4EBC-B969-266A97CAC33F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReportExcelLib", "ReportExcelLib\ReportExcelLib.csproj", "{8F727738-5A81-4EBC-B969-266A97CAC33F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsControlLib", "UsControlLib\UsControlLib.csproj", "{3216DA7B-4C83-4124-9626-116C3AE5863A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,10 @@ Global
 		{8F727738-5A81-4EBC-B969-266A97CAC33F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F727738-5A81-4EBC-B969-266A97CAC33F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F727738-5A81-4EBC-B969-266A97CAC33F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3216DA7B-4C83-4124-9626-116C3AE5863A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3216DA7B-4C83-4124-9626-116C3AE5863A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3216DA7B-4C83-4124-9626-116C3AE5863A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3216DA7B-4C83-4124-9626-116C3AE5863A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

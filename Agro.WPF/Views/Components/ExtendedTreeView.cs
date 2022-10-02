@@ -13,16 +13,16 @@ public class ExtendedTreeView : TreeView
 
     void ___ICH(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
-        if (SelectedItem != null)
+        if (base.SelectedItem != null)
         {
-            SetValue(SelectedItem_Property, SelectedItem);
+            SetValue(SelectedItemProperty, base.SelectedItem);
         }
     }
 
-    public object SelectedItem_
+    public object SelectedItem
     {
-        get { return (object)GetValue(SelectedItem_Property); }
-        set { SetValue(SelectedItem_Property, value); }
+        get { return (object)GetValue(SelectedItemProperty); }
+        set { SetValue(SelectedItemProperty, value); }
     }
-    public static readonly DependencyProperty SelectedItem_Property = DependencyProperty.Register("SelectedItem_", typeof(object), typeof(ExtendedTreeView), new UIPropertyMetadata(null));
+    public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem", typeof(object), typeof(ExtendedTreeView), new UIPropertyMetadata(null));
 }

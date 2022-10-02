@@ -96,7 +96,7 @@
             </Button>
             <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Text="Количество ставок:"/>
             <TextBox Grid.Row="2" Grid.Column="1" Width="100" HorizontalAlignment="Left"
-                     Text="{Binding StaffListPosition.Quantity, UpdateSourceTrigger=PropertyChanged}"/>
+                     Text="{Binding StaffListPosition.Quantity, UpdateSourceTrigger=PropertyChanged, StringFormat=n1}"/>
         </Grid>
     </Grid>
 </Window>

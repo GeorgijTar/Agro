@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="UsControlLib.TypeGroupControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:l="clr-namespace:UsControlLib"
+             xmlns:fa5="http://schemas.fontawesome.com/icons/"
+             mc:Ignorable="d" >
+    <DockPanel Width="{Binding DisplayWidth, RelativeSource={RelativeSource AncestorType=l:TypeGroupControl}}">
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+            <Button Width="22" Height="22" Background="Transparent" Margin="2,0" fa5:Awesome.Content="Solid_PlusCircle" Foreground="DarkGreen"
+                    Command="{Binding AddNewItemCommand, RelativeSource={RelativeSource AncestorType=l:TypeGroupControl}}"/>
+            <Button Width="22" Height="22" Background="Transparent"  Margin="2,0" fa5:Awesome.Content="Solid_Edit" Foreground="DarkBlue"
+                    Command="{Binding EditItemCommand, RelativeSource={RelativeSource AncestorType=l:TypeGroupControl}}"/>
+        </StackPanel>
+
+        <ComboBox VerticalAlignment="Center"  Height="22" Width="auto" 
+                  ItemsSource="{Binding ItemSource, RelativeSource={RelativeSource AncestorType=l:TypeGroupControl}, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=l:TypeGroupControl}, UpdateSourceTrigger=PropertyChanged}"
+        />
+    </DockPanel>
+</UserControl>

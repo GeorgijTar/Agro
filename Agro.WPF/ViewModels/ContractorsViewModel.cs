@@ -11,6 +11,7 @@ using Agro.DAL.Entities.Counter;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.Views.Windows;
 
 
@@ -237,9 +238,19 @@ public class ContractorsViewModel : ViewModel
 
     private void OnSelectRowCommandExecuted(object obj)
     {
-        if (ModelSender is InvoiceViewModel invoice)
+        if (ModelSender != null!)
         {
-            invoice.Invoice.Counterparty = SelectedCounterparty!;
+
+
+            if (ModelSender is InvoiceViewModel invoice)
+            {
+                invoice.Invoice.Counterparty = SelectedCounterparty!;
+            }
+
+            if (ModelSender is ContractViewModel contract)
+            {
+                contract.Contract.Counterparty = SelectedCounterparty!;
+            }
 
             var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
             if (window != null!)
@@ -254,7 +265,7 @@ public class ContractorsViewModel : ViewModel
 
     private bool FilterByName(object count)
     {
-        if (!String.IsNullOrEmpty(NameFilter))
+        if (!string.IsNullOrEmpty(NameFilter))
         {
             Counterparty? dto = count as Counterparty;
             return  dto!.Name.ToUpper().Contains(NameFilter.ToUpper());
@@ -264,7 +275,7 @@ public class ContractorsViewModel : ViewModel
 
     private bool FilterByInn(object count)
     {
-        if (!String.IsNullOrEmpty(InnFilter))
+        if (!string.IsNullOrEmpty(InnFilter))
         {
             Counterparty? dto = count as Counterparty;
             return dto!.Inn.Contains(InnFilter);
@@ -279,7 +290,7 @@ public class ContractorsViewModel : ViewModel
 
         }
 
-        if (!String.IsNullOrEmpty(InnFilter))
+        if (!string.IsNullOrEmpty(InnFilter))
         {
             Counterparty? dto = count as Counterparty;
             return dto!.Group!.Name.Contains(SelectedGroup!.Name);

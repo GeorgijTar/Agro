@@ -12,14 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Agro.WPF.Views.Windows
+namespace Agro.WPF.Views.Windows.Accounting
 {
     /// <summary>
-    /// Логика взаимодействия для ContractsView.xaml
+    /// Логика взаимодействия для RulesAccounting.xaml
     /// </summary>
-    public partial class ContractsView : Window
+    public partial class RulesAccountingView : Window
     {
-        public ContractsView()
+        public RulesAccountingView()
         {
             InitializeComponent();
         }

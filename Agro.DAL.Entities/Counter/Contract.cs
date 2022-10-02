@@ -73,6 +73,11 @@ namespace Agro.DAL.Entities.Counter
 
         public ObservableCollection<ScanFile>? ScanFiles { get => _scanFiles; set => Set(ref _scanFiles, value); }
 
+        private ObservableCollection<SpecificationContract>? _specification;
+
+        public ObservableCollection<SpecificationContract>? Specification { get => _specification; set => Set(ref _specification, value); } 
+
+
 
     }
 }

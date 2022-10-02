@@ -1,15 +1,16 @@
-﻿
-using System;
+﻿using System;
 using System.Windows;
+using System.Windows.Input;
 using Agro.DAL.Entities;
+using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
-using System.Windows.Input;
-using Agro.Interfaces.Base.Repositories.Base;
+using Agro.WPF.ViewModels.Personnel;
 using Agro.WPF.Views.Windows;
+using Agro.WPF.Views.Windows.Personnel;
 using FNS.Api;
 
-namespace Agro.WPF.ViewModels;
+namespace Agro.WPF.ViewModels.Organization;
 
 public class OrganizationViewModel : ViewModel
 {
@@ -172,6 +173,82 @@ public class OrganizationViewModel : ViewModel
         }
         
     }
+
+    #region ShowEmployeeDirector
+
+    private ICommand? _showEmployeeDirectorCommand;
+
+    public ICommand ShowEmployeeDirectorCommand => _showEmployeeDirectorCommand
+        ??= new RelayCommand(OnShowEmployeeDirectorExecuted);
+
+    private void OnShowEmployeeDirectorExecuted(object obj)
+    {
+        var view = new EmployeesView();
+        var model = view.DataContext as EmployeesViewModel;
+        model!.SenderModel = this;
+        model.SenderModelPole = "Director";
+        model.Title = "Выбирете сотрудника - Руководителя";
+        view.ShowDialog();
+    }
+
+    #endregion
+
+    #region ShowEmployeeGlavByx
+
+    private ICommand? _showEmployeeGlavByxCommand;
+
+    public ICommand ShowEmployeeGlavByxCommand => _showEmployeeGlavByxCommand
+        ??= new RelayCommand(OnShowEmployeeGlavByxExecuted);
+
+    private void OnShowEmployeeGlavByxExecuted(object obj)
+    {
+        var view = new EmployeesView();
+        var model = view.DataContext as EmployeesViewModel;
+        model!.SenderModel = this;
+        model.SenderModelPole = "GeneralAccountant";
+        model.Title = "Выбирете сотрудника - Главного бухгалтера";
+        view.ShowDialog();
+    }
+
+    #endregion
+
+    #region ShowEmployeeCashier
+
+    private ICommand? _showEmployeeCashierCommand;
+
+    public ICommand ShowEmployeeCashierCommand => _showEmployeeCashierCommand
+        ??= new RelayCommand(OnShowEmployeeCashierExecuted);
+
+    private void OnShowEmployeeCashierExecuted(object obj)
+    {
+        var view = new EmployeesView();
+        var model = view.DataContext as EmployeesViewModel;
+        model!.SenderModel = this;
+        model.SenderModelPole = "Cashier";
+        model.Title = "Выбирете сотрудника - Кассира";
+        view.ShowDialog();
+    }
+
+    #endregion
+
+    #region ShowEmployeeHr
+
+    private ICommand? _showEmployeeHrCommand;
+
+    public ICommand ShowEmployeeHrCommand => _showEmployeeHrCommand
+        ??= new RelayCommand(OnShowEmployeeHrExecuted);
+
+    private void OnShowEmployeeHrExecuted(object obj)
+    {
+        var view = new EmployeesView();
+        var model = view.DataContext as EmployeesViewModel;
+        model!.SenderModel = this;
+        model.SenderModelPole = "Hr";
+        model.Title = "Выбирете сотрудника - Кадровика";
+        view.ShowDialog();
+    }
+
+    #endregion
 
     #endregion
 }

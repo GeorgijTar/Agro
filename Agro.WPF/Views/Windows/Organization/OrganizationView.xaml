@@ -351,7 +351,7 @@
                             </StackPanel>
                             <Button Grid.Row="0" Grid.Column="0" BorderBrush="DarkBlue" Width="25" Height="25"
                                     Template="{StaticResource ButtonTemplate}"
-                                    Command="{Binding DeleteBankDetailsCommand}"
+                                    Command="{Binding ShowEmployeeDirectorCommand}"
                                     ToolTip="Выбрать из справочника" fa5:Awesome.Content="Solid_Book" 
                                     HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                                     FontSize="18" Foreground="DarkBlue" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -380,7 +380,7 @@
                             </StackPanel>
                             <Button Grid.Row="0" Grid.Column="0" BorderBrush="DarkBlue" Width="25" Height="25"
                                     Template="{StaticResource ButtonTemplate}"
-                                    Command="{Binding DeleteBankDetailsCommand}"
+                                    Command="{Binding ShowEmployeeGlavByxCommand}"
                                     ToolTip="Выбрать из справочника" fa5:Awesome.Content="Solid_Book" 
                                     HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                                     FontSize="18" Foreground="DarkBlue" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -409,7 +409,7 @@
                             </StackPanel>
                             <Button Grid.Row="0" Grid.Column="0" BorderBrush="DarkBlue" Width="25" Height="25"
                                     Template="{StaticResource ButtonTemplate}"
-                                    Command="{Binding DeleteBankDetailsCommand}"
+                                    Command="{Binding  ShowEmployeeCashierCommand}"
                                     ToolTip="Выбрать из справочника" fa5:Awesome.Content="Solid_Book" 
                                     HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                                     FontSize="18" Foreground="DarkBlue" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -438,7 +438,7 @@
                             </StackPanel>
                             <Button Grid.Row="0" Grid.Column="0" BorderBrush="DarkBlue" Width="25" Height="25"
                                     Template="{StaticResource ButtonTemplate}"
-                                    Command="{Binding DeleteBankDetailsCommand}"
+                                    Command="{Binding ShowEmployeeHrCommand}"
                                     ToolTip="Выбрать из справочника" fa5:Awesome.Content="Solid_Book" 
                                     HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                                     FontSize="18" Foreground="DarkBlue" HorizontalAlignment="Center" VerticalAlignment="Center">

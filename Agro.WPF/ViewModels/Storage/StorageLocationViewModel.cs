@@ -1,7 +1,6 @@
 ﻿
 using Agro.DAL.Entities.Organization;
 using Agro.DAL.Entities.Storage;
-using Agro.DAL.Entities.Weight;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using System.Windows.Input;

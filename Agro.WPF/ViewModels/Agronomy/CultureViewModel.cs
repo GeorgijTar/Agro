@@ -2,7 +2,6 @@
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
-using Agro.WPF.Views.Windows.Agronomy;
 using System.Windows;
 using System;
 using System.Linq;

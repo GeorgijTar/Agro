@@ -6,10 +6,8 @@ using System.Windows;
 using Agro.DAL.Entities;
 using Agro.DAL.Entities.Agronomy;
 using Agro.Interfaces.Base.Repositories.Base;
-using Agro.Services.Repositories;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
-using Agro.WPF.Views.Windows;
 
 namespace Agro.WPF.ViewModels.Agronomy;
 

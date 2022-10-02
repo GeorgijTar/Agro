@@ -20,11 +20,9 @@ public class SpecificationContract : Entity
     public DateTime Date { get; set; }
 
     /// <summary>Договор которому пренадлежит спецификация</summary>
-    [Required, ForeignKey("ContractId")]
+ 
     public virtual Contract Contract { get; set; } = null!;
-
-    public int ContractId { get; set; }
-
+    
     /// <summary>Сумма спецификации</summary>
     public decimal Amount { get; set; }
 

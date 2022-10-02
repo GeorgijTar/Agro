@@ -6,7 +6,6 @@ using System.Windows;
 using System;
 using System.Windows.Input;
 using Agro.DAL.Entities.Personnel;
-using Agro.Services.Repositories;
 using System.Linq;
 using Agro.Interfaces.Base.Repositories.Base;
 

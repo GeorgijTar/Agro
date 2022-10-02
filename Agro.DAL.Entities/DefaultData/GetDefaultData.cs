@@ -1,4 +1,6 @@
-﻿namespace Agro.DAL.Entities.DefaultData;
+﻿using Agro.DAL.Entities.Accounting;
+
+namespace Agro.DAL.Entities.DefaultData;
 
 public static class GetDefaultData
 {
@@ -11,7 +13,7 @@ public static class GetDefaultData
         new() { Id = 5, Name = "Актуально" },
         new() { Id = 6, Name = "Удален" },
         new() { Id = 7, Name = "Архивный" },
-        new() { Id = 8, Name = "Принят к оплате" },
+        new() { Id = 8, Name = "Принят" },
         new() { Id = 9, Name = "Готов к оплате" },
         new() { Id = 10, Name = "Оплачен" },
         new() { Id = 11, Name = "Выставлен" },
@@ -34,6 +36,10 @@ public static class GetDefaultData
         new() { Id = 11, Name = "Собственность", TypeApplication = "ЗУ" },
         new() { Id = 12, Name = "Аренда", TypeApplication = "ЗУ" },
         new() { Id = 13, Name = "Прочие документы", TypeApplication = "Документ" },
+        new() { Id = 14, Name = "Договор", TypeApplication = "Контракт" },
+        new() { Id = 15, Name = "Контракт", TypeApplication = "Контракт" },
+        new() { Id = 16, Name = "Солглашение", TypeApplication = "Контракт" },
+        new() { Id = 17, Name = "Договор ГПХ", TypeApplication = "Контракт" },
     };
 
     public static GroupDoc[] DefaultGroup() => new GroupDoc[]
@@ -44,13 +50,13 @@ public static class GetDefaultData
         new() { Id = 4, Name = "Масляничные", TypeApplication = "Готовая продукция" },
         new() { Id = 5, Name = "Технические", TypeApplication = "Готовая продукция" },
         new() { Id = 6, Name = "Отходы", TypeApplication = "Готовая продукция" },
-        new() { Id = 7, Name = "Средства защиты растений", TypeApplication = "Материальные запасы" },
-        new() { Id = 8, Name = "Удобрения", TypeApplication = "Материальные запасы" },
-        new() { Id = 9, Name = "Семена", TypeApplication = "Материальные запасы" },
-        new() { Id = 10, Name = "Запасные части", TypeApplication = "Материальные запасы" },
-        new() { Id = 11, Name = "Материалы", TypeApplication = "Материальные запасы" },
-        new() { Id = 12, Name = "Малоценные товары, инвентарь", TypeApplication = "Материальные запасы" },
-        new() { Id = 13, Name = "ГСМ", TypeApplication = "Материальные запасы" },
+        new() { Id = 7, Name = "Средства защиты растений", TypeApplication = "МПЗ" },
+        new() { Id = 8, Name = "Удобрения", TypeApplication = "МПЗ" },
+        new() { Id = 9, Name = "Семена", TypeApplication = "МПЗ" },
+        new() { Id = 10, Name = "Запасные части", TypeApplication = "МПЗ" },
+        new() { Id = 11, Name = "Материалы", TypeApplication = "МПЗ" },
+        new() { Id = 12, Name = "Малоценные товары, инвентарь", TypeApplication = "МПЗ" },
+        new() { Id = 13, Name = "ГСМ", TypeApplication = "МПЗ" },
         new() { Id = 14, Name = "Паспорт гражданина РФ", TypeApplication = "Удостоверение личности" },
         new() { Id = 15, Name = "Загранпаспорт гражданина РФ", TypeApplication = "Удостоверение личности" },
         new() { Id = 16, Name = "Свидетельство о рождении", TypeApplication = "Удостоверение личности" },
@@ -58,6 +64,9 @@ public static class GetDefaultData
         new() { Id = 18, Name = "Удостоверение личности военнослужащего РФ (военный билет, паспорт моряка)", TypeApplication = "Удостоверение личности" },
         new() { Id = 19, Name = "Вид на жительство", TypeApplication = "Удостоверение личности" },
         new() { Id = 20, Name = "Прочий документ", TypeApplication = "Прочие документы" },
+        new() { Id = 21, Name = "Закупка", TypeApplication = "Контракт" },
+        new() { Id = 22, Name = "Продажа", TypeApplication = "Контракт" },
+
     };
 
     public static UnitOkei[] DefaultUnitOkeis() => new UnitOkei[]

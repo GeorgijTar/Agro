@@ -1,0 +1,28 @@
+﻿<UserControl x:Class="UsControlLib.SelectedControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UsControlLib"
+             xmlns:fa5="http://schemas.fontawesome.com/icons/"
+             mc:Ignorable="d"
+             >
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+            <Button Width="22" Height="22" Background="Transparent" Margin="2,0"
+                    fa5:Awesome.Content="Solid_PlusCircle" Foreground="DarkGreen" ToolTip="Создать новый"/>
+            <Button Width="22" Height="22" Margin="1,0" Background="Transparent"  
+                    fa5:Awesome.Content="Solid_Edit" Foreground="DarkBlue" ToolTip="Редактировать"/>
+            <Button Width="22" Height="22" Margin="1,0" Background="Transparent"  
+                    fa5:Awesome.Content="Solid_Copy" Foreground="DarkOrange" ToolTip="Открыть справочник"/>
+        </StackPanel>
+        <Grid>
+            <ComboBox Width="{Binding DisplayWidth, RelativeSource={RelativeSource AncestorType=local:SelectedControl}}" 
+                      Height="50"  IsEditable="True"
+                      ItemsSource="{Binding ItemSource, RelativeSource={RelativeSource AncestorType=local:SelectedControl}, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=local:SelectedControl}, UpdateSourceTrigger=PropertyChanged}"
+                      ItemTemplate="{Binding ItemTemplate, RelativeSource={RelativeSource AncestorType=local:SelectedControl}}"
+                      DisplayMemberPath="{Binding DisplayMemberPath, RelativeSource={RelativeSource AncestorType=local:SelectedControl}}"/>
+        </Grid>
+    </DockPanel>
+</UserControl>

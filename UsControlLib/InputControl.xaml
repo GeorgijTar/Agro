@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="UsControlLib.InputControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UsControlLib"
+             xmlns:fa5="http://schemas.fontawesome.com/icons/"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+             mc:Ignorable="d"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid>
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button Width="22" Height="22" Background="Transparent" Margin="2,0"
+                        fa5:Awesome.Content="Solid_TrashRestore" Foreground="DarkRed" ToolTip="Очистить поле"/>
+                <Button Width="22" Height="22" Background="Transparent" Margin="2,0"
+                        fa5:Awesome.Content="Solid_PlusCircle" Foreground="DarkGreen" ToolTip="Создать новый"/>
+                <Button Width="22" Height="22" Margin="1,0" Background="Transparent"  
+                        fa5:Awesome.Content="Solid_Edit" Foreground="DarkBlue" ToolTip="Редактировать"/>
+                <Button Width="22" Height="22" Margin="1,0" Background="Transparent"  
+                        fa5:Awesome.Content="Solid_Copy" Foreground="DarkOrange" ToolTip="Открыть справочник"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <TextBox Height="22" x:Name="Tbox"  VerticalAlignment="Center" Text="{Binding Text}" Width="320" PreviewTextInput="TextInputEvent">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                           
+                              
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+                <Popup StaysOpen="False" x:Name="PopupItem" Height="100" Width="320">
+                    <ListBox Width="480" Height="280" 
+                             ItemsSource="{Binding ItemSourceLocal}" 
+                             SelectedItem="{Binding SelectedItem}"
+                             ItemTemplate="{Binding ItemTemplate}">
+                        
+
+                    </ListBox>
+
+                </Popup>
+            </StackPanel>
+            
+            
+        </DockPanel>
+    </Grid>
+</UserControl>

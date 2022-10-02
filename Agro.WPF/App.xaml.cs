@@ -5,6 +5,7 @@ using Agro.DAL.Entities.Counter;
 using Agro.DAL.Entities.Organization;
 using Agro.DAL.Entities.Personnel;
 using Agro.DAL.Entities.Storage;
+using Agro.DAL.Entities.Warehouse;
 using Agro.DAL.Entities.Weight;
 using Agro.DAL.MySql;
 using Agro.DAL.Sql;
@@ -13,10 +14,13 @@ using Agro.Interfaces.Base.Repositories;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.Services.Repositories;
 using Agro.WPF.ViewModels;
+using Agro.WPF.ViewModels.Accounting;
 using Agro.WPF.ViewModels.Agronomy;
+using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.ViewModels.Organization;
 using Agro.WPF.ViewModels.Personnel;
 using Agro.WPF.ViewModels.Storage;
+using Agro.WPF.ViewModels.TMC;
 using Agro.WPF.ViewModels.Weight;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -101,6 +105,12 @@ namespace Agro.WPF
             services.AddScoped<StorageLocationsViewModel>();
             services.AddTransient<StorageLocationViewModel>();
             services.AddTransient<OfficialPersonViewModel>();
+            services.AddScoped<TmCsViewModel>();
+            services.AddTransient<TmcViewModel>();
+            services.AddTransient<RulesAccountingViewModel>();
+            services.AddScoped<ContractsViewModel>();
+            services.AddTransient<ContractViewModel>();
+            services.AddTransient<SpecificationContractViewModel>();
 
 
             //Регистрация репозиториев
@@ -108,7 +118,6 @@ namespace Agro.WPF
             services.AddTransient<IInvoiceRepository<Invoice>, InvoiceRepository>();
             services.AddTransient<IBaseRepository<Product>, ProductRepository>();
             services.AddTransient<IBaseRepository<Organization>, OrganizationRepository>();
-            services.AddTransient<IBaseRepository<Contract>, ContractRepository>();
             services.AddTransient<IBaseRepository<Department>, DepartmentRepository>();
             services.AddTransient<IBaseRepository<Culture>, CultureRepository>();
             services.AddTransient<IBaseRepository<Field>, FieldRepository>();
@@ -119,7 +128,10 @@ namespace Agro.WPF
             services.AddTransient<IBaseRepository<StaffListPosition>, StaffListPositionRepository>();
             services.AddTransient<IBaseRepository<StorageLocation>, StorageLocationRepository>();
             services.AddScoped(typeof(IComingFieldRepository<ComingField>), typeof(ComingFieldRepository));
-
+            services.AddTransient<IBaseRepository<Tmc>, TmcRepository>();
+            services.AddTransient<IBaseRepository<Counterparty>, CounterpartyRepository>();
+            services.AddTransient<IContractRepository<Contract>, ContractRepository>();
+            
 
 
             // Регистрация мапера

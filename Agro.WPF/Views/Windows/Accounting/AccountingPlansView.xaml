@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:self ="clr-namespace:Agro.WPF.Views.Components"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
+        xmlns:infrastructure="clr-namespace:Agro.WPF.Infrastructure"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="680" Width="700"
-        DataContext="{Binding AccountingPlansModel, Source={StaticResource Locator}}">
+        DataContext="{Binding AccountingPlansModel, Source={StaticResource Locator}}"
+        x:Name="MyWindow">
     <Window.Resources>
         <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
             <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
@@ -85,7 +87,9 @@
             <Grid>
                 <GroupBox Header="План счетов" >
                     <self:ExtendedTreeView ItemsSource="{Binding Accounts}" 
-                                           SelectedItem_="{Binding SelectAccountingPlan, Mode=TwoWay}">
+                                           SelectedItem="{Binding SelectAccountingPlan, Mode=TwoWay}"
+                                           infrastructure:MouseDoubleClick.Command="{Binding DoubleClickCommand}"
+                                           infrastructure:MouseDoubleClick.CommandParameter="{Binding ElementName=MyWindow}">
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate  ItemsSource="{Binding ChildPlans}">
                                 <StackPanel Orientation="Horizontal">

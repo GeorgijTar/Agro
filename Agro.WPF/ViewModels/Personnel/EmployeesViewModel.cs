@@ -74,6 +74,8 @@ public class EmployeesViewModel : ViewModel
 
     public object SenderModel { get; set; }=null!;
 
+    public string SenderModelPole { get; set; }=null!;
+
     public EmployeesViewModel(IBaseRepository<Employee> employeeRepository, IBaseRepository<Status> statusRepository)
     {
         _employeeRepository = employeeRepository;
@@ -268,10 +270,33 @@ public class EmployeesViewModel : ViewModel
             if (SenderModel is OfficialPersonViewModel officialPerson)
             {
                 officialPerson.OfficialPerson.Employee = Employee;
-                var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+            }
+
+            if (SenderModel is OrganizationViewModel organization)
+            {
+                switch (SenderModelPole)
+                {
+                    case "GeneralAccountant":
+                        organization.Organization.GeneralAccountant= Employee;
+                        break;
+                    case "Director":
+                        organization.Organization.Director = Employee;
+                        break;
+                    case "Cashier":
+                        organization.Organization.Cashier= Employee;
+                        break;
+                    case "Hr":
+                        organization.Organization.Hr = Employee;
+                        break;
+                }
+               
+                
+                
+            }
+            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
                 if (window != null!)
                     window.Close();
-            }
+
         }
     }
 

@@ -17,18 +17,18 @@ public class StaffListRepository : IBaseRepository<StaffList>
     public async Task<IEnumerable<StaffList>?> GetAllAsync(CancellationToken cancel = default)
     {
         return await _db.StaffList
-            .Include(s=>s.Status)
-            .Include(s=>s.Positions).ThenInclude(p=>p.Division)
-            .Include(s => s.Positions).ThenInclude(p => p.Post)
+            .Include(s=>s.Status!)
+            .Include(s=>s.Positions!).ThenInclude(p=>p.Division)
+            .Include(s => s.Positions!).ThenInclude(p => p.Post)
             .ToArrayAsync(cancel).ConfigureAwait(false);
     }
 
     public async Task<StaffList?> GetByIdAsync(int id, CancellationToken cancel = default)
     {
         return await _db.StaffList
-            .Include(s => s.Status)
-            .Include(s => s.Positions).ThenInclude(p => p.Division)
-            .Include(s => s.Positions).ThenInclude(p => p.Post)
+            .Include(s => s.Status!)
+            .Include(s => s.Positions!).ThenInclude(p => p.Division)
+            .Include(s => s.Positions!).ThenInclude(p => p.Post)
             .FirstOrDefaultAsync(s=>s.Id==id, cancel).ConfigureAwait(false);
     }
 

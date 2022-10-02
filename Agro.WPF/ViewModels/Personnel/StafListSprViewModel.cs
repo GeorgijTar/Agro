@@ -3,13 +3,11 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using Agro.DAL.Entities;
 using System.Windows.Data;
 using Agro.DAL.Entities.Personnel;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.Commands;
-using Agro.WPF.Views.Windows.Personnel;
 using System.Windows.Input;
 using System.Windows;
 using System;

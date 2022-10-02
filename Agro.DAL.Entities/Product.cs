@@ -1,6 +1,5 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Agro.DAL.Entities.Base;
 
 namespace Agro.DAL.Entities;
@@ -22,7 +21,7 @@ public class Product : Entity
     public string Name { get => _name; set => Set(ref _name, value); }
 
     /// <summary>Примечание</summary>
-    private string? _description = null!;
+    private string? _description;
     [MaxLength(225)]
     public string? Description { get => _description; set => Set(ref _description, value); }
 

@@ -5,7 +5,6 @@ using Agro.WPF.ViewModels.Base;
 using System.Windows.Input;
 using System.Windows;
 using System;
-using Agro.Services.Repositories;
 using System.Linq;
 using Agro.DAL.Entities;
 using Agro.Interfaces.Base.Repositories.Base;

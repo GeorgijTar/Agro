@@ -5,21 +5,20 @@ using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using System.Windows.Input;
 using Agro.DAL.Entities;
-using Agro.Services.Repositories;
-using static Agro.WPF.ViewModels.AccountingPlanViewModel;
 using Agro.Interfaces.Base.Repositories.Base;
+using Agro.DAL.Entities.Accounting;
 
-namespace Agro.WPF.ViewModels;
+namespace Agro.WPF.ViewModels.Accounting;
 public class AccountingPlanViewModel : ViewModel
 {
     private readonly IBaseRepository<AccountingPlan> _repository;
 
-    private string _title="Добавление нового счета Плана счетов";
+    private string _title = "Добавление нового счета Плана счетов";
 
-    public string Title { get=>_title; set=>Set(ref _title, value); }
+    public string Title { get => _title; set => Set(ref _title, value); }
 
     private AccountingPlan _accountingPlan;
-    public AccountingPlan AccountingPlan { get=>_accountingPlan; set=>Set(ref _accountingPlan, value); }
+    public AccountingPlan AccountingPlan { get => _accountingPlan; set => Set(ref _accountingPlan, value); }
 
     public AccountingPlanViewModel(IBaseRepository<AccountingPlan> repository)
     {
@@ -51,7 +50,7 @@ public class AccountingPlanViewModel : ViewModel
         {
             MessageBox.Show(e.Message);
         }
-       
+
     }
 
 

@@ -38,6 +38,7 @@
     <ProjectReference Include="..\Bank.Api\Bank.Api.csproj" />
     <ProjectReference Include="..\FNS.Api\FNS.Api.csproj" />
     <ProjectReference Include="..\ReportExcelLib\ReportExcelLib.csproj" />
+    <ProjectReference Include="..\UsControlLib\UsControlLib.csproj" />
   </ItemGroup>
 
   <ItemGroup>

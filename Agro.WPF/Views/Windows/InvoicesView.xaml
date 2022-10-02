@@ -106,57 +106,66 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="120"/>
                         <ColumnDefinition Width="120"/>
-                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="80*"/>
+                        <ColumnDefinition Width="125*"/>
+                        <ColumnDefinition Width="60*"/>
+                        <ColumnDefinition Width="60*"/>
                         <ColumnDefinition Width="80*"/>
                         <ColumnDefinition Width="10*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Номер:" 
                                HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
                     <TextBox Grid.Row="0" Grid.Column="1"  Margin="0,2" 
-                             Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding NumberFilter, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock Grid.Row="0" Grid.Column="2" Text="Дата:" VerticalAlignment="Center" 
                                HorizontalAlignment="Right" Margin="5,0"/>
-                    <DatePicker Grid.Row="0" Grid.Column="3"></DatePicker>
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="ИНН контрагента:" 
+                    <StackPanel Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Orientation="Horizontal">
+                        <TextBlock Text="с:" VerticalAlignment="Center" Margin="5,0"/>
+                        <DatePicker  SelectedDate="{Binding DateOnFilter}" Margin="5,0"/>
+                        <TextBlock Text="по:" VerticalAlignment="Center" Margin="5,0"/>
+                        <DatePicker  SelectedDate="{Binding DateOffFilter}" Margin="5,0"/>
+                    </StackPanel>
+
+                    <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Grid.RowSpan="2" Header="Контрагеньт" >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="ИНН:" 
+                                   HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
+                            <TextBox  Margin="5,0" MaxLength="12" Width="120"
+                             Text="{Binding InnFilter, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalAlignment="Center"/>
+                            <TextBlock Grid.Row="1" Grid.Column="2" Text="Контрагент:" 
                                HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" Margin="0,2" MaxLength="12"
-                             Text="{Binding InnFilter, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock Grid.Row="1" Grid.Column="2" Text="Контрагент:" 
-                               HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
-                    <TextBox Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Margin="0,2" MaxLength="9"/>
+                            <TextBox Margin="5,0" VerticalAlignment="Center" Width="300" 
+                             Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                    </GroupBox>
+
                 </Grid>
             </GroupBox>
             <GroupBox Grid.Row="2">
                 <Grid>
-                    <Grid.Resources>
-                        <ContextMenu x:Key="RowMenu">
-                            <MenuItem Header="Принять" Command="{Binding}"/>
-                            <MenuItem Header="Выставить" Command="{Binding}"/>
-                        </ContextMenu>
-                    </Grid.Resources>
-                    <GroupBox Header="Контрагенты" >
-                        <DataGrid SelectedItem="{Binding SelectedInvoice}" 
-                                  AutoGenerateColumns="False"
-                                  ItemsSource="{Binding Invoices}"
-                                  CanUserAddRows="False">
-                            <DataGrid.RowStyle>
-                                <Style TargetType="DataGridRow" >
-                                    <Setter Property="ContextMenu" Value="{StaticResource RowMenu}" />
-                                </Style>
-                            </DataGrid.RowStyle>
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Width="10*" Header="ID" Binding="{Binding Id}"/>
-                                <DataGridTextColumn Width="20*" Header="Статус" Binding="{Binding Status.Name}"/>
-                                <DataGridTextColumn Width="20*" Header="Номер" Binding="{Binding Number}"/>
-                                <DataGridTextColumn Width="20*" Header="Дата" Binding="{Binding DateInvoice, ConverterCulture='ru-RU', StringFormat='dd.MM.yyyy'}"/>
-                                <DataGridTextColumn Width="30*" Header="Сумма" Binding="{Binding Amount, ConverterCulture='ru-RU', StringFormat=C}"/>
-                                <DataGridTextColumn Width="80*" Header="Контрагент" Binding="{Binding Counterparty.Name}"/>
-                                <DataGridTextColumn Width="50*" Header="Примечание" Binding="{Binding Description}"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </GroupBox>
+                    <DataGrid SelectedItem="{Binding SelectedInvoice}" 
+                              AutoGenerateColumns="False"
+                              ItemsSource="{Binding CollectionView}"
+                              CanUserAddRows="False">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Принять" Command="{Binding AcceptanceCommand, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Separator/>
+                                <MenuItem Header="Выставить" Command="{Binding BillingCommand}"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="10*" Header="ID" Binding="{Binding Id}"/>
+                            <DataGridTextColumn Width="20*" Header="Статус" Binding="{Binding Status.Name}"/>
+                            <DataGridTextColumn Width="20*" Header="Номер" Binding="{Binding Number}"/>
+                            <DataGridTextColumn Width="20*" Header="Дата" Binding="{Binding DateInvoice, ConverterCulture='ru-RU', StringFormat='dd.MM.yyyy'}"/>
+                            <DataGridTextColumn Width="30*" Header="Сумма" Binding="{Binding TotalAmount, ConverterCulture='ru-RU', StringFormat=C}"/>
+                            <DataGridTextColumn Width="80*" Header="Контрагент" Binding="{Binding Counterparty.Name}"/>
+                            <DataGridTextColumn Width="50*" Header="Примечание" Binding="{Binding Description}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </GroupBox>
         </Grid>
