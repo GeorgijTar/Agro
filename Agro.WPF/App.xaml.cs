@@ -16,6 +16,7 @@ using Agro.Services.Repositories;
 using Agro.WPF.ViewModels;
 using Agro.WPF.ViewModels.Accounting;
 using Agro.WPF.ViewModels.Agronomy;
+using Agro.WPF.ViewModels.Auxiliary_windows;
 using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.ViewModels.Organization;
 using Agro.WPF.ViewModels.Personnel;
@@ -111,6 +112,8 @@ namespace Agro.WPF
             services.AddScoped<ContractsViewModel>();
             services.AddTransient<ContractViewModel>();
             services.AddTransient<SpecificationContractViewModel>();
+            services.AddTransient<TypeViewModel>();
+            services.AddTransient<GroupViewModel>();
 
 
             //Регистрация репозиториев

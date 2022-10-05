@@ -14,7 +14,6 @@ using Agro.WPF.ViewModels.Base;
 using Agro.WPF.Views.Windows.Accounting;
 
 namespace Agro.WPF.ViewModels.TMC;
-
 public class TmcViewModel : ViewModel
 {
     private readonly IBaseRepository<Tmc> _tmcRepository;

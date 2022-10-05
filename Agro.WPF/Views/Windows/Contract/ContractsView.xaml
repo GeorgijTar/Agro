@@ -82,15 +82,14 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="170"/>
                         <ColumnDefinition Width="120"/>
                         <ColumnDefinition Width="80"/>
                         <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="80*"/>
                         <ColumnDefinition Width="80*"/>
-                        <ColumnDefinition Width="10*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Наименование:" 
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Наименование контрагента:" 
                                HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
                     <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,2" 
                              Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}"/>
@@ -103,7 +102,7 @@
                                   SelectedItem="{Binding SelectedType}"/>
                     </StackPanel>
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="ИНН:" 
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="ИНН контрагента:" 
                                HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Margin="0,2" MaxLength="12"
                              Text="{Binding InnFilter, UpdateSourceTrigger=PropertyChanged}"/>
@@ -114,7 +113,7 @@
                     <GroupBox Header="Контрагенты" >
                         <DataGrid SelectedItem="{Binding SelectedContract}" 
                                   AutoGenerateColumns="False"
-                                  ItemsSource="{Binding Contracts}"
+                                  ItemsSource="{Binding CollectionView}"
                                   CanUserAddRows="False">
                             <b:Interaction.Triggers>
                                 <b:EventTrigger EventName="MouseDoubleClick">
@@ -125,9 +124,9 @@
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="40" Header="ID" Binding="{Binding Id}"/>
                                 <DataGridTextColumn Width="100" Header="Статус" Binding="{Binding Status.Name}"/>
-                                <DataGridTextColumn Width="80" Header="Дата" Binding="{Binding Date}"/>
+                                <DataGridTextColumn Width="80" Header="Дата" Binding="{Binding Date, StringFormat=dd.MM.yyyy}"/>
                                 <DataGridTextColumn Width="100" Header="Номер" Binding="{Binding Number}"/>
-                                <DataGridTextColumn Width="150" Header="Сумма" Binding="{Binding Amount}"/>
+                                <DataGridTextColumn Width="150" Header="Сумма" Binding="{Binding Amount, StringFormat=C2, ConverterCulture='Ru-ru'}"/>
                                 <DataGridTextColumn Width="300" Header="Контрагент" Binding="{Binding Counterparty.Name}"/>
                                 <DataGridTextColumn Width="50*" Header="Предмет договора" Binding="{Binding Subject}"/>
                             </DataGrid.Columns>

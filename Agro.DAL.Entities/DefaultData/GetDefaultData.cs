@@ -40,6 +40,9 @@ public static class GetDefaultData
         new() { Id = 15, Name = "Контракт", TypeApplication = "Контракт" },
         new() { Id = 16, Name = "Солглашение", TypeApplication = "Контракт" },
         new() { Id = 17, Name = "Договор ГПХ", TypeApplication = "Контракт" },
+        new() { Id = 18, Name = "Соглашение", TypeApplication = "Спецификация" },
+        new() { Id = 19, Name = "Спецификация", TypeApplication = "Спецификация" },
+        new() { Id = 20, Name = "Дополнительное соглашение", TypeApplication = "Спецификация" },
     };
 
     public static GroupDoc[] DefaultGroup() => new GroupDoc[]

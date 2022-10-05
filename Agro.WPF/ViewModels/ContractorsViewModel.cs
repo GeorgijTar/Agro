@@ -132,11 +132,7 @@ public class ContractorsViewModel : ViewModel
 
 
     private ICollectionView _collectionView;
-    public ICollectionView CollectionView
-    {
-        get => _collectionView;
-        set => Set(ref _collectionView, value);
-    }
+    public ICollectionView CollectionView { get => _collectionView; set => Set(ref _collectionView, value); }
 
     #region Command
 

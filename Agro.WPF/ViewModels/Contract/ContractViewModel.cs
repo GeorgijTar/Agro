@@ -12,6 +12,9 @@ using Agro.WPF.Views.Windows;
 using Microsoft.Win32;
 using System.IO;
 using Agro.Interfaces.Base.Repositories;
+using Agro.WPF.ViewModels.Auxiliary_windows;
+using Agro.WPF.Views.Auxiliary_windows;
+using Agro.WPF.Views.Windows.Contract;
 
 namespace Agro.WPF.ViewModels.Contract;
 public class ContractViewModel : ViewModel
@@ -19,6 +22,8 @@ public class ContractViewModel : ViewModel
     private readonly IBaseRepository<TypeDoc> _typeRepository;
     private readonly IBaseRepository<GroupDoc> _groupRepository;
     private readonly IContractRepository<DAL.Entities.Counter.Contract> _contractRepository;
+    private readonly IBaseRepository<DAL.Entities.Organization.Organization> _organizationRepository;
+    private readonly IBaseRepository<Status> _statusRepository;
     private string _title = null!;
     public string Title { get => _title; set => Set(ref _title, value); }
 
@@ -41,14 +46,24 @@ public class ContractViewModel : ViewModel
     private ScanFile _selectedFile = null!;
     public ScanFile SelectedFile { get => _selectedFile; set => Set(ref _selectedFile, value); }
 
+
+    private IEnumerable<BankDetails> _bankDetailsOrg = null!;
+    public IEnumerable<BankDetails> BankDetailsOrg { get => _bankDetailsOrg; set => Set(ref _bankDetailsOrg, value); } 
+
+
     public object SenderModel { get; set; } = null!;
 
     public ContractViewModel(IBaseRepository<TypeDoc> typeRepository,
-        IBaseRepository<GroupDoc> groupRepository, IContractRepository<DAL.Entities.Counter.Contract> contractRepository)
+        IBaseRepository<GroupDoc> groupRepository, 
+        IContractRepository<DAL.Entities.Counter.Contract> contractRepository, 
+        IBaseRepository<DAL.Entities.Organization.Organization> organizationRepository,
+        IBaseRepository<Status> statusRepository)
     {
         _typeRepository = typeRepository;
         _groupRepository = groupRepository;
         _contractRepository = contractRepository;
+        _organizationRepository = organizationRepository;
+        _statusRepository = statusRepository;
         LoadData();
 
     }
@@ -56,15 +71,53 @@ public class ContractViewModel : ViewModel
     private async void LoadData()
     {
         var types = await _typeRepository.GetAllAsync();
-        Types = types!.Where(t => t.TypeApplication == "Контракт").ToArray();
+        Types = types!.Where(t => t.TypeApplication == "Контракт").OrderBy(t => t.Name).ToArray();
 
         var groups = await _groupRepository.GetAllAsync();
         Groups = groups!.Where(g => g.TypeApplication == "Контракт").ToArray();
 
+        var orgs= await _organizationRepository.GetAllAsync();
+        var org = orgs!.FirstOrDefault(o => o.Id == 1);
+        BankDetailsOrg = org!.BankDetails;
     }
-
+        
 
     #region Commands
+
+    #region Save
+
+    private ICommand? _saveCommand;
+
+    public ICommand SaveCommand => _saveCommand
+        ??= new RelayCommand(OnSaveExecuted, CanSaveExecuted);
+
+    private bool CanSaveExecuted(object arg)
+    {
+        return Contract.Type != null! && Contract.Group != null! && Contract.Number != null! &&
+               Contract.Counterparty != null! && Contract.BankDetails != null!;
+    }
+
+    private async void OnSaveExecuted(object obj)
+    {
+        Contract.Status = await _statusRepository.GetByIdAsync(5);
+        var contract = await _contractRepository.SaveAsync(Contract);
+        if (SenderModel != null!)
+        {
+            if (SenderModel is ContractsViewModel contracts)
+            {
+                if (Contract.Id == 0)
+                {
+                    contracts.Contracts.Add(Contract);
+                }
+            }
+        }
+        Contract=contract;
+        var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+        if (window != null!)
+            window.Close();
+    }
+
+    #endregion
 
     #region Close
 
@@ -255,5 +308,176 @@ public class ContractViewModel : ViewModel
 
     #endregion
 
+    #region AddSpecification
+
+    private ICommand? _addSpecificationCommand;
+
+    public ICommand AddSpecificationCommand => _addSpecificationCommand
+        ??= new RelayCommand(OnAddSpecificationExecuted, CanAddSpecificationExecuted);
+
+    private bool CanAddSpecificationExecuted(object arg)
+    {
+        return Contract.Type!= null! && Contract.Number != null!;
+    }
+
+    private void OnAddSpecificationExecuted(object obj)
+    {
+        var view = new SpecificationContractView();
+        var model = view.DataContext as SpecificationContractViewModel;
+        model!.Title = $"Добавление новой спецификации(соглашения) к {Contract.Type.Name} № {Contract.Number} от {Contract.Date.ToShortDateString()}";
+        model.SpecificationContract = new();
+        model.SenderModel = this;
+        view.DataContext=model;
+        view.Show();
+    }
+
+    #endregion
+
+    #region EdetSpecification
+
+    private ICommand? _edeteSpecificationCommand;
+
+    public ICommand EdetSpecificationCommand => _edeteSpecificationCommand
+        ??= new RelayCommand(OnEdetSpecificationExecuted, CanEdetSpecificationExecuted);
+
+    private bool CanEdetSpecificationExecuted(object arg)
+    {
+        return Specification != null! && Contract.Type != null! && Contract.Number != null!;
+    }
+
+    private void OnEdetSpecificationExecuted(object obj)
+    {
+        var view = new SpecificationContractView();
+        var model = view.DataContext as SpecificationContractViewModel;
+        model!.Title = $"Редактирование {Specification!.Type.Name} № {Specification.Number} от {Specification.Date.ToShortDateString()}";
+        model.SpecificationContract = Specification;
+        model.SenderModel = this;
+        model.IsEdet = true;
+        view.DataContext = model;
+        view.Show();
+    }
+
+    #endregion
+
+    #region DeleteSpecification
+
+    private ICommand? _deleteSpecificationCommand;
+
+    public ICommand DeleteSpecificationCommand => _deleteSpecificationCommand
+        ??= new RelayCommand(OnDeleteSpecificationExecuted, CanDeleteSpecificationExecuted);
+
+    private bool CanDeleteSpecificationExecuted(object arg)
+    {
+        return Specification != null! && Contract.Type != null! && Contract.Number != null!;
+    }
+
+    private async void OnDeleteSpecificationExecuted(object obj)
+    {
+        var result = MessageBox.Show($"Вы действительно хотите удалить {Specification!.Type.Name} № " +
+                                     $"{Specification.Number} от {Specification.Date.ToShortDateString()}", "Редактор документов", MessageBoxButton.YesNo);
+        if (result == MessageBoxResult.Yes)
+        {
+            if (Specification.Id != 0)
+            {
+                await _contractRepository.RemoveSpecification(Specification);
+            }
+
+            Contract.Specification!.Remove(Specification);
+        }
+    }
+
+    #endregion
+
+    #region AddNewType
+
+    private ICommand? _addTypeeCommand;
+
+    public ICommand AddTypeCommand => _addTypeeCommand
+        ??= new RelayCommand(OnAddTypeExecuted);
+
+    private void OnAddTypeExecuted(object obj)
+    {
+        var view = new TypeView();
+        var model = view.DataContext as TypeViewModel;
+        model!.SenderModel = this;
+        model.Title = "Добовление нового типа для договора";
+        model.Type = new();
+        model.Type.TypeApplication = "Контракт";
+        view.DataContext = model;
+        view.ShowDialog();
+    }
+
+    #endregion
+
+    #region EdetType
+
+    private ICommand? _edetTypeCommand;
+
+    public ICommand EdetTypeCommand => _edetTypeCommand
+        ??= new RelayCommand(OnEdetTypeExecuted, CanEdetTypeExecuted);
+
+    private bool CanEdetTypeExecuted(object arg)
+    {
+       return Contract.Type != null!;
+    }
+
+    private void OnEdetTypeExecuted(object obj)
+    {
+        var view = new TypeView();
+        var model = view.DataContext as TypeViewModel;
+        model!.SenderModel = this;
+        model.Title = "Редактирование типа для договора";
+        model.Type=Contract.Type;
+        view.DataContext = model;
+        view.ShowDialog();
+    }
+
+    #endregion
+
+    #region AddNewGroup
+
+    private ICommand? _addGroupCommand;
+
+    public ICommand AddGroupCommand => _addGroupCommand
+        ??= new RelayCommand(OnAddGroupExecuted);
+
+    private void OnAddGroupExecuted(object obj)
+    {
+        var view = new GroupView();
+        var model = view.DataContext as GroupViewModel;
+        model!.SenderModel = this;
+        model.Title = "Добовление новой группы для договоров";
+        model.Group = new();
+        model.Group.TypeApplication = "Контракт";
+        view.DataContext = model;
+        view.ShowDialog();
+    }
+
+    #endregion
+
+    #region EdetGroup
+
+    private ICommand? _edetGroupCommand;
+
+    public ICommand EdetGroupCommand => _edetGroupCommand
+        ??= new RelayCommand(OnEdetGroupExecuted, CanEdetGroupExecuted);
+
+    private bool CanEdetGroupExecuted(object arg)
+    {
+        return Contract.Group != null!;
+    }
+
+    private void OnEdetGroupExecuted(object obj)
+    {
+        var view = new GroupView();
+        var model = view.DataContext as GroupViewModel;
+        model!.SenderModel = this;
+        model.Title = "Редактирование группы для договоров";
+        model.Group = Contract.Group;
+        view.DataContext = model;
+        view.ShowDialog();
+    }
+
+    #endregion
     #endregion
 }

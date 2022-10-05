@@ -22,6 +22,7 @@ public class ContractRepository:IContractRepository<Contract>
             .Include(c=>c.Group)
             .Include(c=>c.Type)
             .Include(c=>c.ScanFiles)
+            .OrderBy(c=>c.Date)
             .ToArrayAsync(cancel).ConfigureAwait(false);
     }
 
@@ -77,6 +78,13 @@ public class ContractRepository:IContractRepository<Contract>
     public async Task<bool> RemoveFile(ScanFile file, CancellationToken cancel = default)
     {
         _db.ScanFiles.Remove(file);
+        await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
+        return true;
+    }
+
+    public async Task<bool> RemoveSpecification(SpecificationContract speciication, CancellationToken cancel = default)
+    {
+        _db.Specifications.Remove(speciication);
         await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
         return true;
     }

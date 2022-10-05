@@ -7,28 +7,40 @@ namespace Agro.DAL.Entities.Counter;
 public class SpecificationContract : Entity
 {
     /// <summary>Тип спецификации</summary>
+    private TypeDoc _type = null!;
     [Required, ForeignKey("TypeId")]
-    public virtual TypeDoc Type { get; set; } = null!;
+    public TypeDoc Type { get => _type; set => Set(ref _type, value); }
 
-    public int TypeId { get; set; }
 
     /// <summary>Номер спецификации</summary>
+     
+    private string _number = null!;
     [Required]
-    public string Number { get; set; } = null!;
+    public string Number { get => _number; set => Set(ref _number, value); } 
+    
 
     /// <summary>Дата спецификации</summary>
-    public DateTime Date { get; set; }
+    
+    private DateTime _date = DateTime.Now;
+    public DateTime Date { get => _date; set => Set(ref _date, value); }
+
 
     /// <summary>Договор которому пренадлежит спецификация</summary>
- 
-    public virtual Contract Contract { get; set; } = null!;
+
+    private Contract _contract = null!;
+    public Contract Contract { get => _contract; set => Set(ref _contract, value); } 
+
     
     /// <summary>Сумма спецификации</summary>
-    public decimal Amount { get; set; }
+
+    private decimal _amount;
+    public decimal Amount { get => _amount; set => Set(ref _amount, value); } 
+
 
     /// <summary>Примечание к спецификации</summary>
-    public string? Description { get; set; }
 
-    /// <summary>Прикрепленные файлы</summary>
-    public virtual ICollection<ScanFile>? ScanFiles { get; set; }
+    private string? _description;
+    public string? Description { get => _description; set => Set(ref _description, value); } 
+
+   
 }

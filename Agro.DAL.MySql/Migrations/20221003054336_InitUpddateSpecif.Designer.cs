@@ -3,6 +3,7 @@ using System;
 using Agro.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Agro.DAL.MySql.Migrations
 {
     [DbContext(typeof(AgroDb))]
-    partial class AgroDbModelSnapshot : ModelSnapshot
+    [Migration("20221003054336_InitUpddateSpecif")]
+    partial class InitUpddateSpecif
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2905,24 +2907,6 @@ namespace Agro.DAL.MySql.Migrations
                             Id = 17,
                             Name = "Договор ГПХ",
                             TypeApplication = "Контракт"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Name = "Соглашение",
-                            TypeApplication = "Спецификация"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Name = "Спецификация",
-                            TypeApplication = "Спецификация"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Name = "Дополнительное соглашение",
-                            TypeApplication = "Спецификация"
                         });
                 });
 

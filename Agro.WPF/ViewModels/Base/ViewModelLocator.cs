@@ -1,5 +1,6 @@
 ﻿using Agro.WPF.ViewModels.Accounting;
 using Agro.WPF.ViewModels.Agronomy;
+using Agro.WPF.ViewModels.Auxiliary_windows;
 using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.ViewModels.Organization;
 using Agro.WPF.ViewModels.Personnel;
@@ -113,5 +114,9 @@ public class ViewModelLocator
    public ContractViewModel ContractModel => App.Services.GetRequiredService<ContractViewModel>();
 
    public SpecificationContractViewModel SpecificationContractModel => App.Services.GetRequiredService<SpecificationContractViewModel>();
+
+   public TypeViewModel TypeModel => App.Services.GetRequiredService<TypeViewModel>();
+
+   public GroupViewModel GroupModel => App.Services.GetRequiredService<GroupViewModel>();
 
 }
