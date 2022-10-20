@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         xmlns:e="clr-namespace:Agro.DAL.Entities;assembly=Agro.DAL.Entities"
+        xmlns:c="clr-namespace:Agro.DAL.Entities.Counter;assembly=Agro.DAL.Entities"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="730" Width="880"
         DataContext="{Binding InvoiceModel, Source={StaticResource Locator}}"
@@ -185,20 +186,44 @@
                             </ComboBox>
                         </GroupBox>
                         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="7" Orientation="Horizontal">
-                            <TextBlock Text="Договор" VerticalAlignment="Center" Margin="10"/>
-                            <TextBox VerticalAlignment="Center" Width="280" Margin="0,0,5,0" IsReadOnly="True"/>
+                            <TextBlock Text="Договор:" VerticalAlignment="Center" Margin="10"/>
+                            <Border Width="320" VerticalAlignment="Center" Margin="0,0,5,0" BorderThickness="0.4" BorderBrush="Black">
+                                <DockPanel>
+                                    <Button DockPanel.Dock="Right" Background="Transparent" Content="X" Width="18"
+                                            Command="{Binding ClesrContractCommand}"/>
+                                    <StackPanel Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" 
+                                           Text="{Binding Invoice.Contract.Type.Name, UpdateSourceTrigger=PropertyChanged}" 
+                                           Margin="5,2,2,2"/>
+                                <TextBlock VerticalAlignment="Center" 
+                                           Text="{Binding Invoice.Contract.Number, StringFormat=№ {0}, UpdateSourceTrigger=PropertyChanged}" 
+                                           Margin="2,2,2,2"/>
+                                <TextBlock VerticalAlignment="Center" 
+                                           Text="{Binding Invoice.Contract.Date, StringFormat= от dd.MM.yyyy, UpdateSourceTrigger=PropertyChanged}"
+                                           Margin="2,2,5,2"/>
+                                </StackPanel>
+                                </DockPanel>
+                            </Border>
                             <Button VerticalAlignment="Center" BorderBrush="DarkBlue" 
                                     HorizontalAlignment="Left"  Template="{StaticResource ButtonTemplate}"
-                                    Command="{Binding }">
+                                    Command="{Binding  ShowContractsCommand}">
                                 <fa5:ImageAwesome Icon="Solid_Book" Width="18" Height="18" Foreground="DarkBlue"/>
                             </Button>
-                            <TextBlock Text="Соглашение/Спецификация" VerticalAlignment="Center" Margin="10"/>
-                            <TextBox VerticalAlignment="Center" Width="250" Margin="0,0,5,0" IsReadOnly="True"/>
-                            <Button VerticalAlignment="Center" BorderBrush="DarkBlue" 
-                                    HorizontalAlignment="Left"  Template="{StaticResource ButtonTemplate}"
-                                    Command="{Binding }">
-                                <fa5:ImageAwesome Icon="Solid_Book" Width="18" Height="18" Foreground="DarkBlue"/>
-                            </Button>
+                            <TextBlock Text="Спецификация (доп.согл)" VerticalAlignment="Center" Margin="10"/>
+                            <ComboBox VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="250" Margin="5,0"
+                                      ItemsSource="{Binding Invoice.Contract.Specification}"
+                                      SelectedItem="{Binding Invoice.Specification}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="c:SpecificationContract">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Type.Name}" Margin="0,0,3,0"/>
+                                            <TextBlock Text="{Binding Number, StringFormat= № {0}}" Margin="0,0,2,0"/>
+                                            <TextBlock Text="{Binding Date, StringFormat= от dd.MM.yyyy}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            
                         </StackPanel>
                         
                     </Grid>

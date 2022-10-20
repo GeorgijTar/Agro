@@ -37,7 +37,6 @@ public class Invoice : Entity
     [Required]
     public virtual Counterparty Counterparty { get=> _counterparty; set=>Set(ref _counterparty, value); }
     
-
     /// <summary>Платежные реквизиты контрагента счета</summary>
     private BankDetails _bankDetails = null!;
     [Required]
@@ -45,7 +44,13 @@ public class Invoice : Entity
 
     /// <summary>Договор</summary>
     private Contract? _contract;
-    public Contract? Contract { get => _contract; set => Set(ref _contract, value); } 
+    public Contract? Contract { get => _contract; set => Set(ref _contract, value); }
+
+
+    private SpecificationContract? _specification;
+
+    public SpecificationContract? Specification { get => _specification; set => Set(ref _specification, value); } 
+
 
 
     

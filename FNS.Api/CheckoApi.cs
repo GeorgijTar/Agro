@@ -124,7 +124,6 @@ public static class CheckoApi
         organization.Okato!.Name = json?["data"]!["ОКАТО"]!["Наим"]!.ToString()!;
         organization.Oktmo!.Code = json?["data"]!["ОКТМО"]!["Код"]!.ToString()!;
         organization.Oktmo!.Name = json?["data"]!["ОКТМО"]!["Наим"]!.ToString()!;
-        organization.RegFns!.DateReg= DateTime.Parse(json?["data"]!["ДатаРег"]!.ToString()!);
         organization.RegFns!.CodeFns= json?["data"]!["РегФНС"]!["КодОрг"]!.ToString()!;
         organization.RegFns!.AddressFns = json?["data"]!["РегФНС"]!["АдресОрг"]!.ToString()!;
         organization.RegFns!.NameFns = json?["data"]!["РегФНС"]!["НаимОрг"]!.ToString()!;

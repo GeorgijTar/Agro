@@ -11,7 +11,9 @@ using Agro.DAL.Entities.Base;
 using Agro.Interfaces.Base.Repositories;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.Views.Windows;
+using Agro.WPF.Views.Windows.Contract;
 using Microsoft.Win32;
 
 namespace Agro.WPF.ViewModels;
@@ -193,7 +195,7 @@ public class InvoiceViewModel : ViewModel
     {
         Invoice.Status = await _invoiceRepository.GetStatusById(1);
        var inv = await _invoiceRepository.SaveAsync(Invoice);
-       if (IsEdit != false)
+       if (!IsEdit)
        {
            if (SenderModel != null!)
            {
@@ -220,7 +222,7 @@ public class InvoiceViewModel : ViewModel
 
     private void OnAddFileCommandExecuted(object obj)
     {
-        var filePath = string.Empty;
+        
         OpenFileDialog openFileDialog = new()
         {
             InitialDirectory = "c:\\",
@@ -231,7 +233,7 @@ public class InvoiceViewModel : ViewModel
         if (openFileDialog.ShowDialog() == true)
         {
             //Get the path of specified file
-            filePath = openFileDialog.FileName;
+            var filePath = openFileDialog.FileName;
             FileInfo fileInfo = new FileInfo(filePath);
             double size = fileInfo.Length / 1048576.00;
             var file = new ScanFile();
@@ -258,8 +260,9 @@ public class InvoiceViewModel : ViewModel
 
     private void OnRemoveFileCommandExecuted(object obj)
     {
-        var rezalt = MessageBox.Show($"Вы действительно хотите удалить файл: {SelectedFile.Name}", "Редактор файлов", MessageBoxButton.YesNo);
-        if (rezalt == MessageBoxResult.Yes)
+        var result = MessageBox.Show($"Вы действительно хотите удалить файл: {SelectedFile.Name}", 
+            "Редактор файлов", MessageBoxButton.YesNo);
+        if (result == MessageBoxResult.Yes)
         {
             if (SelectedFile.Id != 0)
                 _invoiceRepository.RemoveFile(SelectedFile);
@@ -278,8 +281,7 @@ public class InvoiceViewModel : ViewModel
 
     private void OnSaveFileCommandExecuted(object obj)
     {
-        var filePath = string.Empty;
-        SaveFileDialog saveFileDialog = new()
+       SaveFileDialog saveFileDialog = new()
         {
             InitialDirectory = "c:\\",
             FileName = SelectedFile.Name,
@@ -397,6 +399,45 @@ public class InvoiceViewModel : ViewModel
         if (SelectProductInvoice.Id != 0)
           await _invoiceRepository.RemoveProductInvoice(SelectProductInvoice);
         Invoice.ProductsInvoice!.Remove(SelectProductInvoice);
+    }
+
+    #endregion
+
+    #region ShowContracts
+
+    private ICommand? _showContractsCommand;
+
+    public ICommand ShowContractsCommand => _showContractsCommand
+        ??= new RelayCommand(OnShowContractsExecuted);
+
+    private void OnShowContractsExecuted(object obj)
+    {
+        var view = new ContractsView();
+        var model = view.DataContext as ContractsViewModel;
+        model!.Title = "Выберите договор";
+        model.SenderModel = this;
+        view.DataContext = model;
+        view.ShowDialog();
+    }
+
+    #endregion
+
+    #region ClesrContract
+
+    private ICommand? _clesrContractCommand;
+
+    public ICommand ClesrContractCommand => _clesrContractCommand
+        ??= new RelayCommand(OnClesrContractExecuted, CanClesrContractExecuted);
+
+    private bool CanClesrContractExecuted(object arg)
+    {
+        return Invoice != null! && Invoice.Contract != null!;
+    }
+
+    private void OnClesrContractExecuted(object obj)
+    {
+        Invoice.Contract = null!;
+        Invoice.Specification=null!;
     }
 
     #endregion

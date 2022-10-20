@@ -197,6 +197,8 @@ public class InvoicesViewModel : ViewModel
 
     #region Commands
 
+    #region Add
+    
     private ICommand? _addCommand;
 
     public ICommand AddCommand => _addCommand
@@ -207,6 +209,7 @@ public class InvoicesViewModel : ViewModel
         InvoiceView view = new();
         InvoiceViewModel viewModel = (InvoiceViewModel)view.DataContext;
         viewModel.Nds = Nds;
+        viewModel.SenderModel = this;
         viewModel.Invoice.Type = TypeInvoice;
         if (TypeInvoice.Id == 8)
         {
@@ -216,7 +219,10 @@ public class InvoicesViewModel : ViewModel
         view.Show();
     }
 
+    #endregion
 
+    #region Edit
+    
     private ICommand? _editCommand;
 
     public ICommand EditCommand => _editCommand
@@ -234,6 +240,7 @@ public class InvoicesViewModel : ViewModel
         viewModel.Nds = Nds;
         viewModel.Invoice = SelectedInvoice;
         viewModel.IsEdit = true;
+        viewModel.SenderModel = this;
         if (TypeInvoice.Id == 8)
         {
             viewModel.VisibilityNumeric = Visibility.Visible;
@@ -241,6 +248,10 @@ public class InvoicesViewModel : ViewModel
         }
         view.Show();
     }
+
+    #endregion
+
+    #region Print
 
     private ICommand? _printCommand;
 
@@ -258,6 +269,10 @@ public class InvoicesViewModel : ViewModel
             InvoiceReportExcel.Print(saveFileDialog.FileName, SelectedInvoice);
         }
     }
+
+    #endregion
+
+    #region ContecstMenu
 
     #region billing 
     /// <summary>
@@ -301,6 +316,8 @@ public class InvoicesViewModel : ViewModel
         SelectedInvoice.Status = await _statusRepository.GetByIdAsync(8);
         await _repository.SaveAsync(SelectedInvoice);
     }
+
+    #endregion
 
     #endregion
 

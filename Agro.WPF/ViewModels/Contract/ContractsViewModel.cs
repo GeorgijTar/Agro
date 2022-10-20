@@ -1,9 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Agro.DAL.Entities;
 using Agro.Interfaces.Base.Repositories;
+using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.Views.Windows.Contract;
@@ -13,10 +16,12 @@ namespace Agro.WPF.ViewModels.Contract;
 public class ContractsViewModel : ViewModel
 {
     private readonly IContractRepository<DAL.Entities.Counter.Contract> _contractRepository;
+    private readonly IBaseRepository<Status> _statusRepository;
 
-    public ContractsViewModel(IContractRepository<DAL.Entities.Counter.Contract> contractRepository)
+    public ContractsViewModel(IContractRepository<DAL.Entities.Counter.Contract> contractRepository, IBaseRepository<Status> statusRepository)
     {
         _contractRepository = contractRepository;
+        _statusRepository = statusRepository;
         Title = "Реестр контрактов";
         LoadData();
     }
@@ -62,6 +67,7 @@ public class ContractsViewModel : ViewModel
     private GroupDoc _groupFilter = null!;
     public GroupDoc GroupFilter { get => _groupFilter; set => Set(ref _groupFilter, value); }
 
+    public object SenderModel { get; set; } = null!;
 
     private void ModelChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -171,5 +177,73 @@ public class ContractsViewModel : ViewModel
 
     #endregion
 
+    #region Delete
+
+    private ICommand? _deleteCommand;
+
+    public ICommand DeleteCommand => _deleteCommand
+        ??= new RelayCommand(OnDeleteExecuted, CanDeleteExecuted);
+
+    private bool CanDeleteExecuted(object arg)
+    {
+        return SelectedContract != null!;
+    }
+
+    private async void OnDeleteExecuted(object obj)
+    {
+        var result = MessageBox.Show($"Вы действительно хотите удалить " +
+                                     $"{SelectedContract.Type.Name} № {SelectedContract.Number} от {SelectedContract.Date.ToShortDateString()}",
+            "Редактор документов", MessageBoxButton.YesNo);
+        if (result == MessageBoxResult.Yes)
+        {
+            SelectedContract.Status = await _statusRepository.GetByIdAsync(6);
+            await _contractRepository.UpdateAsync(SelectedContract);
+            Contracts.Remove(SelectedContract);
+        }
+
+        
+        
+    }
+
+    #endregion
+
+    #region SelectRow
+
+    private ICommand? _selectRowCommand;
+
+    public ICommand SelectRowCommand => _selectRowCommand
+        ??= new RelayCommand(OnSelectRowExecuted, CanSelectRowExecuted);
+
+    private bool CanSelectRowExecuted(object arg)
+    {
+        return SelectedContract != null!;
+    }
+
+    private void OnSelectRowExecuted(object obj)
+    {
+        if (SenderModel != null!)
+        {
+            if (SenderModel is InvoiceViewModel invoice)
+            {
+                invoice.Invoice.Contract=SelectedContract;
+                if (SelectedContract.Specification!.Count == 1)
+                {
+                    invoice.Invoice.Specification = SelectedContract.Specification![0];
+                }
+                if (invoice.Invoice.Counterparty == null!)
+                {
+                    invoice.Invoice.Counterparty = SelectedContract.Counterparty;
+                    invoice.Invoice.BankDetails = SelectedContract.BankDetails;
+                    invoice.Invoice.BankDetailsOrg = SelectedContract.BankDetailsOrg;
+                }
+
+            }
+            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+            if (window != null!)
+                window.Close();
+        }
+    }
+
+    #endregion
     #endregion
 }

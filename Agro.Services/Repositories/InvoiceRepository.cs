@@ -27,6 +27,8 @@ public class InvoiceRepository : IInvoiceRepository<Invoice>
             .ThenInclude(p => p.Product)
             .ThenInclude(p => p.Unit)
             .Include(i => i.Type)
+            .Include(i=>i.Specification)
+            .Include(i=>i.Contract)
             .ToArrayAsync(cancel).ConfigureAwait(false);
     }
 
@@ -44,6 +46,8 @@ public class InvoiceRepository : IInvoiceRepository<Invoice>
             .ThenInclude(p => p.Product)
             .ThenInclude(p => p.Unit)
             .Include(i => i.Type)
+            .Include(i => i.Specification)
+            .Include(i => i.Contract)
             .FirstOrDefaultAsync(i => i.Id == id, cancel).ConfigureAwait(false);
     }
 

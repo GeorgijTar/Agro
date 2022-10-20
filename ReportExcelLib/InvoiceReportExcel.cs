@@ -125,7 +125,16 @@ public static class InvoiceReportExcel
             sheet.Rows[20].Height = 4;
 
             sheet.Cells[21, 8, 21, 33].Merge = true;
-            sheet.Cells[21, 8].Value = "Договор № 15455 от 20.03.2022 г.";
+            string osn="";
+            if (invoice.Contract != null!)
+            {
+                osn = $"{invoice.Contract!.Type.Name} № {invoice.Contract.Number} от {invoice.Contract.Date.ToShortDateString()}";
+                if (invoice.Specification != null!)
+                {
+                    osn += $" ({invoice.Specification.Type.Name} № {invoice.Specification.Number} от {invoice.Specification.Date.ToShortDateString()})";
+                }
+            }
+            sheet.Cells[21, 8].Value = osn;
             // Табличная часть
             sheet.Cells[23, 2, 23, 3].Merge = true;
             sheet.Cells[23, 2].Value = "№";
@@ -189,8 +198,7 @@ public static class InvoiceReportExcel
             sheet.Cells[row + 1, 27].Value = invoice.Amount;
             sheet.Cells[row + 1, 27].Style.Numberformat.Format = "#,##0.00";
 
-
-            var nds = "";
+            string nds;
             if (invoice.Nds.Id == 1)
             {
                 nds=invoice.Nds.Name;
@@ -223,7 +231,7 @@ public static class InvoiceReportExcel
             sheet.Cells[row + 4, 2].Value = $"Всего наименований {count-1}, на сумму {invoice.TotalAmount:N2} руб.";
 
             sheet.Cells[row + 5, 2, row + 5, 33].Merge = true;
-            sheet.Cells[row + 5, 2].Value = RusCurrency.Str(double.Parse(invoice.TotalAmount.ToString()));
+            sheet.Cells[row + 5, 2].Value = RusCurrency.Str((double)invoice.TotalAmount);
             sheet.Rows[row + 5].Height = 26;
             sheet.Cells[row + 5, 2].Style.VerticalAlignment = ExcelVerticalAlignment.Top;
 

@@ -19,6 +19,9 @@ public static class GetDefaultData
         new() { Id = 11, Name = "Выставлен" },
         new() { Id = 12, Name = "Отправлен" },
         new() { Id = 13, Name = "Ошибка отправки" },
+        new() { Id = 14, Name = "Требует внимания" },
+        new() { Id = 15, Name = "Благонадежен" },
+        new() { Id = 16, Name = "Не благонадежен" },
     };
 
     public static TypeDoc[] DefaultType() => new TypeDoc[]

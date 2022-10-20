@@ -1,6 +1,8 @@
 ﻿using Agro.DAL.Entities;
 using Agro.DAL.Entities.Accounting;
 using Agro.DAL.Entities.Agronomy;
+using Agro.DAL.Entities.CheckingCounterparty;
+using Agro.DAL.Entities.CheckingCounterparty.Components;
 using Agro.DAL.Entities.Classifiers;
 using Agro.DAL.Entities.Counter;
 using Agro.DAL.Entities.DefaultData;
@@ -62,13 +64,52 @@ public class AgroDb : DbContext
     public DbSet<OfficialPerson> OfficialPersons { get; set; } = null!;
     public DbSet<Tmc> Tmc { get; set; } = null!;
     public DbSet<RulesAccounting> RulesAccounting { get; set; } = null!;
+    public DbSet<Director> Directors { get; set; } = null!; 
+    public DbSet<Ogrn> Ogrn { get; set; } = null!;
 
-#endregion
+    #region CheckingCounterparty
+    public DbSet<ArbitrationCasesRecord> ArbitrationCasesRecords { get; set; } = null!;
+    public DbSet<AuthorizedCapital> AuthorizedCapitals { get; set; } = null!;
+    public DbSet<Balanceline> Balanceline { get; set; } = null!;
+    public DbSet<Branch> Branchs { get; set; } = null!;
+    public DbSet<CheckBalance> CheckBalances { get; set; } = null!;
+    public DbSet<Contacts> Contacts { get; set; } = null!;
+    public DbSet<DataIp> DataIp { get; set; } = null!;
+    public DbSet<DataUl> DataUl { get; set; } = null!;
+    public DbSet<Director> Director { get; set; } = null!;
+    public DbSet<Divisions> Division { get; set; } = null!;
+    public DbSet<Email> Email { get; set; } = null!;
+    public DbSet<EnforcementProceedingRecord> EnforcementProceedingRecords { get; set; } = null!;
+    public DbSet<FlMo> FlMo { get; set; } = null!;
+    public DbSet<FounderFl> FounderFl { get; set; } = null!;
+    public DbSet<FounderIn> FounderIn { get; set; } = null!;
+    public DbSet<FounderMoRf> FounderMoRf { get; set; } = null!;
+    public DbSet<FounderPif> FounderPif { get; set; } = null!;
+    public DbSet<FounderUl> FounderUl { get; set; } = null!;
+    public DbSet<HolderRegister> HolderRegisters { get; set; } = null!;
+    public DbSet<LegalAddress> LegalAddress { get; set; } = null!;
+    public DbSet<License> Licenses { get; set; } = null!;
+    public DbSet<Likved> Likveds { get; set; } = null!;
+    public DbSet<ManagingOrganization> ManagingOrganization { get; set; } = null!;
+    public DbSet<Ogrn> Ogrns { get; set; } = null!;
+    public DbSet<PaymentTax> PaymentTax { get; set; } = null!;
+    public DbSet<Phone> Phones { get; set; } = null!;
+    public DbSet<PlaintiffDefendant> PlaintiffDefendant { get; set; } = null!;
+    public DbSet<Region> Regions { get; set; } = null!;
+    public DbSet<Rmsp> Rmsp { get; set; } = null!;
+    public DbSet<Share> Shares { get; set; } = null!;
+    public DbSet<Tax> Tax { get; set; } = null!;
+    public DbSet<Ul> Ul { get; set; } = null!;
+    public DbSet<UlShort> UlShort { get; set; } = null!;
+    public DbSet<UnscrupulousSupplierRecord> UnscrupulousSupplierRecord { get; set; } = null!;
+    public DbSet<UrStatus> UrStatus { get; set; } = null!;
+    public DbSet<CheckCounterparty> CheckCounterparty { get; set; } = null!;
+    #endregion
+    #endregion
     public AgroDb(DbContextOptions<AgroDb> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder db)
     {
-        var v = GetDefaultData.DefaultUnitOkeis();
         db.Entity<Status>().HasData(GetDefaultData.DefaultStatus());
         db.Entity<GroupDoc>().HasData(GetDefaultData.DefaultGroup());
         db.Entity<TypeDoc>().HasData(GetDefaultData.DefaultType());
