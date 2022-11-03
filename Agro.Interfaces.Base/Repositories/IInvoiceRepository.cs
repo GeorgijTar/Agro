@@ -1,5 +1,6 @@
 ﻿using Agro.DAL.Entities;
 using Agro.DAL.Entities.Base;
+using Agro.DAL.Entities.CheckingCounterparty;
 using Agro.Interfaces.Base.Repositories.Base;
 
 namespace Agro.Interfaces.Base.Repositories;
@@ -17,5 +18,7 @@ public interface IInvoiceRepository<Invoice> : IBaseRepository<Invoice> where In
     public Task<bool> RemoveProductInvoice(ProductInvoice product, CancellationToken cancel = default);
 
     public Task<ICollection<Nds>?> GetAllNds(CancellationToken cancel = default);
+
+    public Task<Invoice?> SetStatus(int idStatus, Invoice item, CancellationToken cancel = default);
 
 }

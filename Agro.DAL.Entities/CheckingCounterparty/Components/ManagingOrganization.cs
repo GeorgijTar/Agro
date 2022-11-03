@@ -12,16 +12,16 @@ public class ManagingOrganization : Entity
     public bool OgrDostup { get => _ogrDostup; set => Set(ref _ogrDostup, value); }
 
     /// <summary>ОГРН организации</summary>
-    private string _ogrn = null!;
-    public string Ogrn { get => _ogrn; set => Set(ref _ogrn, value); }
+    private string? _ogrn;
+    public string? Ogrn { get => _ogrn; set => Set(ref _ogrn, value); }
 
     /// <summary>ИНН</summary>
-    private string _inn = null!;
-    public string Inn { get => _inn; set => Set(ref _inn, value); }
+    private string? _inn;
+    public string? Inn { get => _inn; set => Set(ref _inn, value); }
 
     ///<summary>Полное наименование</summary>
-    private string _fullName = null!;
-    public string FullName { get => _fullName; set => Set(ref _fullName, value); }
+    private string? _fullName;
+    public string? FullName { get => _fullName; set => Set(ref _fullName, value); }
 
     /// <summary>Страна, в том случае, если управляющая организация является иностранной</summary>
     private string? _inCountry;

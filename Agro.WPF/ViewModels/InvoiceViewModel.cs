@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 using Agro.DAL.Entities;
 using Agro.DAL.Entities.Base;
+using Agro.DAL.Entities.InvoceEntity;
 using Agro.Interfaces.Base.Repositories;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;

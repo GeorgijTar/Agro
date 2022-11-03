@@ -45,18 +45,18 @@ public class Director : Entity
     public bool DisqualifiedPerson { get => _disqualifiedPerson; set => Set(ref _disqualifiedPerson, value); }
 
     /// <summary> Дата начала дисквалификации </summary>
-    private DateTime _disqualifiedOn;
-    public DateTime DisqualifiedOn { get => _disqualifiedOn; set => Set(ref _disqualifiedOn, value); }
+    private DateTime? _disqualifiedOn;
+    public DateTime? DisqualifiedOn { get => _disqualifiedOn; set => Set(ref _disqualifiedOn, value); }
 
     /// <summary> Дата окончания дисквалификации </summary>
-    private DateTime _disqualifiedOff;
-    public DateTime DisqualifiedOff { get => _disqualifiedOff; set => Set(ref _disqualifiedOff, value); }
+    private DateTime? _disqualifiedOff;
+    public DateTime? DisqualifiedOff { get => _disqualifiedOff; set => Set(ref _disqualifiedOff, value); }
 
     /// <summary>ОГРН других организаций, в которых это физлицо является руководителем</summary>
-    private ObservableCollection<Ogrn>? _relatedGuide;
+    private ObservableCollection<Ogrn>? _relatedGuide = new();
     public ObservableCollection<Ogrn>? RelatedGuide { get => _relatedGuide; set => Set(ref _relatedGuide, value); }
 
     /// <summary>ОГРН других организаций, в которых это физлицо является учредителем</summary>
-    private ObservableCollection<Ogrn>? _relatedFoundation;
+    private ObservableCollection<Ogrn>? _relatedFoundation = new();
     public ObservableCollection<Ogrn>? RelatedFoundation { get => _relatedFoundation; set => Set(ref _relatedFoundation, value); } 
 }

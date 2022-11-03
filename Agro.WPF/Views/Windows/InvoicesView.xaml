@@ -86,7 +86,7 @@
                 </Button>
                 <Button BorderBrush="DarkOrange" Width="180"
                         Template="{StaticResource ButtonTemplate}" Margin="2,0"
-                        Command="{Binding PrintCommand}"
+                        Command="{Binding }"
                         Visibility="{Binding VisibilityReestr}">
                     <StackPanel Orientation="Horizontal">
                         <fa5:ImageAwesome Height="12" Icon="Solid_FileDownload"

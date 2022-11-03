@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using Agro.DAL.Entities;
+using Agro.DAL.Entities.InvoceEntity;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 

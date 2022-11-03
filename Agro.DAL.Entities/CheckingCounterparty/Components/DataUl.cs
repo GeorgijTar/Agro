@@ -43,7 +43,7 @@ public class DataUl : Entity
     public string FullName { get => _fullName; set => Set(ref _fullName, value); }
 
     ///<summary>Статус</summary>
-    private UrStatus? _status;
+    private UrStatus? _status=new();
     public UrStatus? Status { get => _status; set => Set(ref _status, value); }
 
     ///<summary>Сведения о ликвидации</summary>
@@ -99,8 +99,8 @@ public class DataUl : Entity
     public RegFss RegFss { get => _regFss; set => Set(ref _regFss, value); }
 
     /// <summary>Уставный капитал</summary>
-    private AuthorizedCapital _authorizedCapital = null!;
-    public AuthorizedCapital AuthorizedCapital { get => _authorizedCapital; set => Set(ref _authorizedCapital, value); }
+    private AuthorizedCapital? _authorizedCapital = null!;
+    public AuthorizedCapital? AuthorizedCapital { get => _authorizedCapital; set => Set(ref _authorizedCapital, value); }
 
     /// <summary>Управляющая организация</summary>
     private ManagingOrganization? _managingOrganization;
@@ -110,21 +110,10 @@ public class DataUl : Entity
     private ObservableCollection<Director> _director = null!;
     public ObservableCollection<Director> Director { get => _director; set => Set(ref _director, value); }
 
-    private ObservableCollection<FounderFl>? _foundersFl;
-    public ObservableCollection<FounderFl>? FoundersFl { get => _foundersFl; set => Set(ref _foundersFl, value); }
-
-    /// <summary>Учредители(участники) Российские Юредические лица</summary>
-    private ObservableCollection<FounderUl>? _foundersUl;
-    public ObservableCollection<FounderUl>? FoundersUl { get => _foundersUl; set => Set(ref _foundersUl, value); }
-
-    /// <summary>Учредители(участники) иностранные организации</summary>
-    private ObservableCollection<FounderIn> _foundersIn = null!;
-    public ObservableCollection<FounderIn> FoundersIn { get => _foundersIn; set => Set(ref _foundersIn, value); }
-
-    /// <summary> Учредитель - Российская Федерация, субъекты РФ и муниципальные образования </summary>
-    private ObservableCollection<FounderMoRf>? _foundersMoRf;
-    public ObservableCollection<FounderMoRf>? FoundersMoRf { get => _foundersMoRf; set => Set(ref _foundersMoRf, value); }
-
+    /// <summary> Учредители </summary>
+    private Founder? _founder = new();
+    public Founder? Founder { get => _founder; set => Set(ref _founder, value); } 
+    
     /// <summary> Юридические лица, находящиеся под управлением данной организации </summary>
     private ObservableCollection<Ul>? _relatedOrganizationsUpr;
     public ObservableCollection<Ul>? RelatedOrganizationsUpr { get => _relatedOrganizationsUpr; set => Set(ref _relatedOrganizationsUpr, value); }
@@ -134,8 +123,8 @@ public class DataUl : Entity
     public ObservableCollection<Ul>? RelatedOrganizationsFounded { get => _relatedOrganizationsFounded; set => Set(ref _relatedOrganizationsFounded, value); }
 
     /// <summary> Держатель реестра акционеров </summary>
-    private HolderRegister _holderRegister = null!;
-    public HolderRegister HolderRegister { get => _holderRegister; set => Set(ref _holderRegister, value); }
+    private HolderRegister? _holderRegister = null!;
+    public HolderRegister? HolderRegister { get => _holderRegister; set => Set(ref _holderRegister, value); }
 
     /// <summary>Лицензии</summary>
     private ObservableCollection<License>? _licenses;
@@ -178,8 +167,8 @@ public class DataUl : Entity
     public bool Unscrupulous { get => _unscrupulous ; set => Set(ref _unscrupulous , value); }
 
     /// <summary> Записи реестра недобросовестных поставщиков </summary>
-    private UnscrupulousSupplierRecord? _unscrupulousSupplierRecord;
-    public UnscrupulousSupplierRecord? UnscrupulousSupplierRecord { get => _unscrupulousSupplierRecord; set => Set(ref _unscrupulousSupplierRecord, value); }
+    private ObservableCollection<UnscrupulousSupplierRecord>? _unscrupulousSupplierRecord;
+    public ObservableCollection<UnscrupulousSupplierRecord>? UnscrupulousSupplierRecord { get => _unscrupulousSupplierRecord; set => Set(ref _unscrupulousSupplierRecord, value); }
 
     /// <summary> Признак присутствия дисквалифицированных лиц в руководстве организации </summary>
     private bool _disqualifiedPersons;
@@ -194,8 +183,8 @@ public class DataUl : Entity
     public bool MassFounders { get => _massFounders; set => Set(ref _massFounders, value); }
 
     /// <summary> Финансовая отчетность </summary>
-    private ObservableCollection<CheckBalance>? _financialStatements;
-    public ObservableCollection<CheckBalance>? FinancialStatements { get => _financialStatements; set => Set(ref _financialStatements, value); }
+    private FinancialStatement? _financialStatements;
+    public FinancialStatement? FinancialStatements { get => _financialStatements; set => Set(ref _financialStatements, value); }
 
     /// <summary> Исполнительные производства </summary>
     private ObservableCollection<EnforcementProceedingRecord>? _enforcementProceedings;

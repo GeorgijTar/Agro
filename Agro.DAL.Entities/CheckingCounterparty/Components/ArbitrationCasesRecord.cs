@@ -1,5 +1,4 @@
 ﻿using Agro.DAL.Entities.Base;
-using System;
 using System.Collections.ObjectModel;
 
 namespace Agro.DAL.Entities.CheckingCounterparty.Components;

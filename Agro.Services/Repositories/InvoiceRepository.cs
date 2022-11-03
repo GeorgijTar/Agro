@@ -1,5 +1,7 @@
 ﻿using Agro.DAL;
 using Agro.DAL.Entities;
+using Agro.DAL.Entities.CheckingCounterparty;
+using Agro.DAL.Entities.InvoiceEntity;
 using Agro.Interfaces.Base.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -131,5 +133,11 @@ public class InvoiceRepository : IInvoiceRepository<Invoice>
     public async Task<ICollection<Nds>?> GetAllNds(CancellationToken cancel = default)
     {
         return await _db.Ndses.ToArrayAsync(cancel).ConfigureAwait(false);
+    }
+
+    public async Task<Invoice?> SetStatus(int idStatus, Invoice item, CancellationToken cancel = default)
+    {
+        item.Status= await _db.Statuses.FirstOrDefaultAsync(s => s.Id == idStatus, cancel).ConfigureAwait(false);
+        return await UpdateAsync(item, cancel).ConfigureAwait(false);
     }
 }

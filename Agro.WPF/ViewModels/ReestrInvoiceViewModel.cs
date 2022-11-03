@@ -1,5 +1,6 @@
 ﻿
 using Agro.DAL.Entities;
+using Agro.DAL.Entities.InvoceEntity;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using System.Windows.Input;

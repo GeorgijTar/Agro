@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Agro.DAL;
+﻿using Agro.DAL;
 using Agro.DAL.Entities.Counter;
 using Agro.Interfaces.Base.Repositories.Base;
 using Microsoft.EntityFrameworkCore;

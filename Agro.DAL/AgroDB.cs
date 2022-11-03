@@ -6,6 +6,7 @@ using Agro.DAL.Entities.CheckingCounterparty.Components;
 using Agro.DAL.Entities.Classifiers;
 using Agro.DAL.Entities.Counter;
 using Agro.DAL.Entities.DefaultData;
+using Agro.DAL.Entities.InvoiceEntity;
 using Agro.DAL.Entities.Organization;
 using Agro.DAL.Entities.Organization.RegInfoOrg;
 using Agro.DAL.Entities.Personnel;
@@ -66,6 +67,7 @@ public class AgroDb : DbContext
     public DbSet<RulesAccounting> RulesAccounting { get; set; } = null!;
     public DbSet<Director> Directors { get; set; } = null!; 
     public DbSet<Ogrn> Ogrn { get; set; } = null!;
+    public DbSet<RegistryInvoice> RegistryInvoices { get; set; } = null!;
 
     #region CheckingCounterparty
     public DbSet<ArbitrationCasesRecord> ArbitrationCasesRecords { get; set; } = null!;
@@ -89,6 +91,7 @@ public class AgroDb : DbContext
     public DbSet<HolderRegister> HolderRegisters { get; set; } = null!;
     public DbSet<LegalAddress> LegalAddress { get; set; } = null!;
     public DbSet<License> Licenses { get; set; } = null!;
+    public DbSet<LicView> LicViews { get; set; } = null!;
     public DbSet<Likved> Likveds { get; set; } = null!;
     public DbSet<ManagingOrganization> ManagingOrganization { get; set; } = null!;
     public DbSet<Ogrn> Ogrns { get; set; } = null!;
@@ -104,7 +107,13 @@ public class AgroDb : DbContext
     public DbSet<UnscrupulousSupplierRecord> UnscrupulousSupplierRecord { get; set; } = null!;
     public DbSet<UrStatus> UrStatus { get; set; } = null!;
     public DbSet<CheckCounterparty> CheckCounterparty { get; set; } = null!;
+    public DbSet<Founder> Founders { get; set; } = null!;
+    public DbSet<FinancialStatement> FinancialStatements { get; set; } = null!;
+
+
+
     #endregion
+
     #endregion
     public AgroDb(DbContextOptions<AgroDb> options) : base(options) { }
 
@@ -116,7 +125,6 @@ public class AgroDb : DbContext
         db.Entity<UnitOkei>().HasData(GetDefaultData.DefaultUnitOkeis());
         db.Entity<Nds>().HasData(GetDefaultData.DefaultNds());
         db.Entity<AccountingPlan>().HasData(GetDefaultData.DefaultAccountingPlans());
-        
     }
 
     

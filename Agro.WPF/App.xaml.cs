@@ -1,7 +1,9 @@
 ﻿using System;
 using Agro.DAL.Entities;
 using Agro.DAL.Entities.Agronomy;
+using Agro.DAL.Entities.CheckingCounterparty;
 using Agro.DAL.Entities.Counter;
+using Agro.DAL.Entities.InvoiceEntity;
 using Agro.DAL.Entities.Organization;
 using Agro.DAL.Entities.Personnel;
 using Agro.DAL.Entities.Storage;
@@ -134,7 +136,9 @@ namespace Agro.WPF
             services.AddTransient<IBaseRepository<Tmc>, TmcRepository>();
             services.AddTransient<IBaseRepository<Counterparty>, CounterpartyRepository>();
             services.AddTransient<IContractRepository<Contract>, ContractRepository>();
-            
+            services.AddScoped(typeof(ICheckCounterpartyRepository<CheckCounterparty>), typeof(CheckCounterpartyRepository));
+            services.AddScoped(typeof(IRegistryInvoiceRepository<RegistryInvoice>), typeof(RegistryInvoiceRepository));
+
 
 
             // Регистрация мапера

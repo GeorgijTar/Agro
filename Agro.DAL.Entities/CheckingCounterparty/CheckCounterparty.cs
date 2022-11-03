@@ -23,8 +23,8 @@ public class CheckCounterparty: Entity
     public DataIp? DataIp { get => _dataIp; set => Set(ref _dataIp, value); }
 
     /// <summary> Результат проверки </summary>
-    private Status _resultStatus = null!;
-    public Status ResultStatus { get => _resultStatus; set => Set(ref _resultStatus, value); }
+    private string _resultStatus = null!;
+    public string ResultStatus { get => _resultStatus; set => Set(ref _resultStatus, value); }
 
     /// <summary> Описание результатов проверки </summary>
     private string? _description;

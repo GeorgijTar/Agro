@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.ObjectModel;
 using Agro.DAL.Entities.Base;
 
 namespace Agro.DAL.Entities.CheckingCounterparty.Components;
@@ -21,7 +22,7 @@ public class License : Entity
     public string LicOrg { get => _licOrg; set => Set(ref _licOrg, value); }
 
     /// <summary> Виды лицензируемой деятельности </summary>
-    private string _licView = null!;
-    public string LicView { get => _licView; set => Set(ref _licView, value); } 
+    private ObservableCollection<LicView> _licView = null!;
+    public ObservableCollection<LicView> LicView { get => _licView; set => Set(ref _licView, value); } 
 
 }

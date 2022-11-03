@@ -1,5 +1,5 @@
-﻿using System.Text.Json;
-using System.Text.Json.Nodes;
+﻿using System.Text.Json.Nodes;
+using Agro.DAL.Entities;
 using Agro.DAL.Entities.Counter;
 using Agro.DAL.Entities.Organization;
 
@@ -17,9 +17,9 @@ public static class CheckoApi
         var response = await client.GetAsync(uri);
         var result = await response.Content.ReadAsStringAsync();
         JsonNode? json = JsonValue.Parse(result);
-        var ss = json?["meta"]!["message"]!;
-        if (ss != null)
-            throw new InvalidOperationException(json?["meta"]!["message"]!.ToString());
+        var ss = json!["meta"]!["message"]!;
+        if (ss != null!)
+            throw new InvalidOperationException(json["meta"]!["message"]!.ToString());
         if (json?["data"]!["Статус"]!["Код"]!.ToString()=="000")
             throw new InvalidOperationException(
                 $"Организация имеет статус: {json["data"]!["Статус"]!["Наим"]} ликвидировано" +
@@ -39,9 +39,20 @@ public static class CheckoApi
         }
         counterparty.Okpo = json["data"]!["ОКПО"]!.ToString();
 
-        counterparty.ActualAddress!.City = json["data"]!["ЮрАдрес"]!["НасПункт"]!.ToString();
-        counterparty.ActualAddress.AddressRf = json["data"]!["ЮрАдрес"]!["АдресРФ"]!.ToString();
-        counterparty.ActualAddress.GarId = json["data"]!["ЮрАдрес"]!["ИдГАР"] != null ? json["data"]!["ЮрАдрес"]!["ИдГАР"]!.ToString() : "";
+
+        if (json["data"]!["ЮрАдрес"] != null!)
+        {
+            counterparty.ActualAddress = new Address
+            {
+                City = json["data"]!["ЮрАдрес"]!["НасПункт"]!.ToString(),
+                AddressRf = json["data"]!["ЮрАдрес"]!["АдресРФ"]!.ToString(),
+                GarId = json["data"]!["ЮрАдрес"]!["ИдГАР"] != null
+                    ? json["data"]!["ЮрАдрес"]!["ИдГАР"]!.ToString()
+                    : ""
+            };
+        }
+
+
         counterparty.ActualAddress.Unreliability = bool.Parse(json["data"]!["ЮрАдрес"]!["Недост"]!.ToString()!);
         counterparty.ActualAddress.UnreliabilityDescription = json["data"]!["ЮрАдрес"]!["НедостОпис"]!= null ? json["data"]!["ЮрАдрес"]!["НедостОпис"]!.ToString() : "";
 
@@ -59,11 +70,11 @@ public static class CheckoApi
         Uri? uri= new Uri($"https://api.checko.ru/v2/entrepreneur?key=zpKipA8XmoNldFmM&inn={inn}");
       
         var response = await client.GetAsync(uri);
-        string? result = await response.Content.ReadAsStringAsync();
-        JsonNode? json = JsonValue.Parse(result);
-        var ss = json["meta"]["message"];
-        if (ss != null)
-            throw new InvalidOperationException(json["meta"]["message"].ToString());
+        string result = await response.Content.ReadAsStringAsync();
+        JsonNode? json = JsonNode.Parse(result);
+        var ss = json!["meta"]!["message"];
+        if (ss != null!)
+            throw new InvalidOperationException(json["meta"]!["message"]!.ToString());
         counterparty.Kpp = "";
         counterparty.Ogrn = json["data"]["ОГРНИП"].ToString();
         counterparty.Name = json["data"]["ФИО"].ToString();

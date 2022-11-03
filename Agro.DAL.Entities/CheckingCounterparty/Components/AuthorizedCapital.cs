@@ -18,7 +18,7 @@ public class AuthorizedCapital : Entity
     public string Type { get => _type; set => Set(ref _type, value); }
 
     /// <summary>Размер капитала, руб.</summary>
-    private int _amount;
-    public int Amount { get => _amount; set => Set(ref _amount, value); } 
+    private long _amount;
+    public long Amount { get => _amount; set => Set(ref _amount, value); } 
 
 }

@@ -4,39 +4,41 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Agro.DAL.Entities;
+using Agro.DAL.Entities.CheckingCounterparty;
 using Agro.DAL.Entities.Counter;
+using Agro.Interfaces.Base.Repositories;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.Views.Windows;
 using FNS.Api;
+using static OfficeOpenXml.ExcelErrorValue;
 
 namespace Agro.WPF.ViewModels;
 public class CounterpartyViewModel : ViewModel
 {
-   
-
-
     private readonly IBaseRepository<GroupDoc> _groupRep;
-
     private readonly IBaseRepository<TypeDoc> _typeRep;
     private readonly IBaseRepository<Counterparty> _counterpartyRepository;
     private readonly IBaseRepository<BankDetails> _bankDetailsRepository;
     private readonly IBaseRepository<Status> _statusRepository;
+    private readonly ICheckCounterpartyRepository<CheckCounterparty> _checkCounterpartyRepository;
 
     public CounterpartyViewModel(
         IBaseRepository<GroupDoc> groupRep,
         IBaseRepository<TypeDoc> typeRep,
         IBaseRepository<Counterparty> counterpartyRepository,
         IBaseRepository<BankDetails> bankDetailsRepository,
-        IBaseRepository<Status> statusRepository)
+        IBaseRepository<Status> statusRepository, 
+        ICheckCounterpartyRepository<CheckCounterparty> checkCounterpartyRepository)
     {
         _groupRep = groupRep;
         _typeRep = typeRep;
         _counterpartyRepository = counterpartyRepository;
         _bankDetailsRepository = bankDetailsRepository;
         _statusRepository = statusRepository;
+        _checkCounterpartyRepository = checkCounterpartyRepository;
         Title = "Новый контрагент";
         LoadList();
     }
@@ -66,18 +68,32 @@ public class CounterpartyViewModel : ViewModel
 
 
     private ObservableCollection<GroupDoc> _groups = new();
-
     public ObservableCollection<GroupDoc> Groups { get => _groups; set => Set(ref _groups, value); }
 
-    private ObservableCollection<TypeDoc> _types = new();
 
+    private ObservableCollection<TypeDoc> _types = new();
     public ObservableCollection<TypeDoc> Types { get => _types; set => Set(ref _types, value); }
 
+
     private Counterparty _counterparty = new();
-    public Counterparty Counterparty { get => _counterparty; set=> Set(ref _counterparty, value); }
+    public Counterparty Counterparty { get => _counterparty;
+        set
+        {
+            Set(ref _counterparty, value);
+            if (value != null! && value.Inn != null!)
+            {
+                CheckCounterparty = _checkCounterpartyRepository.GetByInn(value.Inn);
+            }
+        }
+    }
 
     private BankDetails _selectBankDetails = null!;
     public BankDetails SelectBankDetails { get => _selectBankDetails; set => Set( ref _selectBankDetails, value); }
+
+
+    private CheckCounterparty? _checkCounterparty = null!;
+    public CheckCounterparty? CheckCounterparty { get => _checkCounterparty; set => Set(ref _checkCounterparty, value); } 
+
 
     private string _message =null!;
     public string Message { get => _message; set => Set(ref _message, value); }
@@ -276,6 +292,27 @@ public class CounterpartyViewModel : ViewModel
         }
     }
 
+
+    #endregion
+
+    #region CheckCounterparty
+
+    private ICommand? _checkCounterpartyCommand;
+
+    public ICommand CheckCounterpartyCommand => _checkCounterpartyCommand
+        ??= new RelayCommand(OnCheckCounterpartyExecuted, CanCheckCounterpartyExecuted);
+
+    private bool CanCheckCounterpartyExecuted(object arg)
+    {
+        return Counterparty.Inn!=null! && Counterparty.Inn.Length>=10 && Counterparty.Inn.Length <= 12;
+    }
+
+    private async void OnCheckCounterpartyExecuted(object obj)
+    {
+        var result = await CheckCompany.ChecAsync(Counterparty.Inn);
+        CheckCounterparty= await _checkCounterpartyRepository.SaveAsync(result);
+
+    }
 
     #endregion
 

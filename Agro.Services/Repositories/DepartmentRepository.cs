@@ -33,14 +33,14 @@ public class DepartmentRepository : IBaseRepository<Department>
 
     public async Task<Department> AddAsync(Department item, CancellationToken cancel = default)
     {
-        var dep = (await _db.AddAsync(item).ConfigureAwait(false)).Entity;
+        var dep = (await _db.Departments.AddAsync(item).ConfigureAwait(false)).Entity;
         await _db.SaveChangesAsync(cancel);
         return dep;
     }
 
     public async Task<Department> UpdateAsync(Department item, CancellationToken cancel = default)
     {
-        var dep = (_db.Update(item)).Entity;
+        var dep = (_db.Departments.Update(item)).Entity;
         await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
         return dep;
     }

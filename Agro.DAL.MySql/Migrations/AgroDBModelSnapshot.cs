@@ -16,7 +16,7 @@ namespace Agro.DAL.MySql.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Agro.DAL.Entities.Accounting.AccountingPlan", b =>
@@ -1538,16 +1538,15 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("ResultStatusId")
-                        .HasColumnType("int");
+                    b.Property<string>("ResultStatus")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DataIpId");
 
                     b.HasIndex("DataUlId");
-
-                    b.HasIndex("ResultStatusId");
 
                     b.ToTable("CheckCounterparty");
                 });
@@ -1592,8 +1591,8 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
+                    b.Property<long>("Amount")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -1608,6 +1607,12 @@ namespace Agro.DAL.MySql.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AmountPrecedingPreviousYear")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AmountPreviousYear")
                         .HasColumnType("int");
 
                     b.Property<int?>("CheckBalanceId")
@@ -1643,18 +1648,16 @@ namespace Agro.DAL.MySql.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("FullName")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("InAddressId")
-                        .HasColumnType("int");
+                    b.Property<string>("InAddress")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Kpp")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("LegalAddressId")
-                        .HasColumnType("int");
+                    b.Property<string>("LegalAddress")
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("OgrDostup")
                         .HasColumnType("tinyint(1)");
@@ -1665,10 +1668,6 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.HasIndex("DivisionsId1");
 
-                    b.HasIndex("InAddressId");
-
-                    b.HasIndex("LegalAddressId");
-
                     b.ToTable("Branchs");
                 });
 
@@ -1678,15 +1677,10 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("DataUlId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Year")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DataUlId");
 
                     b.ToTable("CheckBalances");
                 });
@@ -1842,7 +1836,7 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("AuthorizedCapitalId")
+                    b.Property<int?>("AuthorizedCapitalId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ContactsId")
@@ -1863,11 +1857,17 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<int?>("DivisionsId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("FinancialStatementsId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FounderId")
+                        .HasColumnType("int");
+
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("HolderRegisterId")
+                    b.Property<int?>("HolderRegisterId")
                         .HasColumnType("int");
 
                     b.Property<string>("Inn")
@@ -1950,9 +1950,6 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<bool>("Unscrupulous")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int?>("UnscrupulousSupplierRecordId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorizedCapitalId");
@@ -1960,6 +1957,10 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("ContactsId");
 
                     b.HasIndex("DivisionsId");
+
+                    b.HasIndex("FinancialStatementsId");
+
+                    b.HasIndex("FounderId");
 
                     b.HasIndex("HolderRegisterId");
 
@@ -1995,8 +1996,6 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.HasIndex("TaxId");
 
-                    b.HasIndex("UnscrupulousSupplierRecordId");
-
                     b.ToTable("DataUl");
                 });
 
@@ -2012,10 +2011,10 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("DisqualifiedOff")
+                    b.Property<DateTime?>("DisqualifiedOff")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime>("DisqualifiedOn")
+                    b.Property<DateTime?>("DisqualifiedOn")
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool>("DisqualifiedPerson")
@@ -2144,6 +2143,27 @@ namespace Agro.DAL.MySql.Migrations
                     b.ToTable("EnforcementProceedingRecords");
                 });
 
+            modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.FinancialStatement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CheckBalanceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UlId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CheckBalanceId");
+
+                    b.HasIndex("UlId");
+
+                    b.ToTable("FinancialStatements");
+                });
+
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.FlMo", b =>
                 {
                     b.Property<int>("Id")
@@ -2168,13 +2188,21 @@ namespace Agro.DAL.MySql.Migrations
                     b.ToTable("FlMo");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.FounderFl", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.Founder", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("DataUlId")
+                    b.HasKey("Id");
+
+                    b.ToTable("Founders");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.FounderFl", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -2183,6 +2211,9 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<string>("Fio")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<int?>("FounderId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Inn")
                         .IsRequired()
@@ -2202,7 +2233,7 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DataUlId");
+                    b.HasIndex("FounderId");
 
                     b.HasIndex("ShareId");
 
@@ -2223,14 +2254,14 @@ namespace Agro.DAL.MySql.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("DataUlId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateReg")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
+
+                    b.Property<int?>("FounderId")
+                        .HasColumnType("int");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -2251,7 +2282,7 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DataUlId");
+                    b.HasIndex("FounderId");
 
                     b.HasIndex("ShareId");
 
@@ -2264,11 +2295,11 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("DataUlId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
+
+                    b.Property<int?>("FounderId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("OgrDostup")
                         .HasColumnType("tinyint(1)");
@@ -2288,7 +2319,7 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DataUlId");
+                    b.HasIndex("FounderId");
 
                     b.HasIndex("RegionId");
 
@@ -2305,6 +2336,9 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
+
+                    b.Property<int?>("FounderId")
+                        .HasColumnType("int");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -2324,6 +2358,8 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FounderId");
+
                     b.HasIndex("ManagingOrganizationId");
 
                     b.HasIndex("ShareId");
@@ -2337,11 +2373,11 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("DataUlId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
+
+                    b.Property<int?>("FounderId")
+                        .HasColumnType("int");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -2366,7 +2402,7 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DataUlId");
+                    b.HasIndex("FounderId");
 
                     b.HasIndex("ShareId");
 
@@ -2446,10 +2482,6 @@ namespace Agro.DAL.MySql.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("LicView")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Number")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -2461,6 +2493,26 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("DataUlId");
 
                     b.ToTable("Licenses");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.LicView", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LicenseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ViewLic")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LicenseId");
+
+                    b.ToTable("LicViews");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.Likved", b =>
@@ -2492,7 +2544,6 @@ namespace Agro.DAL.MySql.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("FullName")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("InAddress")
@@ -2508,14 +2559,12 @@ namespace Agro.DAL.MySql.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Inn")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<bool>("OgrDostup")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Ogrn")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<bool>("Unreliability")
@@ -2524,6 +2573,26 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ManagingOrganization");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.ModeNalog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Mode")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("TaxId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaxId");
+
+                    b.ToTable("ModeNalog");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.Ogrn", b =>
@@ -2664,10 +2733,9 @@ namespace Agro.DAL.MySql.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Cat")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime?>("Date")
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
@@ -2700,9 +2768,6 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.Property<float?>("ArrearsAmount")
                         .HasColumnType("float");
-
-                    b.Property<string>("Mode")
-                        .HasColumnType("longtext");
 
                     b.Property<float?>("PayAmount")
                         .HasColumnType("float");
@@ -2831,41 +2896,39 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<int>("ContractPrice")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateApproval")
+                    b.Property<int?>("DataUlId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DateApproval")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime>("DatePublication")
+                    b.Property<DateTime?>("DatePublication")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("FullName")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Inn")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Kpp")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("PurchaseDescription")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("PurchaseNumber")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("RegistrationNumber")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("ShortName")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DataUlId");
 
                     b.ToTable("UnscrupulousSupplierRecord");
                 });
@@ -4850,17 +4913,9 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany()
                         .HasForeignKey("DataUlId");
 
-                    b.HasOne("Agro.DAL.Entities.Status", "ResultStatus")
-                        .WithMany()
-                        .HasForeignKey("ResultStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("DataIp");
 
                     b.Navigation("DataUl");
-
-                    b.Navigation("ResultStatus");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.ArbitrationCasesRecord", b =>
@@ -4886,25 +4941,6 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.Divisions", null)
                         .WithMany("RepresentativeOffices")
                         .HasForeignKey("DivisionsId1");
-
-                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.LegalAddress", "InAddress")
-                        .WithMany()
-                        .HasForeignKey("InAddressId");
-
-                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.LegalAddress", "LegalAddress")
-                        .WithMany()
-                        .HasForeignKey("LegalAddressId");
-
-                    b.Navigation("InAddress");
-
-                    b.Navigation("LegalAddress");
-                });
-
-            modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.CheckBalance", b =>
-                {
-                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.DataUl", null)
-                        .WithMany("FinancialStatements")
-                        .HasForeignKey("DataUlId");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.DataIp", b =>
@@ -5018,9 +5054,7 @@ namespace Agro.DAL.MySql.Migrations
                 {
                     b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.AuthorizedCapital", "AuthorizedCapital")
                         .WithMany()
-                        .HasForeignKey("AuthorizedCapitalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AuthorizedCapitalId");
 
                     b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.Contacts", "Contacts")
                         .WithMany()
@@ -5030,11 +5064,17 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany()
                         .HasForeignKey("DivisionsId");
 
+                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.FinancialStatement", "FinancialStatements")
+                        .WithMany()
+                        .HasForeignKey("FinancialStatementsId");
+
+                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.Founder", "Founder")
+                        .WithMany()
+                        .HasForeignKey("FounderId");
+
                     b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.HolderRegister", "HolderRegister")
                         .WithMany()
-                        .HasForeignKey("HolderRegisterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HolderRegisterId");
 
                     b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.LegalAddress", "LegalAddress")
                         .WithMany()
@@ -5122,15 +5162,15 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany()
                         .HasForeignKey("TaxId");
 
-                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.UnscrupulousSupplierRecord", "UnscrupulousSupplierRecord")
-                        .WithMany()
-                        .HasForeignKey("UnscrupulousSupplierRecordId");
-
                     b.Navigation("AuthorizedCapital");
 
                     b.Navigation("Contacts");
 
                     b.Navigation("Divisions");
+
+                    b.Navigation("FinancialStatements");
+
+                    b.Navigation("Founder");
 
                     b.Navigation("HolderRegister");
 
@@ -5165,8 +5205,6 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("Status");
 
                     b.Navigation("Tax");
-
-                    b.Navigation("UnscrupulousSupplierRecord");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.Director", b =>
@@ -5190,6 +5228,25 @@ namespace Agro.DAL.MySql.Migrations
                         .HasForeignKey("DataUlId");
                 });
 
+            modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.FinancialStatement", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.CheckBalance", "CheckBalance")
+                        .WithMany()
+                        .HasForeignKey("CheckBalanceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.Ul", "Ul")
+                        .WithMany()
+                        .HasForeignKey("UlId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CheckBalance");
+
+                    b.Navigation("Ul");
+                });
+
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.FlMo", b =>
                 {
                     b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.FounderMoRf", null)
@@ -5199,9 +5256,9 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.FounderFl", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.DataUl", null)
+                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.Founder", null)
                         .WithMany("FoundersFl")
-                        .HasForeignKey("DataUlId");
+                        .HasForeignKey("FounderId");
 
                     b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.Share", "Share")
                         .WithMany()
@@ -5214,9 +5271,9 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.FounderIn", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.DataUl", null)
+                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.Founder", null)
                         .WithMany("FoundersIn")
-                        .HasForeignKey("DataUlId");
+                        .HasForeignKey("FounderId");
 
                     b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.Share", "Share")
                         .WithMany()
@@ -5229,9 +5286,9 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.FounderMoRf", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.DataUl", null)
+                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.Founder", null)
                         .WithMany("FoundersMoRf")
-                        .HasForeignKey("DataUlId");
+                        .HasForeignKey("FounderId");
 
                     b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.Region", "Region")
                         .WithMany()
@@ -5252,6 +5309,10 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.FounderPif", b =>
                 {
+                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.Founder", null)
+                        .WithMany("FoundersPif")
+                        .HasForeignKey("FounderId");
+
                     b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.ManagingOrganization", "ManagingOrganization")
                         .WithMany()
                         .HasForeignKey("ManagingOrganizationId");
@@ -5269,9 +5330,9 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.FounderUl", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.DataUl", null)
+                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.Founder", null)
                         .WithMany("FoundersUl")
-                        .HasForeignKey("DataUlId");
+                        .HasForeignKey("FounderId");
 
                     b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.Share", "Share")
                         .WithMany()
@@ -5291,6 +5352,20 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.DataUl", null)
                         .WithMany("Licenses")
                         .HasForeignKey("DataUlId");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.LicView", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.License", null)
+                        .WithMany("LicView")
+                        .HasForeignKey("LicenseId");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.ModeNalog", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.Tax", null)
+                        .WithMany("Mode")
+                        .HasForeignKey("TaxId");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.Ogrn", b =>
@@ -5378,6 +5453,13 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.FounderMoRf", null)
                         .WithMany("OrgsMo")
                         .HasForeignKey("FounderMoRfId");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.UnscrupulousSupplierRecord", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.DataUl", null)
+                        .WithMany("UnscrupulousSupplierRecord")
+                        .HasForeignKey("DataUlId");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Classifiers.Okved", b =>
@@ -6091,16 +6173,6 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.Navigation("EnforcementProceedings");
 
-                    b.Navigation("FinancialStatements");
-
-                    b.Navigation("FoundersFl");
-
-                    b.Navigation("FoundersIn");
-
-                    b.Navigation("FoundersMoRf");
-
-                    b.Navigation("FoundersUl");
-
                     b.Navigation("LegalSuccessors");
 
                     b.Navigation("Licenses");
@@ -6110,6 +6182,8 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("RelatedOrganizationsFounded");
 
                     b.Navigation("RelatedOrganizationsUpr");
+
+                    b.Navigation("UnscrupulousSupplierRecord");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.Director", b =>
@@ -6126,6 +6200,19 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("RepresentativeOffices");
                 });
 
+            modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.Founder", b =>
+                {
+                    b.Navigation("FoundersFl");
+
+                    b.Navigation("FoundersIn");
+
+                    b.Navigation("FoundersMoRf");
+
+                    b.Navigation("FoundersPif");
+
+                    b.Navigation("FoundersUl");
+                });
+
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.FounderFl", b =>
                 {
                     b.Navigation("RelatedFoundation");
@@ -6140,8 +6227,15 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("OrgsMo");
                 });
 
+            modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.License", b =>
+                {
+                    b.Navigation("LicView");
+                });
+
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.Tax", b =>
                 {
+                    b.Navigation("Mode");
+
                     b.Navigation("PaymentTaxes");
                 });
 

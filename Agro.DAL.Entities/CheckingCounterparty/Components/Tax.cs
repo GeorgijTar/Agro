@@ -7,9 +7,9 @@ namespace Agro.DAL.Entities.CheckingCounterparty.Components;
 /// </summary>
 public class Tax: Entity
 {
-    /// <summary> Применяемые ообые режимы налогообложения, такие как "ЕСХН", "УСН", "ЕНВД" и "СРП" </summary>
-    private string? _mode;
-    public string? Mode { get => _mode; set => Set(ref _mode, value); }
+    /// <summary> Применяемые особые режимы налогообложения, такие как "ЕСХН", "УСН", "ЕНВД" и "СРП" </summary>
+    private ObservableCollection<ModeNalog>? _mode;
+    public ObservableCollection<ModeNalog>? Mode { get => _mode; set => Set(ref _mode, value); }
 
     /// <summary> Уплаченные налоги и сборы </summary>
     private ObservableCollection<PaymentTax>? _paymentTaxes;

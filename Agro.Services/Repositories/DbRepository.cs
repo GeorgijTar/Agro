@@ -1,6 +1,5 @@
 ﻿using Agro.DAL;
 using Agro.DAL.Entities.Base;
-using Agro.Interfaces.Base.Repositories;
 using Agro.Interfaces.Base.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 
