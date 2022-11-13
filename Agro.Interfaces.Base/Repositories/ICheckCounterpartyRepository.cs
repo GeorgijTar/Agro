@@ -7,7 +7,5 @@ public interface ICheckCounterpartyRepository<CheckCounterparty> : IBaseReposito
     where CheckCounterparty : Entity
 {
     public Task<CheckCounterparty?> GetByInnAsync(string inn, CancellationToken cancel = default);
-
-    public CheckCounterparty? GetByInn(string inn, CancellationToken cancel = default);
 }
     

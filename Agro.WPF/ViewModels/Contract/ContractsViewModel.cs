@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -9,6 +11,7 @@ using Agro.Interfaces.Base.Repositories;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.ViewModels.InvoiceVM;
 using Agro.WPF.Views.Windows.Contract;
 
 namespace Agro.WPF.ViewModels.Contract;
@@ -17,25 +20,31 @@ public class ContractsViewModel : ViewModel
 {
     private readonly IContractRepository<DAL.Entities.Counter.Contract> _contractRepository;
     private readonly IBaseRepository<Status> _statusRepository;
-
-    public ContractsViewModel(IContractRepository<DAL.Entities.Counter.Contract> contractRepository, IBaseRepository<Status> statusRepository)
+    public int GroupId { get; set; }
+    public ContractsViewModel(IContractRepository<DAL.Entities.Counter.Contract> contractRepository, 
+        IBaseRepository<Status> statusRepository)
     {
         _contractRepository = contractRepository;
         _statusRepository = statusRepository;
         Title = "Реестр контрактов";
+        this.PropertyChanged += ModelChanged;
         LoadData();
     }
 
     private async void LoadData()
     {
         Contracts.Clear();
-        var contracts = await _contractRepository.GetAllAsync();
+        var contracts = await _contractRepository.GetAllByNoIdStatusAsync(6);
+        if (GroupId != 0)
+        {
+            contracts = contracts!.Where(c => c.Group.Id == GroupId).ToList();
+        }
+        
         foreach (var contract in contracts!)
         {
             Contracts.Add(contract);
         }
         CollectionView = CollectionViewSource.GetDefaultView(Contracts);
-        this.PropertyChanged += ModelChanged;
     }
 
     private string _title = null!;
@@ -59,31 +68,26 @@ public class ContractsViewModel : ViewModel
     private string _innFilter = null!;
     public string InnFilter { get => _innFilter; set => Set(ref _innFilter, value); }
 
-
-    private TypeDoc _typeFilter = null!;
-    public TypeDoc TypeFilter { get => _typeFilter; set => Set(ref _typeFilter, value); }
-
-
-    private GroupDoc _groupFilter = null!;
-    public GroupDoc GroupFilter { get => _groupFilter; set => Set(ref _groupFilter, value); }
-
+    private string _numberFilter = null!;
+    public string NumberFilter { get => _numberFilter; set => Set(ref _numberFilter, value); }
     public object SenderModel { get; set; } = null!;
 
-    private void ModelChanged(object? sender, PropertyChangedEventArgs e)
+    public void ModelChanged(object? sender, PropertyChangedEventArgs e)
     {
-        switch (e.PropertyName)
+        if (CollectionView != null!)
         {
-            case "NameFilter":
-                CollectionView.Filter = FilterByName;
-                break;
-            case "InnFilter":
-                CollectionView.Filter = FilterByInn;
-                break;
-            case "TypeFilter":
-                CollectionView.Filter = FilterByType;
-                break;
-            case "GroupFilter":
-                break;
+            switch (e.PropertyName)
+            {
+                case "NameFilter":
+                    CollectionView.Filter = FilterByName;
+                    break;
+                case "InnFilter":
+                    CollectionView.Filter = FilterByInn;
+                    break;
+                case "NumberFilter":
+                    CollectionView.Filter = FilterByNumber;
+                    break;
+            }
         }
     }
 
@@ -109,27 +113,17 @@ public class ContractsViewModel : ViewModel
         return true;
     }
 
-    private bool FilterByType(object count)
+    private bool FilterByNumber(object count)
     {
-        if (TypeFilter!=null!)
+        if (!string.IsNullOrEmpty(NumberFilter))
         {
             DAL.Entities.Counter.Contract? dto = count as DAL.Entities.Counter.Contract;
-            return dto!.Type.Name.ToUpper().Contains(TypeFilter.Name.ToUpper());
+            return dto!.Number.ToUpper().Contains(NumberFilter.ToUpper());
         }
         return true;
     }
 
-    private bool FilterByGroup(object count)
-    {
-        if (GroupFilter != null!)
-        {
-            DAL.Entities.Counter.Contract? dto = count as DAL.Entities.Counter.Contract;
-            return dto!.Group.Name.ToUpper().Contains(GroupFilter.Name.ToUpper());
-        }
-        return true;
-    }
-
-    #endregion
+     #endregion
 
     #region Commands
 
@@ -226,7 +220,7 @@ public class ContractsViewModel : ViewModel
             if (SenderModel is InvoiceViewModel invoice)
             {
                 invoice.Invoice.Contract=SelectedContract;
-                if (SelectedContract.Specification!.Count == 1)
+                if (SelectedContract.Specification!=null! && SelectedContract.Specification!.Count == 1)
                 {
                     invoice.Invoice.Specification = SelectedContract.Specification![0];
                 }

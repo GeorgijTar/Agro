@@ -1,6 +1,5 @@
 ﻿using Agro.DAL;
 using Agro.DAL.Entities;
-using Agro.DAL.Entities.CheckingCounterparty;
 using Agro.DAL.Entities.InvoiceEntity;
 using Agro.Interfaces.Base.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -19,18 +18,19 @@ public class InvoiceRepository : IInvoiceRepository<Invoice>
     {
         return await _db.Invoices
             .Include(i => i.Status!)
-            .Include(i => i.Counterparty).ThenInclude(c=>c.ActualAddress!)
+            .Include(i => i.Counterparty).ThenInclude(c => c.ActualAddress!)
             .Include(i => i.BankDetails)
-            .Include(i => i.BankDetailsOrg).ThenInclude(b=>b!.Organization!).ThenInclude(o=>o.AddressUr!)
-            .Include(i => i.BankDetailsOrg).ThenInclude(b => b!.Organization!).ThenInclude(o=>o.Director!.Post)
+            .Include(i => i.BankDetailsOrg).ThenInclude(b => b!.Organization!).ThenInclude(o => o.AddressUr!)
+            .Include(i => i.BankDetailsOrg).ThenInclude(b => b!.Organization!).ThenInclude(o => o.Director!.Post)
             .Include(i => i.BankDetailsOrg).ThenInclude(b => b!.Organization!).ThenInclude(o => o.Director!.People)
             .Include(i => i.Nds)
             .Include(i => i.ProductsInvoice!)
             .ThenInclude(p => p.Product)
             .ThenInclude(p => p.Unit)
             .Include(i => i.Type)
-            .Include(i=>i.Specification)
-            .Include(i=>i.Contract)
+            .Include(i => i.Specification)
+            .Include(i => i.Contract)
+            .Include(i => i.RegistryInvoice)
             .ToArrayAsync(cancel).ConfigureAwait(false);
     }
 
@@ -50,6 +50,7 @@ public class InvoiceRepository : IInvoiceRepository<Invoice>
             .Include(i => i.Type)
             .Include(i => i.Specification)
             .Include(i => i.Contract)
+            .Include(i => i.RegistryInvoice)
             .FirstOrDefaultAsync(i => i.Id == id, cancel).ConfigureAwait(false);
     }
 
@@ -135,9 +136,14 @@ public class InvoiceRepository : IInvoiceRepository<Invoice>
         return await _db.Ndses.ToArrayAsync(cancel).ConfigureAwait(false);
     }
 
-    public async Task<Invoice?> SetStatus(int idStatus, Invoice item, CancellationToken cancel = default)
+    public async Task<Invoice> SetStatusAsync(int idStatus, Invoice item, CancellationToken cancel = default)
     {
-        item.Status= await _db.Statuses.FirstOrDefaultAsync(s => s.Id == idStatus, cancel).ConfigureAwait(false);
+        item.Status = await _db.Statuses.FirstOrDefaultAsync(s => s.Id == idStatus, cancel).ConfigureAwait(false);
         return await UpdateAsync(item, cancel).ConfigureAwait(false);
+    }
+
+    public async Task<decimal>? GetLimit(CancellationToken cancel = default)
+    {
+        return await _db.Sittings.Select(s => s.LimitAmountInvoice).FirstAsync(cancel);
     }
 }

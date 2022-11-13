@@ -7,6 +7,8 @@ using Agro.DAL.Entities;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.ViewModels.Contract;
+using Agro.WPF.ViewModels.InvoiceVM;
 using Agro.WPF.Views;
 using Agro.WPF.Views.Windows;
 using Agro.WPF.Views.Windows.Agronomy;
@@ -347,16 +349,35 @@ public class MainWindowViewModel : ViewModel
 
     #endregion
 
-    #region ShowContracts
+    #region ShowContractsIn
 
-    private ICommand? _showContractsCommand;
+    private ICommand? _showContractsInCommand;
 
-    public ICommand ShowContractsCommand => _showContractsCommand
-        ??= new RelayCommand(OnShowContractsExecuted);
+    public ICommand ShowContractsInCommand => _showContractsInCommand
+        ??= new RelayCommand(OnShowContractsInExecuted);
 
-    private void OnShowContractsExecuted(object obj)
+    private void OnShowContractsInExecuted(object obj)
     {
         var view = new ContractsView();
+        var model = view.DataContext as ContractsViewModel;
+        model!.GroupId = 21;
+       view.Show();
+    }
+
+    #endregion
+
+    #region ShowContractsOut
+
+    private ICommand? _showContractsOutCommand;
+
+    public ICommand ShowContractsOutCommand => _showContractsOutCommand
+        ??= new RelayCommand(OnShowContractsOutExecuted);
+
+    private void OnShowContractsOutExecuted(object obj)
+    {
+        var view = new ContractsView();
+        var model = view.DataContext as ContractsViewModel;
+        model!.GroupId = 22;
         view.Show();
     }
 

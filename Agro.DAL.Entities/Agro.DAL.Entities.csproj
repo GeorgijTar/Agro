@@ -16,4 +16,8 @@
 	  <Folder Include="Register\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Helpers\Agro.Helpers.csproj" />
+	</ItemGroup>
+
 </Project>

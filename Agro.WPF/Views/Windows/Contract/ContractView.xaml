@@ -129,19 +129,20 @@
                         <DockPanel>
                             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
                                 <UniformGrid Rows="2" Columns="2">
-                                    <Button Width="22" Height="22" Background="Transparent" Margin="2,0"
-                               fa5:Awesome.Content="Solid_TrashRestore" Foreground="DarkRed" ToolTip="Очистить поле"
-                               Command="{Binding TreshCounterpartyCommand}"/>
-                                    <Button Width="22" Height="22" Background="Transparent" Margin="2,0"
-                               fa5:Awesome.Content="Solid_PlusCircle" Foreground="DarkGreen" ToolTip="Создать новый"
-                               Command="{Binding AddCounterpartyCommand}"/>
                                     <Button Width="22" Height="22" Margin="1,0" Background="Transparent"  
-                               fa5:Awesome.Content="Solid_Edit" Foreground="DarkBlue" ToolTip="Редактировать"
-                               Command="{Binding EditCounterpartyCommand}"/>
+                                            fa5:Awesome.Content="Solid_Copy" Foreground="DarkOrange" ToolTip="Открыть справочник"
+                                            Command="{Binding ShowSprCounterpartyCommand}"/>
+                                    <Button Width="22" Height="22" Background="Transparent" Margin="2,0"
+                                            fa5:Awesome.Content="Solid_PlusCircle" Foreground="DarkGreen" ToolTip="Создать новый"
+                                            Command="{Binding AddCounterpartyCommand}"/>
                                     <Button Width="22" Height="22" Margin="1,0" Background="Transparent"  
-                               fa5:Awesome.Content="Solid_Copy" Foreground="DarkOrange" ToolTip="Открыть справочник"
-                               Command="{Binding ShowSprCounterpartyCommand}"/>
-                                </UniformGrid>
+                                            fa5:Awesome.Content="Solid_Edit" Foreground="DarkBlue" ToolTip="Редактировать"
+                                            Command="{Binding EditCounterpartyCommand}"/>
+                                    <Button Width="22" Height="22" Background="Transparent" Margin="2,0"
+                                            fa5:Awesome.Content="Solid_TrashRestore" Foreground="DarkRed" ToolTip="Очистить поле"
+                                            Command="{Binding TreshCounterpartyCommand}"/>
+
+</UniformGrid>
                             </StackPanel>
                             <Border BorderBrush="Black" BorderThickness="0.4">
                                 <StackPanel Orientation="Vertical">

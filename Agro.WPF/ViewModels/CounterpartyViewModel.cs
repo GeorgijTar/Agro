@@ -82,16 +82,40 @@ public class CounterpartyViewModel : ViewModel
             Set(ref _counterparty, value);
             if (value != null! && value.Inn != null!)
             {
-                CheckCounterparty = _checkCounterpartyRepository.GetByInn(value.Inn);
+                GetCheckCounterpartyAsync(value.Inn);
+                
             }
         }
     }
 
+    private async void GetCheckCounterpartyAsync(string inn)
+    {
+        try
+        {
+            CheckCounterparty = await _checkCounterpartyRepository.GetByInnAsync(inn);
+            if (CheckCounterparty! == null!)
+            {
+                CheckCounterparty = new CheckCounterparty();
+                CheckCounterparty!.ResultStatus = "Проверка в отнощении этого контрагента не проводилась!";
+            }
+        }
+        catch (InvalidOperationException e)
+        {
+           var result = MessageBox.Show($"Не у далось получить сведения о последней проверке. Ошибка:{e.Message} " +
+                                        $"Повторить попытку?", "Сервис проверки контрагентов", MessageBoxButton.YesNo);
+           if (result == MessageBoxResult.Yes)
+           {
+               GetCheckCounterpartyAsync(inn);
+           }
+        }
+        
+    }
+
+
     private BankDetails _selectBankDetails = null!;
     public BankDetails SelectBankDetails { get => _selectBankDetails; set => Set( ref _selectBankDetails, value); }
 
-
-    private CheckCounterparty? _checkCounterparty = null!;
+    private CheckCounterparty? _checkCounterparty;
     public CheckCounterparty? CheckCounterparty { get => _checkCounterparty; set => Set(ref _checkCounterparty, value); } 
 
 
@@ -269,7 +293,7 @@ public class CounterpartyViewModel : ViewModel
 
     private async void OnLoadCommandExecuted(object p)
     {
-        Counterparty load;
+        Counterparty load =new Counterparty();
         try
         {
             if (Counterparty.Inn.Length == 10)
@@ -280,7 +304,7 @@ public class CounterpartyViewModel : ViewModel
             {
                 load = await CheckoApi.GetIp(Counterparty.Inn);
             }
-
+            load.Status= await _statusRepository.GetByIdAsync(5);
             var id = Counterparty.Id;
             Counterparty = load;
             Counterparty.Id = id;

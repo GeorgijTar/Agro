@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Agro.DAL.Entities.Base;
-using Agro.DAL.Entities.InvoceEntity;
+using Agro.DAL.Entities.InvoiceEntity;
 
 namespace Agro.DAL.Entities;
 

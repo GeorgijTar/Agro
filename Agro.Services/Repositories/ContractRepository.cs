@@ -88,4 +88,37 @@ public class ContractRepository:IContractRepository<Contract>
         await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
         return true;
     }
+
+    public async Task<IEnumerable<GroupDoc>> GetGroupsAsync(CancellationToken cancel = default)
+    {
+        return await _db.Groups.Where(g => g.TypeApplication == "Контракт").ToArrayAsync(cancel).ConfigureAwait(false);
+    }
+
+    public async Task<IEnumerable<Contract>?> GetAllByIdStatusAsync(int idStatus, CancellationToken cancel = default)
+    {
+        return await _db.Contracts
+            .Include(c => c.Counterparty)
+            .Include(c => c.BankDetailsOrg).ThenInclude(b => b.Organization)
+            .Include(c => c.BankDetails)
+            .Include(c => c.Group)
+            .Include(c => c.Type)
+            .Include(c => c.ScanFiles)
+            .Where(c=>c.Status!.Id==idStatus)
+            .OrderBy(c => c.Date)
+            .ToArrayAsync(cancel).ConfigureAwait(false);
+    }
+
+    public async Task<IEnumerable<Contract>?> GetAllByNoIdStatusAsync(int idStatus, CancellationToken cancel = default)
+    {
+        return await _db.Contracts
+            .Include(c => c.Counterparty)
+            .Include(c => c.BankDetailsOrg).ThenInclude(b => b.Organization)
+            .Include(c => c.BankDetails)
+            .Include(c => c.Group)
+            .Include(c => c.Type)
+            .Include(c => c.ScanFiles)
+            .Where(c => c.Status!.Id != idStatus)
+            .OrderBy(c => c.Date)
+            .ToArrayAsync(cancel).ConfigureAwait(false);
+    }
 }

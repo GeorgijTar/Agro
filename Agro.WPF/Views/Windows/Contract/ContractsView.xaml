@@ -84,8 +84,10 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="170"/>
                         <ColumnDefinition Width="120"/>
-                        <ColumnDefinition Width="80"/>
-                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="30*"/>
+                        <ColumnDefinition Width="80*"/>
+                        <ColumnDefinition Width="80*"/>
                         <ColumnDefinition Width="80*"/>
                         <ColumnDefinition Width="80*"/>
                     </Grid.ColumnDefinitions>
@@ -93,19 +95,15 @@
                                HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
                     <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,2" 
                              Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}"/>
-                    <StackPanel Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2" Orientation="Horizontal">
-                        <TextBlock Text="Входит в группу:" Margin="10,0" VerticalAlignment="Center"/>
-                        <ComboBox VerticalAlignment="Center" Width="180" ItemsSource="{Binding Groups}" 
-                                  SelectedItem="{Binding SelectedGroup}"/>
-                        <TextBlock Text="Тип контрагента:" Margin="10,0" VerticalAlignment="Center"/>
-                        <ComboBox VerticalAlignment="Center" Width="180" ItemsSource="{Binding Types}"
-                                  SelectedItem="{Binding SelectedType}"/>
-                    </StackPanel>
-
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="ИНН контрагента:" 
+                   <TextBlock Grid.Row="1" Grid.Column="0" Text="ИНН контрагента:" 
                                HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Margin="0,2" MaxLength="12"
                              Text="{Binding InnFilter, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Grid.Row="0" Grid.Column="4" Text="№ договора:" 
+                               HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
+                    <TextBox Grid.Row="0" Grid.Column="5" Margin="0,2" MaxLength="12"
+                             Text="{Binding NumberFilter, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
             </GroupBox>
             

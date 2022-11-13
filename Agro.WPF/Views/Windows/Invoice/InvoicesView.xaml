@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Agro.WPF.Views.Windows"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="450" Width="1000"
         DataContext="{Binding InvoicesModel, Source={StaticResource Locator}}">
@@ -86,7 +87,7 @@
                 </Button>
                 <Button BorderBrush="DarkOrange" Width="180"
                         Template="{StaticResource ButtonTemplate}" Margin="2,0"
-                        Command="{Binding }"
+                        Command="{Binding RegistryInvoceFormCommand}"
                         Visibility="{Binding VisibilityReestr}">
                     <StackPanel Orientation="Horizontal">
                         <fa5:ImageAwesome Height="12" Icon="Solid_FileDownload"
@@ -109,9 +110,9 @@
                         <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="125*"/>
-                        <ColumnDefinition Width="60*"/>
-                        <ColumnDefinition Width="60*"/>
-                        <ColumnDefinition Width="80*"/>
+                        <ColumnDefinition Width="40*"/>
+                        <ColumnDefinition Width="125*"/>
+                        <ColumnDefinition Width="40*"/>
                         <ColumnDefinition Width="10*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Номер:" 
@@ -124,8 +125,12 @@
                         <TextBlock Text="с:" VerticalAlignment="Center" Margin="5,0"/>
                         <DatePicker  SelectedDate="{Binding DateOnFilter}" Margin="5,0"/>
                         <TextBlock Text="по:" VerticalAlignment="Center" Margin="5,0"/>
-                        <DatePicker  SelectedDate="{Binding DateOffFilter}" Margin="5,0"/>
+                        <DatePicker  SelectedDate="{Binding DateOffFilter}" Margin="5,0" />
                     </StackPanel>
+                    <TextBlock Grid.Row="0" Grid.Column="5" Text="Статус:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
+                    <ComboBox Grid.Row="0" Grid.Column="6" Margin="5,0" VerticalAlignment="Center" 
+                              ItemsSource="{Binding StatusColl}" SelectedItem="{Binding StatusFilter}"
+                              SelectedIndex="0"/>
 
                     <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Grid.RowSpan="2" Header="Контрагеньт" >
                         <StackPanel Orientation="Horizontal">
@@ -151,11 +156,24 @@
                               CanUserAddRows="False">
                         <DataGrid.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Принять" Command="{Binding AcceptanceCommand, UpdateSourceTrigger=PropertyChanged}"/>
+                                <MenuItem Header="Создать" Command="{Binding AddCommand}"></MenuItem>
+                                <MenuItem Header="Редактировать" Command="{Binding EditCommand}"></MenuItem>
+                                <MenuItem Header="Удалить" Command="{Binding DeleteCommand}"></MenuItem>
+                                <MenuItem Header="Печать" Command="{Binding PrintCommand}"></MenuItem>
+                                <Separator/>
+                                <MenuItem Header="Сформировать реестр" Command="{Binding RegistryInvoceFormCommand}"></MenuItem>
+                                <MenuItem Header="Принять" Command="{Binding AcceptanceCommand}"/>
+                                <MenuItem Header="Вернуть на подготовку" Command="{Binding ReturnCommand}"></MenuItem>
                                 <Separator/>
                                 <MenuItem Header="Выставить" Command="{Binding BillingCommand}"/>
                             </ContextMenu>
                         </DataGrid.ContextMenu>
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="MouseDoubleClick">
+                                <b:InvokeCommandAction Command="{Binding SelectRowCommand}" 
+                                                       CommandParameter="{Binding ElementName=CoynterpartiesWindow}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="10*" Header="ID" Binding="{Binding Id}"/>
                             <DataGridTextColumn Width="20*" Header="Статус" Binding="{Binding Status.Name}"/>

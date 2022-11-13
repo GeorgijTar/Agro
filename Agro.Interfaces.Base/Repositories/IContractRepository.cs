@@ -11,4 +11,9 @@ public interface IContractRepository<Contract> : IBaseRepository<Contract> where
     public Task<bool> RemoveFile(ScanFile file, CancellationToken cancel = default);
 
     public Task<bool> RemoveSpecification(SpecificationContract speciication, CancellationToken cancel = default);
+
+    public Task<IEnumerable<GroupDoc>> GetGroupsAsync(CancellationToken cancel = default);
+
+    public Task<IEnumerable<Contract>?> GetAllByIdStatusAsync(int idStatus, CancellationToken cancel = default);
+    public Task<IEnumerable<Contract>?> GetAllByNoIdStatusAsync(int idStatus, CancellationToken cancel = default);
 }

@@ -20,6 +20,8 @@ namespace Agro.DAL;
 public class AgroDb : DbContext
 {
     #region DbSet
+
+    public DbSet<User> Users { get; set; }
     public DbSet<Status> Statuses { get; set; } = null!;
     public DbSet<GroupDoc> Groups { get; set; } = null!;
     public DbSet<TypeDoc> Types { get; set; } = null!;
@@ -45,7 +47,6 @@ public class AgroDb : DbContext
     public DbSet<Okopf> Okopf { get; set; } = null!;
     public DbSet<Oktmo> Oktmo { get; set; } = null!;
     public DbSet<ProductInvoice> ProductsInvoice { get; set; } = null!;
-    public DbSet<ReestrInvoice> ReestrInvoice { get; set; } = null!;
     public DbSet<Document> Documents { get; set; } = null!;
     public DbSet<People> People { get; set; } = null!;
     public DbSet<Employee> Employee { get; set; } = null!;
@@ -68,6 +69,7 @@ public class AgroDb : DbContext
     public DbSet<Director> Directors { get; set; } = null!; 
     public DbSet<Ogrn> Ogrn { get; set; } = null!;
     public DbSet<RegistryInvoice> RegistryInvoices { get; set; } = null!;
+    public DbSet<Sitting> Sittings { get; set; } = null!;
 
     #region CheckingCounterparty
     public DbSet<ArbitrationCasesRecord> ArbitrationCasesRecords { get; set; } = null!;
@@ -125,6 +127,8 @@ public class AgroDb : DbContext
         db.Entity<UnitOkei>().HasData(GetDefaultData.DefaultUnitOkeis());
         db.Entity<Nds>().HasData(GetDefaultData.DefaultNds());
         db.Entity<AccountingPlan>().HasData(GetDefaultData.DefaultAccountingPlans());
+        db.Entity<Sitting>().HasData(GetDefaultData.DefaultSittings());
+        db.Entity<User>().HasData(GetDefaultData.DefaultUsers());
     }
 
     

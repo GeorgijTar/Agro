@@ -7,6 +7,7 @@ using Agro.DAL.Entities;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.ViewModels.InvoiceVM;
 using Agro.WPF.Views.Windows;
 
 namespace Agro.WPF.ViewModels;

@@ -21,21 +21,34 @@
                 <RowDefinition Height="35"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Menu>
+            <Menu Background="AntiqueWhite">
                 <MenuItem Header="Бухгалтерия">
                     <MenuItem.Icon>
                         <fa5:ImageAwesome Height="32" Icon="Solid_PiggyBank" Foreground="DarkBlue"/>
                     </MenuItem.Icon>
-                    <MenuItem Header="Счета">
+                    <MenuItem Header="Продажа">
                         <MenuItem.Icon>
                             <fa5:ImageAwesome Height="14" Icon="Solid_DollarSign" Foreground="DarkBlue"/>
                         </MenuItem.Icon>
+                        <MenuItem Header="Договора" Command="{Binding ShowContractsOutCommand}"/>
                         <MenuItem Header="Счета выставленные" Command="{Binding ShowInvoicesOut}"/>
-                        <Separator/>
-                        <MenuItem Header="Счета полученные" Command="{Binding ShowInvoicesIn}"/>
                     </MenuItem>
-                    <MenuItem Header="Договора" Command="{Binding ShowContractsCommand}"/>
-                    </MenuItem>
+                    <Separator Margin="0,3" />
+                    <MenuItem Header="Закупки">
+                        <MenuItem.Icon>
+                            <fa5:ImageAwesome Height="14" Icon="Solid_ShoppingBasket" Foreground="DarkBlue"/>
+                        </MenuItem.Icon>
+                        <MenuItem Header="Договора" Command="{Binding ShowContractsInCommand}"/>
+                        <MenuItem Header="Счета">
+                            <MenuItem.Icon>
+                                <fa5:ImageAwesome Height="14" Icon="Solid_FileInvoice" Foreground="DarkBlue"/>
+                            </MenuItem.Icon>
+                            <MenuItem Header="Счета полученные" Command="{Binding ShowInvoicesIn}"/>
+                            <MenuItem Header="Реестры счетов на оплату"/>
+                        </MenuItem>
+                        
+                        </MenuItem>
+                   </MenuItem>
                 <MenuItem Header="Кадры">
                     <MenuItem.Icon>
                         <fa5:ImageAwesome Height="32" Icon="Solid_PeopleArrows" Foreground="DarkBlue"/>

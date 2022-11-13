@@ -8,7 +8,7 @@ namespace Agro.DAL.Entities.Counter;
 /// <summary>
 /// Контрагент
 /// </summary>
-[Index(nameof(Inn), IsUnique = true, Name = "NameIndex")]
+//[Index(nameof(Inn), IsUnique = true, Name = "NameIndex")]
 public class Counterparty : Entity
 {
     public Counterparty()

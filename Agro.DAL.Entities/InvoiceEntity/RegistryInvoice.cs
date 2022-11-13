@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using Agro.DAL.Entities.Agronomy;
 using Agro.DAL.Entities.Base;
 
@@ -24,11 +25,9 @@ public class RegistryInvoice : Entity
     /// <summary> Дата отправки реестра </summary>
     private DateTime? _dateDispatch;
     public DateTime? DateDispatch { get => _dateDispatch; set => Set(ref _dateDispatch, value); } 
-
-
-    /// <summary> Счета входящие в реестр </summary>
+    
+    /// <summary> Счета входящие в реестр требующие подтверждение </summary>
     private ObservableCollection<Invoice> _invoices = null!;
-    public ObservableCollection<Invoice> Invoices { get => _invoices; set => Set(ref _invoices, value); } 
-
-
+    public ObservableCollection<Invoice> Invoices { get => _invoices; set => Set(ref _invoices, value); }
+   
 }

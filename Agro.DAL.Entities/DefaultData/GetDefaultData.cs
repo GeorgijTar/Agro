@@ -1,9 +1,21 @@
 ﻿using Agro.DAL.Entities.Accounting;
+using Agro.DAL.Entities.CheckingCounterparty.Components;
+using Helpers;
+
 
 namespace Agro.DAL.Entities.DefaultData;
 
 public static class GetDefaultData
 {
+    public static User[] DefaultUsers() => new User[]
+    {
+        new User() {Id = 1, Login = "admin", Password = AgroHelper.CalculateHash("admin", "admin")},
+        new User() {Id = 2, Login = "я", Password = AgroHelper.CalculateHash("1", "я")}
+    };
+    public static Sitting[] DefaultSittings() => new Sitting[]
+    {
+        new (){ Id = 1, LimitAmountInvoice = 20000}
+    };
     public static Status[] DefaultStatus() => new Status[]
     {
         new() { Id = 1, Name = "Черновик" },
@@ -20,8 +32,9 @@ public static class GetDefaultData
         new() { Id = 12, Name = "Отправлен" },
         new() { Id = 13, Name = "Ошибка отправки" },
         new() { Id = 14, Name = "Требует внимания" },
-        new() { Id = 15, Name = "Благонадежен" },
-        new() { Id = 16, Name = "Не благонадежен" },
+        new() { Id = 15, Name = "Включен в реестр" },
+        new() { Id = 16, Name = "Отпаравлен на рассмотрение" },
+        new() { Id = 17, Name = "Подготовлен" },
     };
 
     public static TypeDoc[] DefaultType() => new TypeDoc[]
@@ -47,6 +60,8 @@ public static class GetDefaultData
         new() { Id = 19, Name = "Спецификация", TypeApplication = "Спецификация" },
         new() { Id = 20, Name = "Дополнительное соглашение", TypeApplication = "Спецификация" },
     };
+
+
 
     public static GroupDoc[] DefaultGroup() => new GroupDoc[]
     {

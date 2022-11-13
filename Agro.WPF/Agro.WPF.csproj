@@ -10,6 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\logo180x180.ico" />
+    <None Remove="Resources\logo_kolos.png" />
+    <None Remove="Views\logo_kolos.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wheat_icon_logo.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -37,18 +43,25 @@
     <ProjectReference Include="..\Agro.Services\Agro.Services.csproj" />
     <ProjectReference Include="..\Bank.Api\Bank.Api.csproj" />
     <ProjectReference Include="..\FNS.Api\FNS.Api.csproj" />
+    <ProjectReference Include="..\Helpers\Agro.Helpers.csproj" />
     <ProjectReference Include="..\ReportExcelLib\ReportExcelLib.csproj" />
     <ProjectReference Include="..\UsControlLib\UsControlLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\logo180x180.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\logo_kolos.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\logo_kolos.png" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>

@@ -2,6 +2,7 @@
 using Agro.WPF.ViewModels.Agronomy;
 using Agro.WPF.ViewModels.Auxiliary_windows;
 using Agro.WPF.ViewModels.Contract;
+using Agro.WPF.ViewModels.InvoiceVM;
 using Agro.WPF.ViewModels.Organization;
 using Agro.WPF.ViewModels.Personnel;
 using Agro.WPF.ViewModels.Storage;
@@ -13,6 +14,7 @@ namespace Agro.WPF.ViewModels.Base;
 
 public class ViewModelLocator
 {
+    public LoginViewModel LoginModel => App.Services.GetRequiredService<LoginViewModel>();
     public MainWindowViewModel MainWindowModel => App.Services.GetRequiredService<MainWindowViewModel>();
 
     public ContractorsViewModel ContractorsModel => App.Services.GetRequiredService<ContractorsViewModel>();
@@ -36,9 +38,7 @@ public class ViewModelLocator
     public OrganizationViewModel OrganizationModel => App.Services.GetRequiredService<OrganizationViewModel>();
 
     public ProductInvoiceViewModel ProductInvoiceModel => App.Services.GetRequiredService<ProductInvoiceViewModel>();
-
-    public ReestrInvoiceViewModel ReestrInvoiceModel => App.Services.GetRequiredService<ReestrInvoiceViewModel>();
-
+    
     public ContractsViewModel ContractsModel => App.Services.GetRequiredService<ContractsViewModel>();
 
     public DepartmentsViewModel DepartmentsModel => App.Services.GetRequiredService<DepartmentsViewModel>();
@@ -119,4 +119,7 @@ public class ViewModelLocator
 
    public GroupViewModel GroupModel => App.Services.GetRequiredService<GroupViewModel>();
 
+   public RegistryInvoiceViewModel RegistryInvoiceModel => App.Services.GetRequiredService<RegistryInvoiceViewModel>();
+   
+   public RegistryInvoicesViewModel RegistryInvoicesModel => App.Services.GetRequiredService<RegistryInvoicesViewModel>();
 }

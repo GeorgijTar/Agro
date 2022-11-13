@@ -15,8 +15,7 @@ public class Invoice : Entity
     private Status? _status = new();
     [Required]
     public virtual Status? Status { get => _status; set => Set(ref _status, value); }
-
-
+    
     /// <summary>Номер счета</summary>
     private string _number = null!;
     [Required]
@@ -83,8 +82,13 @@ public class Invoice : Entity
     private BankDetails? _bankDetailsOrg;
     public virtual BankDetails? BankDetailsOrg { get => _bankDetailsOrg; set => Set(ref _bankDetailsOrg, value); }
 
-
+    /// <summary>История изменения документа </summary>
     private ObservableCollection<History>? _history = new();
     public virtual ObservableCollection<History>? History { get => _history; set => Set(ref _history, value); }
+
+    /// <summary>Реестр счетов в который входит документ </summary>
+    private RegistryInvoice? _registryInvoice;
+    public RegistryInvoice? RegistryInvoice { get => _registryInvoice; set => Set(ref _registryInvoice, value); } 
+
 
 }

@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,32 +8,33 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using Agro.DAL.Entities;
-using Agro.DAL.Entities.InvoceEntity;
 using Agro.Interfaces.Base.Repositories;
 using Agro.Interfaces.Base.Repositories.Base;
+using Agro.Services.Repositories;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.Views.Windows;
+using Agro.WPF.Views.Windows.Invoice;
 using Microsoft.Win32;
 using ReportExcelLib;
 
-namespace Agro.WPF.ViewModels;
+namespace Agro.WPF.ViewModels.InvoiceVM;
 
 public class InvoicesViewModel : ViewModel
 {
-    private readonly IInvoiceRepository<Invoice> _repository;
+    private readonly IInvoiceRepository<DAL.Entities.InvoiceEntity.Invoice> _repository;
     private readonly IBaseRepository<Status> _statusRepository;
 
     private string _title = "Счета";
     public string Title { get => _title; set => Set(ref _title, value); }
 
-    private ObservableCollection<Invoice> _invoices = new();
+    private ObservableCollection<DAL.Entities.InvoiceEntity.Invoice> _invoices = new();
 
-    public ObservableCollection<Invoice> Invoices { get => _invoices; set => Set(ref _invoices, value); }
+    public ObservableCollection<DAL.Entities.InvoiceEntity.Invoice> Invoices { get => _invoices; set => Set(ref _invoices, value); }
 
-    private Invoice _selectedInvoice = null!;
+    private DAL.Entities.InvoiceEntity.Invoice _selectedInvoice = null!;
 
-    public Invoice SelectedInvoice { get => _selectedInvoice; set => Set(ref _selectedInvoice, value); }
+    public DAL.Entities.InvoiceEntity.Invoice SelectedInvoice { get => _selectedInvoice; set => Set(ref _selectedInvoice, value); }
 
     private TypeDoc _typeInvoice = new();
     public TypeDoc TypeInvoice { get => _typeInvoice; set => Set(ref _typeInvoice, value); }
@@ -74,22 +74,29 @@ public class InvoicesViewModel : ViewModel
     private ICollectionView _collectionView = null!;
     public ICollectionView CollectionView { get => _collectionView; set => Set(ref _collectionView, value); }
 
+    private ObservableCollection<Status> _statusColl = new();
+    public ObservableCollection<Status> StatusColl { get => _statusColl; set => Set(ref _statusColl, value); }
 
-    public InvoicesViewModel(IInvoiceRepository<Invoice> repository, IBaseRepository<Status> statusRepository)
+    private Status? _statusFilter;
+    public Status? StatusFilter { get => _statusFilter; set => Set(ref _statusFilter, value); }
+
+    private  decimal _limit;
+
+    public InvoicesViewModel(IInvoiceRepository<DAL.Entities.InvoiceEntity.Invoice> repository, IBaseRepository<Status> statusRepository)
     {
         _repository = repository;
         _statusRepository = statusRepository;
         LoadData();
-        this.PropertyChanged += TypeChanged;
+        PropertyChanged += TypeChanged;
         CollectionView = CollectionViewSource.GetDefaultView(Invoices);
-        this.PropertyChanged += ViewChanged;
+        PropertyChanged += ViewChanged;
     }
 
     private void ViewChanged(object? sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
         {
-            
+
             case "NumberFilter":
                 CollectionView.Filter = FilterByNumber;
                 break;
@@ -105,14 +112,27 @@ public class InvoicesViewModel : ViewModel
             case "NameFilter":
                 CollectionView.Filter = FilterByName;
                 break;
+            case "StatusFilter":
+                CollectionView.Filter = FilterByStatus;
+                break;
         }
+    }
+
+    private bool FilterByStatus(object obj)
+    {
+        if (StatusFilter != null! && StatusFilter.Id != 0)
+        {
+            DAL.Entities.InvoiceEntity.Invoice? dto = obj as DAL.Entities.InvoiceEntity.Invoice;
+            return dto!.Status!.Name.ToUpper().Contains(StatusFilter.Name.ToUpper());
+        }
+        return true;
     }
 
     private bool FilterByName(object obj)
     {
         if (!string.IsNullOrEmpty(NameFilter))
         {
-            Invoice? dto = obj as Invoice;
+            DAL.Entities.InvoiceEntity.Invoice? dto = obj as DAL.Entities.InvoiceEntity.Invoice;
             return dto!.Counterparty.Name.ToUpper().Contains(NameFilter.ToUpper()) |
                    dto.Counterparty.PayName.ToUpper().Contains(NameFilter.ToUpper());
         }
@@ -123,7 +143,7 @@ public class InvoicesViewModel : ViewModel
     {
         if (!string.IsNullOrEmpty(InnFilter))
         {
-            Invoice? dto = obj as Invoice;
+            DAL.Entities.InvoiceEntity.Invoice? dto = obj as DAL.Entities.InvoiceEntity.Invoice;
             return dto!.Counterparty.Inn.ToUpper().Contains(InnFilter.ToUpper());
         }
         return true;
@@ -133,7 +153,7 @@ public class InvoicesViewModel : ViewModel
     {
         if (DateOnFilter <= DateOffFilter)
         {
-            Invoice? dto = obj as Invoice;
+            DAL.Entities.InvoiceEntity.Invoice? dto = obj as DAL.Entities.InvoiceEntity.Invoice;
             return dto!.DateInvoice >= DateOnFilter & dto.DateInvoice <= DateOffFilter;
         }
 
@@ -144,7 +164,7 @@ public class InvoicesViewModel : ViewModel
     {
         if (!string.IsNullOrEmpty(NumberFilter))
         {
-            Invoice? dto = obj as Invoice;
+            DAL.Entities.InvoiceEntity.Invoice? dto = obj as DAL.Entities.InvoiceEntity.Invoice;
             return dto!.Number.ToUpper().Contains(NumberFilter.ToUpper());
         }
         return true;
@@ -184,11 +204,18 @@ public class InvoicesViewModel : ViewModel
 
     private async void LoadData()
     {
+        _limit = await _repository.GetLimit()!;
         Invoices.Clear();
         var invoices = await _repository.GetAllAsync();
         invoices = invoices!.Where(x => x.Status!.Id != 6).Where(x => x.Type.Id == TypeInvoice.Id);
+        StatusColl.Add(new Status() { Id = 0, Name = "Все" });
+        var statuses = invoices!.Select(i => i.Status).Distinct().ToArray();
+        foreach (var statuse in statuses)
+        {
+            StatusColl.Add(statuse!);
+        }
 
-        foreach (var invoice in invoices)
+        foreach (var invoice in invoices!)
         {
             Invoices.Add(invoice);
         }
@@ -199,7 +226,7 @@ public class InvoicesViewModel : ViewModel
     #region Commands
 
     #region Add
-    
+
     private ICommand? _addCommand;
 
     public ICommand AddCommand => _addCommand
@@ -223,7 +250,7 @@ public class InvoicesViewModel : ViewModel
     #endregion
 
     #region Edit
-    
+
     private ICommand? _editCommand;
 
     public ICommand EditCommand => _editCommand
@@ -231,7 +258,7 @@ public class InvoicesViewModel : ViewModel
 
     private bool EditCommandExecut(object arg)
     {
-        return SelectedInvoice != null! && SelectedInvoice.Id != 0;
+        return SelectedInvoice != null! && SelectedInvoice.Status!.Id == 1;
     }
 
     private void OnEditCommandExecuted(object obj)
@@ -248,6 +275,25 @@ public class InvoicesViewModel : ViewModel
             viewModel.VisibilityBankOrg = Visibility.Visible;
         }
         view.Show();
+    }
+
+    #endregion
+
+    #region Delete
+
+    private ICommand? _deleteCommand;
+
+    public ICommand DeleteCommand => _deleteCommand
+        ??= new RelayCommand(OnDeleteExecuted, CanDeleteExecuted);
+
+    private bool CanDeleteExecuted(object arg)
+    {
+        return SelectedInvoice != null! && SelectedInvoice.Status!.Id == 1;
+    }
+
+    private async void OnDeleteExecuted(object obj)
+    {
+       SelectedInvoice= await _repository.SetStatusAsync(6, SelectedInvoice);
     }
 
     #endregion
@@ -273,6 +319,57 @@ public class InvoicesViewModel : ViewModel
 
     #endregion
 
+    #region SelectRow
+
+    private ICommand? _selectRowCommand;
+
+    public ICommand SelectRowCommand => _selectRowCommand
+        ??= new RelayCommand(OnSelectRowExecuted, CanSelectRowExecuted);
+
+    private bool CanSelectRowExecuted(object arg)
+    {
+        return SelectedInvoice != null!;
+    }
+
+    private void OnSelectRowExecuted(object obj)
+    {
+        InvoiceView view = new();
+        InvoiceViewModel viewModel = (InvoiceViewModel)view.DataContext;
+        viewModel.Nds = Nds;
+        viewModel.Invoice = SelectedInvoice;
+        viewModel.ButtonActivity = false;
+        viewModel.IsEdit = true;
+        viewModel.SenderModel = this;
+        if (TypeInvoice.Id == 8)
+        {
+            viewModel.VisibilityNumeric = Visibility.Visible;
+            viewModel.VisibilityBankOrg = Visibility.Visible;
+        }
+        view.Show();
+    }
+
+    #endregion
+
+    #region RegistryInvoceForm
+
+    private ICommand? _registryInvoceFormCommand;
+
+    public ICommand RegistryInvoceFormCommand => _registryInvoceFormCommand
+        ??= new RelayCommand(OnRegistryInvoceFormExecuted, CanRegistryInvoceFormExecuted);
+
+    private bool CanRegistryInvoceFormExecuted(object arg)
+    {
+        return Invoices.Any(i => i.Status!.Id == 8);
+    }
+
+    private void OnRegistryInvoceFormExecuted(object obj)
+    {
+        var view = new RegistryInvoiceView();
+        view.ShowDialog();
+    }
+
+    #endregion
+
     #region ContecstMenu
 
     #region billing 
@@ -287,7 +384,7 @@ public class InvoicesViewModel : ViewModel
 
     private bool CanBillingExecuted(object arg)
     {
-        return SelectedInvoice!=null! &  SelectedInvoice!.Type.Id == 8 & SelectedInvoice.Status!.Id == 1;
+        return SelectedInvoice != null! & SelectedInvoice!.Type.Id == 8 & SelectedInvoice.Status!.Id == 1;
     }
 
     private async void OnBillingExecuted(object obj)
@@ -314,8 +411,34 @@ public class InvoicesViewModel : ViewModel
 
     private async void OnAcceptanceExecuted(object obj)
     {
-        SelectedInvoice.Status = await _statusRepository.GetByIdAsync(8);
-        await _repository.SaveAsync(SelectedInvoice);
+        
+        if (SelectedInvoice.TotalAmount > _limit)
+        {
+            await _repository.SetStatusAsync(8, SelectedInvoice);
+        }
+        else
+        {
+           await _repository.SetStatusAsync(9, SelectedInvoice);
+        }
+    }
+
+    #endregion
+
+    #region Return
+
+    private ICommand? _returnCommand;
+
+    public ICommand ReturnCommand => _returnCommand
+        ??= new RelayCommand(OnReturnExecuted, CanReturnExecuted);
+
+    private bool CanReturnExecuted(object arg)
+    {
+        return SelectedInvoice.Status!.Id != 1 && SelectedInvoice.Status!.Id != 15;
+    }
+
+    private async void OnReturnExecuted(object obj)
+    {
+        await _repository.SetStatusAsync(1, SelectedInvoice);
     }
 
     #endregion

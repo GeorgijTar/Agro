@@ -1,14 +1,14 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Agro.DAL.Entities;
 using Agro.DAL.Entities.Base;
-using Agro.DAL.Entities.InvoceEntity;
+using Agro.DAL.Entities.InvoiceEntity;
 using Agro.Interfaces.Base.Repositories;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
@@ -17,10 +17,14 @@ using Agro.WPF.Views.Windows;
 using Agro.WPF.Views.Windows.Contract;
 using Microsoft.Win32;
 
-namespace Agro.WPF.ViewModels;
+namespace Agro.WPF.ViewModels.InvoiceVM;
 
 public class InvoiceViewModel : ViewModel
 {
+    private bool _buttonActivity = true;
+    public bool ButtonActivity { get => _buttonActivity; set => Set(ref _buttonActivity, value); } 
+
+
     private readonly IInvoiceRepository<Invoice> _invoiceRepository;
     private string _title = "Новый счет";
 
@@ -31,7 +35,7 @@ public class InvoiceViewModel : ViewModel
     public Invoice Invoice { get => _invoice; set => Set(ref _invoice, value); }
 
 
-    private ScanFile _selectedFile = null!; 
+    private ScanFile _selectedFile = null!;
     public ScanFile SelectedFile { get => _selectedFile; set => Set(ref _selectedFile, value); }
 
 
@@ -63,7 +67,9 @@ public class InvoiceViewModel : ViewModel
     public decimal AmountNds { get => _amountNds; set => Set(ref _amountNds, value); }
 
     private bool _isEdit;
-    public bool IsEdit { get => _isEdit;
+    public bool IsEdit
+    {
+        get => _isEdit;
         set
         {
             Set(ref _isEdit, value);
@@ -73,8 +79,8 @@ public class InvoiceViewModel : ViewModel
             Calc();
         }
     }
-    
-    private object _senderModel=null!;
+
+    private object _senderModel = null!;
     public object SenderModel { get => _senderModel; set => Set(ref _senderModel, value); }
     public InvoiceViewModel(
         IInvoiceRepository<Invoice> invoiceRepository)
@@ -100,11 +106,11 @@ public class InvoiceViewModel : ViewModel
     private void Calc()
     {
 
-        if (Invoice.ProductsInvoice != null!)
+        if (Invoice.ProductsInvoice != null! && Invoice.ProductsInvoice.Any())
         {
             TotalAmount = 0;
             AmountNds = 0;
-            decimal invoiceAmount=0;
+            decimal invoiceAmount = 0;
             decimal invoiceAmountNds = 0;
             decimal invoiceTotalAmount = 0;
             foreach (var product in Invoice.ProductsInvoice!)
@@ -123,10 +129,10 @@ public class InvoiceViewModel : ViewModel
             Invoice.PropertyChanged += ChangedPropertyInvoice;
         }
     }
-    
+
     private void ChangedPropertyInvoice(object? sender, PropertyChangedEventArgs e)
     {
-        
+
         switch (e.PropertyName)
         {
             default: return;
@@ -157,7 +163,7 @@ public class InvoiceViewModel : ViewModel
 
     private async void LoadStaticData()
     {
-       BankDetailsOrg = await _invoiceRepository.GetAllBankDetailsOrg();
+        BankDetailsOrg = await _invoiceRepository.GetAllBankDetailsOrg();
     }
 
 
@@ -195,20 +201,20 @@ public class InvoiceViewModel : ViewModel
     private async void OnSaveCommandExecuted(object obj)
     {
         Invoice.Status = await _invoiceRepository.GetStatusById(1);
-       var inv = await _invoiceRepository.SaveAsync(Invoice);
-       if (!IsEdit)
-       {
-           if (SenderModel != null!)
-           {
-               if (SenderModel is InvoicesViewModel invoicesViewModel)
-               {
-                   invoicesViewModel.Invoices.Add(inv);
-               }
-           }
-       }
-       var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
-       if (window != null!)
-           window.Close();
+        var inv = await _invoiceRepository.SaveAsync(Invoice);
+        if (!IsEdit)
+        {
+            if (SenderModel != null!)
+            {
+                if (SenderModel is InvoicesViewModel invoicesViewModel)
+                {
+                    invoicesViewModel.Invoices.Add(inv);
+                }
+            }
+        }
+        var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+        if (window != null!)
+            window.Close();
 
     }
 
@@ -223,7 +229,7 @@ public class InvoiceViewModel : ViewModel
 
     private void OnAddFileCommandExecuted(object obj)
     {
-        
+
         OpenFileDialog openFileDialog = new()
         {
             InitialDirectory = "c:\\",
@@ -261,7 +267,7 @@ public class InvoiceViewModel : ViewModel
 
     private void OnRemoveFileCommandExecuted(object obj)
     {
-        var result = MessageBox.Show($"Вы действительно хотите удалить файл: {SelectedFile.Name}", 
+        var result = MessageBox.Show($"Вы действительно хотите удалить файл: {SelectedFile.Name}",
             "Редактор файлов", MessageBoxButton.YesNo);
         if (result == MessageBoxResult.Yes)
         {
@@ -282,7 +288,7 @@ public class InvoiceViewModel : ViewModel
 
     private void OnSaveFileCommandExecuted(object obj)
     {
-       SaveFileDialog saveFileDialog = new()
+        SaveFileDialog saveFileDialog = new()
         {
             InitialDirectory = "c:\\",
             FileName = SelectedFile.Name,
@@ -330,7 +336,7 @@ public class InvoiceViewModel : ViewModel
 
     private bool CanNumericComand(object arg)
     {
-        return Invoice.Number == null! || Invoice.Number.Length==0;
+        return Invoice.Number == null! || Invoice.Number.Length == 0;
     }
 
     private async void OnNumericCommandExecuted(object obj)
@@ -354,7 +360,7 @@ public class InvoiceViewModel : ViewModel
         viewModel.SenderModel = this;
         viewModel.IsEdit = false;
         view.ShowDialog();
-       
+
     }
 
     #endregion
@@ -383,7 +389,7 @@ public class InvoiceViewModel : ViewModel
 
     #endregion
 
-    #region ShowEditProduct
+    #region DeleteProduct
 
     private ICommand? _deleteProductCommand;
 
@@ -398,7 +404,7 @@ public class InvoiceViewModel : ViewModel
     private async void OnDeleteProductCommandExecuted(object obj)
     {
         if (SelectProductInvoice.Id != 0)
-          await _invoiceRepository.RemoveProductInvoice(SelectProductInvoice);
+            await _invoiceRepository.RemoveProductInvoice(SelectProductInvoice);
         Invoice.ProductsInvoice!.Remove(SelectProductInvoice);
     }
 
@@ -438,7 +444,7 @@ public class InvoiceViewModel : ViewModel
     private void OnClesrContractExecuted(object obj)
     {
         Invoice.Contract = null!;
-        Invoice.Specification=null!;
+        Invoice.Specification = null!;
     }
 
     #endregion

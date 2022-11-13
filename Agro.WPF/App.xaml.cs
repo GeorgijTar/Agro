@@ -20,6 +20,7 @@ using Agro.WPF.ViewModels.Accounting;
 using Agro.WPF.ViewModels.Agronomy;
 using Agro.WPF.ViewModels.Auxiliary_windows;
 using Agro.WPF.ViewModels.Contract;
+using Agro.WPF.ViewModels.InvoiceVM;
 using Agro.WPF.ViewModels.Organization;
 using Agro.WPF.ViewModels.Personnel;
 using Agro.WPF.ViewModels.Storage;
@@ -36,7 +37,7 @@ namespace Agro.WPF
         private static IHost? _hosting;
         public static IHost Hosting => _hosting ??= CreateHostBuilder(Environment.GetCommandLineArgs()).Build();
         public static IServiceProvider Services => Hosting.Services;
-
+        public User CurrentUser { get;  set; }
         public static IHostBuilder CreateHostBuilder(string[] args) => 
             Host.CreateDefaultBuilder(args).ConfigureAppConfiguration(opt => opt.AddJsonFile(
                 "appsettings.json", false, true)).ConfigureServices(ConfigureServices);
@@ -63,6 +64,7 @@ namespace Agro.WPF
             }
             
             //Регистрация вью-моделей
+            services.AddTransient<LoginViewModel>();
             services.AddScoped<ContractorsViewModel>();
             services.AddTransient<CounterpartyViewModel>();
             services.AddTransient<BankDetailsViewModel>();
@@ -75,7 +77,6 @@ namespace Agro.WPF
             services.AddTransient<InvoiceViewModel>();
             services.AddTransient<OrganizationViewModel>();
             services.AddTransient<ProductInvoiceViewModel>();
-            services.AddTransient<ReestrInvoiceViewModel>();
             services.AddScoped<DepartmentsViewModel>();
             services.AddTransient<DepartmentViewModel>();
             services.AddScoped<CulturesViewModel>();
@@ -111,11 +112,13 @@ namespace Agro.WPF
             services.AddScoped<TmCsViewModel>();
             services.AddTransient<TmcViewModel>();
             services.AddTransient<RulesAccountingViewModel>();
-            services.AddScoped<ContractsViewModel>();
+            services.AddTransient<ContractsViewModel>();
             services.AddTransient<ContractViewModel>();
             services.AddTransient<SpecificationContractViewModel>();
             services.AddTransient<TypeViewModel>();
             services.AddTransient<GroupViewModel>();
+            services.AddTransient<RegistryInvoiceViewModel>();
+            services.AddTransient<RegistryInvoicesViewModel>();
 
 
             //Регистрация репозиториев
@@ -138,6 +141,7 @@ namespace Agro.WPF
             services.AddTransient<IContractRepository<Contract>, ContractRepository>();
             services.AddScoped(typeof(ICheckCounterpartyRepository<CheckCounterparty>), typeof(CheckCounterpartyRepository));
             services.AddScoped(typeof(IRegistryInvoiceRepository<RegistryInvoice>), typeof(RegistryInvoiceRepository));
+            services.AddScoped(typeof(ILoginRepository<User>), typeof(LoginRepository));
 
 
 

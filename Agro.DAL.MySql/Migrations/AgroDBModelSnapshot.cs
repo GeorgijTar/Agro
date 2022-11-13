@@ -3185,9 +3185,6 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.HasIndex("TypeDocId");
 
-                    b.HasIndex(new[] { "Inn" }, "NameIndex")
-                        .IsUnique();
-
                     b.ToTable("Counterparties");
                 });
 
@@ -3457,7 +3454,7 @@ namespace Agro.DAL.MySql.Migrations
                     b.ToTable("History");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.Invoice", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.InvoiceEntity.Invoice", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3494,7 +3491,7 @@ namespace Agro.DAL.MySql.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("ReestrInvoiceId")
+                    b.Property<int?>("RegistryInvoiceId")
                         .HasColumnType("int");
 
                     b.Property<int?>("SpecificationId")
@@ -3521,7 +3518,7 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.HasIndex("NdsId");
 
-                    b.HasIndex("ReestrInvoiceId");
+                    b.HasIndex("RegistryInvoiceId");
 
                     b.HasIndex("SpecificationId");
 
@@ -3530,6 +3527,31 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("TypeId");
 
                     b.ToTable("Invoices");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.InvoiceEntity.RegistryInvoice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DateDispatch")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("RegistryInvoices");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Nds", b =>
@@ -4063,38 +4085,6 @@ namespace Agro.DAL.MySql.Migrations
                     b.ToTable("ProductsInvoice");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.ReestrInvoice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("AmountReestr")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<DateTime>("DateReestr")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("DateSend")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("DateValidation")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("StatusId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StatusId");
-
-                    b.ToTable("ReestrInvoice");
-                });
-
             modelBuilder.Entity("Agro.DAL.Entities.ScanFile", b =>
                 {
                     b.Property<int>("Id")
@@ -4128,6 +4118,27 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("InvoiceId");
 
                     b.ToTable("ScanFiles");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Sitting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("LimitAmountInvoice")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sittings");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            LimitAmountInvoice = 20000m
+                        });
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Status", b =>
@@ -4218,12 +4229,17 @@ namespace Agro.DAL.MySql.Migrations
                         new
                         {
                             Id = 15,
-                            Name = "Благонадежен"
+                            Name = "Включен в реестр"
                         },
                         new
                         {
                             Id = 16,
-                            Name = "Не благонадежен"
+                            Name = "Отпаравлен на рассмотрение"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Name = "Подготовлен"
                         });
                 });
 
@@ -4534,9 +4550,36 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Login = "admin",
+                            Password = "2CSU8F1pF7oC96qilonMtES7c/IDgIdssF0fN1N7eJI="
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Login = "я",
+                            Password = "byBvg1FJF6iqL6hrtGFWu8oHl/ugFZUo0/LMnPuj6S8="
+                        });
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Tmc", b =>
@@ -5601,7 +5644,7 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.History", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Invoice", null)
+                    b.HasOne("Agro.DAL.Entities.InvoiceEntity.Invoice", null)
                         .WithMany("History")
                         .HasForeignKey("InvoiceId");
 
@@ -5614,7 +5657,7 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.Invoice", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.InvoiceEntity.Invoice", b =>
                 {
                     b.HasOne("Agro.DAL.Entities.BankDetails", "BankDetails")
                         .WithMany()
@@ -5642,9 +5685,9 @@ namespace Agro.DAL.MySql.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Agro.DAL.Entities.ReestrInvoice", null)
+                    b.HasOne("Agro.DAL.Entities.InvoiceEntity.RegistryInvoice", "RegistryInvoice")
                         .WithMany("Invoices")
-                        .HasForeignKey("ReestrInvoiceId");
+                        .HasForeignKey("RegistryInvoiceId");
 
                     b.HasOne("Agro.DAL.Entities.Counter.SpecificationContract", "Specification")
                         .WithMany()
@@ -5672,11 +5715,22 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.Navigation("Nds");
 
+                    b.Navigation("RegistryInvoice");
+
                     b.Navigation("Specification");
 
                     b.Navigation("Status");
 
                     b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.InvoiceEntity.RegistryInvoice", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Organization.Division", b =>
@@ -5922,7 +5976,7 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.ProductInvoice", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Invoice", "Invoice")
+                    b.HasOne("Agro.DAL.Entities.InvoiceEntity.Invoice", "Invoice")
                         .WithMany("ProductsInvoice")
                         .HasForeignKey("InvoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -5947,24 +6001,13 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.ReestrInvoice", b =>
-                {
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Status");
-                });
-
             modelBuilder.Entity("Agro.DAL.Entities.ScanFile", b =>
                 {
                     b.HasOne("Agro.DAL.Entities.Counter.Contract", null)
                         .WithMany("ScanFiles")
                         .HasForeignKey("ContractId");
 
-                    b.HasOne("Agro.DAL.Entities.Invoice", null)
+                    b.HasOne("Agro.DAL.Entities.InvoiceEntity.Invoice", null)
                         .WithMany("ScanFiles")
                         .HasForeignKey("InvoiceId");
                 });
@@ -5976,6 +6019,15 @@ namespace Agro.DAL.MySql.Migrations
                         .HasForeignKey("StatusId");
 
                     b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.User", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Personnel.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Tmc", b =>
@@ -6251,13 +6303,18 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("BankDetails");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.Invoice", b =>
+            modelBuilder.Entity("Agro.DAL.Entities.InvoiceEntity.Invoice", b =>
                 {
                     b.Navigation("History");
 
                     b.Navigation("ProductsInvoice");
 
                     b.Navigation("ScanFiles");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.InvoiceEntity.RegistryInvoice", b =>
+                {
+                    b.Navigation("Invoices");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Organization.Organization", b =>
@@ -6277,11 +6334,6 @@ namespace Agro.DAL.MySql.Migrations
             modelBuilder.Entity("Agro.DAL.Entities.Personnel.StaffList", b =>
                 {
                     b.Navigation("Positions");
-                });
-
-            modelBuilder.Entity("Agro.DAL.Entities.ReestrInvoice", b =>
-                {
-                    b.Navigation("Invoices");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Storage.StorageLocation", b =>
