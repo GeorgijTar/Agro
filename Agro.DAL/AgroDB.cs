@@ -21,7 +21,7 @@ public class AgroDb : DbContext
 {
     #region DbSet
 
-    public DbSet<User> Users { get; set; }
+    public DbSet<User> Users { get; set; } = null!;
     public DbSet<Status> Statuses { get; set; } = null!;
     public DbSet<GroupDoc> Groups { get; set; } = null!;
     public DbSet<TypeDoc> Types { get; set; } = null!;

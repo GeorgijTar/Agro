@@ -107,6 +107,7 @@
             <TextBlock Text="{Binding AmountInvoice, StringFormat=C, ConverterCulture=Ru-ru }" Margin="5,0" FontWeight="Bold"/>
         </StackPanel>
         <DataGrid Grid.Row="2" ItemsSource="{Binding RegistryInvoice.Invoices, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                  CanUserDeleteRows="False" CanUserResizeColumns="True"
                   AutoGenerateColumns="False"
                   SelectedItem="{Binding Invoice}"
                   CanUserAddRows="False">

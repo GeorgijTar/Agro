@@ -7,7 +7,7 @@
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="450" Width="650"
+        Title="{Binding Title}" Height="550" Width="950"
         DataContext="{Binding RegistryInvoicesModel, Source={StaticResource Locator}}"
         x:Name="Window">
     <Window.Resources>
@@ -38,7 +38,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="45"/>
-            <RowDefinition Height="180"/>
+            <RowDefinition Height="130"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <ToolBar Grid.Row="0">
@@ -76,18 +76,14 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="50"/>
-                    <RowDefinition Height="50"/>
-                </Grid.RowDefinitions>
+                   </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="15*"/>
-                    <ColumnDefinition Width="10*"/>
-                    <ColumnDefinition Width="9*"/>
-                    <ColumnDefinition Width="10*"/>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                   
 
                 </Grid.ColumnDefinitions>
-                <GroupBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Header="Реестр">
+                <GroupBox Grid.Row="0" Grid.Column="0" Header="Реестр">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Номер:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
                         <TextBox VerticalAlignment="Center" Margin="2" Width="120"/>
@@ -97,7 +93,7 @@
                         <DatePicker VerticalAlignment="Center"/>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" Header="Счет на оплату">
+                <GroupBox Grid.Row="0" Grid.Column="1" Header="Счет на оплату">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Номер:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
                         <TextBox VerticalAlignment="Center" Margin="2" Width="120"/>
@@ -107,7 +103,7 @@
                         <DatePicker VerticalAlignment="Center"/>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="6" Header="Контрагент">
+                <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="Контрагент">
                     <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Наименование:" VerticalAlignment="Center" Margin="5,0"/>
                     <TextBox VerticalAlignment="Center" MinWidth="300"/>
@@ -119,6 +115,7 @@
             </Grid>
         </GroupBox>
         <DataGrid Grid.Row="2" SelectedItem="{Binding RegistryInvoice}" 
+                  CanUserDeleteRows="False" CanUserResizeColumns="True"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding RegistryInvoices}"
                   CanUserAddRows="False">

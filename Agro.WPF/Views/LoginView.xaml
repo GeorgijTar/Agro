@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Agro.WPF.Views"
         xmlns:controls="clr-namespace:Agro.WPF.Controls"
+        xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+        xmlns:fa5="http://schemas.fontawesome.com/icons/"
         mc:Ignorable="d"
-        Title="LoginView" Height="495" Width="400" Background="#FFC9D214" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Title="LoginView" Height="520" Width="400" Background="Transparent" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         WindowStyle="None" x:Name="Window"
          DataContext="{Binding LoginModel, Source={StaticResource Locator}}">
     <Window.Resources>
@@ -25,40 +27,57 @@
                 </Trigger>
                 <Trigger Property="IsEnabled" Value="false">
                     <Setter Property="Foreground" Value="Gray"/>
-
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </Window.Resources>
-    <Border CornerRadius="20" Margin="20" Background="Black">
-        <StackPanel Margin="20">
-            <Image Source="/Resources/logo_kolos.png" Width="80" Height="80"/>
+    <Border  Background="#FFC9D214" CornerRadius="20">
+    <Border CornerRadius="20" Margin="30" Background="Black" FocusManager.FocusedElement="{Binding ElementName=TbLogin}">
+        <StackPanel Margin="10,5">
+            <Image Source="/Resources/logo_kolos.png" Width="90" Height="80"/>
             <Label Content="Авторизация" Foreground="AliceBlue" HorizontalAlignment="Center" FontSize="20"/>
             <Separator Foreground="AliceBlue"/>
             <Label Content="Логин" Margin="5" Foreground="AliceBlue"/>
-            <TextBox Text="{Binding Login}" Margin="5,0" Background="DimGray" FontSize="16" HorizontalContentAlignment="Center" Foreground="AliceBlue"/>
+            <TextBox x:Name="TbLogin" Text="{Binding Login}" Margin="5,0" Focusable="True"
+                     Background="DimGray" FontSize="16" HorizontalContentAlignment="Center" Foreground="AliceBlue"/>
 
             <Label Content="Пароль" Margin="5" Foreground="AliceBlue"/>
-            <controls:BindablePasswordBox  Margin="5,0" Password="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            <controls:BindablePasswordBox  Margin="5,0" 
+                                           Password="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                           Background="DimGray" FontSize="16" HorizontalContentAlignment="Stretch" 
                                           Foreground="AliceBlue"/>
             <StackPanel Orientation="Horizontal" Margin="5,10,5,0" HorizontalAlignment="Center">
-                <Button Content="Aвторизоваться" Template="{StaticResource ButtonTemplate}" 
+                <Button Content="Aвторизоваться" Template="{StaticResource ButtonTemplate}" IsDefault="True"
                         Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=Window}"
                         Foreground="AliceBlue" Margin="5,0" Width="150" Height="30" Background="Green" FontSize="16"/>
                 <Button Content="Отмена" Margin="5,0" Width="150"  Height="30"
                         Command="{Binding ExitCommand}" CommandParameter="{Binding ElementName=Window}"
                         FontSize="16" Template="{StaticResource ButtonTemplate}" Foreground="AliceBlue"/>
+                </StackPanel>
+            <DockPanel>
+            <StackPanel Orientation="Horizontal" Margin="10,10,0,0" DockPanel.Dock="Left">
+                <Ellipse x:Name="ellips" Width="30" Height="30" Fill="{Binding EllipseColor}"
+                        VerticalAlignment="Center"/>
+                <Label Content="{Binding EllipseLabel}"  VerticalAlignment="Center"
+                       Foreground="{Binding EllipseColor}"/>
             </StackPanel>
-            <Separator Margin="0,20"/>
+                <Button DockPanel.Dock="Right" Width="30" Height="30" Template="{StaticResource ButtonTemplate}"
+                        HorizontalAlignment="Right" Margin="10,0" Background="Transparent" ToolTip="Настройки подключения">
+                    <fa5:ImageAwesome Height="12" Icon="Solid_Wrench"
+                                      Margin="8,5"
+                                      Foreground="AliceBlue" />
+                </Button>
+            </DockPanel>
+            <Separator Margin="0,7"/>
             <Label Foreground="AliceBlue" HorizontalAlignment="Center">Агропромышленная компания "Михайловское"</Label>
             <Separator Margin="7"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Label Content="Версия:" Foreground="AliceBlue"/>
-                <TextBlock Text="{Binding Version}" Foreground="AliceBlue"></TextBlock>
+                <Label Content="{Binding CurrentVersion}" Foreground="AliceBlue" HorizontalAlignment="Center"/>
             </StackPanel>
             <Label Content="2022 г." HorizontalAlignment="Center" Foreground="AliceBlue"/>
         </StackPanel>
+    </Border>
     </Border>
 
 </Window>

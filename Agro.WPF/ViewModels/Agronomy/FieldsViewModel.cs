@@ -134,7 +134,7 @@ public class FieldsViewModel : ViewModel
             {
                 if (SenderModel is FieldViewModel fieldViewModel)
                 {
-                    fieldViewModel.Field.ParentField = field;
+                    fieldViewModel.Field!.ParentField = field;
                     fieldViewModel.Field.Department = field.Department;
                 }
 

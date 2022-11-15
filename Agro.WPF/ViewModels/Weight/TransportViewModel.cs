@@ -1,6 +1,4 @@
-﻿
-
-using System.Linq;
+﻿using System.Linq;
 using Agro.DAL.Entities.Weight;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
@@ -23,7 +21,7 @@ public class TransportViewModel : ViewModel
     private Transport _transport = new();
     public Transport Transport { get => _transport; set => Set(ref _transport, value); }
 
-    public object SenderModel { get; set; }
+    public object? SenderModel { get; set; }
 
     public TransportViewModel(IBaseRepository<Status> statusRepository, IBaseRepository<Transport> transportRepository)
     {
@@ -49,11 +47,7 @@ public class TransportViewModel : ViewModel
         if (SenderModel is TransportsViewModel viewModel)
         {
             var tr = viewModel.Transports.FirstOrDefault(t => t.Id == transport.Id);
-            if (tr != null!)
-            {
-                tr = transport;
-            }
-            else
+            if (tr! == null!)
             {
                 viewModel.Transports.Add(transport);
             }

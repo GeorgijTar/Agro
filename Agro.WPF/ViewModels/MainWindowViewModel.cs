@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Input;
 using Agro.DAL.Entities;
 using Agro.Interfaces.Base.Repositories.Base;
@@ -13,6 +14,7 @@ using Agro.WPF.Views;
 using Agro.WPF.Views.Windows;
 using Agro.WPF.Views.Windows.Agronomy;
 using Agro.WPF.Views.Windows.Contract;
+using Agro.WPF.Views.Windows.Invoice;
 using Agro.WPF.Views.Windows.Personnel;
 using Agro.WPF.Views.Windows.Storage;
 using Agro.WPF.Views.Windows.TMC;
@@ -26,6 +28,8 @@ public class MainWindowViewModel : ViewModel
     private readonly IBaseRepository<Status> _statusRepository;
     private readonly IBaseRepository<GroupDoc> _groupRepository;
 
+    private User? _user;
+    public User? User { get => _user; set => Set(ref _user, value); }
 
     public IEnumerable<Status>? Status { get; set; }
     public IEnumerable<GroupDoc>? Groups { get; set; }
@@ -41,6 +45,7 @@ public class MainWindowViewModel : ViewModel
         _typeRepository = typeRepository;
         _statusRepository = statusRepository;
         _groupRepository = groupRepository;
+        User = Application.Current.Properties["User"] as User;
         LoadManualData();
     }
 
@@ -379,6 +384,30 @@ public class MainWindowViewModel : ViewModel
         var model = view.DataContext as ContractsViewModel;
         model!.GroupId = 22;
         view.Show();
+    }
+
+    #endregion
+
+    #region ShowRegistryInvoice
+
+    private ICommand? _showRegistryInvoiceCommand;
+
+    public ICommand ShowRegistryInvoiceCommand => _showRegistryInvoiceCommand
+        ??= new RelayCommand(OnShowRegistryInvoiceExecuted);
+
+    private void OnShowRegistryInvoiceExecuted(object obj)
+    {
+        if (Application.Current.Windows.OfType<RegistryInvoicesView>().Any())
+        {
+            var r = Application.Current.Windows.OfType<RegistryInvoicesView>().ToArray();
+            r[0].Window.Visibility = Visibility.Visible;
+            r[0].Window.Focusable = true;
+        }
+        else
+        {
+            var view = new RegistryInvoicesView();
+            view.Show();
+        }
     }
 
     #endregion

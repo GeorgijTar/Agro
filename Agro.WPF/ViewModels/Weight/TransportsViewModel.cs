@@ -38,7 +38,7 @@ public class TransportsViewModel : ViewModel
     private async void LoadData()
     {
         var transports = await _transportRepository.GetAllAsync();
-        transports = transports!.Where(t => t.Status.Id == 5).ToArray();
+        transports = transports!.Where(t => t.Status!.Id == 5).ToArray();
         foreach (var transport in transports)
         {
             Transports.Add(transport);
@@ -112,7 +112,7 @@ public class TransportsViewModel : ViewModel
     public ICommand SelectRowCommand => _selectRowCommand
         ??= new RelayCommand(OnSelectRowExecuted, CanEditExecuted);
 
-    private async void OnSelectRowExecuted(object obj)
+    private void OnSelectRowExecuted(object obj)
     {
         if (SenderModel != null!)
         {

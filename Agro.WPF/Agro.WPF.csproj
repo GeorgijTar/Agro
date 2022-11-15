@@ -7,11 +7,20 @@
     <UseWPF>true</UseWPF>
     <StartupObject>Agro.WPF.App</StartupObject>
     <ApplicationIcon>wheat_icon_logo.ico</ApplicationIcon>
+    <PackageIcon>logo_kolos.png</PackageIcon>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>True</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Resources\logo180x180.ico" />
-    <None Remove="Resources\logo_kolos.png" />
     <None Remove="Views\logo_kolos.png" />
   </ItemGroup>
 
@@ -61,6 +70,10 @@
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\logo_kolos.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
 

@@ -40,7 +40,7 @@ public class FullyObservableCollection<T> : ObservableCollection<T>
     {
         if (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace)
         {
-            foreach (T item in e.OldItems)
+            foreach (T item in e.OldItems!)
             {
                 item.PropertyChanged -= ChildPropertyChanged;
             }
@@ -48,7 +48,7 @@ public class FullyObservableCollection<T> : ObservableCollection<T>
 
         if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace)
         {
-            foreach (T item in e.NewItems)
+            foreach (T item in e.NewItems!)
             {
                 item.PropertyChanged += ChildPropertyChanged;
             }

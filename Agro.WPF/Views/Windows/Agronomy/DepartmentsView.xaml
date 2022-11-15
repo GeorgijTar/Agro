@@ -70,7 +70,8 @@
         </ToolBar>
         <DataGrid Grid.Row="1" Margin="5" CanUserAddRows="False" AutoGenerateColumns="False"
                   ItemsSource="{Binding Departments}"
-                  SelectedItem="{Binding Department}">
+                  SelectedItem="{Binding Department}"
+                  CanUserDeleteRows="False" CanUserResizeColumns="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Width="45" Header="ИД" Binding="{Binding Id }"/>
                 <DataGridTextColumn Width="90" Header="Статус" Binding="{Binding Status.Name}"/>

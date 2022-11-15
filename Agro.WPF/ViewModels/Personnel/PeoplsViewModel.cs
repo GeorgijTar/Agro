@@ -59,7 +59,7 @@ public class PeoplsViewModel : ViewModel
     private ICollectionView _collectionView = null!;
     public ICollectionView CollectionView { get => _collectionView; set => Set(ref _collectionView, value); } 
 
-    public object SenderModel { get; set; }
+    public object? SenderModel { get; set; }
 
 
     #region Filter

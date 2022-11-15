@@ -36,10 +36,8 @@ public class AccountingPlansViewModel : ViewModel
         SelectAccountingPlan = new AccountingPlan();
         LoadData();
     }
-    
-    public object SenderModel { get; set; }
-
-    public string SenderField { get; set; }
+    public object? SenderModel { get; set; }
+    public string? SenderField { get; set; }
 
     private async void LoadData()
     {
@@ -98,7 +96,7 @@ public class AccountingPlansViewModel : ViewModel
 
     private bool EditCan(object arg)
     {
-        if (SelectAccountingPlan.Id != 0) return true;
+        if (SelectAccountingPlan!.Id != 0) return true;
         return false;
     }
 
@@ -106,7 +104,7 @@ public class AccountingPlansViewModel : ViewModel
     {
         var view = new AccountingPlanView();
         var model = view.DataContext as AccountingPlanViewModel;
-        model.Title = $"Редактирование счета {SelectAccountingPlan.Code} {SelectAccountingPlan.Name}";
+        model.Title = $"Редактирование счета {SelectAccountingPlan!.Code} {SelectAccountingPlan.Name}";
         model!.AccountingPlan = SelectAccountingPlan;
         view.Show();
     }
@@ -130,7 +128,7 @@ public class AccountingPlansViewModel : ViewModel
 
     private bool DeleteCan(object arg)
     {
-        if (SelectAccountingPlan.Id != 0) return true;
+        if (SelectAccountingPlan!.Id != 0) return true;
         return false;
     }
 
@@ -139,11 +137,11 @@ public class AccountingPlansViewModel : ViewModel
         var resalt = MessageBox.Show("Вы действительно хотите удалить выбранный счет", "Редактор плана счетов", MessageBoxButton.YesNo);
         if (resalt == MessageBoxResult.Yes)
         {
-            var del = await _repository.DeleteAsync(SelectAccountingPlan);
+            var del = await _repository.DeleteAsync(SelectAccountingPlan!);
 
             if (del)
             {
-                MessageBox.Show($"Счет {SelectAccountingPlan.Code} помечен как архивный", "Редактор плана счетов");
+                MessageBox.Show($"Счет {SelectAccountingPlan!.Code} помечен как архивный", "Редактор плана счетов");
                 LoadData();
             }
         }

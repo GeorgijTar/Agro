@@ -142,7 +142,8 @@
                     </ToolBar>
                     <DataGrid Grid.Row="1" ItemsSource="{Binding People.Documents, 
                         UpdateSourceTrigger=PropertyChanged}" CanUserAddRows="False"
-                              SelectedItem="{Binding Document}" AutoGenerateColumns="False">
+                              SelectedItem="{Binding Document}" AutoGenerateColumns="False"
+                              CanUserDeleteRows="False" CanUserResizeColumns="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Статус" Width="40*" Binding="{Binding Status.Name}"/>
                             <DataGridTextColumn Header="Документ" Width="70*" Binding="{Binding NameDocument}"/>

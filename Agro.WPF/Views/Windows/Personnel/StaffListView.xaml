@@ -149,7 +149,8 @@
                     </ToolBar>
                     <DataGrid Grid.Row="1" ItemsSource="{Binding StaffList.Positions, 
                         UpdateSourceTrigger=PropertyChanged}" CanUserAddRows="False"
-                              SelectedItem="{Binding Position}" AutoGenerateColumns="False" Grid.ColumnSpan="3">
+                              SelectedItem="{Binding Position}" AutoGenerateColumns="False" Grid.ColumnSpan="3"
+                              CanUserDeleteRows="False" CanUserResizeColumns="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Подразделение" Width="120*" Binding="{Binding Division.Name}"/>
                             <DataGridTextColumn Header="Должность" Width="120*" Binding="{Binding Post.Name}"/>

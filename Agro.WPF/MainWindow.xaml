@@ -7,6 +7,7 @@
         xmlns:wpf="clr-namespace:LoadingIndicators.WPF;assembly=LoadingIndicators.WPF"
         xmlns:local="clr-namespace:Agro.WPF"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
+        xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="650" Width="1150" WindowState="Maximized" 
         DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}">
@@ -14,6 +15,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="35"/>
         </Grid.RowDefinitions>
 
         <Grid Height="70" Row="0">
@@ -44,7 +46,7 @@
                                 <fa5:ImageAwesome Height="14" Icon="Solid_FileInvoice" Foreground="DarkBlue"/>
                             </MenuItem.Icon>
                             <MenuItem Header="Счета полученные" Command="{Binding ShowInvoicesIn}"/>
-                            <MenuItem Header="Реестры счетов на оплату"/>
+                            <MenuItem Header="Реестры счетов на оплату" Command="{Binding ShowRegistryInvoiceCommand}"/>
                         </MenuItem>
                         
                         </MenuItem>
@@ -100,7 +102,16 @@
                     <MenuItem.Icon>
                         <fa5:ImageAwesome Height="14" Icon="Solid_Bookmark" Foreground="DarkBlue"/>
                     </MenuItem.Icon>
-                    <MenuItem Header="Настройки организации" Command="{Binding ShowOrganizationSittings}"/>
+                    <MenuItem Header="Настройки организации" Command="{Binding ShowOrganizationSittings}">
+                        <MenuItem.Icon>
+                            <fa5:ImageAwesome Height="14" Icon="Solid_Wrench" Foreground="DarkBlue"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Пользователи" Command="{Binding }">
+                        <MenuItem.Icon>
+                            <fa5:ImageAwesome Height="14" Icon="Solid_PeopleCarry" Foreground="DarkBlue"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
             </Menu>
 
@@ -115,5 +126,14 @@
             <ContentControl FontSize="12" Name="ContentControl"/>
             <wpf:LoadingIndicator  Name="prgTest"  SpeedRatio="2" IsActive="False" Style="{DynamicResource LoadingIndicatorArcsRingStyle}"/>
         </Grid>
+        <ToolBarTray Grid.Row="2">
+            <ToolBar HorizontalAlignment="Center">
+                <TextBlock Text="Сегодня:" HorizontalAlignment="Center" Margin="5,0"/>
+                <TextBlock Text="{Binding Source={x:Static sys:DateTime.Today},   
+       StringFormat='{}{0:dddd, dd MMMM, yyyy г.}', ConverterCulture=Ru-ru}"/>
+                <TextBlock Text="Пользователь:" HorizontalAlignment="Center" Margin="5,0"/>
+                <TextBlock Text="{Binding User.Login}" HorizontalAlignment="Center"/>
+            </ToolBar>
+        </ToolBarTray>
     </Grid>
 </Window>

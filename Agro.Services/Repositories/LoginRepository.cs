@@ -30,4 +30,10 @@ public class LoginRepository : ILoginRepository<User>
     {
         throw new NotImplementedException();
     }
+
+    public async Task<bool> ExistsDb(CancellationToken cancel = default)
+    {
+       var result = await _db.Database.CanConnectAsync(cancel).ConfigureAwait(false);
+        return result;
+    }
 }

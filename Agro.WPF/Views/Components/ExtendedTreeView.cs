@@ -19,10 +19,10 @@ public class ExtendedTreeView : TreeView
         }
     }
 
-    public object SelectedItem
+    public new object SelectedItem
     {
         get { return (object)GetValue(SelectedItemProperty); }
         set { SetValue(SelectedItemProperty, value); }
     }
-    public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem", typeof(object), typeof(ExtendedTreeView), new UIPropertyMetadata(null));
+    public new static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem", typeof(object), typeof(ExtendedTreeView), new UIPropertyMetadata(null));
 }

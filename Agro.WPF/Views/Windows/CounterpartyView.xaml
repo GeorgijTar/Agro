@@ -210,7 +210,8 @@
                     </ToolBar>
                     <DataGrid Grid.Row="1" ItemsSource="{Binding Counterparty.BankDetails, 
                         UpdateSourceTrigger=PropertyChanged}" CanUserAddRows="False"
-                              SelectedItem="{Binding SelectBankDetails}" AutoGenerateColumns="False" Grid.ColumnSpan="3">
+                              SelectedItem="{Binding SelectBankDetails}" AutoGenerateColumns="False" Grid.ColumnSpan="3"
+                              CanUserDeleteRows="False" CanUserResizeColumns="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Наименование банка" Width="120*" Binding="{Binding NameBank}"/>
                             <DataGridTextColumn Header="БИК банка" Width="25*" Binding="{Binding Bik}"/>
@@ -218,7 +219,6 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
-
             </GroupBox>
         </Grid>
     </Grid>

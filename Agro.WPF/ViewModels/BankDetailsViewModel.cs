@@ -31,9 +31,8 @@ public class BankDetailsViewModel : ViewModel
 
     public BankDetails BankDetails { get => _details; set => Set(ref _details, value); }
 
-    private object _viewModelSender;
-
-    public object ViewSender { get => _viewModelSender; set => Set(ref _viewModelSender, value); }
+    private object? _viewModelSender;
+    public object? ViewSender { get => _viewModelSender; set => Set(ref _viewModelSender, value); }
 
     #endregion
 

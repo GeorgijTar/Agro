@@ -118,7 +118,8 @@
                     </ToolBar>
                     <DataGrid Grid.Row="1" ItemsSource="{Binding StorageLocation.Storekeepers, 
                         UpdateSourceTrigger=PropertyChanged}" CanUserAddRows="False"
-                              SelectedItem="{Binding OfficialPerson}" AutoGenerateColumns="False" Grid.ColumnSpan="3">
+                              SelectedItem="{Binding OfficialPerson}" AutoGenerateColumns="False" Grid.ColumnSpan="3"
+                              CanUserDeleteRows="False" CanUserResizeColumns="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Статус" Width="90" 
                                                 Binding="{Binding Status.Name}"/>

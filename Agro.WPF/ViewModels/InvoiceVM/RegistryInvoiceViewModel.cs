@@ -80,8 +80,9 @@ public class RegistryInvoiceViewModel : ViewModel
         if (Application.Current.Windows.OfType<RegistryInvoicesView>().Any())
         {
           var r=  Application.Current.Windows.OfType<RegistryInvoicesView>().ToArray();
-            r[0].Window.Visibility = Visibility.Visible;
-            r[1].Window.Focusable= true;
+            //r[0].Window.Visibility = Visibility.Visible;
+            //r[0].Window.Focusable= true;
+            r[0].Window.Activate();
         }
         else
         {

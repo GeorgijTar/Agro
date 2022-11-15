@@ -13,7 +13,7 @@ public static class LoadLandPlot
 
         using (var package = new ExcelPackage(new FileInfo(filPath)))
         {
-            ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault();
+            ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault()!;
 
             int rows = worksheet!.Dimension.Rows; // 20
             int columns = worksheet.Dimension.Columns; // 7

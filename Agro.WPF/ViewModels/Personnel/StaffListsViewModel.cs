@@ -39,7 +39,7 @@ public class StaffListsViewModel : ViewModel
     {
         StaffLists.Clear();
         var sls = await _stafListRepository.GetAllAsync();
-        sls = sls!.Where(s => s.Status.Id != 6).ToArray();
+        sls = sls!.Where(s => s.Status!.Id != 6).ToArray();
         foreach (var sl in sls)
         {
             StaffLists.Add(sl);

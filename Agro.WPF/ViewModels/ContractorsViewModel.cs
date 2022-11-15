@@ -103,7 +103,7 @@ public class ContractorsViewModel : ViewModel
     {
         Counterparties.Clear();
         var counter = await _counterpartyRepository.GetAllAsync();
-        counter = counter!.Where(x => x.Status.Id == 5);
+        counter = counter!.Where(x => x.Status!.Id == 5);
         if (counter == null!) return;
         foreach (var ct in counter)
         {
@@ -112,8 +112,8 @@ public class ContractorsViewModel : ViewModel
         CollectionView = CollectionViewSource.GetDefaultView(Counterparties);
     }
 
-    private string _nameFilter;
-    public string NameFilter
+    private string? _nameFilter;
+    public string? NameFilter
     {
         get => _nameFilter;
         set
@@ -123,8 +123,8 @@ public class ContractorsViewModel : ViewModel
         }
     }
 
-    private string _innFilter;
-    public string InnFilter { get=> _innFilter;
+    private string? _innFilter;
+    public string? InnFilter { get=> _innFilter;
         set
         {
             Set(ref _innFilter, value);
@@ -132,8 +132,8 @@ public class ContractorsViewModel : ViewModel
         } }
 
 
-    private ICollectionView _collectionView;
-    public ICollectionView CollectionView { get => _collectionView; set => Set(ref _collectionView, value); }
+    private ICollectionView? _collectionView;
+    public ICollectionView? CollectionView { get => _collectionView; set => Set(ref _collectionView, value); }
 
     #region Command
 

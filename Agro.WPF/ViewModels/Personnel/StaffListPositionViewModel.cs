@@ -77,7 +77,7 @@ public class StaffListPositionViewModel : ViewModel
         return StaffListPosition.Division!=null! && StaffListPosition.Post!=null! && StaffListPosition.Quantity!=0;
     }
 
-    private async void OnSaveExecuted(object obj)
+    private void OnSaveExecuted(object obj)
     {
         if (SenderModel != null!)
         {

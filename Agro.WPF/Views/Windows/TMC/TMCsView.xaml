@@ -132,7 +132,7 @@
                         <DataGrid SelectedItem="{Binding Tmc}" 
                                   AutoGenerateColumns="False"
                                   ItemsSource="{Binding Tmcs}"
-                                  CanUserAddRows="False">
+                                  CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="True">
                             <DataGrid.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Создать" Command="{Binding AddCommand}"/>

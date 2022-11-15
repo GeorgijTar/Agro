@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows;
@@ -28,12 +27,12 @@ public class LandPlotsViewModel : ViewModel
     public ObservableCollection<LandPlot> LandPlots { get => _landPlots; set => Set(ref _landPlots, value); }
 
 
-    private LandPlot _landPlot = null!;
-    public LandPlot LandPlot { get => _landPlot; set => Set(ref _landPlot, value); }
+    private LandPlot? _landPlot;
+    public LandPlot? LandPlot { get => _landPlot; set => Set(ref _landPlot, value); }
 
 
     private object _senderModel = null!;
-    public object SenderModel { get => _senderModel; set => Set(ref _senderModel, value); } 
+    public object SenderModel { get => _senderModel; set => Set(ref _senderModel, value); }
 
 
     public LandPlotsViewModel(
@@ -52,7 +51,7 @@ public class LandPlotsViewModel : ViewModel
     {
         LandPlots.Clear();
         var lps = await _landPlotRepository.GetAllAsync();
-        lps = lps!.Where(l => l.Status.Id != 6).ToArray();
+        lps = lps!.Where(l => l.Status!.Id != 6).ToArray();
         foreach (var lp in lps)
         {
             LandPlots.Add(lp);
@@ -93,7 +92,7 @@ public class LandPlotsViewModel : ViewModel
         LandPlotView view = new();
         var model = view.DataContext as LandPlotViewModel;
         model!.SenderModel = this;
-        model.LandPlot = LandPlot;
+        model.LandPlot = LandPlot!;
         model.Title = "Редактирование земельного участка";
         view.DataContext = model;
         view.ShowDialog();
@@ -112,7 +111,7 @@ public class LandPlotsViewModel : ViewModel
 
     private async void OnDeleteExecuted(object obj)
     {
-        var rezalt = MessageBox.Show($"Вы действительно хотите удалить: {LandPlot.Number} {LandPlot.Area} кв.м.",
+        var rezalt = MessageBox.Show($"Вы действительно хотите удалить: {LandPlot!.Number} {LandPlot.Area} кв.м.",
             "Редактор", MessageBoxButton.YesNo);
         if (rezalt == MessageBoxResult.Yes)
         {
@@ -142,29 +141,27 @@ public class LandPlotsViewModel : ViewModel
 
     private async void OnLoadExecuted(object obj)
     {
-       List<LandPlot> landPlots = new List<LandPlot>();
-       var filePath = string.Empty;
-       OpenFileDialog openFileDialog = new()
-       {
-           InitialDirectory = "c:\\",
-           Filter = "Excel (*.exlx)|*.xlsx|Excel(*.exl)|*.xls|All files (*.*)|*.*",
-           FilterIndex = 0,
-           RestoreDirectory = false
-       };
-       if (openFileDialog.ShowDialog() == true)
-       {
-           landPlots = LoadLandPlot.Get(openFileDialog.FileName);
-           foreach (var lp in landPlots)
-           {
-               var lens = await _landPlotRepository.GetAllAsync();
-               var len = lens.Where(l=>l.Number==lp.Number);
-               if (len.Any()) continue;
-               lp.Status = await _statusRepository.GetByIdAsync(5);
-               lp.Type = await _typeRepository.GetByIdAsync(13);
-               var landP = await _landPlotRepository.SaveAsync(lp);
-               LandPlots.Add(landP);
-           }
-       }
+        OpenFileDialog openFileDialog = new()
+        {
+            InitialDirectory = "c:\\",
+            Filter = "Excel (*.exlx)|*.xlsx|Excel(*.exl)|*.xls|All files (*.*)|*.*",
+            FilterIndex = 0,
+            RestoreDirectory = false
+        };
+        if (openFileDialog.ShowDialog() == true)
+        {
+            var landPlots = LoadLandPlot.Get(openFileDialog.FileName);
+            foreach (var lp in landPlots)
+            {
+                var lens = await _landPlotRepository.GetAllAsync();
+                var len = lens!.Where(l => l.Number == lp.Number);
+                if (len.Any()) continue;
+                lp.Status = await _statusRepository.GetByIdAsync(5);
+                lp.Type = await _typeRepository.GetByIdAsync(13);
+                var landP = await _landPlotRepository.SaveAsync(lp);
+                LandPlots.Add(landP);
+            }
+        }
 
     }
 
@@ -179,7 +176,7 @@ public class LandPlotsViewModel : ViewModel
         {
             if (SenderModel is FieldViewModel model)
             {
-                model.Field.LandPlots!.Add(LandPlot);
+                model.Field.LandPlots!.Add(LandPlot!);
 
                 var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
                 if (window != null!)
@@ -188,6 +185,6 @@ public class LandPlotsViewModel : ViewModel
         }
     }
 
-    
+
     #endregion
 }

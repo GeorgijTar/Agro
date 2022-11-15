@@ -121,7 +121,8 @@
                         <DataGrid SelectedItem="{Binding People}" 
                                   AutoGenerateColumns="False"
                                   ItemsSource="{Binding CollectionView}"
-                                  CanUserAddRows="False">
+                                  CanUserAddRows="False" 
+                                  CanUserDeleteRows="False" CanUserResizeColumns="True">
                             <b:Interaction.Triggers>
                                 <b:EventTrigger EventName="MouseDoubleClick">
                                     <b:InvokeCommandAction Command="{Binding SelectRowCommand}" 

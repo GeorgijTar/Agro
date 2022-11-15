@@ -68,7 +68,7 @@ public class PostsViewModel : ViewModel
     { 
         Posts.Clear();
         var posts = await _postRepository.GetAllAsync();
-        posts = posts!.Where(p => p.Status.Id == 5);
+        posts = posts!.Where(p => p.Status!.Id == 5);
         foreach (var post in posts)
         {
             Posts.Add(post);

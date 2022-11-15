@@ -91,7 +91,7 @@ public class RegistryInvoiceRepository : IRegistryInvoiceRepository<RegistryInvo
 
     public async Task<int> GetNumberRegisterAsync(CancellationToken cancel = default)
     {
-        return _db.RegistryInvoices.Any() ? await _db.RegistryInvoices.MaxAsync(r => r.Number, cancel) : 1;
+        return _db.RegistryInvoices.Any() ? await _db.RegistryInvoices.MaxAsync(r => r.Number, cancel)+1 : 1;
     }
 
     public async Task<IEnumerable<RegistryInvoice>> GetAllByIdAsync(int idStatus, CancellationToken cancel = default)

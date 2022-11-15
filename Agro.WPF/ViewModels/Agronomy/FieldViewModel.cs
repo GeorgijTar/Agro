@@ -21,8 +21,8 @@ public class FieldViewModel : ViewModel
     public string Title { get => _title; set => Set(ref _title, value); }
 
 
-    private Field _field = new();
-    public Field Field { get => _field; set => Set(ref _field, value); }
+    private Field? _field = new();
+    public Field? Field { get => _field; set => Set(ref _field, value); }
 
 
     private IEnumerable<Department> _departments = null!;
@@ -106,7 +106,7 @@ public class FieldViewModel : ViewModel
             "Редактор", MessageBoxButton.YesNo);
         if (result == MessageBoxResult.Yes)
         {
-            Field.LandPlots!.Remove(LandPlot);
+            Field!.LandPlots!.Remove(LandPlot);
         }
     }
 
@@ -119,12 +119,12 @@ public class FieldViewModel : ViewModel
 
     private bool CanSaveExecuted(object arg)
     {
-        return Field.Name != null! && Field.Areal != 0 && Field.Department != null!;
+        return Field!.Name != null! && Field.Areal != 0 && Field.Department != null!;
     }
 
     private async void OnSaveExecuted(object obj)
     {
-        Field.Status = await _statusRepository.GetByIdAsync(5);
+        Field!.Status = await _statusRepository.GetByIdAsync(5);
         var cult = await _fieldRepository.SaveAsync(Field);
         if (SenderModel is FieldsViewModel fieldsViewModel)
         {

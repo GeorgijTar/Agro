@@ -227,7 +227,7 @@ public class TmCsViewModel : ViewModel
     public ICommand SelectRowCommand => _selectRowCommand
         ??= new RelayCommand(OnSelectRowExecuted, CanEditExecuted);
 
-    private async void OnSelectRowExecuted(object obj)
+    private void OnSelectRowExecuted(object obj)
     {
         if (SenderModel != null!)
         {

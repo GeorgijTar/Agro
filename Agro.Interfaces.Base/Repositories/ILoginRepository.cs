@@ -9,5 +9,7 @@ public interface ILoginRepository<User> where User : Entity
 
     Task<User?> GetUserAsync(string login, string password, CancellationToken cancel = default);
 
-    Task <User?> AddUserAsync(User user, CancellationToken cancel = default);
+    Task<User?> AddUserAsync(User user, CancellationToken cancel = default);
+
+    Task<bool> ExistsDb(CancellationToken cancel = default);
 }

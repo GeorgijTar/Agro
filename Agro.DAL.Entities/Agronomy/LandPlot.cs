@@ -9,8 +9,8 @@ namespace Agro.DAL.Entities.Agronomy;
 public class LandPlot : Entity
 {
     /// <summary>Статус</summary>
-    private Status _status = null!;
-    public Status Status { get => _status; set => Set(ref _status, value); } 
+    private Status? _status;
+    public Status? Status { get => _status; set => Set(ref _status, value); } 
 
     /// <summary>Кадастровый номер</summary>
     private string _number = null!;
@@ -29,8 +29,8 @@ public class LandPlot : Entity
     public decimal BalanceValue { get => _balanceValue; set => Set(ref _balanceValue, value); }
 
     /// <summary>Тип собственности</summary>
-    private TypeDoc _type = null!;
-    public TypeDoc Type { get => _type; set => Set(ref _type, value); }
+    private TypeDoc? _type;
+    public TypeDoc? Type { get => _type; set => Set(ref _type, value); }
 
 
     private ObservableCollection<Field> _fields = null!;

@@ -72,7 +72,7 @@
         </ToolBar>
         <DataGrid Grid.Row="1" Margin="5" CanUserAddRows="False" AutoGenerateColumns="False"
                   ItemsSource="{Binding Transports}"
-                  SelectedItem="{Binding Transport}">
+                  SelectedItem="{Binding Transport}" CanUserDeleteRows="False" CanUserResizeColumns="True">
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="MouseDoubleClick">
                     <b:InvokeCommandAction Command="{Binding SelectRowCommand}" 

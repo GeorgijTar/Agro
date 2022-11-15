@@ -161,7 +161,7 @@
                         <DataGrid SelectedItem="{Binding ComingField}" 
                                   AutoGenerateColumns="False"
                                   ItemsSource="{Binding ComingFields}"
-                                  CanUserAddRows="False">
+                                  CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="True">
                             <DataGrid.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Создать" Command="{Binding AddCommand}"/>
