@@ -58,10 +58,11 @@ public class RegistryInvoiceRepository : IRegistryInvoiceRepository<RegistryInvo
         return ri.Entity;
     }
 
-    public Task<bool> DeleteAsync(RegistryInvoice item, CancellationToken cancel = default)
+    public async Task<bool> DeleteAsync(RegistryInvoice item, CancellationToken cancel = default)
     {
         throw new NotImplementedException();
     }
+
 
     public Task<bool> DeleteByIdAsync(int id, CancellationToken cancel = default)
     {
@@ -79,6 +80,46 @@ public class RegistryInvoiceRepository : IRegistryInvoiceRepository<RegistryInvo
         return await _db.Statuses.FirstOrDefaultAsync(s => s.Id == idStatus, cancel).ConfigureAwait(false);
     }
 
+    public async Task<RegistryInvoice> AcceptanceAsync(RegistryInvoice item, CancellationToken cancel = default)
+    {
+        var statusItem = item.Status;
+        try
+        {
+            item.Status = await _db.Statuses.FirstOrDefaultAsync(s => s.Id == 18, cancel);
+            var status = await _db.Statuses.FirstOrDefaultAsync(s => s.Id == 9, cancel);
+            foreach (var invoice in item.Invoices)
+            {
+                invoice.Status = status;
+            }
+            await _db.SaveChangesAsync(cancel);
+        }
+        catch (Exception)
+        {
+            item.Status = statusItem;
+        }
+        return item;
+    }
+
+    public async Task<RegistryInvoice> RejectAsync(RegistryInvoice item, CancellationToken cancel = default)
+    {
+        var statusItem = item.Status;
+        try
+        {
+            item.Status = await _db.Statuses.FirstOrDefaultAsync(s => s.Id == 19, cancel);
+            var status = await _db.Statuses.FirstOrDefaultAsync(s => s.Id == 20, cancel);
+            foreach (var invoice in item.Invoices)
+            {
+                invoice.Status = status;
+            }
+            await _db.SaveChangesAsync(cancel);
+        }
+        catch (Exception)
+        {
+            item.Status = statusItem;
+        }
+        return item;
+    }
+
     public async Task<IEnumerable<Invoice>?> GetRegisterAcceptAsync(CancellationToken cancel = default)
     {
         //decimal limit = await _db.Sittings.Select(s => s.LimitAmountInvoice).FirstAsync(cancel);
@@ -91,7 +132,7 @@ public class RegistryInvoiceRepository : IRegistryInvoiceRepository<RegistryInvo
 
     public async Task<int> GetNumberRegisterAsync(CancellationToken cancel = default)
     {
-        return _db.RegistryInvoices.Any() ? await _db.RegistryInvoices.MaxAsync(r => r.Number, cancel)+1 : 1;
+        return _db.RegistryInvoices.Any() ? await _db.RegistryInvoices.MaxAsync(r => r.Number, cancel) + 1 : 1;
     }
 
     public async Task<IEnumerable<RegistryInvoice>> GetAllByIdAsync(int idStatus, CancellationToken cancel = default)
@@ -99,7 +140,7 @@ public class RegistryInvoiceRepository : IRegistryInvoiceRepository<RegistryInvo
         return await _db.RegistryInvoices
             .Include(r => r.Invoices).ThenInclude(i => i.Counterparty)
             .Include(r => r.Invoices).ThenInclude(i => i.Status)
-            .Where(r=>r.Status!.Id==idStatus)
+            .Where(r => r.Status!.Id == idStatus)
             .ToArrayAsync(cancel).ConfigureAwait(false);
     }
 
@@ -110,5 +151,23 @@ public class RegistryInvoiceRepository : IRegistryInvoiceRepository<RegistryInvo
             .Include(r => r.Invoices).ThenInclude(i => i.Status)
             .Where(r => r.Status!.Id != idStatus)
             .ToArrayAsync(cancel).ConfigureAwait(false);
+    }
+
+    public async Task<Invoice?> GetInvoseScanFilesAsync(int invoiceId, CancellationToken cancel = default)
+    {
+        return await _db.Invoices.Include(I => I.ScanFiles)
+            .FirstOrDefaultAsync(I => I.Id == invoiceId)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<RegistryInvoice> DeleteRegAsync(RegistryInvoice item, CancellationToken cancel = default)
+    {
+        item.Status = await _db.Statuses.FirstOrDefaultAsync(s => s.Id == 6, cancel);
+        foreach (var invoice in item.Invoices)
+        {
+            invoice.Status= await _db.Statuses.FirstOrDefaultAsync(s => s.Id == 8, cancel);
+        }
+        item.Invoices = null!;
+       return await UpdateAsync(item, cancel).ConfigureAwait(false);
     }
 }

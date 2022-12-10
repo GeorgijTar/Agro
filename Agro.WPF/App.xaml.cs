@@ -1,6 +1,7 @@
 ﻿using System;
 using Agro.DAL.Entities;
 using Agro.DAL.Entities.Agronomy;
+using Agro.DAL.Entities.Bank.Base;
 using Agro.DAL.Entities.CheckingCounterparty;
 using Agro.DAL.Entities.Counter;
 using Agro.DAL.Entities.InvoiceEntity;
@@ -19,16 +20,20 @@ using Agro.WPF.ViewModels;
 using Agro.WPF.ViewModels.Accounting;
 using Agro.WPF.ViewModels.Agronomy;
 using Agro.WPF.ViewModels.Auxiliary_windows;
+using Agro.WPF.ViewModels.Bank.BaseViewModel;
+using Agro.WPF.ViewModels.Bank.Pay;
 using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.ViewModels.InvoiceVM;
 using Agro.WPF.ViewModels.Organization;
 using Agro.WPF.ViewModels.Personnel;
 using Agro.WPF.ViewModels.Storage;
 using Agro.WPF.ViewModels.TMC;
+using Agro.WPF.ViewModels.UserSettings;
 using Agro.WPF.ViewModels.Weight;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Notification.Wpf;
 
 namespace Agro.WPF
 {
@@ -62,7 +67,9 @@ namespace Agro.WPF
                     services.AddAgroDbMySql(configuration.GetConnectionString("MySql"));
                     break;
             }
-            
+            //Регистрация сервиса уведомлений
+            services.AddSingleton<INotificationManager, NotificationManager>();
+
             //Регистрация вью-моделей
             services.AddTransient<LoginViewModel>();
             services.AddScoped<ContractorsViewModel>();
@@ -119,10 +126,14 @@ namespace Agro.WPF
             services.AddTransient<GroupViewModel>();
             services.AddTransient<RegistryInvoiceViewModel>();
             services.AddTransient<RegistryInvoicesViewModel>();
+            services.AddTransient<RegistryInvoiceSettingsViewModel>();
+            services.AddTransient<ExpenditureItemsViewModel>();
+            services.AddTransient<ExpenditureItemViewModel>();
+            services.AddTransient<PaymentOrdersViewModel>();
 
 
             //Регистрация репозиториев
-            services.AddScoped(typeof(IBaseRepository<>), typeof(DbRepository<>));
+            services.AddTransient(typeof(IBaseRepository<>), typeof(DbRepository<>));
             services.AddTransient<IInvoiceRepository<Invoice>, InvoiceRepository>();
             services.AddTransient<IBaseRepository<Product>, ProductRepository>();
             services.AddTransient<IBaseRepository<Organization>, OrganizationRepository>();
@@ -135,14 +146,15 @@ namespace Agro.WPF
             services.AddTransient<IBaseRepository<StaffList>, StaffListRepository>();
             services.AddTransient<IBaseRepository<StaffListPosition>, StaffListPositionRepository>();
             services.AddTransient<IBaseRepository<StorageLocation>, StorageLocationRepository>();
-            services.AddScoped(typeof(IComingFieldRepository<ComingField>), typeof(ComingFieldRepository));
+            services.AddTransient(typeof(IComingFieldRepository<ComingField>), typeof(ComingFieldRepository));
             services.AddTransient<IBaseRepository<Tmc>, TmcRepository>();
             services.AddTransient<IBaseRepository<Counterparty>, CounterpartyRepository>();
             services.AddTransient<IContractRepository<Contract>, ContractRepository>();
-            services.AddScoped(typeof(ICheckCounterpartyRepository<CheckCounterparty>), typeof(CheckCounterpartyRepository));
-            services.AddScoped(typeof(IRegistryInvoiceRepository<RegistryInvoice>), typeof(RegistryInvoiceRepository));
-            services.AddScoped(typeof(ILoginRepository<User>), typeof(LoginRepository));
-
+            services.AddTransient(typeof(ICheckCounterpartyRepository<CheckCounterparty>), typeof(CheckCounterpartyRepository));
+            services.AddTransient(typeof(IRegistryInvoiceRepository<RegistryInvoice>), typeof(RegistryInvoiceRepository));
+            services.AddTransient(typeof(ILoginRepository<User>), typeof(LoginRepository));
+            services.AddTransient(typeof(IExpenditureItemRepository<ExpenditureItem>), typeof(ExpenditureItemRepository));
+         
 
 
             // Регистрация мапера

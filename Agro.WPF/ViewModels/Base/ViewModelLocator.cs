@@ -1,12 +1,15 @@
 ﻿using Agro.WPF.ViewModels.Accounting;
 using Agro.WPF.ViewModels.Agronomy;
 using Agro.WPF.ViewModels.Auxiliary_windows;
+using Agro.WPF.ViewModels.Bank.BaseViewModel;
+using Agro.WPF.ViewModels.Bank.Pay;
 using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.ViewModels.InvoiceVM;
 using Agro.WPF.ViewModels.Organization;
 using Agro.WPF.ViewModels.Personnel;
 using Agro.WPF.ViewModels.Storage;
 using Agro.WPF.ViewModels.TMC;
+using Agro.WPF.ViewModels.UserSettings;
 using Agro.WPF.ViewModels.Weight;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -122,4 +125,13 @@ public class ViewModelLocator
    public RegistryInvoiceViewModel RegistryInvoiceModel => App.Services.GetRequiredService<RegistryInvoiceViewModel>();
    
    public RegistryInvoicesViewModel RegistryInvoicesModel => App.Services.GetRequiredService<RegistryInvoicesViewModel>();
+
+   public RegistryInvoiceSettingsViewModel RegistryInvoiceSettingsModel => App.Services.GetRequiredService<RegistryInvoiceSettingsViewModel>();
+
+   public ExpenditureItemsViewModel ExpenditureItemsModel=> App.Services.GetRequiredService<ExpenditureItemsViewModel>();
+
+   public ExpenditureItemViewModel ExpenditureItemModel=> App.Services.GetRequiredService<ExpenditureItemViewModel>();
+
+    public PaymentOrdersViewModel PaymentOrdersModel =>App.Services.GetRequiredService<PaymentOrdersViewModel>();
+
 }

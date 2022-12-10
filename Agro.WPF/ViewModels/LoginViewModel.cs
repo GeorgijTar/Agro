@@ -2,16 +2,13 @@
 using Agro.WPF.ViewModels.Base;
 using System.Windows.Input;
 using System;
-using System.Drawing;
 using System.Windows;
 using Agro.DAL.Entities;
 using Agro.Interfaces.Base.Repositories;
 using Helpers;
 using System.Reflection;
 using System.Windows.Media;
-using Brush = System.Drawing.Brush;
-using Brushes = System.Drawing.Brushes;
-using Color = System.Drawing.Color;
+using Notification.Wpf;
 
 namespace Agro.WPF.ViewModels;
 
@@ -19,6 +16,7 @@ public class LoginViewModel : ViewModel
 {
 
     private readonly ILoginRepository<User> _loginRepository;
+    private readonly INotificationManager _notificationManager;
 
     private string _login = null!;
     public string Login { get => _login; set => Set(ref _login, value); }
@@ -35,9 +33,10 @@ public class LoginViewModel : ViewModel
     private string _ellipseLabel ="Сервер не доступен!";
     public string EllipseLabel { get => _ellipseLabel; set => Set(ref _ellipseLabel, value); }
    
-    public LoginViewModel(ILoginRepository<User> loginRepository)
+    public LoginViewModel(ILoginRepository<User> loginRepository, INotificationManager notificationManager)
     {
         _loginRepository = loginRepository;
+        _notificationManager = notificationManager;
         CurrentVersion = Assembly.GetExecutingAssembly().GetName().Version!.ToString();
         AvailableServer();
     }
@@ -50,7 +49,6 @@ public class LoginViewModel : ViewModel
             EllipseLabel = "Сервер доступен!";
         }
     }
-
 
     #region Commands
     
@@ -83,7 +81,8 @@ public class LoginViewModel : ViewModel
         }
         else
         {
-            MessageBox.Show("Неверный логин или пароль!", "Авторизация");
+            _notificationManager.Show("Логер", "Неверный логин или пароль!",NotificationType.Error);
+           // MessageBox.Show("Неверный логин или пароль!", "Авторизация");
         }
     }
 

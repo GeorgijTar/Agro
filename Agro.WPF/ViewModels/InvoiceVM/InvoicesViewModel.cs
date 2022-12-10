@@ -45,8 +45,6 @@ public class InvoicesViewModel : ViewModel
     private Visibility _visibilityReestr = Visibility.Hidden;
     public Visibility VisibilityReestr { get => _visibilityReestr; set => Set(ref _visibilityReestr, value); }
 
-    private ContextMenu _contextMenu = new();
-    public ContextMenu ContextMenu { get => _contextMenu; set => Set(ref _contextMenu, value); }
 
     private IEnumerable<Nds>? _nds = new HashSet<Nds>();
     public IEnumerable<Nds>? Nds { get => _nds; set => Set(ref _nds, value); }
@@ -56,12 +54,12 @@ public class InvoicesViewModel : ViewModel
     public string NumberFilter { get => _numberFilter; set => Set(ref _numberFilter, value); }
 
 
-    private DateTime _dateOnFilter;
-    public DateTime DateOnFilter { get => _dateOnFilter; set => Set(ref _dateOnFilter, value); }
+    private DateTime? _dateOnFilter;
+    public DateTime? DateOnFilter { get => _dateOnFilter; set => Set(ref _dateOnFilter, value); }
 
 
-    private DateTime _dateOffFilter;
-    public DateTime DateOffFilter { get => _dateOffFilter; set => Set(ref _dateOffFilter, value); }
+    private DateTime? _dateOffFilter;
+    public DateTime? DateOffFilter { get => _dateOffFilter; set => Set(ref _dateOffFilter, value); }
 
 
     private string _innFilter = null!;
@@ -87,7 +85,6 @@ public class InvoicesViewModel : ViewModel
         _repository = repository;
         _statusRepository = statusRepository;
         LoadData();
-        PropertyChanged += TypeChanged;
         CollectionView = CollectionViewSource.GetDefaultView(Invoices);
         PropertyChanged += ViewChanged;
     }
@@ -117,6 +114,28 @@ public class InvoicesViewModel : ViewModel
                 break;
         }
     }
+    private async void LoadData()
+    {
+        _limit = await _repository.GetLimit()!;
+        Invoices.Clear();
+        var invoices = await _repository.GetAllAsync();
+        invoices = invoices!.Where(x => x.Status!.Id != 6).Where(x => x.Type.Id == TypeInvoice.Id);
+        StatusColl.Add(new Status() { Id = 0, Name = "Все" });
+        var statuses = invoices!.Select(i => i.Status).Distinct().ToArray();
+        foreach (var statuse in statuses)
+        {
+            StatusColl.Add(statuse!);
+        }
+
+        foreach (var invoice in invoices!)
+        {
+            Invoices.Add(invoice);
+        }
+
+        Nds = await _repository.GetAllNds();
+    }
+
+    #region Filters
 
     private bool FilterByStatus(object obj)
     {
@@ -154,7 +173,7 @@ public class InvoicesViewModel : ViewModel
         if (DateOnFilter <= DateOffFilter)
         {
             DAL.Entities.InvoiceEntity.Invoice? dto = obj as DAL.Entities.InvoiceEntity.Invoice;
-            return dto!.DateInvoice >= DateOnFilter & dto.DateInvoice <= DateOffFilter;
+            return dto!.DateInvoice.Date >= DateOnFilter!.Value.Date & dto.DateInvoice.Date <= DateOffFilter!.Value.Date;
         }
 
         return true;
@@ -170,58 +189,9 @@ public class InvoicesViewModel : ViewModel
         return true;
     }
 
+    #endregion
 
-
-    private void TypeChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == "TypeInvoice")
-        {
-            if (TypeInvoice.Id == 8)
-            {
-                VisibilityButton = Visibility.Visible;
-                VisibilityReestr = Visibility.Hidden;
-            }
-            else
-            {
-                VisibilityButton = Visibility.Collapsed;
-                VisibilityReestr = Visibility.Visible;
-            }
-            GetContextMenu();
-        }
-    }
-
-    private void GetContextMenu()
-    {
-        ContextMenu.Items.Clear();
-
-        var mi = new MenuItem();
-        mi.Header = "File";
-        var mia = new MenuItem();
-        mia.Header = "New";
-        ContextMenu.Items.Add(mi);
-        ContextMenu.Items.Add(mia);
-    }
-
-    private async void LoadData()
-    {
-        _limit = await _repository.GetLimit()!;
-        Invoices.Clear();
-        var invoices = await _repository.GetAllAsync();
-        invoices = invoices!.Where(x => x.Status!.Id != 6).Where(x => x.Type.Id == TypeInvoice.Id);
-        StatusColl.Add(new Status() { Id = 0, Name = "Все" });
-        var statuses = invoices!.Select(i => i.Status).Distinct().ToArray();
-        foreach (var statuse in statuses)
-        {
-            StatusColl.Add(statuse!);
-        }
-
-        foreach (var invoice in invoices!)
-        {
-            Invoices.Add(invoice);
-        }
-
-        Nds = await _repository.GetAllNds();
-    }
+   
 
     #region Commands
 
@@ -232,13 +202,14 @@ public class InvoicesViewModel : ViewModel
     public ICommand AddCommand => _addCommand
         ??= new RelayCommand(OnAddCommandExecuted);
 
-    private void OnAddCommandExecuted(object obj)
+    private async void OnAddCommandExecuted(object obj)
     {
         InvoiceView view = new();
         InvoiceViewModel viewModel = (InvoiceViewModel)view.DataContext;
         viewModel.Nds = Nds;
+        viewModel.BankDetailsOrg = await _repository.GetAllBankDetailsOrg();
         viewModel.SenderModel = this;
-        viewModel.Invoice.Type = TypeInvoice;
+        viewModel.Invoice!.Type = TypeInvoice;
         if (TypeInvoice.Id == 8)
         {
             viewModel.VisibilityNumeric = Visibility.Visible;
@@ -261,12 +232,13 @@ public class InvoicesViewModel : ViewModel
         return SelectedInvoice != null! && SelectedInvoice.Status!.Id == 1;
     }
 
-    private void OnEditCommandExecuted(object obj)
+    private async void OnEditCommandExecuted(object obj)
     {
         InvoiceView view = new();
         InvoiceViewModel viewModel = (InvoiceViewModel)view.DataContext;
+        viewModel.BankDetailsOrg = await _repository.GetAllBankDetailsOrg();
         viewModel.Nds = Nds;
-        viewModel.Invoice = SelectedInvoice;
+        viewModel.Invoice = await _repository.GetByIdAsync(SelectedInvoice.Id);
         viewModel.IsEdit = true;
         viewModel.SenderModel = this;
         if (TypeInvoice.Id == 8)
@@ -303,9 +275,14 @@ public class InvoicesViewModel : ViewModel
     private ICommand? _printCommand;
 
     public ICommand PrintCommand => _printCommand
-        ??= new RelayCommand(OnPrintCommandExecuted, EditCommandExecut);
+        ??= new RelayCommand(OnPrintCommandExecuted, PrintCommandCanExecut);
 
-    private void OnPrintCommandExecuted(object obj)
+    private bool PrintCommandCanExecut(object arg)
+    {
+        return SelectedInvoice!=null! && SelectedInvoice.Type.Id == 8;
+    }
+
+    private async void OnPrintCommandExecuted(object obj)
     {
         SaveFileDialog saveFileDialog = new SaveFileDialog();
         saveFileDialog.DefaultExt = "*.xlsx";
@@ -313,7 +290,7 @@ public class InvoicesViewModel : ViewModel
         saveFileDialog.Filter = "Microsoft Excel (*.xlsx)|*.xlsx";
         if (saveFileDialog.ShowDialog() == true)
         {
-            InvoiceReportExcel.Print(saveFileDialog.FileName, SelectedInvoice);
+            InvoiceReportExcel.Print(saveFileDialog.FileName, await _repository.GetByIdAsync(SelectedInvoice.Id));
         }
     }
 
@@ -331,12 +308,13 @@ public class InvoicesViewModel : ViewModel
         return SelectedInvoice != null!;
     }
 
-    private void OnSelectRowExecuted(object obj)
+    private async void OnSelectRowExecuted(object obj)
     {
         InvoiceView view = new();
         InvoiceViewModel viewModel = (InvoiceViewModel)view.DataContext;
         viewModel.Nds = Nds;
-        viewModel.Invoice = SelectedInvoice;
+        viewModel.BankDetailsOrg = await _repository.GetAllBankDetailsOrg();
+        viewModel.Invoice =  await _repository.GetByIdAsync(SelectedInvoice.Id);
         viewModel.ButtonActivity = false;
         viewModel.IsEdit = true;
         viewModel.SenderModel = this;
@@ -346,6 +324,20 @@ public class InvoicesViewModel : ViewModel
             viewModel.VisibilityBankOrg = Visibility.Visible;
         }
         view.Show();
+    }
+
+    #endregion
+
+    #region Refresh
+
+    private ICommand? _refreshCommand;
+
+    public ICommand RefreshCommand => _refreshCommand
+        ??= new RelayCommand(OnRefreshExecuted);
+
+    private void OnRefreshExecuted(object obj)
+    {
+        LoadData();
     }
 
     #endregion
@@ -406,7 +398,7 @@ public class InvoicesViewModel : ViewModel
 
     private bool CanAcceptanceExecuted(object arg)
     {
-        return SelectedInvoice != null! & SelectedInvoice!.Type.Id == 9 & SelectedInvoice.Status!.Id == 1;
+        return SelectedInvoice != null! && SelectedInvoice.Type.Id == 9 && SelectedInvoice.Status!.Id == 1;
     }
 
     private async void OnAcceptanceExecuted(object obj)

@@ -15,6 +15,7 @@ using Agro.Interfaces.Base.Repositories;
 using Agro.WPF.ViewModels.Auxiliary_windows;
 using Agro.WPF.Views.Auxiliary_windows;
 using Agro.WPF.Views.Windows.Contract;
+using Microsoft.Extensions.Logging;
 
 namespace Agro.WPF.ViewModels.Contract;
 public class ContractViewModel : ViewModel
@@ -24,6 +25,7 @@ public class ContractViewModel : ViewModel
     private readonly IContractRepository<DAL.Entities.Counter.Contract> _contractRepository;
     private readonly IBaseRepository<DAL.Entities.Organization.Organization> _organizationRepository;
     private readonly IBaseRepository<Status> _statusRepository;
+    private readonly ILogger<ContractViewModel> _logger;
     private string _title = null!;
     public string Title { get => _title; set => Set(ref _title, value); }
 
@@ -50,20 +52,21 @@ public class ContractViewModel : ViewModel
     private IEnumerable<BankDetails> _bankDetailsOrg = null!;
     public IEnumerable<BankDetails> BankDetailsOrg { get => _bankDetailsOrg; set => Set(ref _bankDetailsOrg, value); } 
 
-
+    public bool IsEdete { get; set; }
     public object SenderModel { get; set; } = null!;
 
     public ContractViewModel(IBaseRepository<TypeDoc> typeRepository,
         IBaseRepository<GroupDoc> groupRepository, 
         IContractRepository<DAL.Entities.Counter.Contract> contractRepository, 
         IBaseRepository<DAL.Entities.Organization.Organization> organizationRepository,
-        IBaseRepository<Status> statusRepository)
+        IBaseRepository<Status> statusRepository, ILogger<ContractViewModel> logger)
     {
         _typeRepository = typeRepository;
         _groupRepository = groupRepository;
         _contractRepository = contractRepository;
         _organizationRepository = organizationRepository;
         _statusRepository = statusRepository;
+        _logger = logger;
         LoadData();
 
     }
@@ -99,22 +102,41 @@ public class ContractViewModel : ViewModel
 
     private async void OnSaveExecuted(object obj)
     {
+        _logger.LogTrace("Начало сохранения объекта");
+        _logger.LogTrace("Изменение статуса");
         Contract.Status = await _statusRepository.GetByIdAsync(5);
-        var contract = await _contractRepository.SaveAsync(Contract);
+        _logger.LogTrace($"Установлен статус {Contract.Status!.Name}");
+        _logger.LogTrace("Старт добавления объекта в базу данных");
+        var contract = await _contractRepository.SaveAsync(Contract).ConfigureAwait(true);
+        _logger.LogTrace("Объект добавлен в базу данных");
+        Contract = contract;
+
         if (SenderModel != null!)
         {
             if (SenderModel is ContractsViewModel contracts)
             {
-                if (Contract.Id == 0)
+                if (!IsEdete)
                 {
+                   
+                    _logger.LogTrace("Старт Обновления коллекции контрактов");
                     contracts.Contracts.Add(Contract);
+                    _logger.LogTrace("Объект добавлен в коллекцию контрактов");
                 }
             }
         }
-        Contract=contract;
-        var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
-        if (window != null!)
-            window.Close();
+        _logger.LogTrace("Закрытие окна добавления контракта");
+        try
+        {
+            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+            if (window != null!)
+                window.Close();
+            _logger.LogTrace("Окно добавления контракта успешно закрыто");
+        }
+        catch (Exception e)
+        {
+            _logger.LogTrace($"При закрытии окна добавления контракта возникла ошибка: {e.Message}");
+        }
+       
     }
 
     #endregion

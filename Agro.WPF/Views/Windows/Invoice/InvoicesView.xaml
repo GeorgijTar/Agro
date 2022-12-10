@@ -7,7 +7,7 @@
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="450" Width="1000"
+        Title="{Binding Title}" Height="650" Width="1000"
         DataContext="{Binding InvoicesModel, Source={StaticResource Locator}}">
     <Window.Resources>
         <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
@@ -55,7 +55,7 @@
                         <TextBlock Text="Создать" VerticalAlignment="Center" Margin="0,0,5,0"/>
                     </StackPanel>
                 </Button>
-                <Button BorderBrush="DarkGreen" Width="108" Command="{Binding EditCommand}"
+                <Button BorderBrush="DarkGreen" Width="108" Command="{Binding EditCommand,UpdateSourceTrigger=PropertyChanged}"
                             Template="{StaticResource ButtonTemplate}" Margin="2,0">
                     <StackPanel Orientation="Horizontal">
                         <fa5:ImageAwesome Height="12" Icon="Solid_Edit"
@@ -94,6 +94,16 @@
                                           Margin="8,5"
                                           Foreground="DarkOrange"/>
                         <TextBlock Text="Сформировать реестр" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+                <Button BorderBrush="DarkOrange" Width="140"
+                        Template="{StaticResource ButtonTemplate}" Margin="2,0"
+                        Command="{Binding RefreshCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Solid_CircleNotch"
+                                          Margin="8,5"
+                                          Foreground="DarkOrange"/>
+                        <TextBlock Text="Обновить список" VerticalAlignment="Center" Margin="0,0,5,0"/>
                     </StackPanel>
                 </Button>
             </ToolBar>
@@ -158,9 +168,10 @@
                         <DataGrid.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Создать" Command="{Binding AddCommand}"></MenuItem>
-                                <MenuItem Header="Редактировать" Command="{Binding EditCommand}"></MenuItem>
+                                <MenuItem Header="Редактировать" Command="{Binding EditCommand, UpdateSourceTrigger=PropertyChanged}"></MenuItem>
                                 <MenuItem Header="Удалить" Command="{Binding DeleteCommand}"></MenuItem>
                                 <MenuItem Header="Печать" Command="{Binding PrintCommand}"></MenuItem>
+                                <MenuItem Header="Обновить список" Command="{Binding RefreshCommand}"/>
                                 <Separator/>
                                 <MenuItem Header="Сформировать реестр" Command="{Binding RegistryInvoceFormCommand}"></MenuItem>
                                 <MenuItem Header="Принять" Command="{Binding AcceptanceCommand}"/>

@@ -8,7 +8,9 @@
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         mc:Ignorable="d"
-        Title="LoginView" Height="520" Width="400" Background="Transparent" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Title="LoginView" Height="520" Width="400" Background="Transparent" 
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+
         WindowStyle="None" x:Name="Window"
          DataContext="{Binding LoginModel, Source={StaticResource Locator}}">
     <Window.Resources>

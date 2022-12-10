@@ -13,6 +13,7 @@ using Agro.WPF.ViewModels.InvoiceVM;
 using Agro.WPF.Views;
 using Agro.WPF.Views.Windows;
 using Agro.WPF.Views.Windows.Agronomy;
+using Agro.WPF.Views.Windows.Bank.BaseView;
 using Agro.WPF.Views.Windows.Contract;
 using Agro.WPF.Views.Windows.Invoice;
 using Agro.WPF.Views.Windows.Personnel;
@@ -408,6 +409,21 @@ public class MainWindowViewModel : ViewModel
             var view = new RegistryInvoicesView();
             view.Show();
         }
+    }
+
+    #endregion
+
+    #region ShowExpenditureItemsView
+
+    private ICommand? _showExpenditureItemsViewCommand;
+
+    public ICommand ShowExpenditureItemsViewCommand => _showExpenditureItemsViewCommand
+        ??= new RelayCommand(OnShowExpenditureItemsViewExecuted);
+
+    private void OnShowExpenditureItemsViewExecuted(object obj)
+    {
+        var view = new ExpenditureItemsView();
+        view.Show();
     }
 
     #endregion

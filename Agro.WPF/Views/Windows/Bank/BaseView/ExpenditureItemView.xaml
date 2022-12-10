@@ -1,0 +1,100 @@
+﻿<Window x:Class="Agro.WPF.Views.Windows.Bank.BaseView.ExpenditureItemView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Agro.WPF.Views.Windows.Bank.BaseView"
+        xmlns:fa5="http://schemas.fontawesome.com/icons/"
+        xmlns:entities="clr-namespace:Agro.DAL.Entities.Bank.Base;assembly=Agro.DAL.Entities"
+        mc:Ignorable="d"
+        Title="{Binding Title}" Height="220" Width="600" 
+        DataContext="{Binding ExpenditureItemModel, Source={StaticResource Locator}}"
+        x:Name="MyWindow">
+    <Window.Resources>
+        <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
+            <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
+                <ContentPresenter RecognizesAccessKey="True"></ContentPresenter>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Background" Value="DarkGreen"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter  Property="Background" Value="Azure" />
+                    <Setter  Property="BorderBrush" Value="DarkBlue" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style TargetType="{x:Type TextBox}"
+               BasedOn="{StaticResource TextBoxStyle}">
+            <Setter Property="Margin" Value="4 4"/>
+        </Style>
+        
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="Наименование статьи доходов/расходов:" TextWrapping="Wrap"
+                   Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" 
+                 Text="{Binding ExpenditureItem.Name, 
+                        UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Вид движения денежных средств" TextWrapping="Wrap"
+                   Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <ComboBox Grid.Row="1" Grid.Column="1" Margin="5"
+                  ItemsSource="{Binding TypeCashFlows}"
+                  SelectedItem="{Binding ExpenditureItem.TypeCashFlow}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate DataType="entities:TypeCashFlow">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Code}"/>
+                        <TextBlock Text="{Binding Name}" Margin="3,0"
+                                   Opacity="0.8" FontSize="12" FontWeight="Bold" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Grid.Column="0" BorderBrush="DarkBlue" Width="108" IsEnabled="{Binding ButtonActivity}"
+                    Template="{StaticResource ButtonTemplate}"  Margin="0,2,3,15"
+                    Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=MyWindow}" >
+                <StackPanel Orientation="Horizontal">
+                    <fa5:ImageAwesome Height="18" Icon="Solid_Save"
+                                      Margin="8,5"
+                                      Foreground="DarkBlue" />
+                    <TextBlock Text="Сохранить" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="1" BorderBrush="DarkBlue" Width="108"
+                    Template="{StaticResource ButtonTemplate}" Margin="3,2,15,15"
+                    Command="{Binding CloseWindowCommand}" CommandParameter="{Binding ElementName=MyWindow}">
+                <StackPanel Orientation="Horizontal">
+                    <fa5:ImageAwesome Height="18" Icon="Solid_DoorOpen"
+                                      Margin="8,5"
+                                      Foreground="DarkBlue" />
+                    <TextBlock Text="Отмена" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Bottom">
+            <TextBlock Text="Статус:" Margin="5,0"/>
+            <TextBlock Text="{Binding ExpenditureItem.Status.Name}"/>
+            <TextBlock Text="ИД:" Margin="5,0"/>
+            <TextBlock Text="{Binding ExpenditureItem.Id}"/>
+        </StackPanel>
+    </Grid>
+</Window>

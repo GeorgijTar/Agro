@@ -1446,10 +1446,10 @@ namespace Agro.DAL.MySql.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("StatusId")
+                    b.Property<int?>("StatusId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TypeId")
+                    b.Property<int?>("TypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -1459,6 +1459,987 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("TypeId");
 
                     b.ToTable("LandPlots");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Bank.Base.ExpenditureItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Direction")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeCashFlowId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("TypeCashFlowId");
+
+                    b.ToTable("ExpenditureItems");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Bank.Base.TypeCashFlow", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("Direction")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TypeCashFlow");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "4111",
+                            Direction = true,
+                            Name = "Поступления от продажи продукции, товаров, работ и услуг"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "4112",
+                            Direction = true,
+                            Name = "Поступления от арендных платежей, лицензионных платежей, роялти, комиссионных и иных аналогичных платежей"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "4113",
+                            Direction = true,
+                            Name = "Поступления от перепродажи финансовых вложений"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "4119",
+                            Direction = true,
+                            Name = "Прочие поступления от текущих операций"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "4121",
+                            Direction = false,
+                            Name = "Платежи поставщикам (подрядчикам) за сырье, материалы, работы, услуги"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Code = "4122",
+                            Direction = false,
+                            Name = "Платежи в связи с оплатой труда работников"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Code = "4123",
+                            Direction = false,
+                            Name = "Платежи процентов по долговым обязательствам"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Code = "4124",
+                            Direction = false,
+                            Name = "Платежи налога на прибыль организаций"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Code = "4129",
+                            Direction = false,
+                            Name = "Прочие платежи по текущим операциям"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Code = "4211",
+                            Direction = true,
+                            Name = "Поступления от продажи внеоборотных активов (кроме финансовых вложений)"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Code = "4212",
+                            Direction = true,
+                            Name = "Поступления от продажи акций других организаций (долей участия)"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Code = "4213",
+                            Direction = true,
+                            Name = "Поступления от возврата предоставленных займов, от продажи долговых ценных бумаг (прав требования денежных средств к другим лицам)"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Code = "4214",
+                            Direction = true,
+                            Name = "Поступления дивидендов, процентов по долговым финансовым вложениям и аналогичных поступлений от долевого участия в других организациях"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Code = "4219",
+                            Direction = true,
+                            Name = "Прочие поступления  от инвестиционных операций"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Code = "4221",
+                            Direction = false,
+                            Name = "Платежи в связи с приобретением, созданием, модернизацией, реконструкцией и подготовкой к использованию внеоборотных активов"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Code = "4222",
+                            Direction = false,
+                            Name = "Платежи в связи с приобретением акций других организаций (долей участия)"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Code = "4223",
+                            Direction = false,
+                            Name = "Платежи в связи с приобретением долговых ценных бумаг (прав требования денежных средств к другим лицам), предоставление займов другим лицам"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Code = "4224",
+                            Direction = false,
+                            Name = "Платежи процентов по долговым обязательствам, включаемым в стоимость инвестиционного актива"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Code = "4229",
+                            Direction = false,
+                            Name = "Прочие платежи по инвестиционным операциям"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Code = "4311",
+                            Direction = true,
+                            Name = "Поступления от получения кредитов и займов"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Code = "4312",
+                            Direction = true,
+                            Name = "Поступления от денежных вкладов собственников (участников)"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Code = "4313",
+                            Direction = true,
+                            Name = "Поступления от выпуска акций, увеличения долей участия"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Code = "4314",
+                            Direction = true,
+                            Name = "Поступления от выпуска облигаций, векселей и других долговых ценных бумаг и др."
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Code = "4319",
+                            Direction = true,
+                            Name = "Прочие поступления от финансовых операций"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Code = "4321",
+                            Direction = false,
+                            Name = "Платежи собственникам (участникам) в связи с выкупом у них акций (долей участия) организации или их выходом из состава участников"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Code = "4322",
+                            Direction = false,
+                            Name = "Платежи на уплату дивидендов и иных платежей по распределению прибыли в пользу собственников (участников)"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Code = "4323",
+                            Direction = false,
+                            Name = "Платежи в связи с погашением (выкупом) векселей и других долговых ценных бумаг, возврат кредитов и займов"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            Code = "4329",
+                            Direction = false,
+                            Name = "Прочие платежи по финансовым операциям"
+                        });
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Bank.DebitingAccount", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("AmountNds")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("BankDetailsCounterpartyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BankDetailsOrganizationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CounterpartyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreditId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DebitId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ExpenditureItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NdsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PaymentOrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TypeOperationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BankDetailsCounterpartyId");
+
+                    b.HasIndex("BankDetailsOrganizationId");
+
+                    b.HasIndex("CounterpartyId");
+
+                    b.HasIndex("CreditId");
+
+                    b.HasIndex("DebitId");
+
+                    b.HasIndex("ExpenditureItemId");
+
+                    b.HasIndex("NdsId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("PaymentOrderId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("TypeOperationId");
+
+                    b.ToTable("DebitingAccount");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Bank.Pay.BasisPayment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BasisPayment");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "ТП",
+                            Name = "Платежи текущего года"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "ЗД",
+                            Name = "Погашение задолженности, по истекшим налоговым, расчетным (отчетным) периодам, в том числе добровольное"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "РС",
+                            Name = "Погашение рассроченной задолженности"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "ОТ",
+                            Name = "Погашение отсроченной задолженности"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "РТ",
+                            Name = "Погашение реструктурируемой задолженности"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Code = "ПБ",
+                            Name = "Погашение должником задолженности в ходе процедур, применяемых в деле о банкротстве"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Code = "ИН",
+                            Name = "Погашение инвестиционного налогового кредита"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Code = "ТЛ",
+                            Name = "Погашение учредителем (участником) должника, собственником имущества должника - унитарного предприятия или третьим лицом требований к должнику об уплате обязательных платежей в ходе процедур, применяемых в деле о банкротстве"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Code = "ЗТ",
+                            Name = "Погашение текущей задолженности в ходе процедур, применяемых в деле о банкротстве"
+                        });
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Bank.Pay.OrderPayment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderPayment");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "1",
+                            Name = "Платежи по исполнительным документам (алименты, требования о возмещении вреда, причиненного жизни или здоровью"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "2",
+                            Name = "Платежи по исполнительным документам (оплата труда)"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "3",
+                            Name = "Платежи по оплате труда и платежи по поручениям (требованиям) контролирующих органов"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "4",
+                            Name = "Платежи по прочим исполнительным документам"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "5",
+                            Name = "Прочие платежи (в т.ч. налоги и взносы)"
+                        });
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Bank.Pay.PayerStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PayerStatus");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "01",
+                            Name = "Налогоплательщик (плательщик сборов, страховых взносов и иных платежей, администрируемых налоговыми органами) - юридическое лицо"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "02",
+                            Name = "Налоговый агент"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "03",
+                            Name = "Организация федеральной почтовой связи, составившая распоряжение о переводе денежных средств по каждому платежу физического лица, за исключением уплаты таможенных платежей"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "04",
+                            Name = "Налоговый орган"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "05",
+                            Name = "Федеральная служба судебных приставов и ее территориальные органы"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Code = "06",
+                            Name = "Участник внешнеэкономической деятельности - юридическое лицо, за исключением получателя международного почтового отправления (за исключением платежей, администрируемых налоговыми органами)"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Code = "07",
+                            Name = "Таможенный орган (за исключением платежей, администрируемых налоговыми органами)"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Code = "08",
+                            Name = "Плательщик - юридическое лицо, индивидуальный предприниматель, нотариус, занимающийся частной практикой, адвокат, учредивший адвокатский кабинет, глава крестьянского (фермерского) хозяйства, осуществляющие перевод денежных средств в уплату платежей в бюджетную систему Российской Федерации (за исключением платежей, администрируемых налоговыми и таможенными органами)"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Code = "13",
+                            Name = "Налогоплательщик (плательщик сборов, страховых взносов и иных платежей, администрируемых налоговыми органами) - физическое лицо, индивидуальный предприниматель, нотариус, занимающийся частной практикой, адвокат, учредивший адвокатский кабинет, глава крестьянского (фермерского) хозяйства"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Code = "15",
+                            Name = "Кредитная организация (филиал кредитной организации), платежный агент, организация федеральной почтовой связи, составившие платежное поручение на общую сумму с реестром на перевод денежных средств, принятых от плательщиков - физических лиц"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Code = "17",
+                            Name = "Участник внешнеэкономической деятельности - индивидуальный предприниматель (за исключением платежей, администрируемых налоговыми органами)"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Code = "19",
+                            Name = "Организации и их филиалы (далее - организации), составившие распоряжение о переводе денежных средств, удержанных из заработной платы (дохода) должника - физического лица в счет погашения задолженности по платежам в бюджетную систему Российской Федерации на основании исполнительного документа, направленного в организацию в установленном порядке (за исключением платежей, администрируемых налоговыми и таможенными органами)"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Code = "20",
+                            Name = "Кредитная организация (филиал кредитной организации), платежный агент, составившие распоряжение о переводе денежных средств по каждому платежу физического лица (за исключением платежей, администрируемых налоговыми и таможенными органами)"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Code = "23",
+                            Name = "Фонд социального страхования Российской Федерации (за исключением платежей, администрируемых налоговыми органами)"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Code = "24",
+                            Name = "Плательщик - физическое лицо, осуществляющее перевод денежных средств в уплату сборов, страховых взносов, администрируемых Фондом социального страхования Российской Федерации, и иных платежей в бюджетную систему Российской Федерации (за исключением платежей, администрируемых налоговыми и таможенными органами)"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Code = "27",
+                            Name = "Кредитные организации (филиалы кредитных организаций), составившие распоряжение о переводе денежных средств, перечисленных из бюджетной системы Российской Федерации, не зачисленных получателю и подлежащих возврату в бюджетную систему Российской Федерации"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Code = "28",
+                            Name = "Участник внешнеэкономической деятельности - получатель международного почтового отправления (за исключением платежей, администрируемых налоговыми органами)"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Code = "29",
+                            Name = "Политическая партия, избирательное объединение, инициативная группа по проведению референдума, кандидат, зарегистрированный кандидат или уполномоченный представитель инициативной группы по проведению референдума, инициативная агитационная группа при перечислении денежных средств в бюджетную систему Российской Федерации со специальных избирательных счетов и специальных счетов фондов референдума (за исключением платежей, администрируемых налоговыми органами)"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Code = "30",
+                            Name = "Иностранное лицо, не состоящее на учете в налоговых органах Российской Федерации (при уплате платежей, администрируемых таможенными органами)"
+                        });
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Bank.Pay.PaymentDestination", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PaymentDestination");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "1",
+                            Name = "Перевод денежных средств, являющихся заработной платой и (или) иными доходами, в отношении которых статьей 99 Федерального закона от 2 октября 2007 года N 229-ФЗ установлены ограничения размеров удержания"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "2",
+                            Name = "Перевод денежных средств, являющихся доходами, на которые в соответствии с частью 1 статьи 101 Федерального закона от 2 октября 2007 года N 229-ФЗ не может быть обращено взыскание и которые имеют характер периодических выплат, за исключением доходов, к которым в соответствии с частью 2 статьи 101 Федерального закона от 2 октября 2007 года N 229-ФЗ <3> ограничения по обращению взыскания не применяются"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "3",
+                            Name = "Перевод денежных средств, являющихся доходами, к которым в соответствии с частью 2 статьи 101 Федерального закона от 2 октября 2007 года N 229-ФЗ ограничения по обращению взыскания не применяются и которые имеют характер периодических выплат"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "4",
+                            Name = "Перевод денежных средств, являющихся доходами, на которые в соответствии с частью 1 статьи 101 Федерального закона от 2 октября 2007 года N 229-ФЗ не может быть обращено взыскание и которые имеют характер единовременных выплат, за исключением доходов, к которым в соответствии с частью 2 статьи 101 Федерального закона от 2 октября 2007 года N 229-ФЗ ограничения по обращению взыскания не применяются"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "5",
+                            Name = "Перевод денежных средств, являющихся доходами, к которым в соответствии с частью 2 статьи 101 Федерального закона от 2 октября 2007 года N 229-ФЗ ограничения по обращению взыскания не применяются и которые имеют характер единовременных выплат"
+                        });
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Bank.Pay.PaymentOrder", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("AmountNds")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("BackupField")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("BankDetailsCounterpartyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BankDetailsOrganizationId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BasisPaymentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CounterpartyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DateDebiting")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DateDoc")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DateReceiptBank")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DeadlineAcceptance")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("InvoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Kbk")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NalogTypePayment")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("NdsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NumberDoc")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Oktmo")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("OrderPaymentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PayerStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PaymentDestinationCodeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("PaymentTerm")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("PaymentTerms")
+                        .HasMaxLength(1)
+                        .HasColumnType("varchar(1)");
+
+                    b.Property<string>("PayoutCode")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PurposePayment")
+                        .IsRequired()
+                        .HasMaxLength(210)
+                        .HasColumnType("varchar(210)");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TaxPeriodId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeOperationId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TypePaymentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TypeTransactions")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Uip")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BankDetailsCounterpartyId");
+
+                    b.HasIndex("BankDetailsOrganizationId");
+
+                    b.HasIndex("BasisPaymentId");
+
+                    b.HasIndex("CounterpartyId");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.HasIndex("NdsId");
+
+                    b.HasIndex("OrderPaymentId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("PayerStatusId");
+
+                    b.HasIndex("PaymentDestinationCodeId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("TaxPeriodId");
+
+                    b.HasIndex("TypeOperationId");
+
+                    b.HasIndex("TypePaymentId");
+
+                    b.ToTable("PaymentOrder");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Bank.Pay.TaxPeriod", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Tax1")
+                        .HasMaxLength(2)
+                        .HasColumnType("varchar(2)");
+
+                    b.Property<string>("Tax2")
+                        .HasMaxLength(2)
+                        .HasColumnType("varchar(2)");
+
+                    b.Property<string>("TaxYear")
+                        .HasMaxLength(4)
+                        .HasColumnType("varchar(4)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TaxPeriod");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Bank.Pay.TypeOperationPay", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TypeOperationsPay");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsEnabled = true,
+                            Name = "Расчеты с поставщиками"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsEnabled = true,
+                            Name = "Единый налоговый платеж"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsEnabled = true,
+                            Name = "Платежи в ФСС"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsEnabled = true,
+                            Name = "Оплата штрафов ГИБДД"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            IsEnabled = true,
+                            Name = "Перевод на другой счет организации"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            IsEnabled = true,
+                            Name = "Перечисление заработной платы работнику"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            IsEnabled = true,
+                            Name = "Перечисление подотчетному лицу"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            IsEnabled = true,
+                            Name = "Перечисление сотруднику по договору подряда"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            IsEnabled = true,
+                            Name = "Возврат покупателю"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            IsEnabled = true,
+                            Name = "Выдача займа работнику"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            IsEnabled = true,
+                            Name = "Уплата налогов за сотрудника"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            IsEnabled = true,
+                            Name = "Прочее платежи"
+                        });
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Bank.Pay.TypePayment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TypePayment");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "0",
+                            Name = ""
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "1",
+                            Name = "Срочно"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "2",
+                            Name = "Электронно"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "3",
+                            Name = "Почтой"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "4",
+                            Name = "Телеграфом"
+                        });
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Bank.Pay.TypeTransactions", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TypeTransactions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "01",
+                            Name = "Платежное поручение"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "02",
+                            Name = "Платежное требование"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "06",
+                            Name = "Инкассовое поручение"
+                        });
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.BankDetails", b =>
@@ -4240,6 +5221,31 @@ namespace Agro.DAL.MySql.Migrations
                         {
                             Id = 17,
                             Name = "Подготовлен"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Name = "Одобрен"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Name = "Откланен"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Name = "Отказан"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Name = "Отправлено в банк"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Name = "Исполнено"
                         });
                 });
 
@@ -4908,19 +5914,214 @@ namespace Agro.DAL.MySql.Migrations
                 {
                     b.HasOne("Agro.DAL.Entities.Status", "Status")
                         .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StatusId");
 
                     b.HasOne("Agro.DAL.Entities.TypeDoc", "Type")
                         .WithMany()
-                        .HasForeignKey("TypeId")
+                        .HasForeignKey("TypeId");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Bank.Base.ExpenditureItem", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.HasOne("Agro.DAL.Entities.Bank.Base.TypeCashFlow", "TypeCashFlow")
+                        .WithMany()
+                        .HasForeignKey("TypeCashFlowId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Status");
 
-                    b.Navigation("Type");
+                    b.Navigation("TypeCashFlow");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Bank.DebitingAccount", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.BankDetails", "BankDetailsCounterparty")
+                        .WithMany()
+                        .HasForeignKey("BankDetailsCounterpartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.BankDetails", "BankDetailsOrganization")
+                        .WithMany()
+                        .HasForeignKey("BankDetailsOrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Counter.Counterparty", "Counterparty")
+                        .WithMany()
+                        .HasForeignKey("CounterpartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Accounting.AccountingPlan", "Credit")
+                        .WithMany()
+                        .HasForeignKey("CreditId");
+
+                    b.HasOne("Agro.DAL.Entities.Accounting.AccountingPlan", "Debit")
+                        .WithMany()
+                        .HasForeignKey("DebitId");
+
+                    b.HasOne("Agro.DAL.Entities.Bank.Base.ExpenditureItem", "ExpenditureItem")
+                        .WithMany()
+                        .HasForeignKey("ExpenditureItemId");
+
+                    b.HasOne("Agro.DAL.Entities.Nds", "Nds")
+                        .WithMany()
+                        .HasForeignKey("NdsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Organization.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Bank.Pay.PaymentOrder", "PaymentOrder")
+                        .WithMany()
+                        .HasForeignKey("PaymentOrderId");
+
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.HasOne("Agro.DAL.Entities.TypeDoc", "TypeOperation")
+                        .WithMany()
+                        .HasForeignKey("TypeOperationId");
+
+                    b.Navigation("BankDetailsCounterparty");
+
+                    b.Navigation("BankDetailsOrganization");
+
+                    b.Navigation("Counterparty");
+
+                    b.Navigation("Credit");
+
+                    b.Navigation("Debit");
+
+                    b.Navigation("ExpenditureItem");
+
+                    b.Navigation("Nds");
+
+                    b.Navigation("Organization");
+
+                    b.Navigation("PaymentOrder");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("TypeOperation");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Bank.Pay.PaymentOrder", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.BankDetails", "BankDetailsCounterparty")
+                        .WithMany()
+                        .HasForeignKey("BankDetailsCounterpartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.BankDetails", "BankDetailsOrganization")
+                        .WithMany()
+                        .HasForeignKey("BankDetailsOrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Bank.Pay.BasisPayment", "BasisPayment")
+                        .WithMany()
+                        .HasForeignKey("BasisPaymentId");
+
+                    b.HasOne("Agro.DAL.Entities.Counter.Counterparty", "Counterparty")
+                        .WithMany()
+                        .HasForeignKey("CounterpartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.InvoiceEntity.Invoice", "Invoice")
+                        .WithMany()
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Nds", "Nds")
+                        .WithMany()
+                        .HasForeignKey("NdsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Bank.Pay.OrderPayment", "OrderPayment")
+                        .WithMany()
+                        .HasForeignKey("OrderPaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Organization.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Bank.Pay.PayerStatus", "PayerStatus")
+                        .WithMany()
+                        .HasForeignKey("PayerStatusId");
+
+                    b.HasOne("Agro.DAL.Entities.Bank.Pay.PaymentDestination", "PaymentDestinationCode")
+                        .WithMany()
+                        .HasForeignKey("PaymentDestinationCodeId");
+
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.HasOne("Agro.DAL.Entities.Bank.Pay.TaxPeriod", "TaxPeriod")
+                        .WithMany()
+                        .HasForeignKey("TaxPeriodId");
+
+                    b.HasOne("Agro.DAL.Entities.Bank.Pay.TypeOperationPay", "TypeOperation")
+                        .WithMany()
+                        .HasForeignKey("TypeOperationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Bank.Pay.TypePayment", "TypePayment")
+                        .WithMany()
+                        .HasForeignKey("TypePaymentId");
+
+                    b.Navigation("BankDetailsCounterparty");
+
+                    b.Navigation("BankDetailsOrganization");
+
+                    b.Navigation("BasisPayment");
+
+                    b.Navigation("Counterparty");
+
+                    b.Navigation("Invoice");
+
+                    b.Navigation("Nds");
+
+                    b.Navigation("OrderPayment");
+
+                    b.Navigation("Organization");
+
+                    b.Navigation("PayerStatus");
+
+                    b.Navigation("PaymentDestinationCode");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("TaxPeriod");
+
+                    b.Navigation("TypeOperation");
+
+                    b.Navigation("TypePayment");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.BankDetails", b =>

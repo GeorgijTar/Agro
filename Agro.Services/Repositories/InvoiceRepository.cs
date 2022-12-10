@@ -19,18 +19,19 @@ public class InvoiceRepository : IInvoiceRepository<Invoice>
         return await _db.Invoices
             .Include(i => i.Status!)
             .Include(i => i.Counterparty).ThenInclude(c => c.ActualAddress!)
-            .Include(i => i.BankDetails)
-            .Include(i => i.BankDetailsOrg).ThenInclude(b => b!.Organization!).ThenInclude(o => o.AddressUr!)
-            .Include(i => i.BankDetailsOrg).ThenInclude(b => b!.Organization!).ThenInclude(o => o.Director!.Post)
-            .Include(i => i.BankDetailsOrg).ThenInclude(b => b!.Organization!).ThenInclude(o => o.Director!.People)
-            .Include(i => i.Nds)
-            .Include(i => i.ProductsInvoice!)
-            .ThenInclude(p => p.Product)
-            .ThenInclude(p => p.Unit)
+            //.Include(i => i.BankDetails)
+            //.Include(i => i.BankDetailsOrg).ThenInclude(b => b!.Organization!).ThenInclude(o => o.AddressUr!)
+            //.Include(i => i.BankDetailsOrg).ThenInclude(b => b!.Organization!).ThenInclude(o => o.Director!.Post)
+            //.Include(i => i.BankDetailsOrg).ThenInclude(b => b!.Organization!).ThenInclude(o => o.Director!.People)
+            //.Include(i => i.Nds)
+            //.Include(i => i.ProductsInvoice!)
+            //.ThenInclude(p => p.Product)
+            //.ThenInclude(p => p.Unit)
             .Include(i => i.Type)
-            .Include(i => i.Specification)
-            .Include(i => i.Contract)
-            .Include(i => i.RegistryInvoice)
+            //.Include(i => i.Specification)
+            //.Include(i => i.Contract)
+            //.Include(i => i.RegistryInvoice)
+           
             .ToArrayAsync(cancel).ConfigureAwait(false);
     }
 
@@ -51,6 +52,7 @@ public class InvoiceRepository : IInvoiceRepository<Invoice>
             .Include(i => i.Specification)
             .Include(i => i.Contract)
             .Include(i => i.RegistryInvoice)
+            .Include(i => i.ScanFiles)
             .FirstOrDefaultAsync(i => i.Id == id, cancel).ConfigureAwait(false);
     }
 

@@ -65,10 +65,12 @@
                        VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Grid.ColumnSpan="2" 
                      MaxLength="20" Margin="5,0" Text="{Binding BankDetails.Bs}"/>
-            <TextBlock Grid.Row="2" Text="БИК:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Column="0" Grid.Row="2" Text="БИК:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="2" Grid.Column="1" MaxLength="9" Margin="9,0,1,0" VerticalAlignment="Center"
                      Text="{Binding BankDetails.Bik, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-            <TextBlock Grid.Row="3" Grid.RowSpan="2" Text="Наименование банка:" TextWrapping="Wrap" 
+            <TextBlock Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3" Text="{Binding Message}" 
+                       VerticalAlignment="Center" Margin="8,0" Foreground="Red"/>
+            <TextBlock Grid.Column="0" Grid.Row="3" Grid.RowSpan="2" Text="Наименование банка:" TextWrapping="Wrap" 
                        VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="2" Margin="5"
                      Text="{Binding BankDetails.NameBank}"/>

@@ -1,6 +1,9 @@
 ﻿using Agro.DAL.Entities;
 using Agro.DAL.Entities.Accounting;
 using Agro.DAL.Entities.Agronomy;
+using Agro.DAL.Entities.Bank;
+using Agro.DAL.Entities.Bank.Base;
+using Agro.DAL.Entities.Bank.Pay;
 using Agro.DAL.Entities.CheckingCounterparty;
 using Agro.DAL.Entities.CheckingCounterparty.Components;
 using Agro.DAL.Entities.Classifiers;
@@ -116,7 +119,34 @@ public class AgroDb : DbContext
 
     #endregion
 
+    #region Bank
+
+    #region Base
+
+    public DbSet<TypeCashFlow> TypeCashFlow { get; set; } = null!;
+    public DbSet<ExpenditureItem> ExpenditureItems { get; set; } = null!;
+
     #endregion
+
+    #region Pay
+    public DbSet<BasisPayment> BasisPayment { get; set; } = null!;
+    public DbSet<OrderPayment> OrderPayment { get; set; } = null!;
+    public DbSet<PayerStatus> PayerStatus { get; set; } = null!;
+    public DbSet<PaymentDestination> PaymentDestination { get; set; } = null!;
+    public DbSet<PaymentOrder> PaymentOrder { get; set; } = null!;
+    public DbSet<TaxPeriod> TaxPeriod { get; set; } = null!;
+    public DbSet<TypePayment> TypePayment { get; set; } = null!;
+    public DbSet<TypeTransactions> TypeTransactions { get; set; } = null!;
+    public DbSet<TypeOperationPay> TypeOperationsPay { get; set; } = null!;
+
+    #endregion
+
+    public DbSet<DebitingAccount> DebitingAccount { get; set; } = null!;
+    #endregion
+
+    #endregion
+
+
     public AgroDb(DbContextOptions<AgroDb> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder db)
@@ -129,6 +159,15 @@ public class AgroDb : DbContext
         db.Entity<AccountingPlan>().HasData(GetDefaultData.DefaultAccountingPlans());
         db.Entity<Sitting>().HasData(GetDefaultData.DefaultSittings());
         db.Entity<User>().HasData(GetDefaultData.DefaultUsers());
+        db.Entity<TypeCashFlow>().HasData(GetDefaultData.DefaultTypeCashFlow());
+        db.Entity<BasisPayment>().HasData(GetDefaultData.DefaultBasisPayment());
+        db.Entity<TypeTransactions>().HasData(GetDefaultData.DefaultTypeTransactions());
+        db.Entity<OrderPayment>().HasData(GetDefaultData.DefaultOrderPayment());
+        db.Entity<PaymentDestination>().HasData(GetDefaultData.DefaultPaymentDestination());
+        db.Entity<TypePayment>().HasData(GetDefaultData.DefaultTypePayment());
+        db.Entity<PayerStatus>().HasData(GetDefaultData.DefaultPayerStatus());
+        db.Entity<TypeOperationPay>().HasData(GetDefaultData.DefaultTypeOperationPye());
+        
     }
 
     

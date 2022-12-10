@@ -5,6 +5,11 @@ namespace Agro.WPF.ViewModels.Base
 {
     public abstract class ViewModel : INotifyPropertyChanged
     {
+        private string _title = null!;
+        public string Title { get => _title; set => Set(ref _title, value); }
+
+        public object SenderModel = null!;
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public virtual void OnPropertyChanged([CallerMemberName] string? proppertyName = null)

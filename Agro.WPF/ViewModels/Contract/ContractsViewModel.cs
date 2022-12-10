@@ -13,6 +13,7 @@ using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.ViewModels.InvoiceVM;
 using Agro.WPF.Views.Windows.Contract;
+using Microsoft.Extensions.Logging;
 
 namespace Agro.WPF.ViewModels.Contract;
 
@@ -20,15 +21,18 @@ public class ContractsViewModel : ViewModel
 {
     private readonly IContractRepository<DAL.Entities.Counter.Contract> _contractRepository;
     private readonly IBaseRepository<Status> _statusRepository;
+    private readonly ILogger<ContractsViewModel> _logger;
+    
     public int GroupId { get; set; }
     public ContractsViewModel(IContractRepository<DAL.Entities.Counter.Contract> contractRepository, 
-        IBaseRepository<Status> statusRepository)
+        IBaseRepository<Status> statusRepository, ILogger<ContractsViewModel> logger)
     {
         _contractRepository = contractRepository;
         _statusRepository = statusRepository;
+        _logger = logger;
         Title = "Реестр контрактов";
-        this.PropertyChanged += ModelChanged;
         LoadData();
+        this.PropertyChanged += ModelChanged;
     }
 
     private async void LoadData()
@@ -45,6 +49,7 @@ public class ContractsViewModel : ViewModel
             Contracts.Add(contract);
         }
         CollectionView = CollectionViewSource.GetDefaultView(Contracts);
+       
     }
 
     private string _title = null!;
@@ -59,14 +64,29 @@ public class ContractsViewModel : ViewModel
     public DAL.Entities.Counter.Contract SelectedContract { get => _selectedContract; set => Set(ref _selectedContract, value); }
 
     private ICollectionView _collectionView = null!;
-    public ICollectionView CollectionView { get => _collectionView; set => Set(ref _collectionView, value); }
+    public ICollectionView CollectionView 
+    { 
+        get => _collectionView; set
+    {
+        Set(ref _collectionView, value);
+        if (value != null!)
+        {
+            if (!string.IsNullOrEmpty(InnFilter))
+            {
+                CollectionView.Filter = FilterByInn;
+            }
+
+        }
+    }
+    }
 
     private string _namefilter = null!;
     public string NameFilter { get => _namefilter; set => Set(ref _namefilter, value); }
 
 
     private string _innFilter = null!;
-    public string InnFilter { get => _innFilter; set => Set(ref _innFilter, value); }
+    public string InnFilter { get => _innFilter; set=> Set(ref _innFilter, value); }
+
 
     private string _numberFilter = null!;
     public string NumberFilter { get => _numberFilter; set => Set(ref _numberFilter, value); }
@@ -164,6 +184,7 @@ public class ContractsViewModel : ViewModel
         var view = new ContractView();
         var model = view.DataContext as ContractViewModel;
         model!.SenderModel = this;
+        model.IsEdete = true;
         model.Title = "Редактирование договора";
         model.Contract = SelectedContract;
         view.Show();

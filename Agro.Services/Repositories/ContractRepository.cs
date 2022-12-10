@@ -3,15 +3,18 @@ using Agro.DAL.Entities;
 using Agro.DAL.Entities.Counter;
 using Agro.Interfaces.Base.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Agro.Services.Repositories;
 public class ContractRepository:IContractRepository<Contract>
 {
     private readonly AgroDb _db;
+    private readonly ILogger<ContractRepository> _logger;
 
-    public ContractRepository(AgroDb db)
+    public ContractRepository(AgroDb db, ILogger<ContractRepository> logger)
     {
         _db = db;
+        _logger = logger;
     }
     public async Task<IEnumerable<Contract>?> GetAllAsync(CancellationToken cancel = default)
     {
@@ -21,7 +24,7 @@ public class ContractRepository:IContractRepository<Contract>
             .Include(c=>c.BankDetails)
             .Include(c=>c.Group)
             .Include(c=>c.Type)
-            .Include(c=>c.ScanFiles)
+            .Include(c => c.Status)
             .OrderBy(c=>c.Date)
             .ToArrayAsync(cancel).ConfigureAwait(false);
     }
@@ -34,12 +37,14 @@ public class ContractRepository:IContractRepository<Contract>
             .Include(c => c.BankDetails)
             .Include(c => c.Group)
             .Include(c => c.Type)
+            .Include(c => c.Status)
             .Include(c => c.ScanFiles)
             .FirstOrDefaultAsync(c=>c.Id==id, cancel).ConfigureAwait(false);
     }
 
     public async Task<Contract> AddAsync(Contract item, CancellationToken cancel = default)
     {
+        _logger.LogTrace($"Добавление Контракта {item.Number} от {item.Date.ToShortDateString()}");
         if (item is null)
             throw new ArgumentNullException(nameof(item));
         var contract= (await _db.Contracts.AddAsync(item, cancel).ConfigureAwait(false)).Entity;
@@ -102,7 +107,7 @@ public class ContractRepository:IContractRepository<Contract>
             .Include(c => c.BankDetails)
             .Include(c => c.Group)
             .Include(c => c.Type)
-            .Include(c => c.ScanFiles)
+            .Include(c => c.Status)
             .Where(c=>c.Status!.Id==idStatus)
             .OrderBy(c => c.Date)
             .ToArrayAsync(cancel).ConfigureAwait(false);
@@ -116,7 +121,7 @@ public class ContractRepository:IContractRepository<Contract>
             .Include(c => c.BankDetails)
             .Include(c => c.Group)
             .Include(c => c.Type)
-            .Include(c => c.ScanFiles)
+            .Include(c => c.Status)
             .Where(c => c.Status!.Id != idStatus)
             .OrderBy(c => c.Date)
             .ToArrayAsync(cancel).ConfigureAwait(false);

@@ -30,17 +30,16 @@ public class InvoiceViewModel : ViewModel
 
     public string Title { get => _title; set => Set(ref _title, value); }
 
-    private Invoice _invoice = new();
-
-    public Invoice Invoice { get => _invoice; set => Set(ref _invoice, value); }
+    private Invoice? _invoice = new();
+    public Invoice? Invoice { get => _invoice; set => Set(ref _invoice, value); }
 
 
     private ScanFile _selectedFile = null!;
     public ScanFile SelectedFile { get => _selectedFile; set => Set(ref _selectedFile, value); }
 
 
-    private ICollection<BankDetails> _bankDetailsOrg = new HashSet<BankDetails>();
-    public ICollection<BankDetails> BankDetailsOrg { get => _bankDetailsOrg; set => Set(ref _bankDetailsOrg, value); }
+    private ICollection<BankDetails>? _bankDetailsOrg = new HashSet<BankDetails>();
+    public ICollection<BankDetails>? BankDetailsOrg { get => _bankDetailsOrg; set => Set(ref _bankDetailsOrg, value); }
 
 
     private IEnumerable<Nds>? _nds = new HashSet<Nds>();
@@ -86,7 +85,6 @@ public class InvoiceViewModel : ViewModel
         IInvoiceRepository<Invoice> invoiceRepository)
     {
         _invoiceRepository = invoiceRepository;
-        LoadStaticData();
         Invoice.PropertyChanged += ChangedPropertyInvoice;
         Invoice.ProductsInvoice!.ItemPropertyChanged += CalcItem;
         Invoice.ProductsInvoice!.CollectionChanged += CalcCol;
@@ -161,10 +159,7 @@ public class InvoiceViewModel : ViewModel
 
     }
 
-    private async void LoadStaticData()
-    {
-        BankDetailsOrg = await _invoiceRepository.GetAllBankDetailsOrg();
-    }
+    
 
 
     #region Commands
@@ -422,8 +417,11 @@ public class InvoiceViewModel : ViewModel
         var view = new ContractsView();
         var model = view.DataContext as ContractsViewModel;
         model!.Title = "Выберите договор";
+        if (Invoice != null! && Invoice.Counterparty != null!)
+        {
+           model.InnFilter = Invoice.Counterparty.Inn;
+        }
         model.SenderModel = this;
-        view.DataContext = model;
         view.ShowDialog();
     }
 

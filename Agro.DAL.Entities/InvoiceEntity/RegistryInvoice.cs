@@ -27,7 +27,7 @@ public class RegistryInvoice : Entity
     public DateTime? DateDispatch { get => _dateDispatch; set => Set(ref _dateDispatch, value); } 
     
     /// <summary> Счета входящие в реестр требующие подтверждение </summary>
-    private ObservableCollection<Invoice> _invoices = null!;
-    public ObservableCollection<Invoice> Invoices { get => _invoices; set => Set(ref _invoices, value); }
+    private ObservableCollection<Invoice>? _invoices;
+    public ObservableCollection<Invoice>? Invoices { get => _invoices; set => Set(ref _invoices, value); }
    
 }

@@ -28,11 +28,13 @@ public class BankDetailsViewModel : ViewModel
     }
 
     private BankDetails _details = new();
-
     public BankDetails BankDetails { get => _details; set => Set(ref _details, value); }
 
     private object? _viewModelSender;
     public object? ViewSender { get => _viewModelSender; set => Set(ref _viewModelSender, value); }
+
+    private string _message = null!;
+    public string Message { get => _message; set => Set(ref _message, value); }
 
     #endregion
 
@@ -50,10 +52,23 @@ public class BankDetailsViewModel : ViewModel
         {
             if (BankDetails.Bik.Length == 9)
             {
-                var bd = await Get.GetBankByBik(BankDetails.Bik);
-                BankDetails.NameBank = bd.NameBank;
-                BankDetails.City = bd.City;
-                BankDetails.Ks = bd.Ks;
+                try
+                {
+                    var bd = await Get.GetBankByBik(BankDetails.Bik);
+                    Message = "";
+                    BankDetails.NameBank = bd.NameBank;
+                    BankDetails.City = bd.City;
+                    BankDetails.Ks = bd.Ks;
+                }
+                catch (InvalidOperationException exception)
+                {
+                    Message = exception.Message;
+                }
+                catch(Exception ex)
+                {
+                    Message = ex.Message;
+                }
+                
             }
 
         }

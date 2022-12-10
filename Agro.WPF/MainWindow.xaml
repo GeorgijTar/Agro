@@ -50,6 +50,33 @@
                         </MenuItem>
                         
                         </MenuItem>
+                    <Separator Margin="0,3" />
+                    <MenuItem Header="Банк">
+                        <MenuItem.Icon>
+                            <fa5:SvgAwesome Icon="Solid_PiggyBank" Foreground="DarkBlue"/>
+                        </MenuItem.Icon>
+                        <MenuItem Header="Платежные поручения">
+                            <MenuItem.Icon>
+                                <fa5:ImageAwesome Icon="Solid_RubleSign" Foreground="DarkBlue"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Операчии размещения">
+                            <MenuItem.Icon>
+                                <fa5:ImageAwesome Icon="Solid_MoneyBill" Foreground="DarkBlue"/> 
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Кредиты">
+                            <MenuItem.Icon>
+                                <fa5:ImageAwesome Icon="Regular_CreditCard" Foreground="DarkBlue"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator/>
+                        <MenuItem Header="Выписки банка">
+                            <MenuItem.Icon>
+                                <fa5:ImageAwesome Icon="Solid_Table" Foreground="DarkBlue"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
                    </MenuItem>
                 <MenuItem Header="Кадры">
                     <MenuItem.Icon>
@@ -96,7 +123,10 @@
                         <MenuItem Header="Автотранспорт" Command="{Binding ShowTransports}"/>
                         <MenuItem Header="Весовые" Command="{Binding ShowWeights}"/>
                     </MenuItem>
-                   
+                    <Separator  BorderThickness="2"/>
+                    <MenuItem Header="Бухгалтерские справочники">
+                        <MenuItem Header="Справочник статей расходов и доходов ДДС" Command="{Binding ShowExpenditureItemsViewCommand}"></MenuItem>
+                    </MenuItem>
                 </MenuItem>
                 <MenuItem Header="Администрирование">
                     <MenuItem.Icon>

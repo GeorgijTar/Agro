@@ -1,6 +1,5 @@
 ﻿using Agro.DAL.Entities;
 using Agro.DAL.Entities.Base;
-using Agro.DAL.Entities.CheckingCounterparty;
 using Agro.DAL.Entities.InvoiceEntity;
 using Agro.Interfaces.Base.Repositories.Base;
 
@@ -12,6 +11,11 @@ public interface IRegistryInvoiceRepository<RegistryInvoice> : IBaseRepository<R
 
     public Task<Status?> GetStatusAsync(int idStatus, CancellationToken cancel = default);
 
+    public Task<RegistryInvoice> AcceptanceAsync(RegistryInvoice item, CancellationToken cancel = default);
+
+    public Task<RegistryInvoice> RejectAsync(RegistryInvoice item, CancellationToken cancel = default);
+    
+
     public Task<IEnumerable<Invoice>?> GetRegisterAcceptAsync(CancellationToken cancel = default);
 
     public Task<int> GetNumberRegisterAsync(CancellationToken cancel = default);
@@ -19,5 +23,9 @@ public interface IRegistryInvoiceRepository<RegistryInvoice> : IBaseRepository<R
     public Task<IEnumerable<RegistryInvoice>> GetAllByIdAsync(int idStatus, CancellationToken cancel = default);
 
     public Task<IEnumerable<RegistryInvoice>> GetAllByIdNoAsync(int idStatus, CancellationToken cancel = default);
+
+    public Task<Invoice?> GetInvoseScanFilesAsync(int invoiceId, CancellationToken cancel = default);
+
+    public  Task<RegistryInvoice> DeleteRegAsync(RegistryInvoice item, CancellationToken cancel = default);
 
 }
