@@ -36,11 +36,11 @@
     <PackageReference Include="LoadingIndicators.WPF.Core" Version="1.0.1" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.10">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.12">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Notification.WPF" Version="6.1.0.5" />
   </ItemGroup>
@@ -48,8 +48,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Agro.DAL.Entities\Agro.DAL.Entities.csproj" />
     <ProjectReference Include="..\Agro.DAL.MySql\Agro.DAL.MySql.csproj" />
-    <ProjectReference Include="..\Agro.DAL.SqLite\Agro.DAL.SqLite.csproj" />
-    <ProjectReference Include="..\Agro.DAL.Sql\Agro.DAL.Sql.csproj" />
     <ProjectReference Include="..\Agro.Interfaces\Agro.Interfaces.csproj" />
     <ProjectReference Include="..\Agro.Services\Agro.Services.csproj" />
     <ProjectReference Include="..\Bank.Api\Bank.Api.csproj" />
@@ -70,6 +68,36 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\Pages\Bank\BaseView\ExpenditureItemsPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Pages\Bank\Pay\PaymentOrderPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Pages\Contract\ContractsPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Pages\Contract\ContractPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Pages\Contract\SpecificationContractPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Pages\Invoice\InvoicesPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Pages\Invoice\InvoicePage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Pages\Invoice\RegistryInvoicesPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Pages\Invoice\RegistryInvoicePage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -80,10 +108,6 @@
     <None Update="UserSettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\Windows\Bank\Pay\" />
   </ItemGroup>
 
 </Project>

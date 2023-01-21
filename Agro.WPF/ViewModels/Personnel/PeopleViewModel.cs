@@ -22,8 +22,8 @@ public class PeopleViewModel : ViewModel
     private People _people = new();
     public People People { get => _people; set => Set(ref _people, value); }
 
-    private Document? _document;
-    public Document? Document { get => _document; set => Set(ref _document, value); }
+    private IdentityDocument? _document;
+    public IdentityDocument? Document { get => _document; set => Set(ref _document, value); }
 
     public object SenderModel { get; set; }= null!;
 

@@ -12,10 +12,11 @@ using Agro.WPF.Views.Windows;
 using Microsoft.Win32;
 using System.IO;
 using Agro.Interfaces.Base.Repositories;
+using Agro.WPF.Helpers;
 using Agro.WPF.ViewModels.Auxiliary_windows;
 using Agro.WPF.Views.Auxiliary_windows;
 using Agro.WPF.Views.Windows.Contract;
-using Microsoft.Extensions.Logging;
+using Notification.Wpf;
 
 namespace Agro.WPF.ViewModels.Contract;
 public class ContractViewModel : ViewModel
@@ -25,9 +26,8 @@ public class ContractViewModel : ViewModel
     private readonly IContractRepository<DAL.Entities.Counter.Contract> _contractRepository;
     private readonly IBaseRepository<DAL.Entities.Organization.Organization> _organizationRepository;
     private readonly IBaseRepository<Status> _statusRepository;
-    private readonly ILogger<ContractViewModel> _logger;
-    private string _title = null!;
-    public string Title { get => _title; set => Set(ref _title, value); }
+    private readonly IHelperNavigation _helperNavigation;
+    private readonly INotificationManager _notificationManager;
 
     private IEnumerable<TypeDoc> _types = null!;
     public IEnumerable<TypeDoc> Types { get => _types; set => Set(ref _types, value); }
@@ -50,23 +50,24 @@ public class ContractViewModel : ViewModel
 
 
     private IEnumerable<BankDetails> _bankDetailsOrg = null!;
-    public IEnumerable<BankDetails> BankDetailsOrg { get => _bankDetailsOrg; set => Set(ref _bankDetailsOrg, value); } 
+    public IEnumerable<BankDetails> BankDetailsOrg { get => _bankDetailsOrg; set => Set(ref _bankDetailsOrg, value); }
 
     public bool IsEdete { get; set; }
-    public object SenderModel { get; set; } = null!;
-
     public ContractViewModel(IBaseRepository<TypeDoc> typeRepository,
-        IBaseRepository<GroupDoc> groupRepository, 
-        IContractRepository<DAL.Entities.Counter.Contract> contractRepository, 
-        IBaseRepository<DAL.Entities.Organization.Organization> organizationRepository,
-        IBaseRepository<Status> statusRepository, ILogger<ContractViewModel> logger)
+      IBaseRepository<GroupDoc> groupRepository,
+      IContractRepository<DAL.Entities.Counter.Contract> contractRepository,
+      IBaseRepository<DAL.Entities.Organization.Organization> organizationRepository,
+      IBaseRepository<Status> statusRepository,
+      IHelperNavigation helperNavigation,
+      INotificationManager notificationManager)
     {
         _typeRepository = typeRepository;
         _groupRepository = groupRepository;
         _contractRepository = contractRepository;
         _organizationRepository = organizationRepository;
         _statusRepository = statusRepository;
-        _logger = logger;
+        _helperNavigation = helperNavigation;
+        _notificationManager = notificationManager;
         LoadData();
 
     }
@@ -79,11 +80,11 @@ public class ContractViewModel : ViewModel
         var groups = await _groupRepository.GetAllAsync();
         Groups = groups!.Where(g => g.TypeApplication == "Контракт").ToArray();
 
-        var orgs= await _organizationRepository.GetAllAsync();
+        var orgs = await _organizationRepository.GetAllAsync();
         var org = orgs!.FirstOrDefault(o => o.Id == 1);
         BankDetailsOrg = org!.BankDetails;
     }
-        
+
 
     #region Commands
 
@@ -102,41 +103,34 @@ public class ContractViewModel : ViewModel
 
     private async void OnSaveExecuted(object obj)
     {
-        _logger.LogTrace("Начало сохранения объекта");
-        _logger.LogTrace("Изменение статуса");
-        Contract.Status = await _statusRepository.GetByIdAsync(5);
-        _logger.LogTrace($"Установлен статус {Contract.Status!.Name}");
-        _logger.LogTrace("Старт добавления объекта в базу данных");
-        var contract = await _contractRepository.SaveAsync(Contract).ConfigureAwait(true);
-        _logger.LogTrace("Объект добавлен в базу данных");
-        Contract = contract;
-
-        if (SenderModel != null!)
-        {
-            if (SenderModel is ContractsViewModel contracts)
-            {
-                if (!IsEdete)
-                {
-                   
-                    _logger.LogTrace("Старт Обновления коллекции контрактов");
-                    contracts.Contracts.Add(Contract);
-                    _logger.LogTrace("Объект добавлен в коллекцию контрактов");
-                }
-            }
-        }
-        _logger.LogTrace("Закрытие окна добавления контракта");
         try
         {
-            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
-            if (window != null!)
-                window.Close();
-            _logger.LogTrace("Окно добавления контракта успешно закрыто");
+            Contract.Status = await _statusRepository.GetByIdAsync(5);
+            var contract = await _contractRepository.SaveAsync(Contract).ConfigureAwait(true);
+            Contract = contract;
+
+            if (SenderModel != null!)
+            {
+                if (SenderModel is ContractsViewModel contracts)
+                {
+                    if (!IsEdete)
+                    {
+                        contracts.Contracts.Add(Contract);
+                    }
+                }
+            }
+            _notificationManager.Show("Логер", "Договор успешног сохранен!", NotificationType.Information);
+            _helperNavigation.ClosePage(TabItem);
         }
         catch (Exception e)
         {
-            _logger.LogTrace($"При закрытии окна добавления контракта возникла ошибка: {e.Message}");
+            _notificationManager.Show("Логер", 
+                $"Во время сохранения договора возникла ошибка: {e.Message}", NotificationType.Error);
         }
-       
+
+
+
+
     }
 
     #endregion
@@ -150,9 +144,7 @@ public class ContractViewModel : ViewModel
 
     private void OnCloseExecuted(object obj)
     {
-        var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
-        if (window != null!)
-            window.Close();
+        _helperNavigation.ClosePage(TabItem);
     }
 
     #endregion
@@ -168,7 +160,7 @@ public class ContractViewModel : ViewModel
     {
         CoynterpartiesView coynterpartiesView = new();
         ContractorsViewModel model = (ContractorsViewModel)coynterpartiesView.DataContext;
-        model.ModelSender = this;
+        model.SenderModel = this;
         coynterpartiesView.ShowDialog();
     }
 
@@ -339,7 +331,7 @@ public class ContractViewModel : ViewModel
 
     private bool CanAddSpecificationExecuted(object arg)
     {
-        return Contract.Type!= null! && Contract.Number != null!;
+        return Contract.Type != null! && Contract.Number != null!;
     }
 
     private void OnAddSpecificationExecuted(object obj)
@@ -349,7 +341,7 @@ public class ContractViewModel : ViewModel
         model!.Title = $"Добавление новой спецификации(соглашения) к {Contract.Type.Name} № {Contract.Number} от {Contract.Date.ToShortDateString()}";
         model.SpecificationContract = new();
         model.SenderModel = this;
-        view.DataContext=model;
+        view.DataContext = model;
         view.Show();
     }
 
@@ -440,7 +432,7 @@ public class ContractViewModel : ViewModel
 
     private bool CanEdetTypeExecuted(object arg)
     {
-       return Contract.Type != null!;
+        return Contract.Type != null!;
     }
 
     private void OnEdetTypeExecuted(object obj)
@@ -449,7 +441,7 @@ public class ContractViewModel : ViewModel
         var model = view.DataContext as TypeViewModel;
         model!.SenderModel = this;
         model.Title = "Редактирование типа для договора";
-        model.Type=Contract.Type;
+        model.Type = Contract.Type;
         view.DataContext = model;
         view.ShowDialog();
     }

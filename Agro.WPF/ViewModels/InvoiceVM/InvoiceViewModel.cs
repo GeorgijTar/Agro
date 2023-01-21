@@ -11,21 +11,25 @@ using Agro.DAL.Entities.Base;
 using Agro.DAL.Entities.InvoiceEntity;
 using Agro.Interfaces.Base.Repositories;
 using Agro.WPF.Commands;
+using Agro.WPF.Helpers;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.Views.Windows;
 using Agro.WPF.Views.Windows.Contract;
 using Microsoft.Win32;
+using Notification.Wpf;
 
 namespace Agro.WPF.ViewModels.InvoiceVM;
 
 public class InvoiceViewModel : ViewModel
 {
     private bool _buttonActivity = true;
-    public bool ButtonActivity { get => _buttonActivity; set => Set(ref _buttonActivity, value); } 
+    public bool ButtonActivity { get => _buttonActivity; set => Set(ref _buttonActivity, value); }
 
 
     private readonly IInvoiceRepository<Invoice> _invoiceRepository;
+    private readonly IHelperNavigation _helperNavigation;
+    private readonly INotificationManager _notificationManager;
     private string _title = "Новый счет";
 
     public string Title { get => _title; set => Set(ref _title, value); }
@@ -38,8 +42,8 @@ public class InvoiceViewModel : ViewModel
     public ScanFile SelectedFile { get => _selectedFile; set => Set(ref _selectedFile, value); }
 
 
-    private ICollection<BankDetails>? _bankDetailsOrg = new HashSet<BankDetails>();
-    public ICollection<BankDetails>? BankDetailsOrg { get => _bankDetailsOrg; set => Set(ref _bankDetailsOrg, value); }
+    private IEnumerable<BankDetails>? _bankDetailsOrg = new HashSet<BankDetails>();
+    public IEnumerable<BankDetails>? BankDetailsOrg { get => _bankDetailsOrg; set => Set(ref _bankDetailsOrg, value); }
 
 
     private IEnumerable<Nds>? _nds = new HashSet<Nds>();
@@ -72,22 +76,25 @@ public class InvoiceViewModel : ViewModel
         set
         {
             Set(ref _isEdit, value);
-            Invoice.ProductsInvoice!.ItemPropertyChanged += CalcItem;
+            Invoice!.ProductsInvoice!.ItemPropertyChanged += CalcItem;
             Invoice.ProductsInvoice!.CollectionChanged += CalcCol;
             Invoice.PropertyChanged += ChangedPropertyInvoice;
             Calc();
         }
     }
 
-    private object _senderModel = null!;
-    public object SenderModel { get => _senderModel; set => Set(ref _senderModel, value); }
     public InvoiceViewModel(
-        IInvoiceRepository<Invoice> invoiceRepository)
+          IInvoiceRepository<Invoice> invoiceRepository,
+          IHelperNavigation helperNavigation,
+          INotificationManager notificationManager)
     {
         _invoiceRepository = invoiceRepository;
-        Invoice.PropertyChanged += ChangedPropertyInvoice;
+        _helperNavigation = helperNavigation;
+        _notificationManager = notificationManager;
+        Invoice!.PropertyChanged += ChangedPropertyInvoice;
         Invoice.ProductsInvoice!.ItemPropertyChanged += CalcItem;
         Invoice.ProductsInvoice!.CollectionChanged += CalcCol;
+        BankDetailsOrg= Application.Current.Properties["BankDetailsOrg"] as IEnumerable<BankDetails>;
     }
 
 
@@ -104,7 +111,7 @@ public class InvoiceViewModel : ViewModel
     private void Calc()
     {
 
-        if (Invoice.ProductsInvoice != null! && Invoice.ProductsInvoice.Any())
+        if (Invoice!.ProductsInvoice != null! && Invoice.ProductsInvoice.Any())
         {
             TotalAmount = 0;
             AmountNds = 0;
@@ -136,30 +143,30 @@ public class InvoiceViewModel : ViewModel
             default: return;
 
             case "Nds":
-                Invoice.AmountNds = Invoice.Amount * Invoice.Nds.Percent / 100;
+                Invoice!.AmountNds = Invoice.Amount * Invoice.Nds.Percent / 100;
                 break;
             case "Amount":
-                Invoice.AmountNds = Invoice.Amount * Invoice.Nds.Percent / 100;
+                Invoice!.AmountNds = Invoice.Amount * Invoice.Nds.Percent / 100;
                 Invoice.TotalAmount = Invoice.AmountNds + Invoice.Amount;
                 break;
             case "AmountNds":
-                Invoice.TotalAmount = Invoice.AmountNds + Invoice.Amount;
+                Invoice!.TotalAmount = Invoice.AmountNds + Invoice.Amount;
                 break;
             case "TotalAmount":
-                Invoice.PropertyChanged -= ChangedPropertyInvoice;
+                Invoice!.PropertyChanged -= ChangedPropertyInvoice;
                 Invoice.AmountNds = Invoice.TotalAmount / Invoice.Nds.OverPercent * Invoice.Nds.Percent / 100;
                 Invoice.Amount = Invoice.TotalAmount - Invoice.AmountNds;
                 Invoice.PropertyChanged += ChangedPropertyInvoice;
                 break;
             case "Counterparty":
-                if (Invoice.Counterparty.BankDetails!.Count == 1)
+                if (Invoice!.Counterparty.BankDetails!.Count == 1)
                     Invoice.BankDetails = Invoice.Counterparty.BankDetails[0];
                 break;
         }
 
     }
 
-    
+
 
 
     #region Commands
@@ -175,7 +182,7 @@ public class InvoiceViewModel : ViewModel
     {
         CoynterpartiesView coynterpartiesView = new();
         ContractorsViewModel model = (ContractorsViewModel)coynterpartiesView.DataContext;
-        model.ModelSender = this;
+        model.SenderModel = this;
         coynterpartiesView.ShowDialog();
     }
 
@@ -190,26 +197,36 @@ public class InvoiceViewModel : ViewModel
 
     private bool SaveCommandCan(object arg)
     {
-        return Invoice.Number != null! && Invoice.Nds != null! && Invoice.Amount != 0 && Invoice.TotalAmount != 0 && Invoice.Counterparty != null!;
+        return Invoice!.Number != null! && Invoice.Nds != null! && Invoice.Amount != 0 && Invoice.TotalAmount != 0 && Invoice.Counterparty != null!;
     }
 
     private async void OnSaveCommandExecuted(object obj)
     {
-        Invoice.Status = await _invoiceRepository.GetStatusById(1);
-        var inv = await _invoiceRepository.SaveAsync(Invoice);
-        if (!IsEdit)
+        try
         {
-            if (SenderModel != null!)
+            Invoice!.Status = await _invoiceRepository.GetStatusById(1);
+            var inv = await _invoiceRepository.SaveAsync(Invoice);
+            if (!IsEdit)
             {
-                if (SenderModel is InvoicesViewModel invoicesViewModel)
+                if (SenderModel != null!)
                 {
-                    invoicesViewModel.Invoices.Add(inv);
+                    if (SenderModel is InvoicesViewModel invoicesViewModel)
+                    {
+                        invoicesViewModel.Invoices.Add(inv);
+                    }
                 }
             }
+            _notificationManager.Show("Логер", $"Счет успешно сохранен", NotificationType.Information);
+            _helperNavigation.ClosePage(TabItem);
         }
-        var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
-        if (window != null!)
-            window.Close();
+        catch (Exception e)
+        {
+            _notificationManager.Show("Логер", $"При сохранении счета возникла ошибка: {e.Message}", NotificationType.Error);
+        }
+       
+        
+
+       
 
     }
 
@@ -316,9 +333,7 @@ public class InvoiceViewModel : ViewModel
 
     private void OnCloseWindowCommandExecuted(object obj)
     {
-        var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
-        if (window != null!)
-            window.Close();
+        _helperNavigation.ClosePage(TabItem);
     }
 
     #endregion
@@ -419,7 +434,7 @@ public class InvoiceViewModel : ViewModel
         model!.Title = "Выберите договор";
         if (Invoice != null! && Invoice.Counterparty != null!)
         {
-           model.InnFilter = Invoice.Counterparty.Inn;
+            model.InnFilter = Invoice.Counterparty.Inn;
         }
         model.SenderModel = this;
         view.ShowDialog();
@@ -441,7 +456,7 @@ public class InvoiceViewModel : ViewModel
 
     private void OnClesrContractExecuted(object obj)
     {
-        Invoice.Contract = null!;
+        Invoice!.Contract = null!;
         Invoice.Specification = null!;
     }
 

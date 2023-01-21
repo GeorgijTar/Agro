@@ -17,6 +17,7 @@ public class LoginViewModel : ViewModel
 
     private readonly ILoginRepository<User> _loginRepository;
     private readonly INotificationManager _notificationManager;
+    private readonly IReferencesRepository _referencesRepository;
 
     private string _login = null!;
     public string Login { get => _login; set => Set(ref _login, value); }
@@ -27,16 +28,22 @@ public class LoginViewModel : ViewModel
     private string _currentVersion = null!;
     public string CurrentVersion { get => _currentVersion; set => Set(ref _currentVersion, value); }
 
-    private SolidColorBrush _ellipseColor = new SolidColorBrush(Colors.Red); 
+    private SolidColorBrush _ellipseColor = new SolidColorBrush(Colors.Red);
     public SolidColorBrush EllipseColor { get => _ellipseColor; set => Set(ref _ellipseColor, value); }
 
-    private string _ellipseLabel ="Сервер не доступен!";
+    private string _ellipseLabel = "Сервер не доступен!";
     public string EllipseLabel { get => _ellipseLabel; set => Set(ref _ellipseLabel, value); }
-   
-    public LoginViewModel(ILoginRepository<User> loginRepository, INotificationManager notificationManager)
+
+    private User? _user;
+
+    public LoginViewModel(
+        ILoginRepository<User> loginRepository,
+        INotificationManager notificationManager,
+        IReferencesRepository referencesRepository)
     {
         _loginRepository = loginRepository;
         _notificationManager = notificationManager;
+        _referencesRepository = referencesRepository;
         CurrentVersion = Assembly.GetExecutingAssembly().GetName().Version!.ToString();
         AvailableServer();
     }
@@ -51,7 +58,7 @@ public class LoginViewModel : ViewModel
     }
 
     #region Commands
-    
+
     #region Login
 
     private ICommand? _loginCommand;
@@ -66,24 +73,28 @@ public class LoginViewModel : ViewModel
 
     private async void OnLoginCommandExecuted(object p)
     {
-        var user = await _loginRepository.GetUserAsync(Login, AgroHelper.CalculateHash(Password, Login))!;
-
-        if (user != null!)
+        try
         {
-            Application.Current.Properties["User"] = user;
+            _user = await _loginRepository.GetUserAsync(Login, AgroHelper.CalculateHash(Password, Login));
 
-            var view = new MainWindow();
-            view.Show();
-
-            var window = p as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
-            if (window != null!)
-                window.Close();
+            if (_user != null!)
+            {
+                LoadStaticData();
+                var window = p as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+                if (window != null!)
+                    window.Close();
+            }
+            else
+            {
+                _notificationManager.Show("Логер", "Неверный логин или пароль!", NotificationType.Error);
+                // MessageBox.Show("Неверный логин или пароль!", "Авторизация");
+            }
         }
-        else
+        catch (Exception e)
         {
-            _notificationManager.Show("Логер", "Неверный логин или пароль!",NotificationType.Error);
-           // MessageBox.Show("Неверный логин или пароль!", "Авторизация");
+            _notificationManager.Show("Логер", $"Ошибка: {e}", NotificationType.Error);
         }
+
     }
 
     #endregion
@@ -103,6 +114,67 @@ public class LoginViewModel : ViewModel
     }
 
     #endregion
+
+    private async void LoadStaticData()
+    {
+        using var progress = _notificationManager.ShowProgressBar("Загрузка статических данных");
+
+        progress.Report((100, "Получение информации о пользователе", "Загрузка статических данных", false));
+        Application.Current.Properties["CurrentUser"] = _user;
+
+        progress.Report((100, "Загрузка справочника типов документов", "Загрузка статических данных", false));
+        Application.Current.Properties["Types"] = await _referencesRepository.GetAllTypeDocAsync().ConfigureAwait(true);
+
+        progress.Report((100, "Загрузка справочника статусов документов", "Загрузка статических данных", false));
+        Application.Current.Properties["Status"] = await _referencesRepository.GetAllStatusAsync();
+
+        progress.Report((100, "Загрузка справочника групп документов", "Загрузка статических данных", false));
+        Application.Current.Properties["Groups"] = await _referencesRepository.GetAllGroupDocAsync();
+
+        progress.Report((100, "Загрузка справочника типов операций", "Загрузка статических данных", false));
+        Application.Current.Properties["TypeOperation"] = await _referencesRepository.GetAllTypeOperationPayAsync();
+
+        progress.Report((100, "Загрузка справочника банковских реквизитов организации", "Загрузка статических данных", false));
+        Application.Current.Properties["BankDetailsOrg"] = await _referencesRepository.GetAllBankDetailsOrgAsync();
+
+        progress.Report((100, "Загрузка данных организации", "Загрузка статических данных", false));
+        Application.Current.Properties["Organization"] = await _referencesRepository.GetOrganizationAsync();
+
+        progress.Report((100, "Загрузка справочника видов платежа", "Загрузка статических данных", false));
+        Application.Current.Properties["TypePayments"] = await _referencesRepository.GetAllTypesPaymentAsync();
+
+        progress.Report((100, "Загрузка ставок НДС", "Загрузка статических данных", false));
+        Application.Current.Properties["Nds"] = await _referencesRepository.GetAllNdsAsync();
+
+        progress.Report((100, "Загрузка справочника оснований платежа", "Загрузка статических данных", false));
+        Application.Current.Properties["BasisPayments"] = await _referencesRepository.GetAllBasisPaymentAsync();
+
+        progress.Report((100, "Загрузка справочника статусов плательщика", "Загрузка статических данных", false));
+        Application.Current.Properties["PayerStatus"] = await _referencesRepository.GetAllPayerStatusAsync();
+
+        progress.Report((100, "Загрузка справочника очередности платежа", "Загрузка статических данных", false));
+        Application.Current.Properties["OrderPayment"] = await _referencesRepository.GetAllOrderPaymentAsync();
+
+        progress.Report((100, "Загрузка справочника тиаов платежных документов", "Загрузка статических данных", false));
+        Application.Current.Properties["TypeTransactions"] = await _referencesRepository.GetAllTypeTransactionsAsync();
+
+        progress.Report((100, "Загрузка плана счетов", "Загрузка статических данных", false));
+        Application.Current.Properties["AccountingPlans"] = await _referencesRepository.GetAllAccountingPlanAsync();
+
+        progress.Report((100, "Загрузка справочника мест хранения", "Загрузка статических данных", false));
+        Application.Current.Properties["StorageLocations"] = await _referencesRepository.GetAllStorageLocationAsync();
+
+        progress.Report((100, "Загрузка справочника мест хранения", "Загрузка статических данных", false));
+        Application.Current.Properties["Currency"] = await _referencesRepository.GetAllCurrencyAsync();
+
+        progress.Report((100, "Загрузка справочника мест хранения", "Загрузка статических данных", false));
+        Application.Current.Properties["AccountingMethodNds"] = await _referencesRepository.GetAllAccountingMethodNdsAsync();
+
+        var view = new MainWindow();
+        view.Show();
+
+
+    }
 
     #endregion
 }

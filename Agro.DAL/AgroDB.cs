@@ -9,14 +9,19 @@ using Agro.DAL.Entities.CheckingCounterparty.Components;
 using Agro.DAL.Entities.Classifiers;
 using Agro.DAL.Entities.Counter;
 using Agro.DAL.Entities.DefaultData;
+using Agro.DAL.Entities.General;
 using Agro.DAL.Entities.InvoiceEntity;
 using Agro.DAL.Entities.Organization;
 using Agro.DAL.Entities.Organization.RegInfoOrg;
 using Agro.DAL.Entities.Personnel;
+using Agro.DAL.Entities.Registers;
 using Agro.DAL.Entities.Storage;
+using Agro.DAL.Entities.TaxesType;
 using Agro.DAL.Entities.Warehouse;
+using Agro.DAL.Entities.Warehouse.Coming;
 using Agro.DAL.Entities.Weight;
 using Microsoft.EntityFrameworkCore;
+using Tax = Agro.DAL.Entities.CheckingCounterparty.Components.Tax;
 
 
 namespace Agro.DAL;
@@ -29,9 +34,10 @@ public class AgroDb : DbContext
     public DbSet<GroupDoc> Groups { get; set; } = null!;
     public DbSet<TypeDoc> Types { get; set; } = null!;
     public DbSet<BankDetails> BankDetails { get; set; } = null!;
+    public DbSet<Currency> Currency { get; set; } = null!;
     public DbSet<Product> Products { get; set; } = null!;
     public DbSet<UnitOkei> UnitsOkei { get; set; } = null!;
-    public DbSet<Nds>  Ndses { get; set; } = null!;
+    public DbSet<Nds> Ndses { get; set; } = null!;
     public DbSet<AccountingPlan> AccountingPlans { get; set; } = null!;
     public DbSet<Invoice> Invoices { get; set; } = null!;
     public DbSet<Address> Addresses { get; set; } = null!;
@@ -50,7 +56,7 @@ public class AgroDb : DbContext
     public DbSet<Okopf> Okopf { get; set; } = null!;
     public DbSet<Oktmo> Oktmo { get; set; } = null!;
     public DbSet<ProductInvoice> ProductsInvoice { get; set; } = null!;
-    public DbSet<Document> Documents { get; set; } = null!;
+    public DbSet<IdentityDocument> Documents { get; set; } = null!;
     public DbSet<People> People { get; set; } = null!;
     public DbSet<Employee> Employee { get; set; } = null!;
     public DbSet<StaffList> StaffList { get; set; } = null!;
@@ -69,7 +75,7 @@ public class AgroDb : DbContext
     public DbSet<OfficialPerson> OfficialPersons { get; set; } = null!;
     public DbSet<Tmc> Tmc { get; set; } = null!;
     public DbSet<RulesAccounting> RulesAccounting { get; set; } = null!;
-    public DbSet<Director> Directors { get; set; } = null!; 
+    public DbSet<Director> Directors { get; set; } = null!;
     public DbSet<Ogrn> Ogrn { get; set; } = null!;
     public DbSet<RegistryInvoice> RegistryInvoices { get; set; } = null!;
     public DbSet<Sitting> Sittings { get; set; } = null!;
@@ -114,9 +120,21 @@ public class AgroDb : DbContext
     public DbSet<CheckCounterparty> CheckCounterparty { get; set; } = null!;
     public DbSet<Founder> Founders { get; set; } = null!;
     public DbSet<FinancialStatement> FinancialStatements { get; set; } = null!;
+    #endregion
 
+    #region Registers
 
+    public DbSet<TmcRegister> TmcRegisters { get; set; } = null!;
+    public DbSet<AccountingPlanRegister> AccountingPlanRegisters { get; set; } = null!;
 
+    #endregion
+
+    #region Coming
+    public DbSet<ComingTmc> ComingTmc { get; set; } = null!;
+    public DbSet<ComingTmcCalculations> ComingTmcCalculations { get; set; } = null!;
+    public DbSet<InvoiceFactur> InvoiceFacturs { get; set; } = null!;
+    public DbSet<ComingTmcPosition> ComingTmcPositions { get; set; } = null!;
+    public DbSet<AccountingMethodNds> AccountingMethodsNds { get; set; } = null!; 
     #endregion
 
     #region Bank
@@ -144,6 +162,16 @@ public class AgroDb : DbContext
     public DbSet<DebitingAccount> DebitingAccount { get; set; } = null!;
     #endregion
 
+    #region Taxes (Налоги)
+
+    public DbSet<Tax> Taxes { get; set; } = null!;
+    public DbSet<TaxKbk> TaxKbk { get; set; } = null!;
+    public DbSet<TypeCommitment> TypesCommitments { get; set; } = null!;
+
+    #endregion
+
+    public DbSet<ClosedPeriod> ClosedPeriod { get; set; }= null!;
+
     #endregion
 
 
@@ -167,8 +195,10 @@ public class AgroDb : DbContext
         db.Entity<TypePayment>().HasData(GetDefaultData.DefaultTypePayment());
         db.Entity<PayerStatus>().HasData(GetDefaultData.DefaultPayerStatus());
         db.Entity<TypeOperationPay>().HasData(GetDefaultData.DefaultTypeOperationPye());
-        
+        db.Entity<TypeCommitment>().HasData(GetDefaultData.DefaultTypeCommitment());
+        db.Entity<Currency>().HasData(GetDefaultData.DefaultCurrency());
+        db.Entity<AccountingMethodNds>().HasData(GetDefaultData.DefaultAccountingMethodNds());
     }
 
-    
+
 }

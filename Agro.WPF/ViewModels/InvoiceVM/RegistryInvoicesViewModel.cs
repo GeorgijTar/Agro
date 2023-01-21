@@ -20,16 +20,17 @@ using iTextSharp.text.pdf;
 using System.Globalization;
 using System.ComponentModel;
 using System.Windows.Data;
-using System.Reflection;
 using Agro.WPF.Views.Windows.UserSettings;
+using Notification.Wpf;
 
 namespace Agro.WPF.ViewModels.InvoiceVM;
 
 public class RegistryInvoicesViewModel : ViewModel
 {
-    private static readonly string  currentPath = Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!, "TMP");
+    private static readonly string currentPath = Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!, "TMP");
 
     private readonly IRegistryInvoiceRepository<RegistryInvoice> _registryInvoiceRepository;
+    private readonly INotificationManager _notificationManager;
     private string _title = null!;
     public string Title { get => _title; set => Set(ref _title, value); }
 
@@ -74,9 +75,12 @@ public class RegistryInvoicesViewModel : ViewModel
     private string _inn = null!;
     public string InnFilter { get => _inn; set => Set(ref _inn, value); }
 
-    public RegistryInvoicesViewModel(IRegistryInvoiceRepository<RegistryInvoice> registryInvoiceRepository)
+    public RegistryInvoicesViewModel(
+        IRegistryInvoiceRepository<RegistryInvoice> registryInvoiceRepository,
+        INotificationManager notificationManager)
     {
         _registryInvoiceRepository = registryInvoiceRepository;
+        _notificationManager = notificationManager;
         Title = "Список реестров на оплату";
         LoadData();
 
@@ -125,7 +129,7 @@ public class RegistryInvoicesViewModel : ViewModel
         if (!string.IsNullOrEmpty(InnFilter))
         {
             RegistryInvoice? dto = obj as RegistryInvoice;
-            foreach (var invoice in dto!.Invoices)
+            foreach (var invoice in dto!.Invoices!)
             {
                 return invoice.Counterparty.Inn.ToUpper().Contains(InnFilter.ToUpper());
             }
@@ -138,9 +142,9 @@ public class RegistryInvoicesViewModel : ViewModel
         if (!string.IsNullOrEmpty(NameFilter))
         {
             RegistryInvoice? dto = obj as RegistryInvoice;
-            foreach (var invoice in dto!.Invoices)
+            foreach (var invoice in dto!.Invoices!)
             {
-                return invoice.Counterparty.Name.ToUpper().Contains(NameFilter.ToUpper()) ||  invoice.Counterparty.PayName.ToUpper().Contains(NameFilter.ToUpper());
+                return invoice.Counterparty.Name.ToUpper().Contains(NameFilter.ToUpper()) || invoice.Counterparty.PayName.ToUpper().Contains(NameFilter.ToUpper());
             }
         }
         return true;
@@ -151,9 +155,9 @@ public class RegistryInvoicesViewModel : ViewModel
         if (InvoiceDateOnFilter != null! && InvoiceDateOfFilter != null!)
         {
             RegistryInvoice? dto = obj as RegistryInvoice;
-            foreach (var invoice in dto!.Invoices)
+            foreach (var invoice in dto!.Invoices!)
             {
-                return invoice.DateInvoice.Date>= InvoiceDateOnFilter.Value.Date && invoice.DateInvoice.Date <= InvoiceDateOfFilter.Value.Date;
+                return invoice.DateInvoice.Date >= InvoiceDateOnFilter.Value.Date && invoice.DateInvoice.Date <= InvoiceDateOfFilter.Value.Date;
             }
         }
         return true;
@@ -164,7 +168,7 @@ public class RegistryInvoicesViewModel : ViewModel
         if (!string.IsNullOrEmpty(InvoiceNumberFilter))
         {
             RegistryInvoice? dto = obj as RegistryInvoice;
-            foreach (var invoice in dto!.Invoices)
+            foreach (var invoice in dto!.Invoices!)
             {
                 return invoice.Number.ToUpper().Contains(InvoiceNumberFilter.ToUpper());
             }
@@ -177,14 +181,14 @@ public class RegistryInvoicesViewModel : ViewModel
         if (RegDateOnFilter != null! && RegDateOfFilter != null!)
         {
             RegistryInvoice? dto = obj as RegistryInvoice;
-            return dto!.Date.Date>= RegDateOnFilter.Value.Date && dto!.Date.Date <= RegDateOfFilter.Value.Date;
+            return dto!.Date.Date >= RegDateOnFilter.Value.Date && dto!.Date.Date <= RegDateOfFilter.Value.Date;
         }
         return true;
     }
 
     private bool FilterByRegNumber(object obj)
     {
-        if (RegNumberFilter!=0)
+        if (RegNumberFilter != 0)
         {
             RegistryInvoice? dto = obj as RegistryInvoice;
             return dto!.Number == RegNumberFilter;
@@ -233,7 +237,7 @@ public class RegistryInvoicesViewModel : ViewModel
             }
         }
 
-       message.Attachments.Add(new Attachment(SavePdfRegistry(currentPath, registryInvoice)));
+        message.Attachments.Add(new Attachment(SavePdfRegistry(currentPath, registryInvoice)));
 
         foreach (var registryInvoiceInvoice in RegistryInvoice.Invoices!)
         {
@@ -265,7 +269,7 @@ public class RegistryInvoicesViewModel : ViewModel
 
         smtp.Credentials = new NetworkCredential("mikhailovskoe@inbox.ru", "qsJCZZNz3Fz34BwmgqQL"); //qsJCZZNz3Fz34BwmgqQL
         smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-        
+
         try
         {
             smtp.Send(message);
@@ -278,9 +282,11 @@ public class RegistryInvoicesViewModel : ViewModel
 
         return true;
     }
-   
+
 
     #region Commands
+
+    #region Send
 
     private ICommand? _sendCommand;
 
@@ -294,12 +300,23 @@ public class RegistryInvoicesViewModel : ViewModel
 
     private async void OnSendExecuted(object obj)
     {
-        if (await SendRegistrMail(RegistryInvoice))
+        try
         {
-            await _registryInvoiceRepository.SetStatusAsync(16, RegistryInvoice);
+            if (await SendRegistrMail(RegistryInvoice))
+            {
+                await _registryInvoiceRepository.SetStatusAsync(16, RegistryInvoice);
+            }
+            _notificationManager.Show("Логер","Реестр успешно отправлен", NotificationType.Information);
         }
-    }
+        catch (Exception e)
+        {
+            _notificationManager.Show("Логер", $"При отправке реестра возникла ошибка: {e.Message}", NotificationType.Error);
+        }
 
+    }
+    #endregion
+
+    #region Print
     private ICommand? _printCommand;
 
     public ICommand PrintCommand => _printCommand
@@ -312,15 +329,17 @@ public class RegistryInvoicesViewModel : ViewModel
 
     private void OnPrintExecuted(object obj)
     {
-      var filename=  SavePdfRegistry(currentPath, RegistryInvoice);
-      var p = new Process();
-      p.StartInfo = new ProcessStartInfo(filename)
-      {
-          UseShellExecute = true
-      };
-      p.Start();
+        var filename = SavePdfRegistry(currentPath, RegistryInvoice);
+        var p = new Process();
+        p.StartInfo = new ProcessStartInfo(filename)
+        {
+            UseShellExecute = true
+        };
+        p.Start();
     }
+    #endregion
 
+    #region Approve
     private ICommand? _approveCommand;
 
     public ICommand ApproveCommand => _approveCommand
@@ -328,14 +347,16 @@ public class RegistryInvoicesViewModel : ViewModel
 
     private bool ApproveCan(object arg)
     {
-        return RegistryInvoice!=null! && RegistryInvoice.Status!.Id == 16;
+        return RegistryInvoice != null! && RegistryInvoice.Status!.Id == 16;
     }
 
     private async void OnApproveExecuted(object obj)
     {
-        RegistryInvoice= await _registryInvoiceRepository.AcceptanceAsync(RegistryInvoice);
+        RegistryInvoice = await _registryInvoiceRepository.AcceptanceAsync(RegistryInvoice);
     }
+    #endregion
 
+    #region Reject
 
     private ICommand? _rejectCommand;
 
@@ -344,15 +365,16 @@ public class RegistryInvoicesViewModel : ViewModel
 
     private bool RejectCan(object arg)
     {
-        return RegistryInvoice.Status!.Id == 16 || RegistryInvoice.Status!.Id == 18;
+        return RegistryInvoice != null! && (RegistryInvoice.Status!.Id == 16 || RegistryInvoice!.Status!.Id == 18);
     }
 
     private async void OnRejectExecuted(object obj)
     {
         RegistryInvoice = await _registryInvoiceRepository.RejectAsync(RegistryInvoice);
     }
+    #endregion
 
-
+    #region Delete
     private ICommand? _daleteCommand;
 
     public ICommand DeleteCommand => _daleteCommand
@@ -368,6 +390,9 @@ public class RegistryInvoicesViewModel : ViewModel
         RegistryInvoice = await _registryInvoiceRepository.DeleteRegAsync(RegistryInvoice);
     }
 
+    #endregion
+
+    #region Refresh
     private ICommand? _refreshCommand;
 
     public ICommand RefreshCommand => _refreshCommand
@@ -378,7 +403,9 @@ public class RegistryInvoicesViewModel : ViewModel
         LoadData();
     }
 
+    #endregion
 
+    #region Settings
     private ICommand? _settingsCommand;
 
     public ICommand SettingsCommand => _settingsCommand
@@ -389,6 +416,7 @@ public class RegistryInvoicesViewModel : ViewModel
         var view = new RegistryInvoiceSettings();
         view.ShowDialog();
     }
+    #endregion
 
     #endregion
 
@@ -421,8 +449,8 @@ public class RegistryInvoicesViewModel : ViewModel
             //Иначе мы не увидим кириллический текст
             string fontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "Times.ttf");
             BaseFont baseFont = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            iTextSharp.text.Font font = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.NORMAL);
-            iTextSharp.text.Font fontBold = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.BOLD);
+            Font font = new Font(baseFont, Font.DEFAULTSIZE, Font.NORMAL);
+            Font fontBold = new Font(baseFont, Font.DEFAULTSIZE, Font.BOLD);
             //Создаем объект таблицы и передаем в нее число столбцов таблицы из нашего датасета
             PdfPTable table = new PdfPTable(5);
             float[] widths = { 60, 200, 300, 320, 220 };
@@ -440,29 +468,29 @@ public class RegistryInvoicesViewModel : ViewModel
             //Добавляем заголовки столбцов
             cell = new PdfPCell(new Phrase(new Phrase("№ п/п", font)));
             //Фоновый цвет (необязательно, просто сделаем по красивее)
-            cell.BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY;
+            cell.BackgroundColor = BaseColor.LIGHT_GRAY;
             table.AddCell(cell);
 
             cell = new PdfPCell(new Phrase(new Phrase("Номер и дата счета", font)));
             //Фоновый цвет (необязательно, просто сделаем по красивее)
-            cell.BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY;
+            cell.BackgroundColor = BaseColor.LIGHT_GRAY;
             table.AddCell(cell);
 
             cell = new PdfPCell(new Phrase(new Phrase("Контрагент", font)));
-            cell.BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY;
+            cell.BackgroundColor = BaseColor.LIGHT_GRAY;
             table.AddCell(cell);
 
             cell = new PdfPCell(new Phrase(new Phrase("Описание", font)));
-            cell.BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY;
+            cell.BackgroundColor = BaseColor.LIGHT_GRAY;
             table.AddCell(cell);
 
             cell = new PdfPCell(new Phrase(new Phrase("Сумма, руб.", font)));
-            cell.BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY;
+            cell.BackgroundColor = BaseColor.LIGHT_GRAY;
             table.AddCell(cell);
 
             int i = 1;
             decimal total = 0;
-            foreach (var invoice in registryInvoice.Invoices)
+            foreach (var invoice in registryInvoice.Invoices!)
             {
                 table.AddCell(new Phrase(i.ToString(), font));
                 table.AddCell(new Phrase($"{invoice.Number} от {invoice.DateInvoice.ToShortDateString()}", font));

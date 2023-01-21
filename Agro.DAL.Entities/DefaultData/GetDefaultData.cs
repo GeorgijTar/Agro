@@ -1,8 +1,8 @@
 ﻿using Agro.DAL.Entities.Accounting;
 using Agro.DAL.Entities.Bank.Base;
 using Agro.DAL.Entities.Bank.Pay;
-using Agro.DAL.Entities.Base;
-using Agro.DAL.Entities.CheckingCounterparty.Components;
+using Agro.DAL.Entities.TaxesType;
+using Agro.DAL.Entities.Warehouse.Coming;
 using Helpers;
 
 
@@ -12,8 +12,10 @@ public static class GetDefaultData
 {
     public static User[] DefaultUsers() => new User[]
     {
-        new User() {Id = 1, Login = "admin", Password = AgroHelper.CalculateHash("admin", "admin")},
-        new User() {Id = 2, Login = "я", Password = AgroHelper.CalculateHash("1", "я")}
+        new User() {Id = 1, Login = "System", Password = AgroHelper.CalculateHash("system", "System")},
+        new User() {Id = 2, Login = "admin", Password = AgroHelper.CalculateHash("admin", "admin")},
+        new User() {Id = 3, Login = "я", Password = AgroHelper.CalculateHash("1", "я")}
+
     };
     public static Sitting[] DefaultSittings() => new Sitting[]
     {
@@ -43,8 +45,18 @@ public static class GetDefaultData
         new() { Id = 20, Name = "Отказан" },
         new() { Id = 21, Name = "Отправлено в банк" },
         new() { Id = 22, Name = "Исполнено" },
+        new() { Id = 23, Name = "Зарегистрировано" },
+        new() { Id = 24, Name = "Введено" },
+        new() { Id = 25, Name = "Учтено" },
     };
 
+    public static AccountingMethodNds[] DefaultAccountingMethodNds() => new AccountingMethodNds[]
+    {
+        new (){Id = 1, Name = "Принимать к вачету"},
+        new (){Id = 2, Name = "Учитывается в стоимости товара"}
+    };
+
+    
     public static TypeDoc[] DefaultType() => new TypeDoc[]
     {
         new() { Id = 1, Name = "Юридическое лицо", TypeApplication = "Контрагенты" },
@@ -67,6 +79,12 @@ public static class GetDefaultData
         new() { Id = 18, Name = "Соглашение", TypeApplication = "Спецификация" },
         new() { Id = 19, Name = "Спецификация", TypeApplication = "Спецификация" },
         new() { Id = 20, Name = "Дополнительное соглашение", TypeApplication = "Спецификация" },
+        new() { Id = 21, Name = "Серветут", TypeApplication = "Контракт" },
+        new() { Id = 22, Name = "Договор", TypeApplication = "Контракт" },
+        new() { Id = 23, Name = "Иной документ", TypeApplication = "Спецификация" },
+        new() { Id = 24, Name = "Договор оказания услуг", TypeApplication = "Контракт" },
+        new() { Id = 25, Name = "Приход", TypeApplication = "ТМЦ" },
+        new() { Id = 26, Name = "Расход", TypeApplication = "ТМЦ" },
     };
 
 
@@ -111,7 +129,7 @@ public static class GetDefaultData
         new () { Id = 9, Name = "Квадратный метр", Abbreviation = "м2", OkeiCode = "055"},
         new () { Id = 10, Name = "Гектар", Abbreviation = "га", OkeiCode = "059"},
         new () { Id = 11, Name = "Киловатт-час", Abbreviation = "кВт.ч", OkeiCode = "245"},
-        new () { Id = 12, Name = "Лист", Abbreviation = "л.", OkeiCode = "625"},
+        new () { Id = 12, Name = "Литр", Abbreviation = "л", OkeiCode = "112"},
         new () { Id = 13, Name = "Пара (2 шт.)", Abbreviation = "пар", OkeiCode = "715"},
         new () { Id = 14, Name = "Упаковка", Abbreviation = "упак", OkeiCode = "778"},
         new () { Id = 15, Name = "Штука", Abbreviation = "шт", OkeiCode = "796"},
@@ -124,6 +142,13 @@ public static class GetDefaultData
         new () { Id = 2, Name = "0%", Percent = 0, OverPercent = 1},
         new () { Id = 3, Name = "10%", Percent = 10, OverPercent = (decimal)1.1},
         new () { Id = 4, Name = "20%", Percent = 20, OverPercent = (decimal)1.2},
+    };
+
+
+    public static Currency[] DefaultCurrency() => new Currency[]
+    {
+        new () { Id = 1, Code = "810", Name = "РОССИЙСКИЙ РУБЛЬ", Abbreviated = "RUR"},
+        new () { Id = 2, Code = "840", Name = "ДОЛЛАР США", Abbreviated = "USD"},
     };
 
     public static AccountingPlan[] DefaultAccountingPlans()=> new AccountingPlan[]
@@ -386,19 +411,20 @@ public static class GetDefaultData
     
     public static BasisPayment[] DefaultBasisPayment() => new BasisPayment[]
     {
-        new () { Id = 1, Code = "ТП", Name = "Платежи текущего года"},
-        new () { Id = 2, Code = "ЗД", Name = "Погашение задолженности, по истекшим налоговым, расчетным (отчетным) периодам, " +
+        new () { Id = 1, Code = "0", Name = "НЕ УКАЗАНО"},
+        new () { Id = 2, Code = "ТП", Name = "Платежи текущего года"},
+        new () { Id = 3, Code = "ЗД", Name = "Погашение задолженности, по истекшим налоговым, расчетным (отчетным) периодам, " +
                                              "в том числе добровольное"},
-        new () { Id = 3, Code = "РС", Name = "Погашение рассроченной задолженности"},
-        new () { Id = 4, Code = "ОТ", Name = "Погашение отсроченной задолженности" },
-        new () { Id = 5, Code = "РТ", Name = "Погашение реструктурируемой задолженности"},
-        new () { Id = 6, Code = "ПБ", Name = "Погашение должником задолженности в ходе процедур, применяемых в деле о банкротстве"},
-        new () { Id = 7, Code = "ИН", Name = "Погашение инвестиционного налогового кредита"},
-        new () { Id = 8, Code = "ТЛ", Name = "Погашение учредителем (участником) должника, " +
+        new () { Id = 4, Code = "РС", Name = "Погашение рассроченной задолженности"},
+        new () { Id = 5, Code = "ОТ", Name = "Погашение отсроченной задолженности" },
+        new () { Id = 6, Code = "РТ", Name = "Погашение реструктурируемой задолженности"},
+        new () { Id = 7, Code = "ПБ", Name = "Погашение должником задолженности в ходе процедур, применяемых в деле о банкротстве"},
+        new () { Id = 8, Code = "ИН", Name = "Погашение инвестиционного налогового кредита"},
+        new () { Id = 9, Code = "ТЛ", Name = "Погашение учредителем (участником) должника, " +
                                              "собственником имущества должника - унитарного предприятия или третьим лицом " +
                                              "требований к должнику об уплате обязательных платежей в ходе процедур, " +
                                              "применяемых в деле о банкротстве"},
-        new () { Id = 9, Code = "ЗТ", Name = "Погашение текущей задолженности в ходе процедур, применяемых в деле о банкротстве"}
+        new () { Id = 10, Code = "ЗТ", Name = "Погашение текущей задолженности в ходе процедур, применяемых в деле о банкротстве"}
     };
 
 
@@ -470,4 +496,13 @@ public static class GetDefaultData
         new () { Id = 11,  Name = "Уплата налогов за сотрудника", IsEnabled = true},
         new () { Id = 12,  Name = "Прочее платежи", IsEnabled = true}
     };
+
+    public static TypeCommitment[] DefaultTypeCommitment() => new TypeCommitment[]
+    {
+        new () { Id = 1,  Name = "Налог"},
+        new () { Id = 2,  Name = "Пени"},
+        new () { Id = 3,  Name = "Проценты"},
+        new () { Id = 4,  Name = "Штраф"},
+    };
+
 }

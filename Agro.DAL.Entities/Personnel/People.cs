@@ -37,8 +37,8 @@ public class People : Entity
     public string? Snils { get => _snils; set => Set(ref _snils, value); }
 
     /// <summary>Документ удостоверяющий личность</summary>
-    private ObservableCollection<Document>? _documents = new();
-    public ObservableCollection<Document>? Documents { get => _documents; set => Set(ref _documents, value); }
+    private ObservableCollection<IdentityDocument>? _documents = new();
+    public ObservableCollection<IdentityDocument>? Documents { get => _documents; set => Set(ref _documents, value); }
 
     private ObservableCollection<Employee> _employees = null!;
     public ObservableCollection<Employee> Employees { get => _employees; set => Set(ref _employees, value); }

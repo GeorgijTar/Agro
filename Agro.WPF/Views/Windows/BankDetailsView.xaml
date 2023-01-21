@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
+        xmlns:currency = "clr-namespace:Agro.DAL.Entities.Bank.Base;assembly=Agro.DAL.Entities"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="360" Width="500"
+        Title="{Binding Title}" Height="360" Width="580"
         DataContext="{Binding BankDetailsModel, Source={StaticResource Locator}}"
         WindowStartupLocation="CenterOwner"
         x:Name="MyWindow" WindowStyle="ToolWindow">
@@ -39,34 +40,53 @@
             <RowDefinition Height="85*"/>
             <RowDefinition Height="15*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" Margin="5">
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="100"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Наименование:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-            <TextBox Grid.Column="1" VerticalAlignment="Center"  Grid.ColumnSpan="4" Margin="5,0"
+            <TextBox  Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"  Grid.ColumnSpan="4" Margin="5,5"
                      Text="{Binding BankDetails.Title}"/>
-            <TextBlock Grid.Row="1" Text="Расчетный счет:" 
+            <TextBlock Grid.Column="0" Grid.Row="1" Text="Расчетный счет:" 
                        VerticalAlignment="Center" HorizontalAlignment="Right"/>
-            <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Grid.ColumnSpan="2" 
-                     MaxLength="20" Margin="5,0" Text="{Binding BankDetails.Bs}"/>
+            <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"  Width="170"
+                     MaxLength="20" Margin="5,5" Text="{Binding BankDetails.Bs}"/>
+            <CheckBox Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="5,0"
+                      Content="Основной" 
+                      IsChecked="{Binding BankDetails.IsMain, 
+                UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            <StackPanel Grid.Row="1" Grid.Column="4" Orientation="Horizontal">
+                <TextBlock Text="Валюта" VerticalAlignment="Center"/>
+                <ComboBox Width="100" VerticalAlignment="Center" Margin="5,0"
+                          ItemsSource="{Binding Currencies}"
+                          SelectedItem="{Binding BankDetails.Currency}"
+                          SelectedIndex="0">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type currency:Currency}">
+                            <TextBlock Text="{Binding Abbreviated}"></TextBlock>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+
+                </ComboBox>
+            </StackPanel>
+
             <TextBlock Grid.Column="0" Grid.Row="2" Text="БИК:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-            <TextBox Grid.Row="2" Grid.Column="1" MaxLength="9" Margin="9,0,1,0" VerticalAlignment="Center"
+            <TextBox Grid.Row="2" Grid.Column="1" MaxLength="9" Margin="5,05" VerticalAlignment="Center"
                      Text="{Binding BankDetails.Bik, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             <TextBlock Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3" Text="{Binding Message}" 
                        VerticalAlignment="Center" Margin="8,0" Foreground="Red"/>
@@ -74,13 +94,13 @@
                        VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="2" Margin="5"
                      Text="{Binding BankDetails.NameBank}"/>
-            <TextBlock Grid.Row="5"  Text="Город:" TextWrapping="Wrap" 
+            <TextBlock Grid.Column="0" Grid.Row="5"  Text="Город:" TextWrapping="Wrap" 
                        VerticalAlignment="Center" HorizontalAlignment="Right"/>
-            <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"  Margin="5,0" 
+            <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"  Margin="5,5" 
                      VerticalAlignment="Center" Text="{Binding BankDetails.City}"/>
-            <TextBlock Grid.Row="6" Text="Корреспондент. счет:" 
+            <TextBlock Grid.Column="0" Grid.Row="6" Text="Корреспондент. счет:" 
                        TextWrapping="Wrap" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-            <TextBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,0" VerticalAlignment="Center"
+            <TextBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,5" VerticalAlignment="Center"
                      Text="{Binding BankDetails.Ks}" MaxLength="20"/>
             <TextBlock Grid.Row="7" Grid.RowSpan="2" Text="Примечание:" TextWrapping="Wrap" 
                        VerticalAlignment="Center" HorizontalAlignment="Right"/>

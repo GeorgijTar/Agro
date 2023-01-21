@@ -10,7 +10,9 @@ using Agro.DAL.Entities;
 using Agro.DAL.Entities.Counter;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
+using Agro.WPF.ViewModels.Bank.Pay;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.ViewModels.Coming;
 using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.ViewModels.InvoiceVM;
 using Agro.WPF.Views.Windows;
@@ -49,9 +51,6 @@ public class ContractorsViewModel : ViewModel
     private ObservableCollection<TypeDoc>? _types;
     public ObservableCollection<TypeDoc>? Types { get=>_types; set=>Set(ref _types, value); }
     public ObservableCollection<Counterparty> Counterparties { get; set; } = new ();
-
-    private object? _modelSender;
-    public object? ModelSender { get => _modelSender; set => Set(ref _modelSender, value); }
 
     private Counterparty? _counterparty;
     public Counterparty? SelectedCounterparty
@@ -119,7 +118,7 @@ public class ContractorsViewModel : ViewModel
         set
         {
             Set(ref _nameFilter, value);
-            CollectionView.Filter = FilterByName;
+            CollectionView!.Filter = FilterByName;
         }
     }
 
@@ -128,7 +127,7 @@ public class ContractorsViewModel : ViewModel
         set
         {
             Set(ref _innFilter, value);
-            CollectionView.Filter = FilterByInn;
+            CollectionView!.Filter = FilterByInn;
         } }
 
 
@@ -186,7 +185,7 @@ public class ContractorsViewModel : ViewModel
     {
         CounterpartyView counterpartyView = new();
         var mod = counterpartyView.DataContext as CounterpartyViewModel;
-        mod.Title = "Редактирование контрагента";
+        mod!.Title = "Редактирование контрагента";
         mod.Counterparty = SelectedCounterparty!;
         mod.CounterpartyEvent += GridRefreh;
         counterpartyView.Show();
@@ -235,19 +234,30 @@ public class ContractorsViewModel : ViewModel
 
     private void OnSelectRowCommandExecuted(object obj)
     {
-        if (ModelSender != null!)
+        if (SenderModel != null!)
         {
 
-
-            if (ModelSender is InvoiceViewModel invoice)
+            if (SenderModel is InvoiceViewModel invoice)
             {
-                invoice.Invoice.Counterparty = SelectedCounterparty!;
+                invoice.Invoice!.Counterparty = SelectedCounterparty!;
             }
 
-            if (ModelSender is ContractViewModel contract)
+            if (SenderModel is ContractViewModel contract)
             {
                 contract.Contract.Counterparty = SelectedCounterparty!;
             }
+
+            if (SenderModel is PaymentOrderViewModel paymentOrder)
+            {
+                paymentOrder.PaymentOrder!.Counterparty= SelectedCounterparty!;
+                paymentOrder.BankDetailsCounterparty = SelectedCounterparty!.BankDetails!;
+            }
+
+            if (SenderModel is ComingTmcViewModel coming)
+            {
+                coming.ComingTmc.Counterparty= SelectedCounterparty!;
+            }
+
 
             var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
             if (window != null!)
@@ -280,20 +290,20 @@ public class ContractorsViewModel : ViewModel
         return true;
     }
 
-    private bool FilterByGroup(object count)
-    {
-        if (SelectedGroup!.Id != 0)
-        {
+    //private bool FilterByGroup(object count)
+    //{
+    //    if (SelectedGroup!.Id != 0)
+    //    {
 
-        }
+    //    }
 
-        if (!string.IsNullOrEmpty(InnFilter))
-        {
-            Counterparty? dto = count as Counterparty;
-            return dto!.Group!.Name.Contains(SelectedGroup!.Name);
-        }
-        return true;
-    }
+    //    if (!string.IsNullOrEmpty(InnFilter))
+    //    {
+    //        Counterparty? dto = count as Counterparty;
+    //        return dto!.Group!.Name.Contains(SelectedGroup!.Name);
+    //    }
+    //    return true;
+    //}
 
 
     #endregion

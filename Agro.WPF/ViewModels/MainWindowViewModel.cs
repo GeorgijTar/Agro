@@ -1,20 +1,23 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using Agro.DAL.Entities;
-using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
+using Agro.WPF.Helpers;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.ViewModels.Coming;
 using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.ViewModels.InvoiceVM;
 using Agro.WPF.Views;
+using Agro.WPF.Views.Pages.Bank.BaseView;
+using Agro.WPF.Views.Pages.Bank.Pay;
+using Agro.WPF.Views.Pages.Coming;
+using Agro.WPF.Views.Pages.Contract;
+using Agro.WPF.Views.Pages.Invoice;
 using Agro.WPF.Views.Windows;
 using Agro.WPF.Views.Windows.Agronomy;
-using Agro.WPF.Views.Windows.Bank.BaseView;
-using Agro.WPF.Views.Windows.Contract;
 using Agro.WPF.Views.Windows.Invoice;
 using Agro.WPF.Views.Windows.Personnel;
 using Agro.WPF.Views.Windows.Storage;
@@ -25,42 +28,27 @@ namespace Agro.WPF.ViewModels;
 
 public class MainWindowViewModel : ViewModel
 {
-    private readonly IBaseRepository<TypeDoc> _typeRepository;
-    private readonly IBaseRepository<Status> _statusRepository;
-    private readonly IBaseRepository<GroupDoc> _groupRepository;
+    private readonly IHelperNavigation _helperNavigation;
+
 
     private User? _user;
     public User? User { get => _user; set => Set(ref _user, value); }
 
     public IEnumerable<Status>? Status { get; set; }
     public IEnumerable<GroupDoc>? Groups { get; set; }
+    public IEnumerable<TypeDoc>? Types { get; set; }
 
-    private IEnumerable<TypeDoc>? _types = new HashSet<TypeDoc>();
-    public IEnumerable<TypeDoc>? Types { get => _types; set => Set(ref _types, value); }
-
-    public MainWindowViewModel(
-        IBaseRepository<TypeDoc> typeRepository,
-        IBaseRepository<Status> statusRepository,
-        IBaseRepository<GroupDoc> groupRepository)
+    public MainWindowViewModel(IHelperNavigation helperNavigation)
     {
-        _typeRepository = typeRepository;
-        _statusRepository = statusRepository;
-        _groupRepository = groupRepository;
+        _helperNavigation = helperNavigation;
+        Title= $"Агро-2022 версия: {Assembly.GetExecutingAssembly().GetName().Version!.ToString()}";
         User = Application.Current.Properties["User"] as User;
-        LoadManualData();
+        Groups = Application.Current.Properties["Groups"] as IEnumerable<GroupDoc>;
+
+        
     }
 
-    private async void LoadManualData()
-    {
-        Types = await _typeRepository.GetAllAsync();
-        Status = await _statusRepository.GetAllAsync();
-        Groups = await _groupRepository.GetAllAsync();
-    }
-
-    private string _title = $"Агро-2022 версия: {Assembly.GetExecutingAssembly().GetName().Version!.ToString()}";
-    public string Title { get => _title; set => Set(ref _title, value); }
-
-
+  
     #region Command
 
     #region ShowContractors
@@ -117,11 +105,10 @@ public class MainWindowViewModel : ViewModel
 
     private void OnShowInvoicesOutCommandExecuted(object obj)
     {
-        InvoicesView view = new();
-        var model = view.DataContext as InvoicesViewModel;
-        model!.TypeInvoice = Types!.FirstOrDefault(t=>t.Id==8)!;
-        model.Title = $"{model.TypeInvoice.Name} счета";
-        view.Show();
+        var page = new InvoicesPage();
+        var model = page.DataContext as InvoicesViewModel;
+        model!.TypeInvoice = (Application.Current.Properties["Types"] as IEnumerable<TypeDoc>)!.FirstOrDefault(t=>t.Id==8)!;
+        _helperNavigation.OpenPage(page, $"{model.TypeInvoice.Name} счета");
     }
 
     #endregion
@@ -135,11 +122,11 @@ public class MainWindowViewModel : ViewModel
 
     private void OnShowInvoicesInCommandExecuted(object obj)
     {
-        InvoicesView view = new();
-        var model = view.DataContext as InvoicesViewModel;
-        model!.TypeInvoice = Types!.FirstOrDefault(t => t.Id == 9)!;
-        model.Title = $"{model.TypeInvoice.Name} счета";
-        view.Show();
+        var page = new InvoicesPage();
+        var model = page.DataContext as InvoicesViewModel;
+        model!.TypeInvoice = (Application.Current.Properties["Types"] as IEnumerable<TypeDoc>)!.FirstOrDefault(t => t.Id == 9)!;
+        _helperNavigation.OpenPage(page, $"{model.TypeInvoice.Name} счета");
+
     }
 
     #endregion
@@ -309,7 +296,6 @@ public class MainWindowViewModel : ViewModel
 
     #endregion
 
-
     #region ShowComingFields
 
     private ICommand? _showComingFields;
@@ -364,10 +350,10 @@ public class MainWindowViewModel : ViewModel
 
     private void OnShowContractsInExecuted(object obj)
     {
-        var view = new ContractsView();
-        var model = view.DataContext as ContractsViewModel;
+        var page = new ContractsPage();
+       var model = page.DataContext as ContractsViewModel;
         model!.GroupId = 21;
-       view.Show();
+        _helperNavigation.OpenPage(page,"Реестр договоров на закупку");
     }
 
     #endregion
@@ -381,10 +367,10 @@ public class MainWindowViewModel : ViewModel
 
     private void OnShowContractsOutExecuted(object obj)
     {
-        var view = new ContractsView();
-        var model = view.DataContext as ContractsViewModel;
+        var page = new ContractsPage();
+        var model = page.DataContext as ContractsViewModel;
         model!.GroupId = 22;
-        view.Show();
+        _helperNavigation.OpenPage(page, "Реестр договоров на реализацию");
     }
 
     #endregion
@@ -398,17 +384,10 @@ public class MainWindowViewModel : ViewModel
 
     private void OnShowRegistryInvoiceExecuted(object obj)
     {
-        if (Application.Current.Windows.OfType<RegistryInvoicesView>().Any())
-        {
-            var r = Application.Current.Windows.OfType<RegistryInvoicesView>().ToArray();
-            r[0].Window.Visibility = Visibility.Visible;
-            r[0].Window.Focusable = true;
-        }
-        else
-        {
-            var view = new RegistryInvoicesView();
-            view.Show();
-        }
+        var page = new RegistryInvoicesPage();
+        var model = page.DataContext as RegistryInvoicesViewModel;
+        model!.TabItem= _helperNavigation.OpenPage(page, "Реестр счетов на оплату");
+        
     }
 
     #endregion
@@ -422,11 +401,44 @@ public class MainWindowViewModel : ViewModel
 
     private void OnShowExpenditureItemsViewExecuted(object obj)
     {
-        var view = new ExpenditureItemsView();
-        view.Show();
+        _helperNavigation.OpenPage(new ExpenditureItemsPage(), "Справочник статей расходов и доходов ДДС");
     }
 
     #endregion
+
+    #region ShowPaymentsOrder
+
+    private ICommand? _showPaymentsOrderCommand;
+
+    public ICommand ShowPaymentsOrderCommand =>
+        _showPaymentsOrderCommand
+            ??= new RelayCommand(OnShowPaymentsOrderExecuted);
+
+    private void OnShowPaymentsOrderExecuted(object obj)
+    {
+        _helperNavigation.OpenPage(new PaymentsOrdersPage(), "Реестр платежных поручений");
+    }
+    #endregion
+
+    #region ShowComingTMC
+
+    private ICommand? _showComingTmcCommand;
+
+    public ICommand ShowComingTmcCommand => _showComingTmcCommand
+        ??= new RelayCommand(OnShowComingTmcExecuted);
+
+    private void OnShowComingTmcExecuted(object obj)
+    {
+        var page = new ComingsTmcPage();
+        var model = page.DataContext as ComingsTmcViewModel;
+        model!.TabItem = _helperNavigation.OpenPage(page, "Реестр документов поступления");
+    }
+
+    #endregion
+
+
     #endregion
 
 }
+
+

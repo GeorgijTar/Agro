@@ -22,4 +22,7 @@ public interface IInvoiceRepository<Invoice> : IBaseRepository<Invoice> where In
     public Task<Invoice> SetStatusAsync(int idStatus, Invoice item, CancellationToken cancel = default);
     
     public Task<decimal>? GetLimit(CancellationToken cancel = default);
+
+    public Task<IEnumerable<Invoice>?> GetAllNoTrackingAsync(CancellationToken cancel = default);
+    
 }

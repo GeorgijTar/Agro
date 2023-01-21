@@ -8,7 +8,9 @@
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="650" Width="1000"
+        x:Name="CoynterpartiesWindow"
         DataContext="{Binding InvoicesModel, Source={StaticResource Locator}}">
+        
     <Window.Resources>
         <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
             <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
@@ -139,7 +141,8 @@
                     </StackPanel>
                     <TextBlock Grid.Row="0" Grid.Column="5" Text="Статус:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
                     <ComboBox Grid.Row="0" Grid.Column="6" Margin="5,0" VerticalAlignment="Center" 
-                              ItemsSource="{Binding StatusColl}" SelectedItem="{Binding StatusFilter}"
+                              ItemsSource="{Binding StatusColl}" 
+                              SelectedItem="{Binding StatusFilter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                               SelectedIndex="0"/>
 
                     <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Grid.RowSpan="2" Header="Контрагеньт" >

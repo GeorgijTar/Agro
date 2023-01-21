@@ -9,6 +9,7 @@ using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.Views.Windows;
 using Agro.DAL.Entities.Accounting;
+using Agro.WPF.ViewModels.Coming;
 
 namespace Agro.WPF.ViewModels.Accounting;
 
@@ -36,8 +37,7 @@ public class AccountingPlansViewModel : ViewModel
         SelectAccountingPlan = new AccountingPlan();
         LoadData();
     }
-    public object? SenderModel { get; set; }
-    public string? SenderField { get; set; }
+   public string? SenderField { get; set; }
 
     private async void LoadData()
     {
@@ -171,11 +171,35 @@ public class AccountingPlansViewModel : ViewModel
                 {
                     model.RulesAccounting.AccountingPlanNds = SelectAccountingPlan!;
                 }
-
-                var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
-                if (window != null!)
-                    window.Close();
             }
+
+            if (SenderModel is ComingTmcPositionViewModel positionViewModel)
+            {
+                if (SenderField == "AccountingAccount")
+                {
+                    positionViewModel.ComingTmcPosition.AccountingAccount = SelectAccountingPlan!;
+                }
+                else if (SenderField == "AccountingAccountNds")
+                {
+                    positionViewModel.ComingTmcPosition.AccountingAccountNds = SelectAccountingPlan!;
+                }
+            }
+
+            if (SenderModel is ComingTmcCalculationsViewModel calculations)
+            {
+                if (SenderField == "AccountingPlan")
+                {
+                    calculations.ComingTmcCalculations.AccountingPlan = SelectAccountingPlan!;
+                }
+                else if (SenderField== "AccountingPlanPrepayment")
+                {
+                    calculations.ComingTmcCalculations.AccountingPlanPrepayment= SelectAccountingPlan!;
+                }
+                
+            }
+            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+            if (window != null!)
+                window.Close();
         }
     }
 

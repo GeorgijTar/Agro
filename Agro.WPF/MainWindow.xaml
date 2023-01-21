@@ -10,7 +10,44 @@
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="650" Width="1150" WindowState="Maximized" 
-        DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}">
+        DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}"
+        x:Name="MyWindow">
+    <Window.Resources>
+        <Style TargetType="TabItem">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Width" Value="auto"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border Background="LightGray">
+                            <ContentPresenter Content="{Binding Path=Header, RelativeSource={RelativeSource FindAncestor,AncestorType=TabItem,AncestorLevel=1}}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="true">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Border Background="LightBlue" CornerRadius="5,5,0,0">
+                                    <!--<Border.Clip>
+                                        <PathGeometry Figures="M 0,0 C 145,0 50,5 170,20 H0,0"/>
+                                    </Border.Clip>-->
+
+                                    <ContentPresenter
+                                        Content="{Binding Path=Header, RelativeSource={RelativeSource FindAncestor, AncestorType=TabItem, AncestorLevel=1}}"
+                                        Width="auto"
+                                        HorizontalAlignment="Left"
+                                        Margin="5,2,0,0"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -55,12 +92,13 @@
                         <MenuItem.Icon>
                             <fa5:SvgAwesome Icon="Solid_PiggyBank" Foreground="DarkBlue"/>
                         </MenuItem.Icon>
-                        <MenuItem Header="Платежные поручения">
+                        <MenuItem Header="Платежные поручения" Command="{Binding ShowPaymentsOrderCommand}"
+                                  CommandParameter="{Binding ElementName=MyWindow}">
                             <MenuItem.Icon>
                                 <fa5:ImageAwesome Icon="Solid_RubleSign" Foreground="DarkBlue"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Операчии размещения">
+                        <MenuItem Header="Операции размещения">
                             <MenuItem.Icon>
                                 <fa5:ImageAwesome Icon="Solid_MoneyBill" Foreground="DarkBlue"/> 
                             </MenuItem.Icon>
@@ -78,6 +116,17 @@
                         </MenuItem>
                     </MenuItem>
                    </MenuItem>
+                <MenuItem Header="Склад">
+                    <MenuItem.Icon>
+                        <fa5:ImageAwesome Height="32" Icon="Solid_Boxes" Foreground="DarkBlue"/>
+                    </MenuItem.Icon>
+                    <MenuItem Header="Поступление от контрагентов" 
+                              Command="{Binding ShowComingTmcCommand}">
+                        <MenuItem.Icon>
+                            <fa5:ImageAwesome Height="32" Icon="Solid_ArrowDown" Foreground="DarkBlue"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
                 <MenuItem Header="Кадры">
                     <MenuItem.Icon>
                         <fa5:ImageAwesome Height="32" Icon="Solid_PeopleArrows" Foreground="DarkBlue"/>
@@ -153,8 +202,9 @@
         </Grid>
 
         <Grid Row="1" Height ="auto">
-            <ContentControl FontSize="12" Name="ContentControl"/>
-            <wpf:LoadingIndicator  Name="prgTest"  SpeedRatio="2" IsActive="False" Style="{DynamicResource LoadingIndicatorArcsRingStyle}"/>
+            <TabControl x:Name="TabControl">
+
+            </TabControl>
         </Grid>
         <ToolBarTray Grid.Row="2">
             <ToolBar HorizontalAlignment="Center">

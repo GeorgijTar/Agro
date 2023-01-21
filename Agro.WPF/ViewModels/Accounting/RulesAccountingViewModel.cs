@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using Agro.DAL.Entities;
 using Agro.DAL.Entities.Accounting;
+using Agro.DAL.Entities.Warehouse.Coming;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
@@ -25,12 +26,15 @@ public class RulesAccountingViewModel : ViewModel
     private RulesAccounting _rulesAccounting = new();
     public RulesAccounting RulesAccounting { get => _rulesAccounting; set => Set(ref _rulesAccounting, value); }
 
-    public object SenderModel { get; set; } = null!;
-
-    private IEnumerable<AccountingPlan>? _accountingPlans;
+  private IEnumerable<AccountingPlan>? _accountingPlans;
 
     public IEnumerable<AccountingPlan>? AccountingPlans
     { get => _accountingPlans; set => Set(ref _accountingPlans, value); }
+
+
+    private IEnumerable<AccountingMethodNds>? _accountingMethodNds = null!;
+    public IEnumerable<AccountingMethodNds>? AccountingMethodNds 
+    { get => _accountingMethodNds; set => Set(ref _accountingMethodNds, value); }
 
     public RulesAccountingViewModel(
         IBaseRepository<AccountingPlan> accountingRepository,
@@ -41,8 +45,10 @@ public class RulesAccountingViewModel : ViewModel
         LoadData();
     }
 
+
     private async void LoadData()
     {
+        AccountingMethodNds= Application.Current.Properties["AccountingMethodNds"] as IEnumerable<AccountingMethodNds>;
         var acc = await _accountingRepository.GetAllAsync();
         acc = acc!.Where(a => a.IsSelect).Where(a => a.StatusId == 5).ToArray();
         AccountingPlans = acc;

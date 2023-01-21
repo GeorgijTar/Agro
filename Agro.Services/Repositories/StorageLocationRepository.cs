@@ -16,18 +16,18 @@ public class StorageLocationRepository : IBaseRepository<StorageLocation>
     public async Task<IEnumerable<StorageLocation>?> GetAllAsync(CancellationToken cancel = default)
     {
         return await _db.StorageLocations
-            .Include(s=>s.Storekeepers).ThenInclude(s=>s.Employee).ThenInclude(e=>e.People)
-            .Include(s => s.Storekeepers).ThenInclude(s => s.Employee).ThenInclude(e => e.Division)
-            .Include(s => s.Storekeepers).ThenInclude(s => s.Employee).ThenInclude(e => e.Post)
+            .Include(s=>s.Storekeepers)!.ThenInclude(s=>s.Employee).ThenInclude(e=>e.People)
+            .Include(s => s.Storekeepers)!.ThenInclude(s => s.Employee).ThenInclude(e => e.Division)
+            .Include(s => s.Storekeepers)!.ThenInclude(s => s.Employee).ThenInclude(e => e.Post)
             .ToArrayAsync(cancel).ConfigureAwait(false);
     }
 
     public async Task<StorageLocation?> GetByIdAsync(int id, CancellationToken cancel = default)
     {
         return await _db.StorageLocations
-            .Include(s => s.Storekeepers).ThenInclude(s => s.Employee).ThenInclude(e => e.People)
-            .Include(s => s.Storekeepers).ThenInclude(s => s.Employee).ThenInclude(e => e.Division)
-            .Include(s => s.Storekeepers).ThenInclude(s => s.Employee).ThenInclude(e => e.Post)
+            .Include(s => s.Storekeepers)!.ThenInclude(s => s.Employee).ThenInclude(e => e.People)
+            .Include(s => s.Storekeepers)!.ThenInclude(s => s.Employee).ThenInclude(e => e.Division)
+            .Include(s => s.Storekeepers)!.ThenInclude(s => s.Employee).ThenInclude(e => e.Post)
             .FirstOrDefaultAsync(s=>s.Id==id, cancel).ConfigureAwait(false);
     }
 

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Agro.DAL.Entities;
+using Agro.DAL.Entities.Bank.Base;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
@@ -20,13 +22,6 @@ public class BankDetailsViewModel : ViewModel
     private readonly IBaseRepository<BankDetails> _repository;
     private readonly IBaseRepository<Status> _statusRepository;
 
-    private string _title = "Добавление банковских реквизитов";
-    public string Title
-    {
-        get => _title;
-        set => Set(ref _title, value);
-    }
-
     private BankDetails _details = new();
     public BankDetails BankDetails { get => _details; set => Set(ref _details, value); }
 
@@ -36,6 +31,8 @@ public class BankDetailsViewModel : ViewModel
     private string _message = null!;
     public string Message { get => _message; set => Set(ref _message, value); }
 
+    private IEnumerable<Currency>? _currencies;
+    public IEnumerable<Currency>? Currencies { get => _currencies; set => Set(ref _currencies, value); }
     #endregion
 
     public BankDetailsViewModel(IBaseRepository<BankDetails> repository, IBaseRepository<Status> statusRepository)
@@ -44,6 +41,7 @@ public class BankDetailsViewModel : ViewModel
         _statusRepository = statusRepository;
         Title = "Банковские реквизиты контрагента";
         BankDetails.PropertyChanged += GetBank;
+        Currencies = Application.Current.Properties["Currency"] as IEnumerable<Currency>;
     }
 
     private async void GetBank(object? sender, PropertyChangedEventArgs e)

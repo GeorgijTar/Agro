@@ -16,6 +16,10 @@ public class DebitingAccount : Entity
     private Status? _status;
     public Status? Status { get => _status; set => Set(ref _status, value); }
 
+    /// <summary> Дата списания с расчетного счета </summary>
+    private DateTime _date;
+    public DateTime Date { get => _date; set => Set(ref _date, value); }
+
     /// <summary> Тип операции
     /// (оплата контрагенту, оплата налогов, оплата штрафов и т.д.)
     /// </summary>

@@ -140,12 +140,25 @@ public class InvoiceRepository : IInvoiceRepository<Invoice>
 
     public async Task<Invoice> SetStatusAsync(int idStatus, Invoice item, CancellationToken cancel = default)
     {
-        item.Status = await _db.Statuses.FirstOrDefaultAsync(s => s.Id == idStatus, cancel).ConfigureAwait(false);
-        return await UpdateAsync(item, cancel).ConfigureAwait(false);
+        var invoice = await _db.Invoices.FirstOrDefaultAsync(i => i.Id == item.Id, cancel).ConfigureAwait(false);
+        if (invoice! == null!)
+            throw new ArgumentNullException(nameof(item));
+        invoice.Status = await _db.Statuses.FirstOrDefaultAsync(s => s.Id == idStatus, cancel);
+        return await UpdateAsync(invoice, cancel).ConfigureAwait(false);
     }
 
     public async Task<decimal>? GetLimit(CancellationToken cancel = default)
     {
         return await _db.Sittings.Select(s => s.LimitAmountInvoice).FirstAsync(cancel);
+    }
+
+    public async Task<IEnumerable<Invoice>?> GetAllNoTrackingAsync(CancellationToken cancel = default)
+    {
+        return await _db.Invoices
+            .AsNoTracking()
+            .Include(i => i.Status!)
+            .Include(i => i.Counterparty).ThenInclude(c => c.ActualAddress!)
+            .Include(i => i.Type)
+            .ToArrayAsync(cancel).ConfigureAwait(false);
     }
 }

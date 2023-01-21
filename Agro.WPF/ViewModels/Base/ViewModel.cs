@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Controls;
 
 namespace Agro.WPF.ViewModels.Base
 {
@@ -8,6 +9,8 @@ namespace Agro.WPF.ViewModels.Base
         private string _title = null!;
         public string Title { get => _title; set => Set(ref _title, value); }
 
+        public TabItem TabItem { get; set; } = null!;
+       
         public object SenderModel = null!;
 
         public event PropertyChangedEventHandler? PropertyChanged;

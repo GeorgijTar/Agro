@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -10,10 +9,11 @@ using Agro.DAL.Entities;
 using Agro.Interfaces.Base.Repositories;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
+using Agro.WPF.Helpers;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.ViewModels.InvoiceVM;
-using Agro.WPF.Views.Windows.Contract;
-using Microsoft.Extensions.Logging;
+using Agro.WPF.Views.Pages.Contract;
+using Notification.Wpf;
 
 namespace Agro.WPF.ViewModels.Contract;
 
@@ -21,15 +21,20 @@ public class ContractsViewModel : ViewModel
 {
     private readonly IContractRepository<DAL.Entities.Counter.Contract> _contractRepository;
     private readonly IBaseRepository<Status> _statusRepository;
-    private readonly ILogger<ContractsViewModel> _logger;
-    
+    private readonly IHelperNavigation _helperNavigation;
+    private readonly INotificationManager _notificationManager;
+
     public int GroupId { get; set; }
-    public ContractsViewModel(IContractRepository<DAL.Entities.Counter.Contract> contractRepository, 
-        IBaseRepository<Status> statusRepository, ILogger<ContractsViewModel> logger)
+    public ContractsViewModel(
+        IContractRepository<DAL.Entities.Counter.Contract> contractRepository,
+        IBaseRepository<Status> statusRepository,
+        IHelperNavigation helperNavigation,
+        INotificationManager notificationManager)
     {
         _contractRepository = contractRepository;
         _statusRepository = statusRepository;
-        _logger = logger;
+        _helperNavigation = helperNavigation;
+        _notificationManager = notificationManager;
         Title = "Реестр контрактов";
         LoadData();
         this.PropertyChanged += ModelChanged;
@@ -43,18 +48,14 @@ public class ContractsViewModel : ViewModel
         {
             contracts = contracts!.Where(c => c.Group.Id == GroupId).ToList();
         }
-        
+
         foreach (var contract in contracts!)
         {
             Contracts.Add(contract);
         }
         CollectionView = CollectionViewSource.GetDefaultView(Contracts);
-       
+
     }
-
-    private string _title = null!;
-    public string Title { get => _title; set => Set(ref _title, value); }
-
 
     private ObservableCollection<DAL.Entities.Counter.Contract> _contracts = new();
     public ObservableCollection<DAL.Entities.Counter.Contract> Contracts { get => _contracts; set => Set(ref _contracts, value); }
@@ -64,20 +65,19 @@ public class ContractsViewModel : ViewModel
     public DAL.Entities.Counter.Contract SelectedContract { get => _selectedContract; set => Set(ref _selectedContract, value); }
 
     private ICollectionView _collectionView = null!;
-    public ICollectionView CollectionView 
-    { 
-        get => _collectionView; set
+    public ICollectionView CollectionView
     {
-        Set(ref _collectionView, value);
-        if (value != null!)
+        get => _collectionView; set
         {
-            if (!string.IsNullOrEmpty(InnFilter))
+            Set(ref _collectionView, value);
+            if (value != null!)
             {
-                CollectionView.Filter = FilterByInn;
+                if (!string.IsNullOrEmpty(InnFilter))
+                {
+                    CollectionView.Filter = FilterByInn;
+                }
             }
-
         }
-    }
     }
 
     private string _namefilter = null!;
@@ -85,12 +85,11 @@ public class ContractsViewModel : ViewModel
 
 
     private string _innFilter = null!;
-    public string InnFilter { get => _innFilter; set=> Set(ref _innFilter, value); }
+    public string InnFilter { get => _innFilter; set => Set(ref _innFilter, value); }
 
 
     private string _numberFilter = null!;
     public string NumberFilter { get => _numberFilter; set => Set(ref _numberFilter, value); }
-    public object SenderModel { get; set; } = null!;
 
     public void ModelChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -143,7 +142,7 @@ public class ContractsViewModel : ViewModel
         return true;
     }
 
-     #endregion
+    #endregion
 
     #region Commands
 
@@ -156,15 +155,15 @@ public class ContractsViewModel : ViewModel
 
     private void OnAddExecuted(object obj)
     {
-        var view = new ContractView();
-        var model = view.DataContext as ContractViewModel;
-        model!.SenderModel=this;
+        var page = new ContractPage();
+        var model = page.DataContext as ContractViewModel;
+        model!.SenderModel = this;
         model.Title = "Добавление нового договора";
         model.Contract = new DAL.Entities.Counter.Contract();
-        view.Show();
-        
+        model.TabItem = _helperNavigation.OpenPage(page, "Добовление нового договора");
+
     }
-    
+
     #endregion
 
     #region Edet
@@ -181,13 +180,14 @@ public class ContractsViewModel : ViewModel
 
     private void OnEdetExecuted(object obj)
     {
-        var view = new ContractView();
-        var model = view.DataContext as ContractViewModel;
+        var page = new ContractPage();
+        var model = page.DataContext as ContractViewModel;
         model!.SenderModel = this;
         model.IsEdete = true;
         model.Title = "Редактирование договора";
         model.Contract = SelectedContract;
-        view.Show();
+        model.TabItem= _helperNavigation.OpenPage(page,
+            $"Редактирование договора № {SelectedContract.Number} от {SelectedContract.Date.ToShortDateString()}");
     }
 
     #endregion
@@ -211,13 +211,23 @@ public class ContractsViewModel : ViewModel
             "Редактор документов", MessageBoxButton.YesNo);
         if (result == MessageBoxResult.Yes)
         {
-            SelectedContract.Status = await _statusRepository.GetByIdAsync(6);
-            await _contractRepository.UpdateAsync(SelectedContract);
-            Contracts.Remove(SelectedContract);
+            try
+            {
+                SelectedContract.Status = await _statusRepository.GetByIdAsync(6);
+                await _contractRepository.UpdateAsync(SelectedContract);
+                Contracts.Remove(SelectedContract);
+                _notificationManager.Show("Логер", "Договор успешно удален!", NotificationType.Information);
+            }
+            catch (Exception e)
+            {
+                _notificationManager.Show("Логер",
+                    $"Во время удаления договора произошла ошибка: {e.Message}", NotificationType.Error);
+            }
+
         }
 
-        
-        
+
+
     }
 
     #endregion
@@ -240,8 +250,8 @@ public class ContractsViewModel : ViewModel
         {
             if (SenderModel is InvoiceViewModel invoice)
             {
-                invoice.Invoice.Contract=SelectedContract;
-                if (SelectedContract.Specification!=null! && SelectedContract.Specification!.Count == 1)
+                invoice.Invoice!.Contract = SelectedContract;
+                if (SelectedContract.Specification != null! && SelectedContract.Specification!.Count == 1)
                 {
                     invoice.Invoice.Specification = SelectedContract.Specification![0];
                 }
@@ -251,11 +261,12 @@ public class ContractsViewModel : ViewModel
                     invoice.Invoice.BankDetails = SelectedContract.BankDetails;
                     invoice.Invoice.BankDetailsOrg = SelectedContract.BankDetailsOrg;
                 }
-
+                var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+                if (window != null!)
+                    window.Close();
+                return;
             }
-            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
-            if (window != null!)
-                window.Close();
+            _helperNavigation.ClosePage(TabItem);
         }
     }
 

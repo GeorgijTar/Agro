@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:Agro.WPF.Views.Windows.Accounting"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="200" Width="700"
+        Title="{Binding Title}" Height="250" Width="700"
         DataContext="{Binding RulesAccountingModel, Source={StaticResource Locator}}"
         x:Name="MyWindow">
     <Window.Resources>
@@ -40,6 +40,7 @@
             <RowDefinition/>
             <RowDefinition />
             <RowDefinition/>
+            <RowDefinition/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -47,7 +48,7 @@
             <ColumnDefinition Width="120*"/>
             <ColumnDefinition Width="60"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Right">
+        <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -97,6 +98,14 @@
                                         ShowSprCommand="{Binding ShowCommandNds}"
                                         ClearItemCommand="{Binding ClearAccNdsCommand}" 
                                         Margin="5,0"/>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Способ учета НДС:" 
+                   VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
+
+        <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="5,0"
+                  ItemsSource="{Binding AccountingMethodNds}" 
+                  SelectedItem="{Binding RulesAccounting.AccountingMethodNds}"
+                  SelectedIndex="0"/>
 
     </Grid>
 </Window>

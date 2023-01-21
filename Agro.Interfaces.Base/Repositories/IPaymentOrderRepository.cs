@@ -9,8 +9,9 @@ public interface IPaymentOrderRepository<PaymentOrder> : IBaseRepository<Payment
 {
     public Task<ICollection<PaymentOrder>?> GetAllNoTrackingAsync(CancellationToken cancel = default);
 
-    public Task<Status?> GetStatusByIdAsync(int id, CancellationToken cancel = default);
 
-    public Task<ICollection<TypeOperationPay>?> GetAllTypeOprrationPayAsync (CancellationToken cancel = default);
+    public Task<int> GetNumberAsync(CancellationToken cancel = default);
+
+
 }
 

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Agro.DAL.Entities;
+using Agro.DAL.Entities.Accounting;
 using Agro.DAL.Entities.Agronomy;
 using Agro.DAL.Entities.Bank.Base;
+using Agro.DAL.Entities.Bank.Pay;
 using Agro.DAL.Entities.CheckingCounterparty;
 using Agro.DAL.Entities.Counter;
 using Agro.DAL.Entities.InvoiceEntity;
@@ -9,19 +12,22 @@ using Agro.DAL.Entities.Organization;
 using Agro.DAL.Entities.Personnel;
 using Agro.DAL.Entities.Storage;
 using Agro.DAL.Entities.Warehouse;
+using Agro.DAL.Entities.Warehouse.Coming;
 using Agro.DAL.Entities.Weight;
 using Agro.DAL.MySql;
-using Agro.DAL.Sql;
-using Agro.DAL.SqLite;
 using Agro.Interfaces.Base.Repositories;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.Services.Repositories;
+using Agro.Services.Repositories.Bank;
+using Agro.Services.Repositories.References;
+using Agro.WPF.Helpers;
 using Agro.WPF.ViewModels;
 using Agro.WPF.ViewModels.Accounting;
 using Agro.WPF.ViewModels.Agronomy;
 using Agro.WPF.ViewModels.Auxiliary_windows;
 using Agro.WPF.ViewModels.Bank.BaseViewModel;
 using Agro.WPF.ViewModels.Bank.Pay;
+using Agro.WPF.ViewModels.Coming;
 using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.ViewModels.InvoiceVM;
 using Agro.WPF.ViewModels.Organization;
@@ -42,7 +48,30 @@ namespace Agro.WPF
         private static IHost? _hosting;
         public static IHost Hosting => _hosting ??= CreateHostBuilder(Environment.GetCommandLineArgs()).Build();
         public static IServiceProvider Services => Hosting.Services;
-        public User CurrentUser { get;  set; }
+
+        /// <summary> Глобальные переменные </summary>
+        public User? CurrentUser { get;  set; }
+
+        /// <summary> Глобальные статические справочники </summary>
+        public IEnumerable<TypeDoc>? Types { get; set; }
+        public IEnumerable<Status>? Status { get; set; }
+        public IEnumerable<GroupDoc>? Groups { get; set; }
+        public IEnumerable<TypeOperationPay> ? TypeOperation { get; set; }
+        public IEnumerable<BankDetails>? BankDetailsOrg { get; set; }
+        public Organization? Organization { get; set; }
+        public IEnumerable<TypePayment>? TypePayments { get; set; }
+        public IEnumerable<Nds>? Nds { get; set; }
+        public IEnumerable<BasisPayment>? BasisPayments { get; set; }
+        public IEnumerable<PayerStatus>? PayerStatus { get; set; }
+        public IEnumerable<OrderPayment>? OrderPayment { get; set; }
+        public IEnumerable<TypeTransactions>? TypeTransactions { get; set; }
+        public IEnumerable<StorageLocation>? StorageLocations { get; set; }
+        public IEnumerable<AccountingPlan>? AccountingPlans { get; set; }
+        public IEnumerable<Currency>? Currency { get; set; }
+        public IEnumerable<AccountingMethodNds>? AccountingMethodNds { get; set; }
+
+
+
         public static IHostBuilder CreateHostBuilder(string[] args) => 
             Host.CreateDefaultBuilder(args).ConfigureAppConfiguration(opt => opt.AddJsonFile(
                 "appsettings.json", false, true)).ConfigureServices(ConfigureServices);
@@ -56,15 +85,8 @@ namespace Agro.WPF
             {
                 default: throw new InvalidOperationException($"Тип БД {dbType} не поддерживается");
 
-                case "Sqlite":
-                    services.AddAgroDbSqlite(configuration.GetConnectionString("Sqlite"));
-                    break;
-
-                case "SqlServer":
-                    services.AddAgroDbSqlServer(configuration.GetConnectionString("SqlServer"));
-                    break;
                 case "MySql":
-                    services.AddAgroDbMySql(configuration.GetConnectionString("MySql"));
+                    services.AddAgroDbMySql(configuration.GetConnectionString("MySql")!);
                     break;
             }
             //Регистрация сервиса уведомлений
@@ -130,6 +152,11 @@ namespace Agro.WPF
             services.AddTransient<ExpenditureItemsViewModel>();
             services.AddTransient<ExpenditureItemViewModel>();
             services.AddTransient<PaymentOrdersViewModel>();
+            services.AddTransient<PaymentOrderViewModel>();
+            services.AddTransient<ComingsTmcViewModel>();
+            services.AddTransient<ComingTmcViewModel>();
+            services.AddTransient<ComingTmcPositionViewModel>();
+            services.AddTransient<ComingTmcCalculationsViewModel>();
 
 
             //Регистрация репозиториев
@@ -154,23 +181,13 @@ namespace Agro.WPF
             services.AddTransient(typeof(IRegistryInvoiceRepository<RegistryInvoice>), typeof(RegistryInvoiceRepository));
             services.AddTransient(typeof(ILoginRepository<User>), typeof(LoginRepository));
             services.AddTransient(typeof(IExpenditureItemRepository<ExpenditureItem>), typeof(ExpenditureItemRepository));
-         
+            services.AddTransient(typeof(IPaymentOrderRepository<PaymentOrder>), typeof(PaymentOrderRepository));
+            services.AddTransient<IReferencesRepository, ReferencesRepository>();
+            services.AddTransient(typeof(IComingTmcRepository<ComingTmc>), typeof(ComingTmcRepository));
 
 
-            // Регистрация мапера
-            //services.AddAutoMapper(
-            //        typeof(CounterpartyProfile), 
-            //        typeof(GroupProfile), 
-            //        typeof(TypeProfile), 
-            //        typeof(StatusProfile),
-            //        typeof(BankDetailsProfile),
-            //        typeof(ProductProfile),
-            //        typeof(UnitProfile),
-            //        typeof(NdsProfile),
-            //        typeof(AccountingPlanProfile),
-            //        typeof(InvoiceProfile)) // маппинг-профайлы передавать через запятую typeof(AppMappingProfile), typeof(MappingProfile2)
-            //    .AddScoped(typeof(IMapper<>), typeof(AutoMapperService<>))
-            //    .AddScoped(typeof(IMapper<,>), typeof(AutoMapperService<,>));
+            // Регистрация навигатора
+            services.AddTransient<IHelperNavigation, HelperNavigation>();
         }
     }
 }

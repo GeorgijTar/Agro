@@ -3,6 +3,7 @@ using Agro.WPF.ViewModels.Agronomy;
 using Agro.WPF.ViewModels.Auxiliary_windows;
 using Agro.WPF.ViewModels.Bank.BaseViewModel;
 using Agro.WPF.ViewModels.Bank.Pay;
+using Agro.WPF.ViewModels.Coming;
 using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.ViewModels.InvoiceVM;
 using Agro.WPF.ViewModels.Organization;
@@ -134,4 +135,15 @@ public class ViewModelLocator
 
     public PaymentOrdersViewModel PaymentOrdersModel =>App.Services.GetRequiredService<PaymentOrdersViewModel>();
 
+    public PaymentOrderViewModel PaymentOrderModel => App.Services.GetRequiredService<PaymentOrderViewModel>();
+
+    public ComingsTmcViewModel ComingsTmcModel => App.Services.GetRequiredService<ComingsTmcViewModel>();
+
+    public ComingTmcViewModel ComingTmcModel => App.Services.GetRequiredService<ComingTmcViewModel>();
+
+    public ComingTmcPositionViewModel ComingTmcPositionModel =>
+        App.Services.GetRequiredService<ComingTmcPositionViewModel>();
+
+    public ComingTmcCalculationsViewModel ComingTmcCalculationsModel =>
+        App.Services.GetRequiredService<ComingTmcCalculationsViewModel>();
 }

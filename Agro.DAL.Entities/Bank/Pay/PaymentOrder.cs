@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Agro.DAL.Entities.Accounting;
 using Agro.DAL.Entities.Base;
 using Agro.DAL.Entities.Counter;
 using Agro.DAL.Entities.InvoiceEntity;
+using Agro.DAL.Entities.TaxesType;
 
 namespace Agro.DAL.Entities.Bank.Pay;
 
@@ -21,9 +21,17 @@ public class PaymentOrder : Entity
     private TypeOperationPay _typeOperation = null!;
     public TypeOperationPay TypeOperation { get => _typeOperation; set => Set(ref _typeOperation, value); }
 
+    
+    private TaxesType.Taxes? _tax;
+    public TaxesType.Taxes? Tax { get => _tax; set => Set(ref _tax, value); }
+
+    /// <summary> Вид обязательства (Налог, пеня, штраф, проценты)) </summary>
+    private TypeCommitment? _typeCommitment = null!;
+    public TypeCommitment? TypeCommitment { get => _typeCommitment; set => Set(ref _typeCommitment, value); }
+
     /// <summary> Счет на оплату </summary>
-    private Invoice _invoice = null!;
-    public Invoice Invoice { get => _invoice; set => Set(ref _invoice, value); }
+    private Invoice? _invoice = null!;
+    public Invoice? Invoice { get => _invoice; set => Set(ref _invoice, value); }
 
     /// <summary> Ставка НДС</summary>
     private Nds _nds = null!;
@@ -32,6 +40,10 @@ public class PaymentOrder : Entity
     /// <summary>Сумма НДС</summary>
     private decimal _amountNds;
     public decimal AmountNds { get => _amountNds; set => Set(ref _amountNds, value); }
+
+    /// <summary> Примечание к платежному поручению </summary>
+    private string? _description;
+    public string? Description { get => _description; set => Set(ref _description, value); }
 
    
     #region Реквизиты платежного поручения по приложению № 1 Положения Банка России от 29 июня 2021 года N 762-П
@@ -69,8 +81,8 @@ public class PaymentOrder : Entity
     public Counterparty Counterparty { get => _counterparty; set => Set(ref _counterparty, value); }
     
     /// <summary> Вид операции (поле 18) </summary>
-    private string _typeTransactions = null!;
-    public string TypeTransactions { get => _typeTransactions; set => Set(ref _typeTransactions, value); }
+    private TypeTransactions _typeTransactions = null!;
+    public TypeTransactions TypeTransactions { get => _typeTransactions; set => Set(ref _typeTransactions, value); }
 
     /// <summary> Срок платежа (поле 19) (Реквизит не заполняется, если иное не установлено Банком России) </summary>
     private DateTime? _paymentTerm;
@@ -105,7 +117,7 @@ public class PaymentOrder : Entity
     public string? PaymentTerms { get => _paymentTerms; set => Set(ref _paymentTerms, value); }
 
     /// <summary> Срок для акцепта (поле 36) </summary>
-    private string? _deadlineAcceptance = null!;
+    private string? _deadlineAcceptance;
     public string? DeadlineAcceptance { get => _deadlineAcceptance; set => Set(ref _deadlineAcceptance, value); }
 
     /// <summary> Код выплат (поле 110)</summary>
@@ -125,7 +137,7 @@ public class PaymentOrder : Entity
     #region Реквизиты платежного поручения по Приказу Минфина России от 12.11.2013 N 107н (реквизиты бюджетного платежа)
 
     /// <summary> Статус плательщика (поле 101) </summary>
-    private PayerStatus? _payerStatus = null!;
+    private PayerStatus? _payerStatus;
     public PayerStatus? PayerStatus { get => _payerStatus; set => Set(ref _payerStatus, value); }
 
 
@@ -150,11 +162,11 @@ public class PaymentOrder : Entity
     public string? NumberDoc { get => _numberDoc; set => Set(ref _numberDoc, value); }
 
     /// <summary> Дата документа (поле 109) </summary>
-    private DateTime? _dateDoc;
-    public DateTime? DateDoc { get => _dateDoc; set => Set(ref _dateDoc, value); }
+    private string? _dateDoc;
+    public string? DateDoc { get => _dateDoc; set => Set(ref _dateDoc, value); }
 
     /// <summary> Тип платежа (поле 110) (НЕ ЗАПОЛНЯЕТСЯ)</summary>
-    private string? _nalogTypePayment = null!;
+    private string? _nalogTypePayment;
     public string? NalogTypePayment { get => _nalogTypePayment; set => Set(ref _nalogTypePayment, value); }
 
     #endregion

@@ -21,8 +21,8 @@ public class DocumentViewModel : ViewModel
     public string Title { get => _title; set => Set(ref _title, value); }
 
 
-    private Document _document = new();
-    public Document Document { get => _document; set => Set(ref _document, value); }
+    private IdentityDocument _document = new();
+    public IdentityDocument Document { get => _document; set => Set(ref _document, value); }
 
 
     private IEnumerable<TypeDoc> _types = null!;

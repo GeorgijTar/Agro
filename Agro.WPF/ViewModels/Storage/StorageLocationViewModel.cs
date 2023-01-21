@@ -69,6 +69,7 @@ public class StorageLocationViewModel : ViewModel
                 locationsViewModel.StorageLocations.Add(cult);
             }
         }
+        Application.Current.Properties["StorageLocations"] = await _storageLocationRepository.GetAllAsync();
 
         var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
         if (window != null!)
@@ -121,7 +122,7 @@ public class StorageLocationViewModel : ViewModel
         if (result == MessageBoxResult.Yes)
         {
             OfficialPerson.Status = await _statusRepository.GetByIdAsync(6);
-            StorageLocation.Storekeepers.Remove(OfficialPerson);
+            StorageLocation.Storekeepers!.Remove(OfficialPerson);
         }
     }
     

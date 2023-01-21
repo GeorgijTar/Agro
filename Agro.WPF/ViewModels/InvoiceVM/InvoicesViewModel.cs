@@ -4,18 +4,19 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using Agro.DAL.Entities;
 using Agro.Interfaces.Base.Repositories;
 using Agro.Interfaces.Base.Repositories.Base;
-using Agro.Services.Repositories;
 using Agro.WPF.Commands;
+using Agro.WPF.Helpers;
+using Agro.WPF.ViewModels.Bank.Pay;
 using Agro.WPF.ViewModels.Base;
-using Agro.WPF.Views.Windows;
+using Agro.WPF.Views.Pages.Invoice;
 using Agro.WPF.Views.Windows.Invoice;
 using Microsoft.Win32;
+using Notification.Wpf;
 using ReportExcelLib;
 
 namespace Agro.WPF.ViewModels.InvoiceVM;
@@ -24,9 +25,8 @@ public class InvoicesViewModel : ViewModel
 {
     private readonly IInvoiceRepository<DAL.Entities.InvoiceEntity.Invoice> _repository;
     private readonly IBaseRepository<Status> _statusRepository;
-
-    private string _title = "Счета";
-    public string Title { get => _title; set => Set(ref _title, value); }
+    private readonly IHelperNavigation _helperNavigation;
+    private readonly INotificationManager _notificationManager;
 
     private ObservableCollection<DAL.Entities.InvoiceEntity.Invoice> _invoices = new();
 
@@ -37,7 +37,16 @@ public class InvoicesViewModel : ViewModel
     public DAL.Entities.InvoiceEntity.Invoice SelectedInvoice { get => _selectedInvoice; set => Set(ref _selectedInvoice, value); }
 
     private TypeDoc _typeInvoice = new();
-    public TypeDoc TypeInvoice { get => _typeInvoice; set => Set(ref _typeInvoice, value); }
+    public TypeDoc TypeInvoice
+    {
+        get => _typeInvoice;
+        set
+        {
+            Set(ref _typeInvoice, value);
+            if (TypeInvoice.Id == 9)
+                VisibilityReestr = Visibility.Visible;
+        }
+    }
 
     private Visibility _visibilityButton = Visibility.Hidden;
     public Visibility VisibilityButton { get => _visibilityButton; set => Set(ref _visibilityButton, value); }
@@ -76,14 +85,26 @@ public class InvoicesViewModel : ViewModel
     public ObservableCollection<Status> StatusColl { get => _statusColl; set => Set(ref _statusColl, value); }
 
     private Status? _statusFilter;
-    public Status? StatusFilter { get => _statusFilter; set => Set(ref _statusFilter, value); }
 
-    private  decimal _limit;
+    public Status? StatusFilter
+    {
+        get => _statusFilter;
+        set => Set(ref _statusFilter, value);
+    }
 
-    public InvoicesViewModel(IInvoiceRepository<DAL.Entities.InvoiceEntity.Invoice> repository, IBaseRepository<Status> statusRepository)
+    private decimal _limit;
+
+    public InvoicesViewModel(
+        IInvoiceRepository<DAL.Entities.InvoiceEntity.Invoice> repository,
+        IBaseRepository<Status> statusRepository,
+        IHelperNavigation helperNavigation,
+        INotificationManager notificationManager)
     {
         _repository = repository;
         _statusRepository = statusRepository;
+        _helperNavigation = helperNavigation;
+        _notificationManager = notificationManager;
+        Title = "Реестр счетов";
         LoadData();
         CollectionView = CollectionViewSource.GetDefaultView(Invoices);
         PropertyChanged += ViewChanged;
@@ -118,19 +139,30 @@ public class InvoicesViewModel : ViewModel
     {
         _limit = await _repository.GetLimit()!;
         Invoices.Clear();
-        var invoices = await _repository.GetAllAsync();
+        var invoices = await _repository.GetAllNoTrackingAsync();
         invoices = invoices!.Where(x => x.Status!.Id != 6).Where(x => x.Type.Id == TypeInvoice.Id);
-        StatusColl.Add(new Status() { Id = 0, Name = "Все" });
-        var statuses = invoices!.Select(i => i.Status).Distinct().ToArray();
-        foreach (var statuse in statuses)
-        {
-            StatusColl.Add(statuse!);
-        }
-
-        foreach (var invoice in invoices!)
+        foreach (var invoice in invoices)
         {
             Invoices.Add(invoice);
         }
+        var statusTmp = StatusFilter;
+        StatusColl.Clear();
+        StatusColl.Add(new Status() { Id = 0, Name = "Все" });
+        var statuses = invoices.Select(i => i.Status).Distinct().ToArray();
+        foreach (var status in statuses)
+        {
+            StatusColl.Add(status!);
+        }
+
+        if (statusTmp! == null!)
+        {
+            StatusFilter = StatusColl[0];
+        }
+        else
+        {
+            StatusFilter = statusTmp;
+        }
+
 
         Nds = await _repository.GetAllNds();
     }
@@ -191,7 +223,7 @@ public class InvoicesViewModel : ViewModel
 
     #endregion
 
-   
+
 
     #region Commands
 
@@ -204,18 +236,19 @@ public class InvoicesViewModel : ViewModel
 
     private async void OnAddCommandExecuted(object obj)
     {
-        InvoiceView view = new();
-        InvoiceViewModel viewModel = (InvoiceViewModel)view.DataContext;
-        viewModel.Nds = Nds;
-        viewModel.BankDetailsOrg = await _repository.GetAllBankDetailsOrg();
-        viewModel.SenderModel = this;
-        viewModel.Invoice!.Type = TypeInvoice;
+        var page = new InvoicePage();
+        var model = page.DataContext as InvoiceViewModel;
+
+        model!.Nds = Nds;
+        model.SenderModel = this;
+        model.Invoice!.Type = TypeInvoice;
         if (TypeInvoice.Id == 8)
         {
-            viewModel.VisibilityNumeric = Visibility.Visible;
-            viewModel.VisibilityBankOrg = Visibility.Visible;
+            model.VisibilityNumeric = Visibility.Visible;
+            model.VisibilityBankOrg = Visibility.Visible;
         }
-        view.Show();
+
+        model.TabItem = _helperNavigation.OpenPage(page, $"Новый счет на оплату ({TypeInvoice.Name})");
     }
 
     #endregion
@@ -234,19 +267,18 @@ public class InvoicesViewModel : ViewModel
 
     private async void OnEditCommandExecuted(object obj)
     {
-        InvoiceView view = new();
-        InvoiceViewModel viewModel = (InvoiceViewModel)view.DataContext;
-        viewModel.BankDetailsOrg = await _repository.GetAllBankDetailsOrg();
-        viewModel.Nds = Nds;
-        viewModel.Invoice = await _repository.GetByIdAsync(SelectedInvoice.Id);
-        viewModel.IsEdit = true;
-        viewModel.SenderModel = this;
+        var page = new InvoicePage();
+        var model = page.DataContext as InvoiceViewModel;
+        model!.Nds = Nds;
+        model.Invoice = await _repository.GetByIdAsync(SelectedInvoice.Id);
+        model.IsEdit = true;
+        model.SenderModel = this;
         if (TypeInvoice.Id == 8)
         {
-            viewModel.VisibilityNumeric = Visibility.Visible;
-            viewModel.VisibilityBankOrg = Visibility.Visible;
+            model.VisibilityNumeric = Visibility.Visible;
+            model.VisibilityBankOrg = Visibility.Visible;
         }
-        view.Show();
+        model.TabItem = _helperNavigation.OpenPage(page, $"Редактирование счета на оплату ({TypeInvoice.Name}) № {SelectedInvoice.Number} от {SelectedInvoice.DateInvoice.ToShortDateString()}");
     }
 
     #endregion
@@ -265,7 +297,16 @@ public class InvoicesViewModel : ViewModel
 
     private async void OnDeleteExecuted(object obj)
     {
-       SelectedInvoice= await _repository.SetStatusAsync(6, SelectedInvoice);
+        try
+        {
+            SelectedInvoice = await _repository.SetStatusAsync(6, SelectedInvoice);
+            _notificationManager.Show("Логер", "Счет успешно удален!", NotificationType.Information);
+        }
+        catch (Exception e)
+        {
+            _notificationManager.Show("Логер", $"При удалении счета возникла ошибка: {e.Message}", NotificationType.Error);
+        }
+
     }
 
     #endregion
@@ -279,7 +320,7 @@ public class InvoicesViewModel : ViewModel
 
     private bool PrintCommandCanExecut(object arg)
     {
-        return SelectedInvoice!=null! && SelectedInvoice.Type.Id == 8;
+        return SelectedInvoice != null! && SelectedInvoice.Type.Id == 8;
     }
 
     private async void OnPrintCommandExecuted(object obj)
@@ -310,20 +351,53 @@ public class InvoicesViewModel : ViewModel
 
     private async void OnSelectRowExecuted(object obj)
     {
-        InvoiceView view = new();
-        InvoiceViewModel viewModel = (InvoiceViewModel)view.DataContext;
-        viewModel.Nds = Nds;
-        viewModel.BankDetailsOrg = await _repository.GetAllBankDetailsOrg();
-        viewModel.Invoice =  await _repository.GetByIdAsync(SelectedInvoice.Id);
-        viewModel.ButtonActivity = false;
-        viewModel.IsEdit = true;
-        viewModel.SenderModel = this;
-        if (TypeInvoice.Id == 8)
+
+
+        if (SenderModel != null!)
         {
-            viewModel.VisibilityNumeric = Visibility.Visible;
-            viewModel.VisibilityBankOrg = Visibility.Visible;
+            if (SenderModel is PaymentOrderViewModel paymentOrderViewModel)
+            {
+                try
+                {
+                    paymentOrderViewModel.PaymentOrder!.Invoice = (await _repository.GetByIdAsync(SelectedInvoice.Id))!;
+                    var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+                    if (window != null!)
+                        window.Close();
+                }
+                catch (Exception e)
+                {
+                    _notificationManager.Show("Логер", $"При вставке счета №{SelectedInvoice.Number} от {SelectedInvoice.DateInvoice.ToShortDateString()} возникла ошибка: {e.Message}", NotificationType.Error);
+                }
+
+            }
         }
-        view.Show();
+        else
+        {
+            try
+            {
+                var page = new InvoicePage();
+                var model = page.DataContext as InvoiceViewModel;
+                model!.Nds = Nds;
+                model.BankDetailsOrg = await _repository.GetAllBankDetailsOrg();
+                model.Invoice = await _repository.GetByIdAsync(SelectedInvoice.Id);
+                model.ButtonActivity = false;
+                model.IsEdit = true;
+                model.SenderModel = this;
+                if (TypeInvoice.Id == 8)
+                {
+                    model.VisibilityNumeric = Visibility.Visible;
+                    model.VisibilityBankOrg = Visibility.Visible;
+                }
+                model.TabItem = _helperNavigation.OpenPage(page, $"Счет на оплату ({TypeInvoice.Name}) № {SelectedInvoice.Number} от {SelectedInvoice.DateInvoice.ToShortDateString()}");
+            }
+            catch (Exception e)
+            {
+                _notificationManager.Show("Логер", $"При открытии счета №{SelectedInvoice.Number} от {SelectedInvoice.DateInvoice.ToShortDateString()} возникла ошибка: {e.Message}", NotificationType.Error);
+            }
+
+        }
+
+
     }
 
     #endregion
@@ -376,13 +450,25 @@ public class InvoicesViewModel : ViewModel
 
     private bool CanBillingExecuted(object arg)
     {
-        return SelectedInvoice != null! & SelectedInvoice!.Type.Id == 8 & SelectedInvoice.Status!.Id == 1;
+        return SelectedInvoice != null! && SelectedInvoice!.Type.Id == 8 && SelectedInvoice.Status!.Id == 1;
     }
 
     private async void OnBillingExecuted(object obj)
     {
-        SelectedInvoice.Status = await _statusRepository.GetByIdAsync(11);
-        await _repository.SaveAsync(SelectedInvoice);
+        try
+        {
+            SelectedInvoice.Status = (await _repository.SetStatusAsync(11, SelectedInvoice)).Status;
+            
+            _notificationManager.Show("Логер",
+                $"Статус счета успешно изменен на \"{SelectedInvoice.Status!.Name}\"",
+                NotificationType.Information);
+        }
+        catch (Exception e)
+        {
+            _notificationManager.Show("Логер",
+                $"При изменении статуса счета произошла ошибка: {e.Message}",
+                NotificationType.Error);
+        }
     }
 
     #endregion
@@ -398,20 +484,39 @@ public class InvoicesViewModel : ViewModel
 
     private bool CanAcceptanceExecuted(object arg)
     {
+
         return SelectedInvoice != null! && SelectedInvoice.Type.Id == 9 && SelectedInvoice.Status!.Id == 1;
+
+
+
     }
 
     private async void OnAcceptanceExecuted(object obj)
     {
-        
-        if (SelectedInvoice.TotalAmount > _limit)
+        try
         {
-            await _repository.SetStatusAsync(8, SelectedInvoice);
+
+            if (SelectedInvoice.TotalAmount > _limit)
+            {
+              SelectedInvoice.Status =  (await _repository.SetStatusAsync(8, SelectedInvoice)).Status;
+            }
+            else
+            {
+                SelectedInvoice.Status = (await _repository.SetStatusAsync(9, SelectedInvoice)).Status;
+            }
+           
+            _notificationManager.Show("Логер",
+                $"Статус счета успешно изменен на \"{SelectedInvoice.Status!.Name}\"",
+                NotificationType.Information);
         }
-        else
+        catch (Exception e)
         {
-           await _repository.SetStatusAsync(9, SelectedInvoice);
+            _notificationManager.Show("Логер",
+                $"При изменении статуса счета произошла ошибка: {e.Message}",
+                NotificationType.Error);
         }
+
+
     }
 
     #endregion
@@ -425,12 +530,24 @@ public class InvoicesViewModel : ViewModel
 
     private bool CanReturnExecuted(object arg)
     {
-        return SelectedInvoice.Status!.Id != 1 && SelectedInvoice.Status!.Id != 15;
+        return SelectedInvoice != null! && SelectedInvoice.Status!.Id != 1 && SelectedInvoice.Status!.Id != 15;
     }
 
     private async void OnReturnExecuted(object obj)
     {
-        await _repository.SetStatusAsync(1, SelectedInvoice);
+        try
+        {
+            SelectedInvoice.Status =(await _repository.SetStatusAsync(1, SelectedInvoice)).Status;
+            _notificationManager.Show("Логер",
+                $"Статус счета успешно изменен на \"{SelectedInvoice.Status!.Name}\"",
+                NotificationType.Information);
+        }
+        catch (Exception e)
+        {
+
+            _notificationManager.Show("Логер", $"При изменении статуса возникла ошибка: {e.Message}", NotificationType.Error);
+        }
+
     }
 
     #endregion

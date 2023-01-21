@@ -12,4 +12,9 @@ public class TypeOperationPay : Entity
 
     private bool _isEnabled;
     public bool IsEnabled { get => _isEnabled; set => Set(ref _isEnabled, value); }
+
+    public override string ToString()
+    {
+        return Name;
+    }
 }

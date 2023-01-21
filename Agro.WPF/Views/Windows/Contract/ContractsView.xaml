@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="{Binding Title}" Height="550" Width="1100" 
         DataContext="{Binding ContractsModel, Source={StaticResource Locator}}"
-        x:Name="ContractsWindow">
+        x:Name="ContractsWindow" ShowInTaskbar="False">
     <Window.Resources>
         <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
             <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">

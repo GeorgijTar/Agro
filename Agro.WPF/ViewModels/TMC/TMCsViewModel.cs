@@ -13,6 +13,7 @@ using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Agronomy;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.ViewModels.Coming;
 using Agro.WPF.ViewModels.Weight;
 using Agro.WPF.Views.Windows.Agronomy;
 using Agro.WPF.Views.Windows.TMC;
@@ -92,7 +93,7 @@ public class TmCsViewModel : ViewModel
         }
     }
 
-   #region Filteres
+    #region Filteres
 
     private bool FilterByName(object obj)
     {
@@ -125,7 +126,7 @@ public class TmCsViewModel : ViewModel
 
     private bool FilterByGroup(object obj)
     {
-        if (GroupFilter!=null!)
+        if (GroupFilter != null!)
         {
             Tmc? dto = obj as Tmc;
             return dto!.Group.Name.ToUpper().Contains(GroupFilter.Name.ToUpper());
@@ -235,7 +236,25 @@ public class TmCsViewModel : ViewModel
             {
 
             }
+            if (SenderModel is ComingTmcPositionViewModel positionViewModel)
+            {
+                positionViewModel.ComingTmcPosition.Tmc = Tmc;
+                positionViewModel.ComingTmcPosition.UnitOkei = Tmc.Unit;
+                if (Tmc.RulesAccountings!.Count == 1)
+                {
+                    var rulesAccounting = Tmc.RulesAccountings[0];
+                    positionViewModel.ComingTmcPosition.AccountingAccount = rulesAccounting.AccountingPlan;
+                    positionViewModel.ComingTmcPosition.AccountingAccountNds = rulesAccounting.AccountingPlanNds!;
+                    positionViewModel.ComingTmcPosition.AccountingMethodNds = rulesAccounting.AccountingMethodNds;
+                }
+            }
+
+            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+            if (window != null!)
+                window.Close();
         }
+
+
     }
 
     private ICommand? _showFieldsCommand;

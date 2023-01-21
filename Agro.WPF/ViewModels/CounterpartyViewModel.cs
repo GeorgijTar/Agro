@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -18,61 +19,41 @@ using static OfficeOpenXml.ExcelErrorValue;
 namespace Agro.WPF.ViewModels;
 public class CounterpartyViewModel : ViewModel
 {
-    private readonly IBaseRepository<GroupDoc> _groupRep;
-    private readonly IBaseRepository<TypeDoc> _typeRep;
     private readonly IBaseRepository<Counterparty> _counterpartyRepository;
     private readonly IBaseRepository<BankDetails> _bankDetailsRepository;
     private readonly IBaseRepository<Status> _statusRepository;
     private readonly ICheckCounterpartyRepository<CheckCounterparty> _checkCounterpartyRepository;
 
     public CounterpartyViewModel(
-        IBaseRepository<GroupDoc> groupRep,
-        IBaseRepository<TypeDoc> typeRep,
         IBaseRepository<Counterparty> counterpartyRepository,
         IBaseRepository<BankDetails> bankDetailsRepository,
         IBaseRepository<Status> statusRepository, 
         ICheckCounterpartyRepository<CheckCounterparty> checkCounterpartyRepository)
     {
-        _groupRep = groupRep;
-        _typeRep = typeRep;
         _counterpartyRepository = counterpartyRepository;
         _bankDetailsRepository = bankDetailsRepository;
         _statusRepository = statusRepository;
         _checkCounterpartyRepository = checkCounterpartyRepository;
         Title = "Новый контрагент";
-        LoadList();
+        Groups = (Application.Current.Properties["Groups"] as IEnumerable<GroupDoc>)!.Where(g =>
+            g.TypeApplication == "Контрагенты");
+        Types = (Application.Current.Properties["Types"] as IEnumerable<TypeDoc>)!.Where(g =>
+            g.TypeApplication == "Контрагенты");
     }
 
-    private async void LoadList()
-    {
-        var groups = await _groupRep.GetAllAsync();
-        groups = groups!.Where(g => g.TypeApplication == "Контрагенты").ToArray();
-
-        foreach (var group in groups)
-        {
-            Groups.Add(group);
-        }
-
-        var types = await _typeRep.GetAllAsync();
-        types = types!.Where(g => g.TypeApplication == "Контрагенты").ToArray();
-        foreach (var type in types)
-        {
-            Types.Add(type);
-        }
-    }
-
+   
     #region Property
 
     private string _title = "";
     public string Title { get => _title; set => Set(ref _title, value); }
 
 
-    private ObservableCollection<GroupDoc> _groups = new();
-    public ObservableCollection<GroupDoc> Groups { get => _groups; set => Set(ref _groups, value); }
+    private IEnumerable<GroupDoc>? _groups;
+    public IEnumerable<GroupDoc>? Groups { get => _groups; set => Set(ref _groups, value); }
 
 
-    private ObservableCollection<TypeDoc> _types = new();
-    public ObservableCollection<TypeDoc> Types { get => _types; set => Set(ref _types, value); }
+    private IEnumerable<TypeDoc>? _types;
+    public IEnumerable<TypeDoc>? Types { get => _types; set => Set(ref _types, value); }
 
 
     private Counterparty _counterparty = new();
@@ -121,8 +102,6 @@ public class CounterpartyViewModel : ViewModel
 
     private string _message =null!;
     public string Message { get => _message; set => Set(ref _message, value); }
-
-    public object SenderModel { get; set; }=null!;
 
     #endregion
 

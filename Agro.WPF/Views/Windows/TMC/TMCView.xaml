@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Agro.WPF.Views.Windows.TMC"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         mc:Ignorable="d"
-         Title="{Binding Title}" Height="250" Width="520"
+         Title="{Binding Title}" Height="250" Width="620"
         DataContext="{Binding TmcModel, Source={StaticResource Locator}}"
         x:Name="TrWindow" SizeToContent="Height">
     <Window.Resources>
@@ -129,9 +129,11 @@
                                 UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" CanUserAddRows="False" AutoGenerateColumns="False"
                       SelectedItem="{Binding RulesAccounting, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Описание" Width="200*" Binding="{Binding Description}"/>
-                            <DataGridTextColumn Header="Сч. учета" Width="100*" Binding="{Binding AccountingPlan.Code}"/>
-                            <DataGridTextColumn Header="Сч. учета НДС" Width="100*" Binding="{Binding AccountingPlanNds.Code}"/>
+                            <DataGridTextColumn Header="Статус" Width="100*" Binding="{Binding Status.Name}"/>
+                            <DataGridTextColumn Header="Описание" Width="180*" Binding="{Binding Description}"/>
+                            <DataGridTextColumn Header="Счет" Width="60*" Binding="{Binding AccountingPlan.Code}"/>
+                            <DataGridTextColumn Header="Счет НДС" Width="60*" Binding="{Binding AccountingPlanNds.Code}"/>
+                            <DataGridTextColumn Header="Учет НДС" Width="130*" Binding="{Binding  AccountingMethodNds.Name}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

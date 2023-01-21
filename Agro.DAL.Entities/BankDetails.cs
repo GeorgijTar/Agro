@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Agro.DAL.Entities.Bank.Base;
 using Agro.DAL.Entities.Base;
 using Agro.DAL.Entities.Counter;
 
@@ -42,6 +44,10 @@ public class BankDetails : Entity
     [Required, MaxLength(20)]
     public string Bs { get=>_bs; set=>Set(ref _bs, value); }
 
+    /// <summary> Валюта </summary>
+    private Currency _currency = null!;
+    public Currency Currency { get => _currency; set => Set(ref _currency, value); }
+
     /// <summary>БИК банка</summary>
     private string _bik =null!;
     [Required, MaxLength(9)]
@@ -56,7 +62,10 @@ public class BankDetails : Entity
     private string? _description;
     [MaxLength(225)]
     public string? Description { get=>_description; set=>Set(ref _description, value); }
-    
+
+    private bool _isMain;
+    public bool IsMain { get => _isMain; set => Set(ref _isMain, value); }
+
    public override string ToString() => $"{Bs} в {NameBank}";
 }
 
