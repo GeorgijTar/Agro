@@ -1,7 +1,6 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
@@ -11,11 +10,8 @@ using System.Windows.Input;
 using Agro.DAL.Entities;
 using Agro.DAL.Entities.Accounting;
 using Agro.DAL.Entities.Base;
-using Agro.DAL.Entities.InvoiceEntity;
-using Agro.DAL.Entities.Registers;
 using Agro.DAL.Entities.Warehouse.Coming;
 using Agro.Interfaces.Base.Repositories;
-using Agro.Services.Repositories;
 using Agro.WPF.Commands;
 using Agro.WPF.Helpers;
 using Agro.WPF.ViewModels.Base;
@@ -348,52 +344,66 @@ public class ComingTmcViewModel : ViewModel
 
     private async void OnSaveExecuted(object obj)
     {
-        var accountingCollection = new ObservableCollection<AccountingPlanRegister>();
-
         try
         {
-            if (ComingTmc.RegNumber == 0)
+            var closePeriod = await _comingTmcRepository.GetClosedPeriodAsync();
+            if (ComingTmc.RegDate <= closePeriod)
             {
-                ComingTmc.RegNumber = await _comingTmcRepository.GetRegNumberAsync();
+                MessageBox.Show("Дата регистрации документа попадает в закрытый период, измените дату регистрации");
+                return;
             }
 
-            if (ComingTmc.History != null) ComingTmc.History = new();
-            string action;
-            if (IsEdit)
+            var validComingTMC = Validation(ComingTmc);
+            if (HasCriticalErrors)
             {
-                action = "Изменение документа";
-            }
-            else
-            {
-                action = "Создание документа";
-            }
-            ComingTmc.History!.Add(new History()
-            {
-                EventDate = DateTime.Now,
-                EventHistory = action,
-                User = (Application.Current.Properties["CurrentUser"] as User)!
-            });
 
-            var coming = await _comingTmcRepository.SaveAsync(ComingTmc);
-            if (SenderModel != null!)
-            {
-                if (SenderModel is ComingsTmcViewModel comingsTmcModel)
+            }
+            else {
+                
+                if (validComingTMC.RegNumber == 0)
                 {
-                    var ind = comingsTmcModel.ComingsTmc.FirstOrDefault(c => c.Id == coming.Id);
-                    if (ind! == null!)
+                    validComingTMC.RegNumber = await _comingTmcRepository.GetRegNumberAsync();
+                }
+
+                if (validComingTMC.History != null) ComingTmc.History = new();
+                string action;
+                if (IsEdit)
+                {
+                    action = "Изменение документа";
+                }
+                else
+                {
+                    action = "Создание документа";
+                }
+
+                validComingTMC.History!.Add(new History()
+                {
+                    EventDate = DateTime.Now,
+                    EventHistory = action,
+                    User = (Application.Current.Properties["CurrentUser"] as User)!
+                });
+
+                var coming = await _comingTmcRepository.SaveAsync(validComingTMC);
+                if (SenderModel != null!)
+                {
+                    if (SenderModel is ComingsTmcViewModel comingsTmcModel)
                     {
-                        comingsTmcModel.ComingsTmc.Add(coming);
-                    }
-                    else
-                    {
-                        int i = comingsTmcModel.ComingsTmc.IndexOf(ind);
-                        comingsTmcModel.ComingsTmc[i] = coming;
+                        var ind = comingsTmcModel.ComingsTmc.FirstOrDefault(c => c.Id == coming.Id);
+                        if (ind! == null!)
+                        {
+                            comingsTmcModel.ComingsTmc.Add(coming);
+                        }
+                        else
+                        {
+                            int i = comingsTmcModel.ComingsTmc.IndexOf(ind);
+                            comingsTmcModel.ComingsTmc[i] = coming;
+                        }
                     }
                 }
-            }
 
-            _helperNavigation.ClosePage(TabItem);
-            _notificationManager.Show("Логер", "Документ успешно сохранен", NotificationType.Information);
+                _helperNavigation.ClosePage(TabItem);
+                _notificationManager.Show("Логер", "Документ успешно сохранен", NotificationType.Information);
+            }
         }
         catch (Exception e)
         {
@@ -493,7 +503,54 @@ public class ComingTmcViewModel : ViewModel
 
     #endregion
 
-    
+    #endregion
+
+    #region Валидация данных
+
+    /// <summary>
+    /// Метод проверки введенных пользователем данных
+    /// </summary>
+    /// <param name="comingTmc">Документ поступления</param>
+    /// <returns>Возвращается переланный документ</returns>
+    private ComingTmc Validation(ComingTmc comingTmc)
+    {
+        if (!comingTmc.Positions.Any())
+        {
+            AddError("Документ поступления не содержит ни обной позиции поступления!", true);
+        }
+        if (comingTmc.RegDate.Date.Month > DateTime.Now.Date.Month)
+        {
+            AddError("Вы пытаетесь зарегистрировать документ, месяцем, который еще не наступил, " +
+                     "возможно вы ввели не верную дату регистрации!", false);
+        }
+
+        if (string.IsNullOrEmpty(comingTmc.NumberDoc.Trim()))
+        {
+            AddError("Не указан номер документа поступления, " +
+                     "если в оригинальном документе не указан номер, введите в поле № документа \"б/н\"", true);
+        }
+        else
+        {
+            comingTmc.NumberDoc = comingTmc.NumberDoc.Trim();
+        }
+
+        if (comingTmc.Counterparty == null!)
+        {
+            AddError("В документе поступления не указан Контрагент", true);
+        }
+
+        if (comingTmc.TotalAmount == 0)
+        {
+            AddError("Сумма документе поступления не ножет быть равна нулю", true);
+        }
+
+        if (comingTmc.Note != null!)
+        {
+            comingTmc.Note = comingTmc.Note.Trim();
+        }
+
+      return comingTmc;
+    }
 
 
     #endregion

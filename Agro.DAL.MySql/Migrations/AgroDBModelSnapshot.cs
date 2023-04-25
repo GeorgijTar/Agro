@@ -16,7 +16,7 @@ namespace Agro.DAL.MySql.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.12")
+                .HasAnnotation("ProductVersion", "7.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Agro.DAL.Entities.Accounting.AccountingPlan", b =>
@@ -3529,6 +3529,26 @@ namespace Agro.DAL.MySql.Migrations
                     b.ToTable("LegalAddress");
                 });
 
+            modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.LicView", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LicenseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ViewLic")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LicenseId");
+
+                    b.ToTable("LicViews");
+                });
+
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.License", b =>
                 {
                     b.Property<int>("Id")
@@ -3559,26 +3579,6 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("DataUlId");
 
                     b.ToTable("Licenses");
-                });
-
-            modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.LicView", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("LicenseId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ViewLic")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LicenseId");
-
-                    b.ToTable("LicViews");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.Likved", b =>
@@ -4467,6 +4467,9 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<int?>("ComingTmcId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("DecommissioningTmcId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("EventDate")
                         .HasColumnType("datetime(6)");
 
@@ -4483,6 +4486,8 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ComingTmcId");
+
+                    b.HasIndex("DecommissioningTmcId");
 
                     b.HasIndex("InvoiceId");
 
@@ -5183,7 +5188,7 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<int>("ComingTmcId")
+                    b.Property<int?>("ComingTmcId")
                         .HasColumnType("int");
 
                     b.Property<string>("ContaAction")
@@ -5207,6 +5212,9 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<int>("DebitId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("DecommissioningTmcId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ComingTmcId");
@@ -5214,6 +5222,8 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("CreditId");
 
                     b.HasIndex("DebitId");
+
+                    b.HasIndex("DecommissioningTmcId");
 
                     b.ToTable("AccountingPlanRegisters");
                 });
@@ -5230,7 +5240,7 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<decimal>("AmountNds")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<int>("ComingTmcId")
+                    b.Property<int?>("ComingTmcId")
                         .HasColumnType("int");
 
                     b.Property<int>("CreditId")
@@ -5240,6 +5250,9 @@ namespace Agro.DAL.MySql.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("DebitId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DecommissioningTmcId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -5270,6 +5283,8 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("CreditId");
 
                     b.HasIndex("DebitId");
+
+                    b.HasIndex("DecommissioningTmcId");
 
                     b.HasIndex("StorageLocationId");
 
@@ -5535,21 +5550,6 @@ namespace Agro.DAL.MySql.Migrations
                     b.ToTable("Kbk");
                 });
 
-            modelBuilder.Entity("Agro.DAL.Entities.TaxesType.Taxes", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Taxes");
-                });
-
             modelBuilder.Entity("Agro.DAL.Entities.TaxesType.TaxKbk", b =>
                 {
                     b.Property<int>("Id")
@@ -5574,6 +5574,21 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("TypeCommitmentId");
 
                     b.ToTable("TaxKbk");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.TaxesType.Taxes", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Taxes");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.TaxesType.TypeCommitment", b =>
@@ -5787,6 +5802,18 @@ namespace Agro.DAL.MySql.Migrations
                             Id = 26,
                             Name = "Расход",
                             TypeApplication = "ТМЦ"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Name = "Списание",
+                            TypeApplication = "ДокументСписанияТМЦ"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            Name = "Стронирование списания",
+                            TypeApplication = "ДокументСписанияТМЦ"
                         });
                 });
 
@@ -6177,6 +6204,221 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("InvoiceFacturs");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Decommissioning.DecommissioningTmc", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AccountingPlanId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("DecommissioningStornoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MolId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PurposeExpenditureId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StorekeeperId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeDocId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WriteOffObjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountingPlanId");
+
+                    b.HasIndex("DecommissioningStornoId");
+
+                    b.HasIndex("MolId");
+
+                    b.HasIndex("PurposeExpenditureId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("StorekeeperId");
+
+                    b.HasIndex("TypeDocId");
+
+                    b.HasIndex("WriteOffObjectId");
+
+                    b.ToTable("DecommissioningTmc");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Decommissioning.GroupObject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("GroupObjects");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Decommissioning.PositionDecommissioningTmc", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AccountingPlanId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("DecommissioningTmcId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("char(36)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("StorageLocationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TmcId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UnitOkeiId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountingPlanId");
+
+                    b.HasIndex("DecommissioningTmcId");
+
+                    b.HasIndex("StorageLocationId");
+
+                    b.HasIndex("TmcId");
+
+                    b.HasIndex("UnitOkeiId");
+
+                    b.ToTable("PositionDecommissioningTmc");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Decommissioning.PurposeExpenditure", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AccountingPlanId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountingPlanId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("PurposeExpenditures");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Decommissioning.TypeObject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("TypesObject");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Decommissioning.WriteOffObject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("GroupObjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("InvNumber")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RegNumber")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeObjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupObjectId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("TypeObjectId");
+
+                    b.ToTable("WriteOffObjects");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Tmc", b =>
@@ -7218,6 +7460,13 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("Share");
                 });
 
+            modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.LicView", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.License", null)
+                        .WithMany("LicView")
+                        .HasForeignKey("LicenseId");
+                });
+
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.License", b =>
                 {
                     b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.DataIp", null)
@@ -7227,13 +7476,6 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.DataUl", null)
                         .WithMany("Licenses")
                         .HasForeignKey("DataUlId");
-                });
-
-            modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.LicView", b =>
-                {
-                    b.HasOne("Agro.DAL.Entities.CheckingCounterparty.Components.License", null)
-                        .WithMany("LicView")
-                        .HasForeignKey("LicenseId");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.ModeNalog", b =>
@@ -7450,6 +7692,10 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasOne("Agro.DAL.Entities.Warehouse.Coming.ComingTmc", null)
                         .WithMany("History")
                         .HasForeignKey("ComingTmcId");
+
+                    b.HasOne("Agro.DAL.Entities.Warehouse.Decommissioning.DecommissioningTmc", null)
+                        .WithMany("History")
+                        .HasForeignKey("DecommissioningTmcId");
 
                     b.HasOne("Agro.DAL.Entities.InvoiceEntity.Invoice", null)
                         .WithMany("History")
@@ -7841,9 +8087,7 @@ namespace Agro.DAL.MySql.Migrations
                 {
                     b.HasOne("Agro.DAL.Entities.Warehouse.Coming.ComingTmc", "ComingTmc")
                         .WithMany("AccountingPlanRegisters")
-                        .HasForeignKey("ComingTmcId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ComingTmcId");
 
                     b.HasOne("Agro.DAL.Entities.Accounting.AccountingPlan", "Credit")
                         .WithMany()
@@ -7856,21 +8100,25 @@ namespace Agro.DAL.MySql.Migrations
                         .HasForeignKey("DebitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Warehouse.Decommissioning.DecommissioningTmc", "DecommissioningTmc")
+                        .WithMany("AccountingPlanRegisters")
+                        .HasForeignKey("DecommissioningTmcId");
 
                     b.Navigation("ComingTmc");
 
                     b.Navigation("Credit");
 
                     b.Navigation("Debit");
+
+                    b.Navigation("DecommissioningTmc");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Registers.TmcRegister", b =>
                 {
                     b.HasOne("Agro.DAL.Entities.Warehouse.Coming.ComingTmc", "ComingTmc")
                         .WithMany("TmcRegisters")
-                        .HasForeignKey("ComingTmcId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ComingTmcId");
 
                     b.HasOne("Agro.DAL.Entities.Accounting.AccountingPlan", "Credit")
                         .WithMany()
@@ -7883,6 +8131,10 @@ namespace Agro.DAL.MySql.Migrations
                         .HasForeignKey("DebitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Warehouse.Decommissioning.DecommissioningTmc", "DecommissioningTmc")
+                        .WithMany("TmcRegisters")
+                        .HasForeignKey("DecommissioningTmcId");
 
                     b.HasOne("Agro.DAL.Entities.Storage.StorageLocation", "StorageLocation")
                         .WithMany()
@@ -7913,6 +8165,8 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("Credit");
 
                     b.Navigation("Debit");
+
+                    b.Navigation("DecommissioningTmc");
 
                     b.Navigation("StorageLocation");
 
@@ -8103,6 +8357,178 @@ namespace Agro.DAL.MySql.Migrations
                         .HasForeignKey("StatusId");
 
                     b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Decommissioning.DecommissioningTmc", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Accounting.AccountingPlan", "AccountingPlan")
+                        .WithMany()
+                        .HasForeignKey("AccountingPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Warehouse.Decommissioning.DecommissioningTmc", "DecommissioningStorno")
+                        .WithMany()
+                        .HasForeignKey("DecommissioningStornoId");
+
+                    b.HasOne("Agro.DAL.Entities.Personnel.Employee", "Mol")
+                        .WithMany()
+                        .HasForeignKey("MolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Warehouse.Decommissioning.PurposeExpenditure", "PurposeExpenditure")
+                        .WithMany()
+                        .HasForeignKey("PurposeExpenditureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.HasOne("Agro.DAL.Entities.Personnel.Employee", "Storekeeper")
+                        .WithMany()
+                        .HasForeignKey("StorekeeperId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.TypeDoc", "TypeDoc")
+                        .WithMany()
+                        .HasForeignKey("TypeDocId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Warehouse.Decommissioning.WriteOffObject", "WriteOffObject")
+                        .WithMany()
+                        .HasForeignKey("WriteOffObjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccountingPlan");
+
+                    b.Navigation("DecommissioningStorno");
+
+                    b.Navigation("Mol");
+
+                    b.Navigation("PurposeExpenditure");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("Storekeeper");
+
+                    b.Navigation("TypeDoc");
+
+                    b.Navigation("WriteOffObject");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Decommissioning.GroupObject", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Decommissioning.PositionDecommissioningTmc", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Accounting.AccountingPlan", "AccountingPlan")
+                        .WithMany()
+                        .HasForeignKey("AccountingPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Warehouse.Decommissioning.DecommissioningTmc", "DecommissioningTmc")
+                        .WithMany("Positions")
+                        .HasForeignKey("DecommissioningTmcId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Storage.StorageLocation", "StorageLocation")
+                        .WithMany()
+                        .HasForeignKey("StorageLocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Warehouse.Tmc", "Tmc")
+                        .WithMany()
+                        .HasForeignKey("TmcId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.UnitOkei", "UnitOkei")
+                        .WithMany()
+                        .HasForeignKey("UnitOkeiId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccountingPlan");
+
+                    b.Navigation("DecommissioningTmc");
+
+                    b.Navigation("StorageLocation");
+
+                    b.Navigation("Tmc");
+
+                    b.Navigation("UnitOkei");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Decommissioning.PurposeExpenditure", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Accounting.AccountingPlan", "AccountingPlan")
+                        .WithMany()
+                        .HasForeignKey("AccountingPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccountingPlan");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Decommissioning.TypeObject", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Decommissioning.WriteOffObject", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Warehouse.Decommissioning.GroupObject", "GroupObject")
+                        .WithMany()
+                        .HasForeignKey("GroupObjectId");
+
+                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Warehouse.Decommissioning.TypeObject", "TypeObject")
+                        .WithMany()
+                        .HasForeignKey("TypeObjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GroupObject");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("TypeObject");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Tmc", b =>
@@ -8444,6 +8870,17 @@ namespace Agro.DAL.MySql.Migrations
             modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Coming.InvoiceFactur", b =>
                 {
                     b.Navigation("ComingTmc");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Decommissioning.DecommissioningTmc", b =>
+                {
+                    b.Navigation("AccountingPlanRegisters");
+
+                    b.Navigation("History");
+
+                    b.Navigation("Positions");
+
+                    b.Navigation("TmcRegisters");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Tmc", b =>

@@ -56,4 +56,9 @@ public class StorageLocationRepository : IBaseRepository<StorageLocation>
     {
         throw new NotImplementedException();
     }
+
+    public Task<DateTime> GetClosedPeriodAsync(CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -72,7 +72,7 @@ public class ComingsTmcViewModel : ViewModel
         }
         catch (Exception e)
         {
-            _notificationManager.Show("Логер", $"При загрузке данны возникла ошибка: {e.Message}", NotificationType.Error);
+            _notificationManager.Show("Логер", $"При загрузке данныx возникла ошибка: {e.Message}", NotificationType.Error);
 
         }
 
@@ -91,7 +91,7 @@ public class ComingsTmcViewModel : ViewModel
         set
         {
             Set(ref _dateDocOn, value);
-            CollectionView.Filter = FilterByDateDoc;
+            if (CollectionView != null!) CollectionView.Filter = FilterByDateDoc;
         }
     }
 
@@ -114,7 +114,7 @@ public class ComingsTmcViewModel : ViewModel
         set
         {
             Set(ref _dateDocOff, value);
-            CollectionView.Filter = FilterByDateDoc;
+            if (CollectionView != null!) CollectionView.Filter = FilterByDateDoc;
         }
     }
 
@@ -126,7 +126,7 @@ public class ComingsTmcViewModel : ViewModel
         set
         {
             Set(ref _dateRegOn, value);
-            CollectionView.Filter = FilterByDateReg;
+            if (CollectionView != null!) CollectionView.Filter = FilterByDateReg;
         }
     }
 
@@ -148,7 +148,7 @@ public class ComingsTmcViewModel : ViewModel
         set
         {
             Set(ref _dateRegOff, value);
-            CollectionView.Filter = FilterByDateReg;
+            if (CollectionView != null!) CollectionView.Filter = FilterByDateReg;
         }
     }
 
@@ -160,7 +160,7 @@ public class ComingsTmcViewModel : ViewModel
         set
         {
             Set(ref _numberDoc, value);
-            CollectionView.Filter = FilterByNumber;
+            if (CollectionView != null!) CollectionView.Filter = FilterByNumber;
         }
     }
 
@@ -182,7 +182,7 @@ public class ComingsTmcViewModel : ViewModel
         set
         {
             Set(ref _inn, value);
-            CollectionView.Filter = FilterByInn;
+            if (CollectionView != null!) CollectionView.Filter = FilterByInn;
         }
     }
 
@@ -205,7 +205,7 @@ public class ComingsTmcViewModel : ViewModel
         set
         {
             Set(ref _counterpartyName, value);
-            CollectionView.Filter = FilterByName;
+            if (CollectionView != null!) CollectionView.Filter = FilterByName;
         }
     }
 
@@ -228,8 +228,27 @@ public class ComingsTmcViewModel : ViewModel
     public Status Status
     {
         get => _status;
-        set { Set(ref _status, value); }
+        set
+        {
+            Set(ref _status, value);
+            if(CollectionView!=null!) {CollectionView.Filter = FilterByStatus;}
+           
+        }
     }
+
+    private bool FilterByStatus(object obj)
+    {
+        if (Status!=null!)
+        {
+            if (Status.Id == 0) return true;
+
+            var dto = obj as ComingTmc;
+            return dto!.Status!.Id==Status.Id;
+        }
+        return true;
+    }
+
+
 
     #endregion
 
@@ -426,25 +445,15 @@ public class ComingsTmcViewModel : ViewModel
         try
         {
             var coming = await _comingTmcRepository.GetByIdAsync(SelectedComingTmc.Id);
-            //foreach (var tmcRegister in coming!.TmcRegisters!)
-            //{
-            //   await _comingTmcRepository.DeleteTmcRegister(tmcRegister.Id);
-            //    coming!.TmcRegisters!.Remove(tmcRegister);
-            //}
-
-            //foreach (var planRegister in coming!.AccountingPlanRegisters!)
-            //{
-            //   await _comingTmcRepository.DeleteAccountingRegister(planRegister.Id);
-            //    coming!.AccountingPlanRegisters!.Remove(planRegister);
-            //}
+           
             if (coming!.TmcRegisters != null)
             {
-                coming.TmcRegisters.Clear();
+              await _comingTmcRepository.DeleteTmcRegisterRangePlanAsync(coming.TmcRegisters);
             }
 
             if (coming.AccountingPlanRegisters != null)
             {
-                coming.AccountingPlanRegisters.Clear();
+                await _comingTmcRepository.DeleteAccountingRegisterRangePlanAsync(coming.AccountingPlanRegisters);
             }
             
             coming.Status=(Application.Current.Properties["Status"] as IEnumerable<Status>)!.FirstOrDefault(s => s.Id == 1);

@@ -61,4 +61,9 @@ public class EmployeeRepository : IBaseRepository<Employee>
     {
         throw new NotImplementedException();
     }
+
+    public Task<DateTime> GetClosedPeriodAsync(CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -1,5 +1,4 @@
-﻿using System.Data;
-using Agro.DAL;
+﻿using Agro.DAL;
 using Agro.DAL.Entities.CheckingCounterparty;
 using Agro.Interfaces.Base.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -102,6 +101,11 @@ public class CheckCounterpartyRepository : ICheckCounterpartyRepository<CheckCou
     }
 
     public Task<bool> DeleteByIdAsync(int id, CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<DateTime> GetClosedPeriodAsync(CancellationToken cancel = default)
     {
         throw new NotImplementedException();
     }

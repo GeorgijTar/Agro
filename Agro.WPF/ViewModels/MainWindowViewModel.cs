@@ -9,19 +9,24 @@ using Agro.WPF.Helpers;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.ViewModels.Coming;
 using Agro.WPF.ViewModels.Contract;
+using Agro.WPF.ViewModels.Decommissioning;
 using Agro.WPF.ViewModels.InvoiceVM;
+using Agro.WPF.ViewModels.TMC;
 using Agro.WPF.Views;
 using Agro.WPF.Views.Pages.Bank.BaseView;
 using Agro.WPF.Views.Pages.Bank.Pay;
 using Agro.WPF.Views.Pages.Coming;
 using Agro.WPF.Views.Pages.Contract;
+using Agro.WPF.Views.Pages.Decommissioning;
 using Agro.WPF.Views.Pages.Invoice;
+using Agro.WPF.Views.Pages.Tmc;
 using Agro.WPF.Views.Windows;
 using Agro.WPF.Views.Windows.Agronomy;
 using Agro.WPF.Views.Windows.Invoice;
 using Agro.WPF.Views.Windows.Personnel;
 using Agro.WPF.Views.Windows.Storage;
 using Agro.WPF.Views.Windows.TMC;
+using Agro.WPF.Views.Windows.Warehouse;
 using Agro.WPF.Views.Windows.Weight;
 
 namespace Agro.WPF.ViewModels;
@@ -436,6 +441,53 @@ public class MainWindowViewModel : ViewModel
 
     #endregion
 
+    #region DecommissioningPageShow
+
+    private ICommand? _decommissioningPageShow;
+
+    public ICommand DecommissioningPageShow => _decommissioningPageShow
+        ??= new RelayCommand(OnDecommissioningPageShow);
+
+    private void OnDecommissioningPageShow(object obj)
+    {
+        var page = new DecommissioningTmcsPage();
+        var model = page.DataContext as DecommissioningTmcsViewModel;
+        model!.TabItem = _helperNavigation.OpenPage(page, "Реестр Требований-накладных");
+    }
+
+    #endregion
+
+    #region ShowWriteOffObject
+
+    private ICommand? _showWriteOffObjectCommand;
+
+    public ICommand ShowWriteOffObjectCommand => _showWriteOffObjectCommand
+        ??= new RelayCommand(OnShowWriteOffObjectExecuted);
+
+    private void OnShowWriteOffObjectExecuted(object obj)
+    {
+       var page = new WriteOffObjectsPage();
+        var model = page.DataContext as WriteOffObjectsViewModel;
+        model!.TabItem = _helperNavigation.OpenPage(page, "Справочник объектов списания");
+    }
+
+    #endregion
+
+    #region ShowTmcSprPage
+
+    private ICommand? _showTmcSprPageCommand;
+
+    public ICommand ShowTmcSprPageCommand => _showTmcSprPageCommand
+        ??= new RelayCommand(OnShowTmcSprPageExecuted);
+
+    private void OnShowTmcSprPageExecuted(object obj)
+    {
+        var page = new TmcSprPage();
+        var model = page.DataContext as TmcSprViewModel;
+        model!.TabItem = _helperNavigation.OpenPage(page, "Остатки ТМЦ");
+    }
+
+    #endregion
 
     #endregion
 

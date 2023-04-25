@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
+using Agro.Dto;
 
 namespace Agro.WPF.ViewModels.Base
 {
-    public abstract class ViewModel : INotifyPropertyChanged
+    public abstract class ViewModel : BizActionErrors, INotifyPropertyChanged
     {
         private string _title = null!;
         public string Title { get => _title; set => Set(ref _title, value); }

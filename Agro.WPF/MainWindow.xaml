@@ -55,11 +55,10 @@
             <RowDefinition Height="35"/>
         </Grid.RowDefinitions>
 
-        <Grid Height="70" Row="0">
+        <Grid Height="auto" Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="35"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+              </Grid.RowDefinitions>
             <Menu Background="AntiqueWhite">
                 <MenuItem Header="Бухгалтерия">
                     <MenuItem.Icon>
@@ -123,9 +122,43 @@
                     <MenuItem Header="Поступление от контрагентов" 
                               Command="{Binding ShowComingTmcCommand}">
                         <MenuItem.Icon>
-                            <fa5:ImageAwesome Height="32" Icon="Solid_ArrowDown" Foreground="DarkBlue"/>
+                            <fa5:ImageAwesome Height="32" Icon="Regular_ArrowAltCircleDown" Foreground="DarkBlue"/>
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem Header="Поступление из подотчета" 
+                              Command="{Binding Show}">
+                        <MenuItem.Icon>
+                            <fa5:ImageAwesome Height="32" Icon="Regular_ArrowAltCircleDown" Foreground="DarkBlue"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Доп. затраты от поставщиков" 
+                              Command="{Binding Show}">
+                        <MenuItem.Icon>
+                            <fa5:ImageAwesome Height="32" Icon="Regular_PlusSquare" Foreground="DarkBlue"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Доп. затраты от подотчетников" 
+                              Command="{Binding Show}">
+                        <MenuItem.Icon>
+                            <fa5:ImageAwesome Height="32" Icon="Solid_PlusSquare" Foreground="DarkBlue"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Требования-накладные" Command="{Binding DecommissioningPageShow}">
+                        <MenuItem.Icon>
+                            <fa5:ImageAwesome Height="32" Icon="Solid_ArrowCircleRight" Foreground="DarkBlue"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Отчеты">
+                        <MenuItem.Icon>
+                            <fa5:ImageAwesome Height="32" Icon="Solid_Diagnoses" Foreground="DarkBlue"/>
+                        </MenuItem.Icon>
+                        <MenuItem Header="Остатки на складе" Command="{Binding ShowTmcSprPageCommand}">
+                            <MenuItem.Icon>
+                                <fa5:ImageAwesome Height="32" Icon="Regular_MoneyBillAlt" Foreground="DarkBlue"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+
                 </MenuItem>
                 <MenuItem Header="Кадры">
                     <MenuItem.Icon>
@@ -153,12 +186,16 @@
                     </MenuItem.Icon>
 
                     <MenuItem Header="Контрагенты" Command="{Binding ShowContractors}"/>
+                    <Separator  BorderThickness="2"/>
+                    <MenuItem Header="Справочники кладовщика">
                     <MenuItem Header="Номенклатура">
                         <MenuItem Header="Готовая продукция" Command="{Binding ShowProduct}"/>
                         <MenuItem Header="Материальные запасы" Command="{Binding ShowTmc}"/>
                     </MenuItem>
                     <MenuItem Header="Места хранения" Command="{Binding ShowStorageLocations}"/>
-                    <MenuItem Header="План счетов" Command="{Binding ShowAccountingPlans}"/>
+                        <MenuItem Header="Объекты списания" Command="{Binding ShowWriteOffObjectCommand}"/>
+                    </MenuItem>
+
                     <Separator  BorderThickness="2"/>
                     <MenuItem Header="Агрономические справочники">
                         <MenuItem Header="Отделения" Command="{Binding ShowDepartment}"/>
@@ -166,14 +203,17 @@
                         <MenuItem Header="Земельные участки" Command="{Binding ShowLandPlots}"/>
                         <MenuItem Header="Выращиваемые культуры" Command="{Binding ShowCulture}"/>
                     </MenuItem>
+
                     <Separator  BorderThickness="2"/>
                     <MenuItem Header="Справочники весовщика">
                         <MenuItem Header="Водители" Command="{Binding ShowDrivers}"/>
                         <MenuItem Header="Автотранспорт" Command="{Binding ShowTransports}"/>
                         <MenuItem Header="Весовые" Command="{Binding ShowWeights}"/>
                     </MenuItem>
+
                     <Separator  BorderThickness="2"/>
                     <MenuItem Header="Бухгалтерские справочники">
+                        <MenuItem Header="План счетов" Command="{Binding ShowAccountingPlans}"/>
                         <MenuItem Header="Справочник статей расходов и доходов ДДС" Command="{Binding ShowExpenditureItemsViewCommand}"></MenuItem>
                     </MenuItem>
                 </MenuItem>
@@ -193,12 +233,6 @@
                     </MenuItem>
                 </MenuItem>
             </Menu>
-
-            <Grid Grid.Row="1" Background="AliceBlue">
-                <GroupBox>
-
-                </GroupBox>
-            </Grid>
         </Grid>
 
         <Grid Row="1" Height ="auto">

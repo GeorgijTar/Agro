@@ -67,4 +67,9 @@ public class ProductRepository : IBaseRepository<Product>
         await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
         return true;
     }
+
+    public Task<DateTime> GetClosedPeriodAsync(CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
+    }
 }

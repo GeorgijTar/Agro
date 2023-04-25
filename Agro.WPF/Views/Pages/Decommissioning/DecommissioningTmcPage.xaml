@@ -1,0 +1,425 @@
+﻿<Page x:Class="Agro.WPF.Views.Pages.Decommissioning.DecommissioningTmcPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Agro.WPF.Views.Pages.Decommissioning"
+      xmlns:converters="clr-namespace:Agro.WPF.Converters"
+      xmlns:fa5="http://schemas.fontawesome.com/icons/"
+      xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+      mc:Ignorable="d" 
+      Title="{Binding Title}"
+      DataContext="{Binding DecommissioningTmcModel, Source={StaticResource Locator}}"
+      x:Name="MyWindow">
+    <Page.Resources>
+      <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
+            <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
+                <ContentPresenter RecognizesAccessKey="True"></ContentPresenter>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Background" Value="DarkGreen"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter  Property="Background" Value="Azure" />
+                    <Setter  Property="BorderBrush" Value="DarkBlue" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style TargetType="{x:Type TextBox}"
+               BasedOn="{StaticResource TextBoxStyle}">
+            <Setter Property="Margin" Value="4 4"/>
+        </Style>
+        <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBoxFlatStyle}"></Style>
+        <!--<Style TargetType="{x:Type DatePicker}" BasedOn="{StaticResource PickerStyle}"></Style>-->
+        <Style TargetType="{x:Type Calendar}" BasedOn="{StaticResource DefaultCalendar}"></Style>
+        </Page.Resources>
+    <Grid>
+        <Grid Background="AliceBlue">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Line></Line>
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBlock Text="ID:" Margin="5,0"/>
+                <TextBlock Text="{Binding DecommissioningTmc.Id}" Margin="5,0"/>
+                <TextBlock Text="Статус:" Margin="5,0"/>
+                <TextBlock Text="{Binding DecommissioningTmc.Status.Name}" Margin="5,0"/>
+            </StackPanel>
+            <Grid Grid.Row="3" HorizontalAlignment="Right">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" BorderBrush="DarkBlue" Width="108" IsEnabled="{Binding IsEnabled}"
+                    Template="{StaticResource ButtonTemplate}"  Margin="0,2,3,15"
+                    Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=MyWindow}" >
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="18" Icon="Solid_Save"
+                                      Margin="8,5"
+                                      Foreground="DarkBlue" />
+                        <TextBlock Text="Сохранить" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="1" BorderBrush="DarkBlue" Width="108"
+                    Template="{StaticResource ButtonTemplate}" Margin="3,2,15,15"
+                    Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=MyWindow}">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="18" Icon="Solid_DoorOpen"
+                                      Margin="8,5"
+                                      Foreground="DarkBlue" />
+                        <TextBlock Text="Отмена" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+            <Grid Grid.Row="0" Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="5">
+                    <TextBlock Text="№" Margin="5,0" VerticalAlignment="Center"/>
+                    <TextBox VerticalAlignment="Center" Width="55" IsReadOnly="True" Text="{Binding DecommissioningTmc.Number,
+                        UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="5,0"/>
+                    <TextBlock Text="от" Margin="5,0" VerticalAlignment="Center"/>
+                    <DatePicker VerticalAlignment="Center" SelectedDate="{Binding DecommissioningTmc.Date,
+                        UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" CalendarStyle="{StaticResource DefaultCalendar}"/>
+                    <TextBlock Text="Тип документа" VerticalAlignment="Center" Margin="5,0"/>
+                    <ComboBox MinWidth="150" VerticalAlignment="Center" ItemsSource="{Binding TypeDocs}"
+                              SelectedItem="{Binding SelectedTypeDoc}"
+                              SelectedIndex="0"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Orientation="Horizontal"  Margin="2"
+                            Visibility="{Binding Visibility}">
+                    <TextBlock Text="Сторнируемый документ списания" VerticalAlignment="Center"/>
+                    <Border CornerRadius="3" Width="200" Margin="5,0" BorderThickness="0.4" BorderBrush="#5f9ea0">
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" Content="X" ToolTip="Очистить поле" Margin="2,0"
+                                Template="{StaticResource ButtonClearTemplate}"
+                                   
+                                    Command="{Binding}" Background="Transparent" BorderThickness="0"/>
+                            <TextBlock Text="{Binding DecommissioningTmc.DecommissioningStorno.Number}"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding DecommissioningTmc.DecommissioningStorno.Date, StringFormat=от dd.MM.yyyy}"/>
+                        </DockPanel>
+                    </Border>
+                    <Button  BorderBrush="DarkBlue" Width="22" Height="22" IsEnabled="{Binding IsEnabled}"
+                             Template="{StaticResource ButtonTemplate}"  Margin="1" Foreground="DarkBlue"
+                             Command="{Binding  }" ToolTip="Выбрать из справочника">
+                        <fa5:ImageAwesome Icon="Solid_Book" Foreground="DarkBlue" Margin="1"/>
+                    </Button>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="2">
+                    <TextBlock Text="Цель расходования" VerticalAlignment="Center"/>
+                    <Border CornerRadius="3" Width="300" Margin="5,0" BorderThickness="0.4" BorderBrush="#5f9ea0">
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" Content="X" ToolTip="Очистить поле" Margin="2,0"
+                                    Template="{StaticResource ButtonClearTemplate}"
+                                    Command="{Binding ClearPurposeCommand}" Background="Transparent" BorderThickness="0"/>
+                            <TextBlock Text="{Binding DecommissioningTmc.PurposeExpenditure.Name}"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding DecommissioningTmc.PurposeExpenditure.RulesAccounting.AccountingPlan}"
+                                       VerticalAlignment="Center" Margin="5,0"/>
+                        </DockPanel>
+                    </Border>
+                    <Button  BorderBrush="DarkBlue" Width="22" Height="22" IsEnabled="{Binding IsEnabled}"
+                             Template="{StaticResource ButtonTemplate}"  Margin="1" Foreground="DarkBlue"
+                             Command="{Binding ShowPurposeCommand}" ToolTip="Выбрать из справочника">
+                        <fa5:ImageAwesome Icon="Solid_Book" Foreground="DarkBlue" Margin="1"/>
+                    </Button>
+                    <TextBlock Text="Объект расходования" VerticalAlignment="Center" Margin="10,0,5,0"/>
+                    <Border CornerRadius="3" Width="400" Margin="5,0" BorderThickness="0.4" BorderBrush="#5f9ea0">
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" Content="X" ToolTip="Очистить поле" Margin="2,0"
+                                    Template="{StaticResource ButtonClearTemplate}"
+                                    Command="{Binding ClearWriteOffObjectCommand}" 
+                                    Background="Transparent" BorderThickness="0"/>
+                            <TextBlock Text="{Binding DecommissioningTmc.WriteOffObject.Name}"
+                                       VerticalAlignment="Center" Margin="5,0"/>
+                            <TextBlock Text="{Binding DecommissioningTmc.WriteOffObject.InvNumber, StringFormat=Инв.№ {0}}"
+                                       VerticalAlignment="Center" Margin="5,0"/>
+                            <TextBlock Text="{Binding DecommissioningTmc.WriteOffObject.RegNumber, StringFormat=Рег.№ {0}}"
+                                       VerticalAlignment="Center" Margin="5,0"/>
+                        </DockPanel>
+                    </Border>
+                    <Button  BorderBrush="DarkBlue" Width="22" Height="22" IsEnabled="{Binding IsEnabled}"
+                             Template="{StaticResource ButtonTemplate}"  Margin="1" Foreground="DarkBlue"
+                             Command="{Binding ShowWriteOffObjectCommand}" ToolTip="Выбрать из справочника">
+                        <fa5:ImageAwesome Icon="Solid_Book" Foreground="DarkBlue" Margin="1"/>
+                    </Button>
+                </StackPanel>
+                <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="2">
+                    <TextBlock Text="Счет списания:" VerticalAlignment="Center" Margin="5,0"/>
+                    <Border CornerRadius="3" Width="60" Margin="5,0" BorderThickness="0.4" BorderBrush="#5f9ea0">
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" Content="X" ToolTip="Очистить поле" Margin="2,0"
+                                    Template="{StaticResource ButtonClearTemplate}"
+                                    Command="{Binding ClearAccountingCommand}" 
+                                    Background="Transparent" BorderThickness="0"/>
+                            <TextBlock Text="{Binding DecommissioningTmc.AccountingPlan.Code}"
+                                       ToolTip="{Binding DecommissioningTmc.AccountingPlan.Name}"
+                                       VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"/>
+                            
+                        </DockPanel>
+                    </Border>
+                    <Button  BorderBrush="DarkBlue" Width="22" Height="22" IsEnabled="{Binding IsEnabled}"
+                             Template="{StaticResource ButtonTemplate}"  Margin="1" Foreground="DarkBlue"
+                             Command="{Binding ShowAccountingsCommand}" ToolTip="Выбрать из справочника">
+                        <fa5:ImageAwesome Icon="Solid_Book" Foreground="DarkBlue" Margin="1"/>
+                    </Button>
+                    <TextBlock Text="Кладовщик" VerticalAlignment="Center" Margin="10,0,5,0"/>
+                    <Border CornerRadius="3" Width="400" Margin="5,0" BorderThickness="0.4" BorderBrush="#5f9ea0">
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" Content="X" ToolTip="Очистить поле" Margin="2,0"
+                                    Template="{StaticResource ButtonClearTemplate}"
+                                    Command="{Binding ClearStorekeeperCommand}" 
+                                    Background="Transparent" BorderThickness="0"/>
+                            <TextBlock Text="{Binding DecommissioningTmc.Storekeeper.People.Surname}"
+                                       VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            <TextBlock Text="{Binding DecommissioningTmc.Storekeeper.People.Name}"
+                                       VerticalAlignment="Center" Margin="5,0"/>
+                            <TextBlock Text="{Binding DecommissioningTmc.Storekeeper.People.Patronymic}"
+                                       VerticalAlignment="Center"/>
+                        </DockPanel>
+                    </Border>
+                    <Button  BorderBrush="DarkBlue" Width="22" Height="22" IsEnabled="{Binding IsEnabled}"
+                             Template="{StaticResource ButtonTemplate}"  Margin="1" Foreground="DarkBlue"
+                             Command="{Binding ShowEmployesCommand}"
+                             CommandParameter="Storekeeper"
+                             ToolTip="Выбрать из справочника">
+                        <fa5:ImageAwesome Icon="Solid_Book" Foreground="DarkBlue" Margin="1"/>
+                    </Button>
+                    <TextBlock Text="Подотчетное лицо" VerticalAlignment="Center" Margin="10,0,5,0"/>
+                    <Border CornerRadius="3" Width="400" Margin="5,0" BorderThickness="0.4" BorderBrush="#5f9ea0">
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" Content="X" ToolTip="Очистить поле" Margin="2,0"
+                                    Template="{StaticResource ButtonClearTemplate}"
+                                    Command="{Binding ClearMolCommand}" 
+                                    Background="Transparent" BorderThickness="0"/>
+                            <TextBlock Text="{Binding DecommissioningTmc.Mol.People.Surname}"
+                                       VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            <TextBlock Text="{Binding DecommissioningTmc.Mol.People.Name}"
+                                       VerticalAlignment="Center" Margin="5,0"/>
+                            <TextBlock Text="{Binding DecommissioningTmc.Mol.People.Patronymic}"
+                                       VerticalAlignment="Center" />
+                        </DockPanel>
+                    </Border>
+                    <Button  BorderBrush="DarkBlue" Width="22" Height="22" IsEnabled="{Binding IsEnabled}"
+                             Template="{StaticResource ButtonTemplate}"  Margin="1" Foreground="DarkBlue"
+                             Command="{Binding ShowEmployesCommand}" 
+                             CommandParameter="Mol" 
+                             ToolTip="Выбрать из справочника">
+                        <fa5:ImageAwesome Icon="Solid_Book" Foreground="DarkBlue" Margin="1"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <TabControl Grid.Row="1" Grid.Column="0">
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Позиции поступления" Margin="5,0"/>
+                            <TextBlock Text="{Binding ComingTmc.Positions.Count, StringFormat=({0}),
+                                UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <ToolBar Grid.Row="0">
+                            <Button  BorderBrush="DarkBlue" Width="30" Height="30" IsEnabled="{Binding IsEnabled}"
+                                     Template="{StaticResource ButtonTemplate}"  Margin="5" Foreground="DarkBlue"
+                                     Command="{Binding AddPositionCommand}" CommandParameter="{Binding ElementName=MyWindow}" 
+                                     ToolTip="Добавить">
+                                <fa5:ImageAwesome Icon="Solid_PlusCircle" Foreground="DarkBlue" Margin="2"/>
+                            </Button>
+                            <Button  BorderBrush="DarkBlue" Width="30" Height="30" IsEnabled="{Binding IsEnabled}"
+                                     Template="{StaticResource ButtonTemplate}"  Margin="5" Foreground="DarkBlue"
+                                     Command="{Binding EditPositionCommand}" CommandParameter="{Binding ElementName=MyWindow}" 
+                                     ToolTip="Редактировать">
+                                <fa5:ImageAwesome Icon="Solid_Edit" Foreground="DarkBlue" Margin="2"/>
+                            </Button>
+                            <Button  BorderBrush="DarkBlue" Width="30" Height="30" IsEnabled="{Binding IsEnabled}"
+                                     Template="{StaticResource ButtonTemplate}"  Margin="5" Foreground="DarkBlue"
+                                     Command="{Binding DeleteCommand}" CommandParameter="{Binding ElementName=MyWindow}" 
+                                     ToolTip="Удалить">
+                                <fa5:ImageAwesome Icon="Solid_Trash" Foreground="DarkBlue" Margin="2"/>
+                            </Button>
+                        </ToolBar>
+                        <DataGrid Grid.Row="1" SelectedItem="{Binding SelectedPosition}" 
+                              AutoGenerateColumns="False"
+                              ItemsSource="{Binding  DecommissioningTmc.Positions}"
+                              CanUserAddRows="False" Margin="5,0"
+                              CanUserDeleteRows="False" CanUserResizeColumns="True" IsReadOnly="True">
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Добавить" Command="{Binding AddPositionCommand}"></MenuItem>
+                                    <MenuItem Header="Редактировать" Command="{Binding EditPositionCommand, UpdateSourceTrigger=PropertyChanged}"></MenuItem>
+                                    <MenuItem Header="Удалить" Command="{Binding DeleteCommand}"></MenuItem>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+                            <b:Interaction.Triggers>
+                                <b:EventTrigger EventName="MouseDoubleClick">
+                                    <b:InvokeCommandAction Command="{Binding SelectRowCommand}" 
+                                                       CommandParameter="{Binding ElementName=CoynterpartiesWindow}"/>
+                                </b:EventTrigger>
+                            </b:Interaction.Triggers>
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridCell" x:Key="RightText">
+                                    <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+                                </Style>
+                                <Style TargetType="DataGridCell" x:Key="CenterText">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="60" Header="Id" Binding="{Binding Tmc.Id}"/>
+                                <DataGridTextColumn Width="200*" Header="Наименование" Binding="{Binding Tmc.Name}"/>
+                                <DataGridTextColumn Width="30*" Header="Ед. изм." Binding="{Binding UnitOkei.Abbreviation}" CellStyle="{StaticResource CenterText}"/>
+                                <DataGridTextColumn Width="45*" Header="Количество" Binding="{Binding Quantity, StringFormat=N3}" CellStyle="{StaticResource RightText}"/>
+                                <DataGridTextColumn Width="50*" Header="Цена" Binding="{Binding Price, StringFormat=C, ConverterCulture='ru-Ru'}" CellStyle="{StaticResource RightText}"/>
+                                <DataGridTextColumn Width="60*" Header="Сумма" Binding="{Binding Amount, ConverterCulture='ru-RU', StringFormat=C}" CellStyle="{StaticResource RightText}"/>
+                                <DataGridTextColumn Width="40*" Header="Сч.учета" Binding="{Binding AccountingPlan.Code}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StatusBar Grid.Row="2">
+                            <StatusBarItem Margin="5,0">
+                                <TextBlock Text="Итого позиций" VerticalAlignment="Center"/>
+                            </StatusBarItem>
+                            <StatusBarItem Margin="5,0">
+                                <TextBlock Text="{Binding DecommissioningTmc.Positions.Count}" VerticalAlignment="Center"/>
+                            </StatusBarItem>
+                            <StatusBarItem Margin="5,0">
+                                <TextBlock Text="на сумму: " VerticalAlignment="Center"/>
+                            </StatusBarItem>
+                            <StatusBarItem Margin="5,0">
+                                <TextBlock Text="{Binding ComingTmc.TotalAmount, 
+ConverterCulture='ru-Ru', StringFormat=C}" VerticalAlignment="Center" IsEnabled="{Binding IsEnabled}"/>
+                            </StatusBarItem>
+                        </StatusBar>
+                    </Grid>
+                </TabItem>
+                <TabItem >
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Проводки" Margin="5,0"/>
+                            <TextBlock Text="{Binding ComingTmc.AccountingPlanRegisters.Count, StringFormat=({0}),
+UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <DataGrid 
+                              ItemsSource="{Binding ComingTmc.AccountingPlanRegisters, UpdateSourceTrigger=PropertyChanged}" 
+                        CanUserAddRows="False" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Дата проводки" Width="90" Binding="{Binding DateReg, StringFormat=dd.MM.yyyy}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Дебит" Width="70" Binding="{Binding Debit.Code}"/>
+                            <DataGridTextColumn Header="Кредит" Width="70" Binding="{Binding Credit.Code}"/>
+                            <DataGridTextColumn Header="Сумма" Width="100" Binding="{Binding Amount, ConverterCulture='ru-Ru', StringFormat=C}"/>
+                            <DataGridTextColumn Header="Описание" Width="100*" Binding="{Binding  ContaAction}"/>
+                            <DataGridTextColumn Header="Описание" Width="100*" Binding="{Binding  ContaObject}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Файлы" Margin="5,0"/>
+                            <TextBlock Text="{Binding ComingTmc.ScanFiles.Count, StringFormat=({0}),
+                                UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <ToolBar>
+                            <Button BorderBrush="DarkBlue" Width="108" Command="{Binding AddFileCommand}"
+                                Template="{StaticResource ButtonTemplate}" Margin="2,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <fa5:ImageAwesome Height="12" Icon="Solid_PlusCircle"
+                                                  Margin="8,5"
+                                                  Foreground="DarkBlue" />
+                                    <TextBlock Text="Добавить" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                </StackPanel>
+                            </Button>
+                            <Button BorderBrush="DarkRed" Width="108"
+                                        Template="{StaticResource ButtonTemplate}" Margin="2,0"
+                                        Command="{Binding RemoveFileCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <fa5:ImageAwesome Height="12" Icon="Solid_TrashAlt"
+                                                  Margin="8,5"
+                                                  Foreground="DarkRed"/>
+                                    <TextBlock Text="Удалить" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                </StackPanel>
+                            </Button>
+                            <Button BorderBrush="DarkGreen" Width="125"
+                                        Template="{StaticResource ButtonTemplate}" Margin="2,0"
+                                        Command="{Binding SaveFileCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <fa5:ImageAwesome Height="12" Icon="Solid_Save"
+                                                          Margin="4,5"
+                                                          Foreground="DarkGreen"/>
+                                    <TextBlock Text="Сохранить на ПК" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                </StackPanel>
+                            </Button>
+                        </ToolBar>
+                        <DataGrid Grid.Row="1" 
+                                      ItemsSource="{Binding ComingTmc.ScanFiles, UpdateSourceTrigger=PropertyChanged}" 
+                                      SelectedItem="{Binding SelectedFile}" CanUserAddRows="False" AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Наименование" Width="120*" Binding="{Binding Name}" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Описание" Width="80*" Binding="{Binding Description}"/>
+                                <DataGridTextColumn Header="Размер (Mb)" Width="30*" Binding="{Binding TotalBytes, StringFormat=N2}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="История" Margin="5,0"/>
+                            <TextBlock Text="{Binding ComingTmc.History.Count, StringFormat=({0}),
+                                UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <DataGrid 
+                        ItemsSource="{Binding ComingTmc.History, UpdateSourceTrigger=PropertyChanged}" 
+                         CanUserAddRows="False" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Дата события" Width="120" Binding="{Binding EventDate, StringFormat=dd.MM.yyyy hh:mm:ss}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Событие" Width="220*" Binding="{Binding EventHistory}"/>
+                            <DataGridTextColumn Header="Пользователь (логин)" Width="70*" Binding="{Binding User.Login}"/>
+                            <DataGridTextColumn Header="Пользователь (Фамилия)" Width="100*" Binding="{Binding User.Employee.People.Surname}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+            </TabControl>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Примечание" Margin="5,0" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Height="54"
+                     Text="{Binding DecommissioningTmc.Note,
+                UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</Page>

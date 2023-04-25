@@ -10,6 +10,7 @@ using Agro.WPF.ViewModels.Base;
 using Agro.WPF.Views.Windows;
 using Agro.DAL.Entities.Accounting;
 using Agro.WPF.ViewModels.Coming;
+using Agro.WPF.ViewModels.Decommissioning;
 
 namespace Agro.WPF.ViewModels.Accounting;
 
@@ -197,6 +198,17 @@ public class AccountingPlansViewModel : ViewModel
                 }
                 
             }
+
+            if (SenderModel is DecommissioningTmcViewModel decommissioningmodel)
+            {
+                decommissioningmodel.DecommissioningTmc.AccountingPlan= SelectAccountingPlan!;
+            }
+
+            if (SenderModel is PurposeExpenditureViewModel purposeModel)
+            {
+                purposeModel.PurposeExpenditure.AccountingPlan= SelectAccountingPlan!;
+            }
+
             var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
             if (window != null!)
                 window.Close();

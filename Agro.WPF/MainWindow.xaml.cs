@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using Agro.WPF.Views.Windows;
 
 namespace Agro.WPF
 {

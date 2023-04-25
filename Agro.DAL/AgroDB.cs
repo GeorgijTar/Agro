@@ -19,6 +19,7 @@ using Agro.DAL.Entities.Storage;
 using Agro.DAL.Entities.TaxesType;
 using Agro.DAL.Entities.Warehouse;
 using Agro.DAL.Entities.Warehouse.Coming;
+using Agro.DAL.Entities.Warehouse.Decommissioning;
 using Agro.DAL.Entities.Weight;
 using Microsoft.EntityFrameworkCore;
 using Tax = Agro.DAL.Entities.CheckingCounterparty.Components.Tax;
@@ -134,7 +135,7 @@ public class AgroDb : DbContext
     public DbSet<ComingTmcCalculations> ComingTmcCalculations { get; set; } = null!;
     public DbSet<InvoiceFactur> InvoiceFacturs { get; set; } = null!;
     public DbSet<ComingTmcPosition> ComingTmcPositions { get; set; } = null!;
-    public DbSet<AccountingMethodNds> AccountingMethodsNds { get; set; } = null!; 
+    public DbSet<AccountingMethodNds> AccountingMethodsNds { get; set; } = null!;
     #endregion
 
     #region Bank
@@ -170,7 +171,18 @@ public class AgroDb : DbContext
 
     #endregion
 
-    public DbSet<ClosedPeriod> ClosedPeriod { get; set; }= null!;
+    public DbSet<ClosedPeriod> ClosedPeriod { get; set; } = null!;
+
+    #region DecommissioningTmc
+    public DbSet<DecommissioningTmc> DecommissioningTmc { get; set; } = null!;
+    public DbSet<PositionDecommissioningTmc> PositionDecommissioningTmc { get; set; } = null!;
+    public DbSet<PurposeExpenditure> PurposeExpenditures { get; set; } = null!;
+    public DbSet<WriteOffObject> WriteOffObjects { get; set; } = null!;
+    public DbSet<TypeObject> TypesObject { get; set; } = null!;
+    public DbSet<GroupObject> GroupObjects { get; set; } = null!;
+
+
+    #endregion
 
     #endregion
 

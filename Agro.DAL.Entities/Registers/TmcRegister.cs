@@ -2,9 +2,12 @@
 using System.Collections.ObjectModel;
 using Agro.DAL.Entities.Accounting;
 using Agro.DAL.Entities.Base;
+using Agro.DAL.Entities.Counter;
+using Agro.DAL.Entities.Personnel;
 using Agro.DAL.Entities.Storage;
 using Agro.DAL.Entities.Warehouse;
 using Agro.DAL.Entities.Warehouse.Coming;
+using Agro.DAL.Entities.Warehouse.Decommissioning;
 
 namespace Agro.DAL.Entities.Registers;
 /// <summary>
@@ -22,8 +25,11 @@ public class TmcRegister : Entity<Guid>
     public DateTime DateRegister { get => _dateRegister; set => Set(ref _dateRegister, value); }
 
     /// <summary> Родительский документ поступения </summary>
-    private ComingTmc _comingTmc = null!;
-    public ComingTmc ComingTmc { get => _comingTmc; set => Set(ref _comingTmc, value); }
+    private ComingTmc? _comingTmc;
+    public ComingTmc? ComingTmc { get => _comingTmc; set => Set(ref _comingTmc, value); }
+
+    private DecommissioningTmc? _decommissioningTmc;
+    public DecommissioningTmc? DecommissioningTmc { get => _decommissioningTmc; set => Set(ref _decommissioningTmc, value); }
 
     /// <summary> Товар </summary>
     private Tmc _tmc = null!;

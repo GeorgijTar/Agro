@@ -69,6 +69,11 @@ public class RegistryInvoiceRepository : IRegistryInvoiceRepository<RegistryInvo
         throw new NotImplementedException();
     }
 
+    public Task<DateTime> GetClosedPeriodAsync(CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<RegistryInvoice> SetStatusAsync(int idStatus, RegistryInvoice item, CancellationToken cancel = default)
     {
         item.Status = await _db.Statuses.FirstOrDefaultAsync(s => s.Id == idStatus, cancel).ConfigureAwait(false);

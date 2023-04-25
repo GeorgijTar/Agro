@@ -69,6 +69,11 @@ public class ComingFieldRepository: IComingFieldRepository<ComingField>
         throw new NotImplementedException();
     }
 
+    public Task<DateTime> GetClosedPeriodAsync(CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<int> GetNumber(ComingField coming, CancellationToken cancel = default)
     {
         try

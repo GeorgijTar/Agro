@@ -7,6 +7,7 @@ using Agro.DAL.Entities.Organization;
 using Agro.DAL.Entities.Storage;
 using Agro.DAL.Entities.TaxesType;
 using Agro.DAL.Entities.Warehouse.Coming;
+using Agro.DAL.Entities.Warehouse.Decommissioning;
 
 namespace Agro.Interfaces.Base.Repositories;
 public interface IReferencesRepository
@@ -143,5 +144,17 @@ public interface IReferencesRepository
     /// <returns></returns>
     public Task<IEnumerable<AccountingMethodNds>?> GetAllAccountingMethodNdsAsync(CancellationToken cancel = default);
 
-    
+    /// <summary>
+    /// Справочник типов объектов списания
+    /// </summary>
+    /// <param name="cancel"></param>
+    /// <returns></returns>
+    public Task<IEnumerable<TypeObject>?> GetAllTypeObjectAsync(CancellationToken cancel = default);
+
+    /// <summary>
+    /// Справочник групп объектов списания
+    /// </summary>
+    /// <param name="cancel"></param>
+    /// <returns></returns>
+    public Task<IEnumerable<GroupObject>?> GetAllGroupObjectAsync(CancellationToken cancel = default);
 }

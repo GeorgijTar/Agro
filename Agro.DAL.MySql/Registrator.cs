@@ -5,11 +5,11 @@ namespace Agro.DAL.MySql;
 
 public static class Registrator
 {
-    public static IServiceCollection AddAgroDbMySql(this IServiceCollection services, string ConnectionString)
+    public static IServiceCollection AddAgroDbMySql(this IServiceCollection services, string connectionString)
     {
         var serverVersion = new MySqlServerVersion(new Version(8, 0, 28));
         services.AddDbContext<AgroDb>(opt => opt
-            .UseMySql(ConnectionString, serverVersion,
+            .UseMySql(connectionString, serverVersion,
                 o => o.MigrationsAssembly(typeof(Registrator).Assembly.FullName).EnableRetryOnFailure(5))); //.UseLazyLoadingProxies()
         return services;
     }

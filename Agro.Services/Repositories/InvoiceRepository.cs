@@ -96,6 +96,11 @@ public class InvoiceRepository : IInvoiceRepository<Invoice>
         return true;
     }
 
+    public Task<DateTime> GetClosedPeriodAsync(CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<string> GetNumber(Invoice invoice, CancellationToken cancel = default)
     {
         var inv = await _db.Invoices

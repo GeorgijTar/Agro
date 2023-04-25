@@ -54,4 +54,9 @@ public class CultureRepository:IBaseRepository<Culture>
     {
         throw new NotImplementedException();
     }
+
+    public Task<DateTime> GetClosedPeriodAsync(CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
+    }
 }

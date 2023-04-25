@@ -170,6 +170,12 @@ public class LoginViewModel : ViewModel
         progress.Report((100, "Загрузка справочника мест хранения", "Загрузка статических данных", false));
         Application.Current.Properties["AccountingMethodNds"] = await _referencesRepository.GetAllAccountingMethodNdsAsync();
 
+        progress.Report((100, "Загрузка справочника типов объектов списания", "Загрузка статических данных", false));
+        Application.Current.Properties["TypeObjects"] = await _referencesRepository.GetAllTypeObjectAsync();
+
+       progress.Report((100, "Загрузка справочника групп объектов списания", "Загрузка статических данных", false));
+        Application.Current.Properties["GroupObjects"] = await _referencesRepository.GetAllGroupObjectAsync();
+
         var view = new MainWindow();
         view.Show();
 

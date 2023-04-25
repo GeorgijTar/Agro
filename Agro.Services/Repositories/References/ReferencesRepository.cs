@@ -8,6 +8,7 @@ using Agro.DAL.Entities.Organization;
 using Agro.DAL.Entities.Storage;
 using Agro.DAL.Entities.TaxesType;
 using Agro.DAL.Entities.Warehouse.Coming;
+using Agro.DAL.Entities.Warehouse.Decommissioning;
 using Agro.Interfaces.Base.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -108,5 +109,16 @@ public class ReferencesRepository: IReferencesRepository
     public async Task<IEnumerable<AccountingMethodNds>?> GetAllAccountingMethodNdsAsync(CancellationToken cancel = default)
     {
         return await _db.AccountingMethodsNds.ToArrayAsync(cancel).ConfigureAwait(false);
+    }
+
+    public async Task<IEnumerable<TypeObject>?> GetAllTypeObjectAsync(CancellationToken cancel = default)
+    {
+        return await  _db.TypesObject.ToArrayAsync(cancel).ConfigureAwait(false);
+    }
+
+
+    public async Task<IEnumerable<GroupObject>?> GetAllGroupObjectAsync(CancellationToken cancel = default)
+    {
+        return await _db.GroupObjects.ToArrayAsync(cancel).ConfigureAwait(false);
     }
 }

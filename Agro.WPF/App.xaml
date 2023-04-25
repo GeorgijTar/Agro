@@ -9,6 +9,10 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/TextBoxStyle.xaml"/>
                 <ResourceDictionary Source="Styles/ComboBoxStyle.xaml"/>
+                <ResourceDictionary Source="Styles/DatePickerCustomSty.xaml"/>
+                <ResourceDictionary Source="Styles/CalendarStyle.xaml"/>
+                <ResourceDictionary Source="Styles/ButtonClearStyle.xaml"/>
+                <ResourceDictionary Source="Styles/ButtonStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

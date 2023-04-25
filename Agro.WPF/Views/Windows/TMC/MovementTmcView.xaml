@@ -1,0 +1,136 @@
+﻿<Window x:Class="Agro.WPF.Views.Windows.TMC.MovementTmcView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Agro.WPF.Views.Windows.TMC"
+        xmlns:conv ="clr-namespace:Agro.WPF.Converters"
+        xmlns:fa5="http://schemas.fontawesome.com/icons/"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+            Title="{Binding Title}"
+        x:Name="TmcSpr" Width="900" Height="400"
+        DataContext="{Binding MovementTmcModel, Source={StaticResource Locator}}">
+
+    <Window.Resources>
+        <conv:TmcRegisterConverter x:Key="TmcRegisterConverter"></conv:TmcRegisterConverter>
+        <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
+            <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
+                <ContentPresenter RecognizesAccessKey="True"></ContentPresenter>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Background" Value="DarkGreen"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter  Property="Background" Value="Azure" />
+                    <Setter  Property="BorderBrush" Value="DarkBlue" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style TargetType="{x:Type TextBox}"
+               BasedOn="{StaticResource TextBoxStyle}">
+            <Setter Property="Margin" Value="4 4"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <ToolBar Grid.Row="0">
+                <Button BorderBrush="YellowGreen" Width="100"
+                        Template="{StaticResource ButtonTemplate}" Margin="2,0"
+                        Command="{Binding RefreshCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Solid_ArrowAltCircleDown"
+                                          Margin="8,5"
+                                          Foreground="YellowGreen"/>
+                        <TextBlock Text="Обновить" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+                <Button BorderBrush="ForestGreen" Width="140"
+                        Template="{StaticResource ButtonTemplate}" Margin="2,0"
+                        Command="{Binding ExcelCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Regular_FileExcel"
+                                          Margin="8,5"
+                                          Foreground="ForestGreen"/>
+                        <TextBlock Text="Вывести в Excel" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+            </ToolBar>  
+            <GroupBox Grid.Row="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                        <TextBlock  Text="Наименование:" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding TmcSprDto.NameTmc}" 
+                                   Margin="5,0" FontSize="15" FontWeight="Bold"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <TextBlock Text="Текущий остаток:"/>
+                        <TextBlock Text="{Binding TmcSprDto.Quantity, StringFormat=N}" Margin="5,0"/>
+                        <TextBlock Text="{Binding TmcSprDto.Unit}"/>
+                        <TextBlock Text=" на сумму:"/>
+                        <TextBlock Text="{Binding TmcSprDto.Amount, StringFormat=C, ConverterCulture=RU-ru}"/>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+            <GroupBox Grid.Row="2">
+                <Grid>
+                    <DataGrid SelectedItem="{Binding TmcRegister}" 
+                              AutoGenerateColumns="False"
+                              ItemsSource="{Binding TmcRegisters}"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False" CanUserResizeColumns="True"
+                              SelectionMode="Single"
+                              IsReadOnly="True">
+                        <!--<DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Движение" Command="{Binding BillingCommand}"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>-->
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="MouseDoubleClick">
+                                <b:InvokeCommandAction Command="{Binding DoubleСlickCommand}" 
+                                                       CommandParameter="{Binding ElementName=TmcSpr}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="50" Header="ID" Binding="{Binding Id}"/>
+                            <DataGridTextColumn Width="90" Header="Тип движения" Binding="{Binding TypeDoc.Name}"/>
+                            <DataGridTextColumn Width="80" Header="Дата" Binding="{Binding DateRegister, StringFormat=dd.MM.yyyy }"/>
+                            <DataGridTextColumn Width="125" Header="Документ поступления" Binding="{Binding ComingTmc, Converter={StaticResource TmcRegisterConverter}, ConverterParameter='Comming'}"/>
+                            <DataGridTextColumn Width="125" Header="Документ списания" Binding="{Binding DecommissioningTmc, Converter={StaticResource TmcRegisterConverter}, ConverterParameter='Decommissioning'}"/>
+                            <DataGridTextColumn Width="90" Header="Кол-во" Binding="{Binding Quantity, StringFormat=N3}"/>
+                            <DataGridTextColumn Width="80" Header="Цена" Binding="{Binding Price, ConverterCulture='ru-RU', StringFormat=C}"/>
+                            <DataGridTextColumn Width="90" Header="Сумма" Binding="{Binding Amount, ConverterCulture='ru-RU', StringFormat=C}"/>
+                            <DataGridTextColumn Width="120" Header="Склад" Binding="{Binding StorageLocation}"/>
+                            <DataGridTextColumn Width="50" Header="Дт." Binding="{Binding  Debit}"/>
+                            <DataGridTextColumn Width="50" Header="Кт." Binding="{Binding  Credit}"/>
+                            <DataGridTextColumn Width="100" Header="Поставщик" Binding="{Binding ComingTmc.Counterparty.Name}"/>
+                            <DataGridTextColumn Width="100" Header="МОЛ" Binding="{Binding DecommissioningTmc.Mol.People}"/>
+                            <DataGridTextColumn Width="300" Header="Объект списания" Binding="{Binding DecommissioningTmc.WriteOffObject, Converter={StaticResource TmcRegisterConverter}, ConverterParameter='WriteOffObject'}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Window>

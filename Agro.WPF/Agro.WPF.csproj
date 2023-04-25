@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows10.0.17763.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <StartupObject>Agro.WPF.App</StartupObject>
     <ApplicationIcon>wheat_icon_logo.ico</ApplicationIcon>
     <PackageIcon>logo_kolos.png</PackageIcon>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.1</AssemblyVersion>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -36,18 +37,19 @@
     <PackageReference Include="LoadingIndicators.WPF.Core" Version="1.0.1" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.12">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-    <PackageReference Include="Notification.WPF" Version="6.1.0.5" />
+    <PackageReference Include="Notification.WPF" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Agro.DAL.Entities\Agro.DAL.Entities.csproj" />
     <ProjectReference Include="..\Agro.DAL.MySql\Agro.DAL.MySql.csproj" />
+    <ProjectReference Include="..\Agro.Dto\Agro.Dto.csproj" />
     <ProjectReference Include="..\Agro.Interfaces\Agro.Interfaces.csproj" />
     <ProjectReference Include="..\Agro.Services\Agro.Services.csproj" />
     <ProjectReference Include="..\Bank.Api\Bank.Api.csproj" />
@@ -68,6 +70,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Update="Views\Pages\Bank\BaseView\ExpenditureItemsPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -101,6 +108,10 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Update="Resources\logo_kolos.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -108,6 +119,10 @@
     <None Update="UserSettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\Warehouse\" />
   </ItemGroup>
 
 </Project>

@@ -179,7 +179,7 @@
                               AutoGenerateColumns="False"
                               ItemsSource="{Binding CollectionView}"
                               CanUserAddRows="False"
-                              CanUserDeleteRows="False" CanUserResizeColumns="True">
+                              CanUserDeleteRows="False" CanUserResizeColumns="True" IsReadOnly="True">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Создать" Command="{Binding AddCommand}"></MenuItem>

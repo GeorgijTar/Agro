@@ -264,7 +264,7 @@ UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsReadOnly="True"/>
                               AutoGenerateColumns="False"
                               ItemsSource="{Binding  ComingTmc.Positions}"
                               CanUserAddRows="False" Margin="5,0"
-                              CanUserDeleteRows="False" CanUserResizeColumns="True">
+                              CanUserDeleteRows="False" CanUserResizeColumns="True" IsReadOnly="True">
                             <DataGrid.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Добавить" Command="{Binding AddPositionCommand}"></MenuItem>
@@ -347,13 +347,14 @@ UpdateSourceTrigger=PropertyChanged}"/>
                     </TabItem.Header>
                     <DataGrid 
                               ItemsSource="{Binding ComingTmc.AccountingPlanRegisters, UpdateSourceTrigger=PropertyChanged}" 
-                        CanUserAddRows="False" AutoGenerateColumns="False">
+                        CanUserAddRows="False" AutoGenerateColumns="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Дата проводки" Width="90" Binding="{Binding DateReg, StringFormat=dd.MM.yyyy}" IsReadOnly="True"/>
                             <DataGridTextColumn Header="Дебит" Width="70" Binding="{Binding Debit.Code}"/>
                             <DataGridTextColumn Header="Кредит" Width="70" Binding="{Binding Credit.Code}"/>
                             <DataGridTextColumn Header="Сумма" Width="100" Binding="{Binding Amount, ConverterCulture='ru-Ru', StringFormat=C}"/>
                             <DataGridTextColumn Header="Описание" Width="100*" Binding="{Binding  ContaAction}"/>
+                            <DataGridTextColumn Header="Описание" Width="100*" Binding="{Binding  ContaObject}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </TabItem>

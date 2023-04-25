@@ -5,6 +5,7 @@ using Agro.WPF.ViewModels.Bank.BaseViewModel;
 using Agro.WPF.ViewModels.Bank.Pay;
 using Agro.WPF.ViewModels.Coming;
 using Agro.WPF.ViewModels.Contract;
+using Agro.WPF.ViewModels.Decommissioning;
 using Agro.WPF.ViewModels.InvoiceVM;
 using Agro.WPF.ViewModels.Organization;
 using Agro.WPF.ViewModels.Personnel;
@@ -146,4 +147,28 @@ public class ViewModelLocator
 
     public ComingTmcCalculationsViewModel ComingTmcCalculationsModel =>
         App.Services.GetRequiredService<ComingTmcCalculationsViewModel>();
+
+    public DecommissioningTmcsViewModel DecommissioningModel => App.Services.GetRequiredService<DecommissioningTmcsViewModel>();
+
+    public DecommissioningTmcViewModel DecommissioningTmcModel=> App.Services.GetRequiredService<DecommissioningTmcViewModel>();
+
+    public PositionDecommissioningTmcViewModel PositionDecommissioningTmcModel => 
+        App.Services.GetRequiredService<PositionDecommissioningTmcViewModel>();
+
+    public TmcSprViewModel TmcSprModel => App.Services.GetRequiredService<TmcSprViewModel>();
+
+    public WriteOffObjectsViewModel WriteOffObjectsModel => App.Services.GetRequiredService<WriteOffObjectsViewModel>();
+
+    public WriteOffObjectViewModel WriteOffObjectModel => App.Services.GetRequiredService<WriteOffObjectViewModel>();
+
+    public TypeSubTypeGroupObjectViewModel TypeSubTypeGroupObjectModel =>
+        App.Services.GetRequiredService<TypeSubTypeGroupObjectViewModel>();
+
+    public PurposeExpendituresViewModel PurposeExpendituresModel =>
+        App.Services.GetRequiredService<PurposeExpendituresViewModel>();
+
+    public PurposeExpenditureViewModel PurposeExpenditureModel =>
+        App.Services.GetRequiredService<PurposeExpenditureViewModel>();
+
+    public MovementTmcViewModel MovementTmcModel => App.Services.GetRequiredService<MovementTmcViewModel>();
 }

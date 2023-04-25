@@ -163,6 +163,11 @@ public class DbRepository<T> : IBaseRepository<T> where T : Entity
         return item;
     }
 
+    public Task<DateTime> GetClosedPeriodAsync(CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
+    }
+
     #endregion
 
     #region Реализация сенхронных методов

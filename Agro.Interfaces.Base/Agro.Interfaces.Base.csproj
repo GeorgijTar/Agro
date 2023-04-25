@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Agro.DAL.Entities\Agro.DAL.Entities.csproj" />
+    <ProjectReference Include="..\Agro.Dto\Agro.Dto.csproj" />
   </ItemGroup>
 
 </Project>

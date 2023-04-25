@@ -15,6 +15,7 @@ using Agro.DAL.Entities.Personnel;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.ViewModels.Decommissioning;
 using Agro.WPF.ViewModels.Organization;
 using Agro.WPF.Views.Windows.Personnel;
 
@@ -71,9 +72,6 @@ public class EmployeesViewModel : ViewModel
 
     private string _tabNumberFilter = null!;
     public string TabNumberFilter { get => _tabNumberFilter; set => Set(ref _tabNumberFilter, value); }
-
-    public object SenderModel { get; set; }=null!;
-
     public string SenderModelPole { get; set; }=null!;
 
     public EmployeesViewModel(IBaseRepository<Employee> employeeRepository, IBaseRepository<Status> statusRepository)
@@ -289,9 +287,19 @@ public class EmployeesViewModel : ViewModel
                         organization.Organization.Hr = Employee;
                         break;
                 }
-               
-                
-                
+            }
+
+            if (SenderModel is DecommissioningTmcViewModel decommissioningTmc)
+            {
+                if (SenderModelPole == "Mol")
+                {
+                    decommissioningTmc.DecommissioningTmc.Mol=Employee;
+                }
+
+                if (SenderModelPole == "Storekeeper")
+                {
+                    decommissioningTmc.DecommissioningTmc.Storekeeper= Employee;
+                }
             }
             var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
                 if (window != null!)

@@ -1,4 +1,5 @@
 ﻿using Agro.DAL;
+using Agro.DAL.Entities.Registers;
 using Agro.DAL.Entities.Warehouse.Coming;
 using Agro.Interfaces.Base.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -83,6 +84,11 @@ public class ComingTmcRepository : IComingTmcRepository<ComingTmc>
         throw new NotImplementedException();
     }
 
+    public async Task<DateTime> GetClosedPeriodAsync(CancellationToken cancel = default)
+    {
+      return await _db.ClosedPeriod.MaxAsync(c=>c.Date, cancel).ConfigureAwait(false);
+    }
+
     public async Task<int> GetRegNumberAsync(CancellationToken cancel = default)
     {
         int max = 0;
@@ -103,6 +109,7 @@ public class ComingTmcRepository : IComingTmcRepository<ComingTmc>
     public async Task<IEnumerable<ComingTmc>?> GetAllNoTrackingAsync(CancellationToken cancel = default)
     {
         return await _db.ComingTmc
+            .AsNoTrackingWithIdentityResolution()
             .Include(c=>c.Status)
             .Include(c => c.Counterparty)
             .Include(c => c.TmcRegisters)
@@ -140,6 +147,20 @@ public class ComingTmcRepository : IComingTmcRepository<ComingTmc>
         if (tmcRegister! == null!) { throw new ArgumentNullException($"В базе данных не найдена запись"); }
         _db.TmcRegisters.Remove(tmcRegister);
         await _db.SaveChangesAsync(cancel);
+        return true;
+    }
+
+    public async Task<bool> DeleteAccountingRegisterRangePlanAsync(IEnumerable<AccountingPlanRegister> accountingPlanRegisters, CancellationToken cancel = default)
+    {
+        _db.AccountingPlanRegisters.RemoveRange(accountingPlanRegisters);
+        await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
+        return true;
+    }
+
+    public async Task<bool> DeleteTmcRegisterRangePlanAsync(IEnumerable<TmcRegister> tmcRegisters, CancellationToken cancel = default)
+    {
+        _db.TmcRegisters.RemoveRange(tmcRegisters);
+        await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
         return true;
     }
 }

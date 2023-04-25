@@ -1,5 +1,4 @@
 ﻿using Agro.DAL;
-using Agro.DAL.Entities;
 using Agro.DAL.Entities.Bank.Pay;
 using Agro.Interfaces.Base.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -76,6 +75,11 @@ public class PaymentOrderRepository : IPaymentOrderRepository<PaymentOrder>
     }
 
     public Task<bool> DeleteByIdAsync(int id, CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<DateTime> GetClosedPeriodAsync(CancellationToken cancel = default)
     {
         throw new NotImplementedException();
     }

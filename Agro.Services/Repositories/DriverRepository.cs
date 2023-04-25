@@ -53,4 +53,9 @@ public class DriverRepository : IBaseRepository<Driver>
     {
         throw new NotImplementedException();
     }
+
+    public Task<DateTime> GetClosedPeriodAsync(CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
+    }
 }

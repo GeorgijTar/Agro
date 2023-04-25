@@ -50,4 +50,9 @@ public class StaffListPositionRepository: IBaseRepository<StaffListPosition>
     {
         throw new NotImplementedException();
     }
+
+    public Task<DateTime> GetClosedPeriodAsync(CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
+    }
 }

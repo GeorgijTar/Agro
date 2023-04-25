@@ -73,6 +73,7 @@ public class ComingTmc : Entity
     private InvoiceFactur? _invoiceFactur;
     public InvoiceFactur? InvoiceFactur { get => _invoiceFactur; set => Set(ref _invoiceFactur, value); }
 
+    /// <summary> Записи в регистри ТМЦ </summary>
     private ObservableCollection<TmcRegister>? _tmcRegisters;
     public ObservableCollection<TmcRegister>? TmcRegisters { get => _tmcRegisters; set => Set(ref _tmcRegisters, value); }
 

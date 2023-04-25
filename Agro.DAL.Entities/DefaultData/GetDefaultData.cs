@@ -85,6 +85,8 @@ public static class GetDefaultData
         new() { Id = 24, Name = "Договор оказания услуг", TypeApplication = "Контракт" },
         new() { Id = 25, Name = "Приход", TypeApplication = "ТМЦ" },
         new() { Id = 26, Name = "Расход", TypeApplication = "ТМЦ" },
+        new() { Id = 27, Name = "Списание", TypeApplication = "ДокументСписанияТМЦ" },
+        new() { Id = 28, Name = "Стронирование списания", TypeApplication = "ДокументСписанияТМЦ" },        
     };
 
 
