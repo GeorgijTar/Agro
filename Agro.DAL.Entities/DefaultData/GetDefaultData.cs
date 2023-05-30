@@ -86,7 +86,9 @@ public static class GetDefaultData
         new() { Id = 25, Name = "Приход", TypeApplication = "ТМЦ" },
         new() { Id = 26, Name = "Расход", TypeApplication = "ТМЦ" },
         new() { Id = 27, Name = "Списание", TypeApplication = "ДокументСписанияТМЦ" },
-        new() { Id = 28, Name = "Стронирование списания", TypeApplication = "ДокументСписанияТМЦ" },        
+        new() { Id = 28, Name = "Стронирование списания", TypeApplication = "ДокументСписанияТМЦ" },
+        new() { Id = 29, Name = "Ввод остатков", TypeApplication = "ТМЦ" },
+        new() { Id = 30, Name = "Корректировка", TypeApplication = "ТМЦ" }
     };
 
 

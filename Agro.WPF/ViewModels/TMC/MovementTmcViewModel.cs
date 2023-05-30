@@ -1,10 +1,14 @@
 ﻿
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using Agro.DAL.Entities.Registers;
 using Agro.DAL.Entities.Warehouse;
 using Agro.Dto.Warehouse;
 using Agro.Interfaces.Base.Repositories;
+using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
+using Microsoft.Win32;
+using ReportExcelLib.Tmc;
 
 namespace Agro.WPF.ViewModels.TMC;
 public class MovementTmcViewModel : ViewModel
@@ -42,4 +46,34 @@ public class MovementTmcViewModel : ViewModel
         }
         
     }
+
+    #region Commands
+
+    #region Excel
+
+    private ICommand? _excelCommand;
+
+    public ICommand ExcelCommand => _excelCommand
+        ??= new RelayCommand(OnExcelExecuted, ExcelCan);
+
+    private bool ExcelCan(object arg)
+    {
+        return TmcSprDto!=null!;
+    }
+
+    private void OnExcelExecuted(object obj)
+    {
+        SaveFileDialog saveFileDialog = new SaveFileDialog();
+        saveFileDialog.DefaultExt = "*.xlsx";
+        saveFileDialog.FileName = $"Движение ТМЦ";
+        saveFileDialog.Filter = "Microsoft Excel (*.xlsx)|*.xlsx";
+        if (saveFileDialog.ShowDialog() == true)
+        {
+            MovementToExcel.ToExcel(TmcRegisters, TmcSprDto, saveFileDialog.FileName);
+        }
+    }
+
+    #endregion
+
+    #endregion
 }

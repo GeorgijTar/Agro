@@ -36,7 +36,9 @@ public static class SprTmcToExcel
                 sheet.Cells["D" + row].Value = dto.Unit;
                 sheet.Cells["E" + row].Value = dto.Quantity;
                 sheet.Cells["F" + row].Value = dto.Price;
+                sheet.Cells["F" + row].Style.Numberformat.Format = "#,##0.00";
                 sheet.Cells["G" + row].Value = dto.Amount;
+                sheet.Cells["G" + row].Style.Numberformat.Format = "#,##0.00";
                 sheet.Cells["H" + row].Value = dto.AccountingPlanCode;
                 sheet.Cells["I" + row].Value = dto.StorageLocation;
                 row++;

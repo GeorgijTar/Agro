@@ -8,8 +8,9 @@
     <StartupObject>Agro.WPF.App</StartupObject>
     <ApplicationIcon>wheat_icon_logo.ico</ApplicationIcon>
     <PackageIcon>logo_kolos.png</PackageIcon>
-    <AssemblyVersion>2.0.0.1</AssemblyVersion>
+    <AssemblyVersion>2.0.0.2</AssemblyVersion>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <GenerateDocumentationFile>False</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
