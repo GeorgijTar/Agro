@@ -17,6 +17,7 @@ using Agro.WPF.ViewModels.Auxiliary_windows;
 using Agro.WPF.Views.Auxiliary_windows;
 using Agro.WPF.Views.Windows.Contract;
 using Notification.Wpf;
+using Agro.DAL.Entities.Base;
 
 namespace Agro.WPF.ViewModels.Contract;
 public class ContractViewModel : ViewModel

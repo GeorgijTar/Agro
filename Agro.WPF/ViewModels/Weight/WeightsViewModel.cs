@@ -5,11 +5,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows;
-using Agro.DAL.Entities;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.Views.Windows.Weight;
+using Agro.DAL.Entities.Base;
 
 namespace Agro.WPF.ViewModels.Weight;
 public class WeightsViewModel : ViewModel

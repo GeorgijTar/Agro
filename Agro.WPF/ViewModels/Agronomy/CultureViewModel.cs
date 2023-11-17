@@ -6,8 +6,8 @@ using System.Windows;
 using System;
 using System.Linq;
 using System.Windows.Input;
-using Agro.DAL.Entities;
 using Agro.WPF.Views.Windows;
+using Agro.DAL.Entities.Base;
 
 namespace Agro.WPF.ViewModels.Agronomy;
 public class CultureViewModel : ViewModel

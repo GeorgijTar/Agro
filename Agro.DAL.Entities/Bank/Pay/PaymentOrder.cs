@@ -9,12 +9,9 @@ namespace Agro.DAL.Entities.Bank.Pay;
 /// <summary>
 /// Платежное поручение
 /// </summary>
-public class PaymentOrder : Entity
+public class PaymentOrder : BaseDoc
 {
-    /// <summary>Статус документа</summary>
-    private Status? _status;
-    public Status? Status { get => _status; set => Set(ref _status, value); }
-
+    
     /// <summary> Тип операции
     /// (оплата контрагенту, оплата налогов, оплата штрафов и т.д.)
     /// </summary>
@@ -44,25 +41,14 @@ public class PaymentOrder : Entity
     /// <summary> Примечание к платежному поручению </summary>
     private string? _description;
     public string? Description { get => _description; set => Set(ref _description, value); }
-
+    
    
+    
     #region Реквизиты платежного поручения по приложению № 1 Положения Банка России от 29 июня 2021 года N 762-П
-
-    /// <summary> Номер платежного поручения (поле 3) </summary>
-    private int _number;
-    public int Number { get => _number; set => Set(ref _number, value); }
-
-    /// <summary> Дата составления платежного поручения (поле 4)</summary>
-    private DateTime _date = DateTime.Now;
-    public DateTime Date { get => _date; set => Set(ref _date, value); }
-
+    
     /// <summary> Вид платежа (поле 5) </summary>
     private TypePayment? _typePayment;
     public TypePayment? TypePayment { get => _typePayment; set => Set(ref _typePayment, value); }
-
-    /// <summary> Сумма платежного поручения (поле 7) </summary>
-    private decimal _amount;
-    public decimal Amount { get => _amount; set => Set(ref _amount, value); }
 
     /// <summary> Плательщик (поля 8 (наименование), 60 (ИНН), 102(КПП)) </summary>
     private Organization.Organization _organization = null!;

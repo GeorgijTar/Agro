@@ -4,6 +4,7 @@ using Agro.DAL.Entities.Agronomy;
 using Agro.DAL.Entities.Bank;
 using Agro.DAL.Entities.Bank.Base;
 using Agro.DAL.Entities.Bank.Pay;
+using Agro.DAL.Entities.Base;
 using Agro.DAL.Entities.CheckingCounterparty;
 using Agro.DAL.Entities.CheckingCounterparty.Components;
 using Agro.DAL.Entities.Classifiers;
@@ -11,6 +12,8 @@ using Agro.DAL.Entities.Counter;
 using Agro.DAL.Entities.DefaultData;
 using Agro.DAL.Entities.General;
 using Agro.DAL.Entities.InvoiceEntity;
+using Agro.DAL.Entities.Kassa;
+using Agro.DAL.Entities.Kassa.Base;
 using Agro.DAL.Entities.Organization;
 using Agro.DAL.Entities.Organization.RegInfoOrg;
 using Agro.DAL.Entities.Personnel;
@@ -22,6 +25,7 @@ using Agro.DAL.Entities.Warehouse.Coming;
 using Agro.DAL.Entities.Warehouse.Decommissioning;
 using Agro.DAL.Entities.Weight;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 using Tax = Agro.DAL.Entities.CheckingCounterparty.Components.Tax;
 
 
@@ -171,6 +175,14 @@ public class AgroDb : DbContext
 
     #endregion
 
+    #region Cash (Касса)
+
+    public DbSet<DocCash> DocsCash { get; set; } = null!;
+    public DbSet<TypeOperationCash> TypesOperationCash { get; set; } = null!;
+    public DbSet<ItemExpenditureOrIncome> ItemsExpenditureOrIncome { get; set; } = null!;
+
+    #endregion
+
     public DbSet<ClosedPeriod> ClosedPeriod { get; set; } = null!;
 
     #region DecommissioningTmc
@@ -186,6 +198,12 @@ public class AgroDb : DbContext
 
     #endregion
 
+    #region Авансовые отчеты
+
+    public DbSet<AdvanceReport> AdvanceReport { get; set; } = null!;
+    public DbSet<AdvanceProduct> AdvanceProduct { get; set; } = null!;
+
+    #endregion
 
     public AgroDb(DbContextOptions<AgroDb> options) : base(options) { }
 
@@ -210,6 +228,40 @@ public class AgroDb : DbContext
         db.Entity<TypeCommitment>().HasData(GetDefaultData.DefaultTypeCommitment());
         db.Entity<Currency>().HasData(GetDefaultData.DefaultCurrency());
         db.Entity<AccountingMethodNds>().HasData(GetDefaultData.DefaultAccountingMethodNds());
+        db.Entity<ItemExpenditureOrIncome>().HasData(
+            new { Id = 1, Name = "Пополнение расчетного счета" },
+            new { Id = 2, Name = "Поступления от покупателей", TypeCashFlowId = 1 },
+            new { Id = 3, Name = "Розничная выручка", TypeCashFlowId = 1 },
+            new { Id = 4, Name = "Возврат кредитов и займов", TypeCashFlowId = 12 },
+            new { Id = 5, Name = "Прочие поступления", TypeCashFlowId = 4 },
+
+            new { Id = 6, Name = "Оплата поставщику (подрядчику)", TypeCashFlowId = 5 },
+            new { Id = 7, Name = "Выплата заработной платы", TypeCashFlowId = 6 },
+            new { Id = 8, Name = "Выдача кредитов и займов", TypeCashFlowId = 17 },
+            new { Id = 9, Name = "Выдача под авансовый отчет", TypeCashFlowId = 5 },
+            new { Id = 10, Name = "Прочие выплаты", TypeCashFlowId = 9 }
+        );
+
+
+        db.Entity<TypeOperationCash>().HasData(
+            new { Id = 1, Name = "Получение наличных в банке", TypeDocId = 31, AccountingPlanId = 69, ItemExpenditureOrIncomeId = 1, IsAccountingPlan = false },
+            new { Id = 2, Name = "Оплата от покупателя", TypeDocId = 31, AccountingPlanId = 82, ItemExpenditureOrIncomeId = 2, IsAccountingPlan = true },
+            new { Id = 3, Name = "Розничная выручка", TypeDocId = 31, ItemExpenditureOrIncomeId = 3, IsAccountingPlan = true },
+            new { Id = 4, Name = "Возврат от подотчетного лица", TypeDocId = 31, AccountingPlanId = 100, IsAccountingPlan = true },
+            new { Id = 5, Name = "Возврат займа работником", TypeDocId = 31, AccountingPlanId = 101, ItemExpenditureOrIncomeId = 4, IsAccountingPlan = true },
+            new { Id = 6, Name = "Возврат от поставщика", TypeDocId = 31, AccountingPlanId = 79, ItemExpenditureOrIncomeId = 5, IsAccountingPlan = true },
+            new { Id = 7, Name = "Прочий приход", TypeDocId = 31, ItemExpenditureOrIncomeId = 5, IsAccountingPlan = true },
+
+
+            new { Id = 8, Name = "Выдача подотчетному лицу", TypeDocId = 32, ItemExpenditureOrIncomeId = 9, AccountingPlanId = 100, IsAccountingPlan = true },
+            new { Id = 9, Name = "Оплата поставщику", TypeDocId = 32, ItemExpenditureOrIncomeId = 6, AccountingPlanId = 79, IsAccountingPlan = true },
+            new { Id = 10, Name = "Выплата заработной платы по ведомостям", TypeDocId = 32, ItemExpenditureOrIncomeId = 7, AccountingPlanId = 99, IsAccountingPlan = true },
+            new { Id = 11, Name = "Выплата заработной платы работнику", TypeDocId = 32, ItemExpenditureOrIncomeId = 7, AccountingPlanId = 99, IsAccountingPlan = true },
+            new { Id = 12, Name = "Выплата по договору подряда", TypeDocId = 32, ItemExpenditureOrIncomeId = 6, AccountingPlanId = 103, IsAccountingPlan = true },
+            new { Id = 13, Name = "Выдача займа работнику", TypeDocId = 32, ItemExpenditureOrIncomeId = 8, AccountingPlanId = 101, IsAccountingPlan = true },
+            new { Id = 14, Name = "Взнос наличными в банк", TypeDocId = 32, ItemExpenditureOrIncomeId = 1, IsAccountingPlan = false },
+            new { Id = 15, Name = "Прочий расход", TypeDocId = 32, ItemExpenditureOrIncomeId = 10, IsAccountingPlan = true }
+        );
     }
 
 

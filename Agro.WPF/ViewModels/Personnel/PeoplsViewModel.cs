@@ -6,11 +6,12 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Agro.DAL.Entities;
+using Agro.DAL.Entities.Base;
 using Agro.DAL.Entities.Personnel;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.ViewModels.Kassa;
 using Agro.WPF.Views.Windows.Personnel;
 
 namespace Agro.WPF.ViewModels.Personnel;
@@ -207,11 +208,16 @@ public class PeoplsViewModel : ViewModel
             if (SenderModel is EmployeeViewModel employeeViewModel)
             {
                 employeeViewModel.Employee.People = People;
-
-                var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
-                if (window != null!)
-                    window.Close();
             }
+
+            if (SenderModel is DocCashViewModel docCashViewModel)
+            {
+                docCashViewModel.DocCash.People = People;
+            }
+
+            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+            if (window != null!)
+                window.Close();
         }
     }
 

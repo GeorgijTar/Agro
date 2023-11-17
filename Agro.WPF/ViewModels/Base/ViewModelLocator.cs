@@ -7,8 +7,10 @@ using Agro.WPF.ViewModels.Coming;
 using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.ViewModels.Decommissioning;
 using Agro.WPF.ViewModels.InvoiceVM;
+using Agro.WPF.ViewModels.Kassa;
 using Agro.WPF.ViewModels.Organization;
 using Agro.WPF.ViewModels.Personnel;
+using Agro.WPF.ViewModels.Shared;
 using Agro.WPF.ViewModels.Storage;
 using Agro.WPF.ViewModels.TMC;
 using Agro.WPF.ViewModels.UserSettings;
@@ -43,7 +45,7 @@ public class ViewModelLocator
     public OrganizationViewModel OrganizationModel => App.Services.GetRequiredService<OrganizationViewModel>();
 
     public ProductInvoiceViewModel ProductInvoiceModel => App.Services.GetRequiredService<ProductInvoiceViewModel>();
-    
+
     public ContractsViewModel ContractsModel => App.Services.GetRequiredService<ContractsViewModel>();
 
     public DepartmentsViewModel DepartmentsModel => App.Services.GetRequiredService<DepartmentsViewModel>();
@@ -112,29 +114,29 @@ public class ViewModelLocator
 
     public TmCsViewModel TmCsModel => App.Services.GetRequiredService<TmCsViewModel>();
 
-   public TmcViewModel TmcModel => App.Services.GetRequiredService<TmcViewModel>();
+    public TmcViewModel TmcModel => App.Services.GetRequiredService<TmcViewModel>();
 
-   public RulesAccountingViewModel RulesAccountingModel => App.Services.GetRequiredService<RulesAccountingViewModel>();
+    public RulesAccountingViewModel RulesAccountingModel => App.Services.GetRequiredService<RulesAccountingViewModel>();
 
-   public ContractViewModel ContractModel => App.Services.GetRequiredService<ContractViewModel>();
+    public ContractViewModel ContractModel => App.Services.GetRequiredService<ContractViewModel>();
 
-   public SpecificationContractViewModel SpecificationContractModel => App.Services.GetRequiredService<SpecificationContractViewModel>();
+    public SpecificationContractViewModel SpecificationContractModel => App.Services.GetRequiredService<SpecificationContractViewModel>();
 
-   public TypeViewModel TypeModel => App.Services.GetRequiredService<TypeViewModel>();
+    public TypeViewModel TypeModel => App.Services.GetRequiredService<TypeViewModel>();
 
-   public GroupViewModel GroupModel => App.Services.GetRequiredService<GroupViewModel>();
+    public GroupViewModel GroupModel => App.Services.GetRequiredService<GroupViewModel>();
 
-   public RegistryInvoiceViewModel RegistryInvoiceModel => App.Services.GetRequiredService<RegistryInvoiceViewModel>();
-   
-   public RegistryInvoicesViewModel RegistryInvoicesModel => App.Services.GetRequiredService<RegistryInvoicesViewModel>();
+    public RegistryInvoiceViewModel RegistryInvoiceModel => App.Services.GetRequiredService<RegistryInvoiceViewModel>();
 
-   public RegistryInvoiceSettingsViewModel RegistryInvoiceSettingsModel => App.Services.GetRequiredService<RegistryInvoiceSettingsViewModel>();
+    public RegistryInvoicesViewModel RegistryInvoicesModel => App.Services.GetRequiredService<RegistryInvoicesViewModel>();
 
-   public ExpenditureItemsViewModel ExpenditureItemsModel=> App.Services.GetRequiredService<ExpenditureItemsViewModel>();
+    public RegistryInvoiceSettingsViewModel RegistryInvoiceSettingsModel => App.Services.GetRequiredService<RegistryInvoiceSettingsViewModel>();
 
-   public ExpenditureItemViewModel ExpenditureItemModel=> App.Services.GetRequiredService<ExpenditureItemViewModel>();
+    public ExpenditureItemsViewModel ExpenditureItemsModel => App.Services.GetRequiredService<ExpenditureItemsViewModel>();
 
-    public PaymentOrdersViewModel PaymentOrdersModel =>App.Services.GetRequiredService<PaymentOrdersViewModel>();
+    public ExpenditureItemViewModel ExpenditureItemModel => App.Services.GetRequiredService<ExpenditureItemViewModel>();
+
+    public PaymentOrdersViewModel PaymentOrdersModel => App.Services.GetRequiredService<PaymentOrdersViewModel>();
 
     public PaymentOrderViewModel PaymentOrderModel => App.Services.GetRequiredService<PaymentOrderViewModel>();
 
@@ -150,9 +152,9 @@ public class ViewModelLocator
 
     public DecommissioningTmcsViewModel DecommissioningModel => App.Services.GetRequiredService<DecommissioningTmcsViewModel>();
 
-    public DecommissioningTmcViewModel DecommissioningTmcModel=> App.Services.GetRequiredService<DecommissioningTmcViewModel>();
+    public DecommissioningTmcViewModel DecommissioningTmcModel => App.Services.GetRequiredService<DecommissioningTmcViewModel>();
 
-    public PositionDecommissioningTmcViewModel PositionDecommissioningTmcModel => 
+    public PositionDecommissioningTmcViewModel PositionDecommissioningTmcModel =>
         App.Services.GetRequiredService<PositionDecommissioningTmcViewModel>();
 
     public TmcSprViewModel TmcSprModel => App.Services.GetRequiredService<TmcSprViewModel>();
@@ -171,4 +173,20 @@ public class ViewModelLocator
         App.Services.GetRequiredService<PurposeExpenditureViewModel>();
 
     public MovementTmcViewModel MovementTmcModel => App.Services.GetRequiredService<MovementTmcViewModel>();
+
+    public DocsCashViewModel DocsCashModel=> App.Services.GetRequiredService<DocsCashViewModel>();
+
+    public DocCashViewModel DocCashModel => App.Services.GetRequiredService<DocCashViewModel>();
+
+    public TransactionViewModel TransactionModel => App.Services.GetRequiredService<TransactionViewModel>();
+
+    public LookViewModel LookModel => App.Services.GetRequiredService<LookViewModel>();
+
+    public AdvanceReportsViewModel AdvanceReportsModel => App.Services.GetRequiredService<AdvanceReportsViewModel>();
+
+    public AdvanceReportViewModel AdvanceReportModel => App.Services.GetRequiredService<AdvanceReportViewModel>();
+
+
+   public TestUserControl TestUserControlModel => App.Services.GetRequiredService<TestUserControl>();
+
 }

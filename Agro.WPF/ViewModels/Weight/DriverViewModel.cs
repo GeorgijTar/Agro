@@ -7,9 +7,9 @@ using Agro.DAL.Entities.Weight;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using System.Windows.Input;
-using Agro.DAL.Entities;
 using Agro.WPF.Views.Windows.Weight;
 using Agro.Interfaces.Base.Repositories.Base;
+using Agro.DAL.Entities.Base;
 
 namespace Agro.WPF.ViewModels.Weight;
 

@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Agro.DAL.Entities;
 using Agro.DAL.Entities.InvoiceEntity;
 using Agro.Interfaces.Base.Repositories;
 using Agro.WPF.ViewModels.Base;
@@ -22,6 +21,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using Agro.WPF.Views.Windows.UserSettings;
 using Notification.Wpf;
+using Agro.DAL.Entities.Base;
 
 namespace Agro.WPF.ViewModels.InvoiceVM;
 

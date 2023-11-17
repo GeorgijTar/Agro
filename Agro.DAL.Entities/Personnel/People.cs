@@ -24,6 +24,57 @@ public class People : Entity
     private string _surname = null!;
     public string Surname { get => _surname; set => Set(ref _surname, value); }
 
+    #region Падежи
+
+    #region Фамилия
+ /// <summary>Фамилия в родительном падеже</summary>
+    private string? _surnameRp;
+    public string? SurnameRp { get => _surnameRp; set => Set(ref _surnameRp, value); }
+
+    /// <summary>Фамилия в дательном падеже</summary>
+    private string? _surnameDp;
+    public string? SurnameDp { get => _surnameDp; set => Set(ref _surnameDp, value); }
+
+    /// <summary>Фамилия в творительном падеже</summary>
+    private string? _surnameTp;
+    public string? SurnameTp { get => _surnameTp; set => Set(ref _surnameTp, value); }
+
+    #endregion
+
+    #region Имя
+    
+    /// <summary>Имя в родительном падеже</summary>
+    private string? _nameRp;
+    public string? NameRp { get => _nameRp; set => Set(ref _nameRp, value); }
+
+    /// <summary>Имя в дательном падеже</summary>
+    private string? _nameDp;
+    public string? NameDp { get => _nameDp; set => Set(ref _nameDp, value); }
+
+    /// <summary>Имя в творительном падеже</summary>
+    private string? _nameTp;
+    public string? NameTp { get => _nameTp; set => Set(ref _nameTp, value); }
+
+    #endregion
+
+    #region Отчество
+    /// <summary>Отчество в родительном падеже</summary>
+    private string? _patronymicRp;
+    public string? PatronymicRp{ get => _patronymicRp; set => Set(ref _patronymicRp, value); }
+
+    /// <summary>Отчество в дательном падеже</summary>
+    private string? _patronymicDp;
+    public string? PatronymicDp { get => _patronymicDp; set => Set(ref _patronymicDp, value); }
+
+    /// <summary>Отчество в творительном падеже</summary>
+    private string? _patronymicTp;
+    public string? PatronymicTp { get => _patronymicTp; set => Set(ref _patronymicTp, value); }
+
+    #endregion
+
+    #endregion
+
+
     /// <summary>Дата рождения</summary>
     private DateTime? _birthDate;
     public DateTime? BirthDate { get => _birthDate; set => Set(ref _birthDate, value); }

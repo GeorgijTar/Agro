@@ -1,6 +1,6 @@
 ﻿using Agro.DAL;
-using Agro.DAL.Entities;
 using Agro.DAL.Entities.Bank.Base;
+using Agro.DAL.Entities.Base;
 using Agro.Interfaces.Base.Repositories;
 using Microsoft.EntityFrameworkCore;
 

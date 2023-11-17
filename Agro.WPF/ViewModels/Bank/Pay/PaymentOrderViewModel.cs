@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using Agro.DAL.Entities;
 using Agro.DAL.Entities.Bank.Pay;
+using Agro.DAL.Entities.Base;
 using Agro.Interfaces.Base.Repositories;
 using Agro.WPF.Commands;
 using Agro.WPF.Helpers;
@@ -423,7 +424,10 @@ public class PaymentOrderViewModel : ViewModel
     {
         try
         {
-
+            if (PaymentOrder!.UserCreator == null!)
+            {
+                PaymentOrder!.UserCreator = (Application.Current.Properties["CurrentUser"] as User)!;
+            }
             var po = await _repository.SaveAsync(PaymentOrder!);
             if (SenderModel != null!)
             {

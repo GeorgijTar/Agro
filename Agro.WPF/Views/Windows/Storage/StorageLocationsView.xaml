@@ -9,7 +9,7 @@
         mc:Ignorable="d"
            Title="{Binding Title}" Height="550" Width="490"
         DataContext="{Binding StorageLocationsModel, Source={StaticResource Locator}}"
-        x:Name="TrWindow">
+        x:Name="StorageWindow">
     <Window.Resources>
         <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
             <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
@@ -94,7 +94,7 @@
                             <b:Interaction.Triggers>
                                 <b:EventTrigger EventName="MouseDoubleClick">
                                     <b:InvokeCommandAction Command="{Binding SelectRowCommand}" 
-                                                           CommandParameter="{Binding ElementName=PeoplsWindow}"/>
+                                                           CommandParameter="{Binding ElementName=StorageWindow}"/>
                                 </b:EventTrigger>
                             </b:Interaction.Triggers>
                             <DataGrid.Columns>

@@ -9,13 +9,14 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Agro.DAL.Entities;
+using Agro.DAL.Entities.Base;
 using Agro.DAL.Entities.Organization;
 using Agro.DAL.Entities.Personnel;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.ViewModels.Decommissioning;
+using Agro.WPF.ViewModels.Kassa;
 using Agro.WPF.ViewModels.Organization;
 using Agro.WPF.Views.Windows.Personnel;
 
@@ -301,6 +302,25 @@ public class EmployeesViewModel : ViewModel
                     decommissioningTmc.DecommissioningTmc.Storekeeper= Employee;
                 }
             }
+
+            if (SenderModel is DocCashViewModel model)
+            {
+                switch (SenderModelPole)
+                {
+                    case "Cashier":
+                        model.DocCash.Cashier=Employee;
+                        break;
+                    case "GeneralAccountant":
+                        model.DocCash.GeneralAccountant=Employee;
+                        break;
+                    case "Director":
+                        model.DocCash.Director = Employee;
+                        break;
+
+                }
+            }
+
+
             var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
                 if (window != null!)
                     window.Close();

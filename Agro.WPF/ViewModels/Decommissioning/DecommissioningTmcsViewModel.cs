@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Agro.DAL.Entities;
+using Agro.DAL.Entities.Base;
 using Agro.DAL.Entities.Registers;
 using Agro.DAL.Entities.Warehouse;
 using Agro.DAL.Entities.Warehouse.Decommissioning;
@@ -414,7 +415,7 @@ public class DecommissioningTmcsViewModel : ViewModel
 
     private bool SpendCan(object arg)
     {
-        return SelectionDecommissioningTmc.StatusId == 1;
+        return SelectionDecommissioningTmc!=null! &&  SelectionDecommissioningTmc.StatusId == 1;
     }
 
     private async void OnSpendExecuted(object obj)

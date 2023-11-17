@@ -1,6 +1,7 @@
 ﻿
 using Agro.DAL.Entities.Accounting;
 using Agro.DAL.Entities.Base;
+using Agro.DAL.Entities.Kassa;
 using Agro.DAL.Entities.Warehouse.Coming;
 using Agro.DAL.Entities.Warehouse.Decommissioning;
 
@@ -41,11 +42,15 @@ public class AccountingPlanRegister : Entity<Guid>
     private string? _contaObject;
     public string? ContaObject { get => _contaObject; set => Set(ref _contaObject, value); }
 
-    /// <summary> Родительский документ поступения </summary>
+    /// <summary> Родительский документ поступения ТМЦ </summary>
     private ComingTmc? _comingTmc;
     public ComingTmc? ComingTmc { get => _comingTmc; set => Set(ref _comingTmc, value); }
 
-    /// <summary> Родительский документ списания  </summary>
+    /// <summary> Родительский документ списания ТМЦ </summary>
     private DecommissioningTmc? _decommissioningTmc = null!;
     public DecommissioningTmc? DecommissioningTmc { get => _decommissioningTmc; set => Set(ref _decommissioningTmc, value); }
+
+    /// <summary> Родительский документ движения наличных денег </summary>
+    private DocCash? _docCash;
+    public DocCash? DocCash { get => _docCash; set => Set(ref _docCash, value); }
 }

@@ -3,7 +3,9 @@
 using Agro.DAL.Entities.Base;
 
 namespace Agro.DAL.Entities.Organization;
-
+/// <summary>
+/// Структурное подразделение
+/// </summary>
 public class Division : Entity
 
 {

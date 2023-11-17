@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Agro.DAL.Entities;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.DAL.Entities.Accounting;
+using Agro.DAL.Entities.Base;
 
 namespace Agro.WPF.ViewModels.Accounting;
 public class AccountingPlanViewModel : ViewModel

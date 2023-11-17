@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         mc:Ignorable="d"
-         Title="{Binding Title}" Width="850" Height="400"
+         Title="{Binding Title}" Width="950" Height="auto"
         DataContext="{Binding PeopleModel, Source={StaticResource Locator}}"
         WindowStartupLocation="CenterOwner"
         x:Name="MyWindow" WindowStyle="ToolWindow">
@@ -36,8 +36,8 @@
     </Window.Resources>
     <Grid Background="AliceBlue">
         <Grid.RowDefinitions>
-            <RowDefinition Height="90*"/>
-            <RowDefinition Height="15*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="1" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
@@ -77,11 +77,12 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="5"/>
-                <RowDefinition Height="20*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Column="0" Text="Фамилия:" VerticalAlignment="Center" Margin="10,0" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Фамилия:" VerticalAlignment="Center" Margin="10,0" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="0" Grid.Column="1" TextAlignment="Left" TextWrapping="Wrap" 
                          Text="{Binding People.Surname, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Grid.Row="0" Grid.Column="2" Text="Имя:" TextWrapping="Wrap"
@@ -92,18 +93,65 @@
             <TextBlock Grid.Row="0" Grid.Column="4" Text="Отчество:" 
                            HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"/>
             <TextBox Grid.Row="0" Grid.Column="5" Text="{Binding People.Patronymic, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="Дата рождения:" Margin="10,0" 
+           <Expander Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" Header="Склонения">
+               <Grid>
+                   <Grid.RowDefinitions>
+                       <RowDefinition Height="Auto"/>
+                       <RowDefinition Height="Auto"/>
+                       <RowDefinition Height="Auto"/>
+                       <RowDefinition Height="Auto"/>
+                   </Grid.RowDefinitions>
+                    <Button Grid.Row="0" BorderBrush="DarkBlue" Width="108" Command="{Binding GetDeclinationCommand}"
+                           Template="{StaticResource ButtonTemplate}" Margin="2,0" HorizontalAlignment="Left">
+                       <StackPanel Orientation="Horizontal">
+                           <fa5:ImageAwesome Height="12" Icon="Solid_CaretSquareDown"
+                                             Margin="8,5"
+                                             Foreground="DarkBlue" />
+                           <TextBlock Text="Заполнить" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                       </StackPanel>
+                   </Button>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                       <TextBlock Text="Родительный падеж:" VerticalAlignment="Center" Margin="5,0"/>
+                       <TextBlock Text="Фамилия:" VerticalAlignment="Center" Margin="5,0"/>
+                       <TextBox VerticalAlignment="Center" Width="200" Text="{Binding People.SurnameRp}"/>
+                       <TextBlock Text="Имя:" VerticalAlignment="Center" Margin="5,0"/>
+                       <TextBox VerticalAlignment="Center" Width="200" Text="{Binding People.NameRp}"/>
+                       <TextBlock Text="Отчество:" VerticalAlignment="Center" Margin="5,0"/>
+                       <TextBox VerticalAlignment="Center" Width="200" Text="{Binding People.PatronymicRp}"/>
+                    </StackPanel>
+                   <StackPanel Grid.Row="2" Orientation="Horizontal">
+                       <TextBlock Text="Дательный падеж:" VerticalAlignment="Center" Margin="5,0"/>
+                       <TextBlock Text="Фамилия:" VerticalAlignment="Center" Margin="5,0"/>
+                       <TextBox VerticalAlignment="Center" Width="200" Text="{Binding People.SurnameDp}"/>
+                       <TextBlock Text="Имя:" VerticalAlignment="Center" Margin="5,0"/>
+                       <TextBox VerticalAlignment="Center" Width="200" Text="{Binding People.NameDp}"/>
+                       <TextBlock Text="Отчество:" VerticalAlignment="Center" Margin="5,0"/>
+                       <TextBox VerticalAlignment="Center" Width="200" Text="{Binding People.PatronymicDp}"/>
+                   </StackPanel>
+                   <StackPanel Grid.Row="3" Orientation="Horizontal">
+                       <TextBlock Text="Творительный падеж:" VerticalAlignment="Center" Margin="5,0"/>
+                       <TextBlock Text="Фамилия:" VerticalAlignment="Center" Margin="5,0"/>
+                       <TextBox VerticalAlignment="Center" Width="200" Text="{Binding People.SurnameTp}"/>
+                       <TextBlock Text="Имя:" VerticalAlignment="Center" Margin="5,0"/>
+                       <TextBox VerticalAlignment="Center" Width="200" Text="{Binding People.NameTp}"/>
+                       <TextBlock Text="Отчество:" VerticalAlignment="Center" Margin="5,0"/>
+                       <TextBox VerticalAlignment="Center" Width="200" Text="{Binding People.PatronymicTp}"/>
+                   </StackPanel>
+                </Grid>
+
+           </Expander>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Дата рождения:" Margin="10,0" 
                        HorizontalAlignment="Right" VerticalAlignment="Center" TextWrapping="Wrap"/>
-            <DatePicker Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" SelectedDate="{Binding People.BirthDate}"/>
-            <TextBlock Grid.Row="1" Grid.Column="2" Text="ИНН:" 
+            <DatePicker Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" SelectedDate="{Binding People.BirthDate}"/>
+            <TextBlock Grid.Row="2" Grid.Column="2" Text="ИНН:" 
                        VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0"/>
-            <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding  People.Inn, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Grid.Row="1" Grid.Column="4" Text="СНИЛС:" TextWrapping="Wrap" 
+            <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding  People.Inn, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Grid.Row="2" Grid.Column="4" Text="СНИЛС:" TextWrapping="Wrap" 
                        HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"/>
 
-            <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding People.Snils, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Row="2" Grid.Column="5" Text="{Binding People.Snils, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <GroupBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6" Margin="5" Header="Документы" BorderThickness="2">
+            <GroupBox Grid.Row="4" Height="230" Grid.Column="0" Grid.ColumnSpan="6" Margin="5" Header="Документы" BorderThickness="2">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35"/>

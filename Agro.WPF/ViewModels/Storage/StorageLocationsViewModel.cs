@@ -5,12 +5,15 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows;
-using Agro.DAL.Entities;
 using Agro.DAL.Entities.Storage;
+using Agro.DAL.Entities.Weight;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.ViewModels.Weight;
 using Agro.WPF.Views.Windows.Storage;
+using Agro.WPF.ViewModels.Kassa;
+using Agro.DAL.Entities.Base;
 
 namespace Agro.WPF.ViewModels.Storage;
 
@@ -28,8 +31,6 @@ public class StorageLocationsViewModel : ViewModel
     
     private StorageLocation _storageLocation = null!;
     public StorageLocation StorageLocation { get => _storageLocation; set => Set(ref _storageLocation, value); } 
-
-    public object SenderModel { get; set; } = null!;
 
     public StorageLocationsViewModel(
         IBaseRepository<StorageLocation> storageLocationRepository, 
@@ -124,24 +125,31 @@ public class StorageLocationsViewModel : ViewModel
     }
 
 
-    //private ICommand? _selectRowCommand;
+    private ICommand? _selectRowCommand;
 
-    //public ICommand SelectRowCommand => _selectRowCommand
-    //    ??= new RelayCommand(OnSelectRowExecuted, CanEditExecuted);
+    public ICommand SelectRowCommand => _selectRowCommand
+        ??= new RelayCommand(OnSelectRowExecuted, CanEditExecuted);
 
-    //private async void OnSelectRowExecuted(object obj)
-    //{
-    //    if (SenderModel != null!)
-    //    {
-    //        if (SenderModel is DriverViewModel driverViewModel)
-    //        {
-    //            driverViewModel.Driver.Transports!.Add(Transport);
-    //            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
-    //            if (window != null!)
-    //                window.Close();
-    //        }
-    //    }
-    //}
+    private async void OnSelectRowExecuted(object obj)
+    {
+        if (SenderModel != null!)
+        {
+            //if (SenderModel is DriverViewModel driverViewModel)
+            //{
+            //    driverViewModel.Driver.Transports!.Add(Transport);
+                
+            //}
+
+            if (SenderModel is DocCashViewModel docCashViewModel)
+            {
+                docCashViewModel.DocCash.StorageLocation= StorageLocation;
+            }
+
+            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+            if (window != null!)
+                window.Close();
+        }
+    }
 
     #endregion
 }

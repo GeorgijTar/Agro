@@ -4,6 +4,8 @@ using Agro.DAL.Entities;
 using Agro.DAL.Entities.Accounting;
 using Agro.DAL.Entities.Bank.Base;
 using Agro.DAL.Entities.Bank.Pay;
+using Agro.DAL.Entities.Base;
+using Agro.DAL.Entities.Kassa.Base;
 using Agro.DAL.Entities.Organization;
 using Agro.DAL.Entities.Storage;
 using Agro.DAL.Entities.TaxesType;
@@ -78,7 +80,24 @@ public class ReferencesRepository: IReferencesRepository
 
     public async Task<Organization?> GetOrganizationAsync(CancellationToken cancel = default)
     {
-        return await _db.Organizations.FirstOrDefaultAsync(cancel).ConfigureAwait(false);
+        return await _db.Organizations
+            .Include(o=>o.Director).ThenInclude(d=>d!.People)
+            .Include(o => o.Director).ThenInclude(d => d!.Post)
+            .Include(o => o.Cashier).ThenInclude(d => d!.People)
+            .Include(o => o.GeneralAccountant).ThenInclude(d => d!.People)
+            .Include(o=>o.AddressUr)
+            .Include(o=>o.BankDetails)
+            .Include(o=>o.Divisions)
+            .Include(o=>o.Hr).ThenInclude(h=>h!.People)
+            .Include(o=>o.Okato)
+            .Include(o=>o.Okfs)
+            .Include(o=>o.Okogy)
+            .Include(o=>o.Okved)
+            .Include(o => o.Oktmo)
+            .Include(o=>o.RegFns)
+            .Include(o => o.RegFss)
+            .Include(o => o.RegPfr)
+            .FirstOrDefaultAsync(cancel).ConfigureAwait(false);
     }
 
     public async Task<IEnumerable<TypePayment>?> GetAllTypesPaymentAsync(CancellationToken cancel = default)
@@ -120,5 +139,14 @@ public class ReferencesRepository: IReferencesRepository
     public async Task<IEnumerable<GroupObject>?> GetAllGroupObjectAsync(CancellationToken cancel = default)
     {
         return await _db.GroupObjects.ToArrayAsync(cancel).ConfigureAwait(false);
+    }
+
+    public async Task<IEnumerable<TypeOperationCash>?> GetAllTypeOperationCashAsync(CancellationToken cancel = default)
+    {
+        return  await _db.TypesOperationCash
+            .Include(t=>t.TypeDoc)
+            .Include(t=>t.AccountingPlan)
+            .Include(t=>t.ItemExpenditureOrIncome)
+            .ToArrayAsync(cancel).ConfigureAwait(false);
     }
 }

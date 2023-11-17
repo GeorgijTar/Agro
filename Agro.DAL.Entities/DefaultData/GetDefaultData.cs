@@ -1,6 +1,8 @@
 ﻿using Agro.DAL.Entities.Accounting;
 using Agro.DAL.Entities.Bank.Base;
 using Agro.DAL.Entities.Bank.Pay;
+using Agro.DAL.Entities.Base;
+using Agro.DAL.Entities.Kassa.Base;
 using Agro.DAL.Entities.TaxesType;
 using Agro.DAL.Entities.Warehouse.Coming;
 using Helpers;
@@ -48,6 +50,7 @@ public static class GetDefaultData
         new() { Id = 23, Name = "Зарегистрировано" },
         new() { Id = 24, Name = "Введено" },
         new() { Id = 25, Name = "Учтено" },
+        new (){Id = 26, Name = "Проведено"}
     };
 
     public static AccountingMethodNds[] DefaultAccountingMethodNds() => new AccountingMethodNds[]
@@ -88,7 +91,9 @@ public static class GetDefaultData
         new() { Id = 27, Name = "Списание", TypeApplication = "ДокументСписанияТМЦ" },
         new() { Id = 28, Name = "Стронирование списания", TypeApplication = "ДокументСписанияТМЦ" },
         new() { Id = 29, Name = "Ввод остатков", TypeApplication = "ТМЦ" },
-        new() { Id = 30, Name = "Корректировка", TypeApplication = "ТМЦ" }
+        new() { Id = 30, Name = "Корректировка", TypeApplication = "ТМЦ" },
+        new() { Id = 31, Name = "Приход", TypeApplication = "Касса" },
+        new() { Id = 32, Name = "Расход", TypeApplication = "Касса" }
     };
 
 
@@ -224,6 +229,7 @@ public static class GetDefaultData
         new () {Id = 65, StatusId = 5, Code = "43-1", Name = "Готовая продукция - Растениеводства", ParentPlanId = 64, IsSelect = true},
         new () {Id = 66, StatusId = 5, Code = "Раздел V", Name = "Денежные средства", IsSelect = false},
         new () {Id = 67, StatusId = 5, Code = "50", Name = "Касса", ParentPlanId = 66, IsSelect = true},
+        new () {Id = 138, StatusId = 5, Code = "50-1", Name = "Касса организации", ParentPlanId = 67, IsSelect = true},
         new () {Id = 68, StatusId = 5, Code = "51", Name = "Расчетные счета", ParentPlanId = 66, IsSelect = false},
         new () {Id = 69, StatusId = 5, Code = "51-1", Name = "Расчетный счет в Россельхозбанке", ParentPlanId = 68, IsSelect = true},
         new () {Id = 70, StatusId = 5, Code = "51-2", Name = "Расчетный счет в ОТП", ParentPlanId = 68, IsSelect = true},
@@ -507,6 +513,14 @@ public static class GetDefaultData
         new () { Id = 2,  Name = "Пени"},
         new () { Id = 3,  Name = "Проценты"},
         new () { Id = 4,  Name = "Штраф"},
+    };
+
+
+    public static TypeOperationCash[] DefaulTypeOperationCash() => new TypeOperationCash[]
+    {
+        new TypeOperationCash(){Id = 1, Name = "Оплата от покупателя", TypeDoc = DefaultType()[30], 
+            AccountingPlan = DefaultAccountingPlans().FirstOrDefault(d=>d.Id==82)!,
+            ItemExpenditureOrIncome = new (){Id = 1, Name = "Поступления от покупателей", TypeCashFlow = DefaultTypeCashFlow()[0]}},
     };
 
 }

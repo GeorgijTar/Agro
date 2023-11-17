@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using Agro.DAL.Entities;
+using Agro.DAL.Entities.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.Helpers;
 using Agro.WPF.ViewModels.Base;
@@ -11,6 +12,7 @@ using Agro.WPF.ViewModels.Coming;
 using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.ViewModels.Decommissioning;
 using Agro.WPF.ViewModels.InvoiceVM;
+using Agro.WPF.ViewModels.Kassa;
 using Agro.WPF.ViewModels.TMC;
 using Agro.WPF.Views;
 using Agro.WPF.Views.Pages.Bank.BaseView;
@@ -19,14 +21,14 @@ using Agro.WPF.Views.Pages.Coming;
 using Agro.WPF.Views.Pages.Contract;
 using Agro.WPF.Views.Pages.Decommissioning;
 using Agro.WPF.Views.Pages.Invoice;
+using Agro.WPF.Views.Pages.Kassa;
 using Agro.WPF.Views.Pages.Tmc;
 using Agro.WPF.Views.Windows;
 using Agro.WPF.Views.Windows.Agronomy;
-using Agro.WPF.Views.Windows.Invoice;
+using Agro.WPF.Views.Windows.Kassa;
 using Agro.WPF.Views.Windows.Personnel;
 using Agro.WPF.Views.Windows.Storage;
 using Agro.WPF.Views.Windows.TMC;
-using Agro.WPF.Views.Windows.Warehouse;
 using Agro.WPF.Views.Windows.Weight;
 
 namespace Agro.WPF.ViewModels;
@@ -485,6 +487,53 @@ public class MainWindowViewModel : ViewModel
         var page = new TmcSprPage();
         var model = page.DataContext as TmcSprViewModel;
         model!.TabItem = _helperNavigation.OpenPage(page, "Остатки ТМЦ");
+    }
+
+    #endregion
+
+    #region ShowCashDocs
+
+    private ICommand? _showCashDocsCommand;
+
+    public ICommand ShowCashDocsCommand => _showCashDocsCommand
+        ??= new RelayCommand(OnShowCashDocsExecuted);
+
+    private void OnShowCashDocsExecuted(object obj)
+    {
+        var page = new DocsCashPage();
+        var model = page.DataContext as DocsCashViewModel;
+        model!.TabItem = _helperNavigation.OpenPage(page, "Кассовые документы");
+    }
+
+    #endregion
+
+    #region  Test
+
+    private ICommand? _testCommand;
+
+    public ICommand TestCommand => _testCommand
+        ??= new RelayCommand(OnTestExecuted);
+
+    private void OnTestExecuted(object obj)
+    {
+        Window1 view = new Window1();
+        view.Show();
+    }
+
+    #endregion
+
+    #region Авансовые отчеты
+
+    private ICommand? _showAdvanceReportsCommand;
+
+    public ICommand ShowAdvanceReportsCommand => _showAdvanceReportsCommand
+        ??= new RelayCommand(OnShowAdvanceReportsExecuted);
+
+    private void OnShowAdvanceReportsExecuted(object obj)
+    {
+        var page = new AdvanceReportsPage();
+        var model = page.DataContext as AdvanceReportsViewModel;
+        model!.TabItem = _helperNavigation.OpenPage(page, "Реестр авансовых отчетов");
     }
 
     #endregion

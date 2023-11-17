@@ -4,8 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using Agro.DAL.Entities;
 using Agro.DAL.Entities.Bank.Pay;
+using Agro.DAL.Entities.Base;
 using Agro.Interfaces.Base.Repositories;
 using Agro.WPF.Commands;
 using Agro.WPF.Helpers;
@@ -72,11 +72,21 @@ public class PaymentOrdersViewModel : ViewModel
         ??= new RelayCommand(OnAddExecuted);
     private async void OnAddExecuted(object obj)
     {
-        var page = new PaymentOrderPage();
-        var model=page.DataContext as PaymentOrderViewModel;
-        model!.SenderModel=this;
-        model.PaymentOrder!.Number = await _repository.GetNumberAsync();
-        model.TabItem = _helperNavigation.OpenPage(page, "Новое платежное поручение");
+        try
+        {
+            var page = new PaymentOrderPage();
+            var model = page.DataContext as PaymentOrderViewModel;
+            model!.SenderModel = this;
+            model.PaymentOrder!.Number = (await _repository.GetNumberAsync()).ToString();
+            model.TabItem = _helperNavigation.OpenPage(page, "Новое платежное поручение");
+        }
+        catch (Exception e)
+        {
+            string message = e.Message;
+            if (e.InnerException != null!)
+                message = $"{e.Message}; внутреннее исключение {e.InnerException.Message}";
+            _notificationManager.Show($"При загрузке данных произошла ошибка {message}", NotificationType.Error);
+        }
 
     }
 

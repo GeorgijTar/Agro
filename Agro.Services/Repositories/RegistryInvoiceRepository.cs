@@ -2,7 +2,7 @@
 using Agro.Interfaces.Base.Repositories;
 using Agro.DAL.Entities.InvoiceEntity;
 using Microsoft.EntityFrameworkCore;
-using Agro.DAL.Entities;
+using Agro.DAL.Entities.Base;
 
 namespace Agro.Services.Repositories;
 

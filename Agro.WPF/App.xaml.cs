@@ -5,9 +5,12 @@ using Agro.DAL.Entities.Accounting;
 using Agro.DAL.Entities.Agronomy;
 using Agro.DAL.Entities.Bank.Base;
 using Agro.DAL.Entities.Bank.Pay;
+using Agro.DAL.Entities.Base;
 using Agro.DAL.Entities.CheckingCounterparty;
 using Agro.DAL.Entities.Counter;
 using Agro.DAL.Entities.InvoiceEntity;
+using Agro.DAL.Entities.Kassa;
+using Agro.DAL.Entities.Kassa.Base;
 using Agro.DAL.Entities.Organization;
 using Agro.DAL.Entities.Personnel;
 using Agro.DAL.Entities.Storage;
@@ -32,8 +35,10 @@ using Agro.WPF.ViewModels.Coming;
 using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.ViewModels.Decommissioning;
 using Agro.WPF.ViewModels.InvoiceVM;
+using Agro.WPF.ViewModels.Kassa;
 using Agro.WPF.ViewModels.Organization;
 using Agro.WPF.ViewModels.Personnel;
+using Agro.WPF.ViewModels.Shared;
 using Agro.WPF.ViewModels.Storage;
 using Agro.WPF.ViewModels.TMC;
 using Agro.WPF.ViewModels.UserSettings;
@@ -73,6 +78,7 @@ namespace Agro.WPF
         public IEnumerable<AccountingMethodNds>? AccountingMethodNds { get; set; }
         public IEnumerable<TypeObject>? TypeObjects { get; set; }
         public IEnumerable<GroupObject>? GroupObjects { get; set; }
+        public IEnumerable<TypeOperationCash>? TypesOperationCash { get; set; }
 
 
 
@@ -171,6 +177,13 @@ namespace Agro.WPF
             services.AddTransient<PurposeExpenditureViewModel>();
             services.AddTransient<PurposeExpendituresViewModel>();
             services.AddTransient<MovementTmcViewModel>();
+            services.AddTransient<DocsCashViewModel>();
+            services.AddTransient<DocCashViewModel>();
+            services.AddTransient<TransactionViewModel>();
+            services.AddTransient<LookViewModel>();
+            services.AddTransient<AdvanceReportViewModel>();
+            services.AddTransient<AdvanceReportsViewModel>();
+            services.AddTransient<TestUserControl>();
 
 
             //Регистрация репозиториев
@@ -202,7 +215,9 @@ namespace Agro.WPF
             services.AddTransient(typeof(ITmcSprRepository<Tmc>), typeof(TmcSprRepository));
             services.AddTransient<IBaseRepository<WriteOffObject>, WriteOffObjectRepository>();
             services.AddTransient<IBaseRepository<PurposeExpenditure>, PurposeExpenditureRepository>();
-
+            services.AddTransient(typeof(ICashDocRepository<DocCash>), typeof(CashDocRepository));
+            services.AddTransient(typeof(ITransactionRepository), typeof(TransactionRepository));
+            services.AddTransient(typeof(IAdvanceReportRepository), typeof(AdvanceReportRepository));
             // Регистрация навигатора
             services.AddTransient<IHelperNavigation, HelperNavigation>();
         }

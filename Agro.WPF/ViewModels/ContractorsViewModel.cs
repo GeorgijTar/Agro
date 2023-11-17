@@ -15,6 +15,7 @@ using Agro.WPF.ViewModels.Base;
 using Agro.WPF.ViewModels.Coming;
 using Agro.WPF.ViewModels.Contract;
 using Agro.WPF.ViewModels.InvoiceVM;
+using Agro.WPF.ViewModels.Kassa;
 using Agro.WPF.Views.Windows;
 
 
@@ -258,6 +259,10 @@ public class ContractorsViewModel : ViewModel
                 coming.ComingTmc.Counterparty= SelectedCounterparty!;
             }
 
+            if (SenderModel is DocCashViewModel docCashViewModel)
+            {
+                docCashViewModel.DocCash.Counterparty = SelectedCounterparty!;
+            }
 
             var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
             if (window != null!)

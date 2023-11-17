@@ -155,7 +155,12 @@ namespace Agro.Launcher
             }
             catch (Exception e)
             {
-                MessageCollection.Add("Не удалось проверить обновления");
+                var mass=e.Message;
+                if (e.InnerException != null)
+                {
+                    mass=e.InnerException.Message;
+                }
+                MessageCollection.Add($"Не удалось проверить обновления: {mass}");
                 return;
             }
 
@@ -211,7 +216,12 @@ namespace Agro.Launcher
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message.ToString(), "Клиент2");
+                var mass = ex.Message;
+                if (ex.InnerException != null)
+                {
+                    mass = ex.InnerException.Message;
+                }
+                MessageBox.Show($"Произошла ошибка соединения: {mass}", "Клиент2");
                 return false;
             }
         }

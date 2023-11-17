@@ -117,67 +117,90 @@ public class LoginViewModel : ViewModel
 
     private async void LoadStaticData()
     {
-        using var progress = _notificationManager.ShowProgressBar("Загрузка статических данных");
+        try
+        {
+            using var progress = _notificationManager.ShowProgressBar("Загрузка статических данных");
+            progress.Cancel.ThrowIfCancellationRequested();
+            progress.Report((5, "Получение информации о пользователе", "Загрузка статических данных", false));
+            Application.Current.Properties["CurrentUser"] = _user;
 
-        progress.Report((100, "Получение информации о пользователе", "Загрузка статических данных", false));
-        Application.Current.Properties["CurrentUser"] = _user;
+            progress.Report((10, "Загрузка справочника типов документов", "Загрузка статических данных", false));
+            Application.Current.Properties["Types"] =
+                await _referencesRepository.GetAllTypeDocAsync().ConfigureAwait(true);
 
-        progress.Report((100, "Загрузка справочника типов документов", "Загрузка статических данных", false));
-        Application.Current.Properties["Types"] = await _referencesRepository.GetAllTypeDocAsync().ConfigureAwait(true);
+            progress.Report((15, "Загрузка справочника статусов документов", "Загрузка статических данных", false));
+            Application.Current.Properties["Status"] = await _referencesRepository.GetAllStatusAsync();
 
-        progress.Report((100, "Загрузка справочника статусов документов", "Загрузка статических данных", false));
-        Application.Current.Properties["Status"] = await _referencesRepository.GetAllStatusAsync();
+            progress.Report((20, "Загрузка справочника групп документов", "Загрузка статических данных", false));
+            Application.Current.Properties["Groups"] = await _referencesRepository.GetAllGroupDocAsync();
 
-        progress.Report((100, "Загрузка справочника групп документов", "Загрузка статических данных", false));
-        Application.Current.Properties["Groups"] = await _referencesRepository.GetAllGroupDocAsync();
+            progress.Report((25, "Загрузка справочника типов операций", "Загрузка статических данных", false));
+            Application.Current.Properties["TypeOperation"] = await _referencesRepository.GetAllTypeOperationPayAsync();
 
-        progress.Report((100, "Загрузка справочника типов операций", "Загрузка статических данных", false));
-        Application.Current.Properties["TypeOperation"] = await _referencesRepository.GetAllTypeOperationPayAsync();
+            progress.Report((30, "Загрузка справочника банковских реквизитов организации",
+                "Загрузка статических данных", false));
+            Application.Current.Properties["BankDetailsOrg"] = await _referencesRepository.GetAllBankDetailsOrgAsync();
 
-        progress.Report((100, "Загрузка справочника банковских реквизитов организации", "Загрузка статических данных", false));
-        Application.Current.Properties["BankDetailsOrg"] = await _referencesRepository.GetAllBankDetailsOrgAsync();
+            progress.Report((35, "Загрузка данных организации", "Загрузка статических данных", false));
+            Application.Current.Properties["Organization"] = await _referencesRepository.GetOrganizationAsync();
 
-        progress.Report((100, "Загрузка данных организации", "Загрузка статических данных", false));
-        Application.Current.Properties["Organization"] = await _referencesRepository.GetOrganizationAsync();
+            progress.Report((40, "Загрузка справочника видов платежа", "Загрузка статических данных", false));
+            Application.Current.Properties["TypePayments"] = await _referencesRepository.GetAllTypesPaymentAsync();
 
-        progress.Report((100, "Загрузка справочника видов платежа", "Загрузка статических данных", false));
-        Application.Current.Properties["TypePayments"] = await _referencesRepository.GetAllTypesPaymentAsync();
+            progress.Report((45, "Загрузка ставок НДС", "Загрузка статических данных", false));
+            Application.Current.Properties["Nds"] = await _referencesRepository.GetAllNdsAsync();
 
-        progress.Report((100, "Загрузка ставок НДС", "Загрузка статических данных", false));
-        Application.Current.Properties["Nds"] = await _referencesRepository.GetAllNdsAsync();
+            progress.Report((50, "Загрузка справочника оснований платежа", "Загрузка статических данных", false));
+            Application.Current.Properties["BasisPayments"] = await _referencesRepository.GetAllBasisPaymentAsync();
 
-        progress.Report((100, "Загрузка справочника оснований платежа", "Загрузка статических данных", false));
-        Application.Current.Properties["BasisPayments"] = await _referencesRepository.GetAllBasisPaymentAsync();
+            progress.Report((55, "Загрузка справочника статусов плательщика", "Загрузка статических данных", false));
+            Application.Current.Properties["PayerStatus"] = await _referencesRepository.GetAllPayerStatusAsync();
 
-        progress.Report((100, "Загрузка справочника статусов плательщика", "Загрузка статических данных", false));
-        Application.Current.Properties["PayerStatus"] = await _referencesRepository.GetAllPayerStatusAsync();
+            progress.Report((60, "Загрузка справочника очередности платежа", "Загрузка статических данных", false));
+            Application.Current.Properties["OrderPayment"] = await _referencesRepository.GetAllOrderPaymentAsync();
 
-        progress.Report((100, "Загрузка справочника очередности платежа", "Загрузка статических данных", false));
-        Application.Current.Properties["OrderPayment"] = await _referencesRepository.GetAllOrderPaymentAsync();
+            progress.Report((65, "Загрузка справочника тиаов платежных документов", "Загрузка статических данных",
+                false));
+            Application.Current.Properties["TypeTransactions"] =
+                await _referencesRepository.GetAllTypeTransactionsAsync();
 
-        progress.Report((100, "Загрузка справочника тиаов платежных документов", "Загрузка статических данных", false));
-        Application.Current.Properties["TypeTransactions"] = await _referencesRepository.GetAllTypeTransactionsAsync();
+            progress.Report((70, "Загрузка плана счетов", "Загрузка статических данных", false));
+            Application.Current.Properties["AccountingPlans"] = await _referencesRepository.GetAllAccountingPlanAsync();
 
-        progress.Report((100, "Загрузка плана счетов", "Загрузка статических данных", false));
-        Application.Current.Properties["AccountingPlans"] = await _referencesRepository.GetAllAccountingPlanAsync();
+            progress.Report((75, "Загрузка справочника мест хранения", "Загрузка статических данных", false));
+            Application.Current.Properties["StorageLocations"] =
+                await _referencesRepository.GetAllStorageLocationAsync();
 
-        progress.Report((100, "Загрузка справочника мест хранения", "Загрузка статических данных", false));
-        Application.Current.Properties["StorageLocations"] = await _referencesRepository.GetAllStorageLocationAsync();
+            progress.Report((80, "Загрузка справочника мест хранения", "Загрузка статических данных", false));
+            Application.Current.Properties["Currency"] = await _referencesRepository.GetAllCurrencyAsync();
 
-        progress.Report((100, "Загрузка справочника мест хранения", "Загрузка статических данных", false));
-        Application.Current.Properties["Currency"] = await _referencesRepository.GetAllCurrencyAsync();
+            progress.Report((85, "Загрузка справочника мест хранения", "Загрузка статических данных", false));
+            Application.Current.Properties["AccountingMethodNds"] =
+                await _referencesRepository.GetAllAccountingMethodNdsAsync();
 
-        progress.Report((100, "Загрузка справочника мест хранения", "Загрузка статических данных", false));
-        Application.Current.Properties["AccountingMethodNds"] = await _referencesRepository.GetAllAccountingMethodNdsAsync();
+            progress.Report((90, "Загрузка справочника типов объектов списания", "Загрузка статических данных",
+                false));
+            Application.Current.Properties["TypeObjects"] = await _referencesRepository.GetAllTypeObjectAsync();
 
-        progress.Report((100, "Загрузка справочника типов объектов списания", "Загрузка статических данных", false));
-        Application.Current.Properties["TypeObjects"] = await _referencesRepository.GetAllTypeObjectAsync();
+            progress.Report((95, "Загрузка справочника групп объектов списания", "Загрузка статических данных",
+                false));
+            Application.Current.Properties["GroupObjects"] = await _referencesRepository.GetAllGroupObjectAsync();
 
-       progress.Report((100, "Загрузка справочника групп объектов списания", "Загрузка статических данных", false));
-        Application.Current.Properties["GroupObjects"] = await _referencesRepository.GetAllGroupObjectAsync();
+            progress.Report((100, "Загрузка справочника видов операций с наличными", "Загрузка статических данных",
+                false));
+            Application.Current.Properties["TypesOperationCash"] =
+                await _referencesRepository.GetAllTypeOperationCashAsync();
 
-        var view = new MainWindow();
-        view.Show();
+            var view = new MainWindow();
+            view.Show();
+        }
+        catch (Exception e)
+        {
+            string message = e.Message;
+            if (e.InnerException != null!)
+                message = $"{e.Message}; внутреннее исключение {e.InnerException.Message}";
+            _notificationManager.Show($"При загрузке данных произошла ошибка {message}", NotificationType.Error);
+        }
 
 
     }

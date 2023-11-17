@@ -3,10 +3,10 @@ using Agro.DAL.Entities.Weight;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using System.Windows.Input;
-using Agro.DAL.Entities;
 using Agro.Interfaces.Base.Repositories.Base;
 using System.Windows;
 using System;
+using Agro.DAL.Entities.Base;
 
 namespace Agro.WPF.ViewModels.Weight;
 

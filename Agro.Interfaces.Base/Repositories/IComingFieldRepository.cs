@@ -1,5 +1,4 @@
-﻿using Agro.DAL.Entities;
-using Agro.DAL.Entities.Base;
+﻿using Agro.DAL.Entities.Base;
 using Agro.DAL.Entities.Storage;
 using Agro.DAL.Entities.Weight;
 using Agro.Interfaces.Base.Repositories.Base;

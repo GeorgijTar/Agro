@@ -2,7 +2,7 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
-using Agro.DAL.Entities;
+using Agro.DAL.Entities.Base;
 using Agro.DAL.Entities.Organization;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;

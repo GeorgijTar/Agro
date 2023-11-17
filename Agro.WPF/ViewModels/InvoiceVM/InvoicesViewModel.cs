@@ -7,12 +7,14 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Agro.DAL.Entities;
+using Agro.DAL.Entities.Base;
 using Agro.Interfaces.Base.Repositories;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.Helpers;
 using Agro.WPF.ViewModels.Bank.Pay;
 using Agro.WPF.ViewModels.Base;
+using Agro.WPF.ViewModels.Kassa;
 using Agro.WPF.Views.Pages.Invoice;
 using Agro.WPF.Views.Windows.Invoice;
 using Microsoft.Win32;
@@ -114,7 +116,6 @@ public class InvoicesViewModel : ViewModel
     {
         switch (e.PropertyName)
         {
-
             case "NumberFilter":
                 CollectionView.Filter = FilterByNumber;
                 break;
@@ -360,9 +361,7 @@ public class InvoicesViewModel : ViewModel
                 try
                 {
                     paymentOrderViewModel.PaymentOrder!.Invoice = (await _repository.GetByIdAsync(SelectedInvoice.Id))!;
-                    var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
-                    if (window != null!)
-                        window.Close();
+                    
                 }
                 catch (Exception e)
                 {
@@ -370,6 +369,15 @@ public class InvoicesViewModel : ViewModel
                 }
 
             }
+
+            if (SenderModel is DocCashViewModel docCashViewModel)
+            {
+                docCashViewModel.DocCash.Invoice = (await _repository.GetByIdAsync(SelectedInvoice.Id))!;
+            }
+
+            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+            if (window != null!)
+                window.Close();
         }
         else
         {

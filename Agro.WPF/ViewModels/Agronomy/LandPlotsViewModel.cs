@@ -11,6 +11,7 @@ using Agro.WPF.Views.Windows.Agronomy;
 using Microsoft.Win32;
 using ReportExcelLib;
 using System;
+using Agro.DAL.Entities.Base;
 
 namespace Agro.WPF.ViewModels.Agronomy;
 

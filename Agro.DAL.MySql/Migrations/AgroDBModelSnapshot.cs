@@ -651,6 +651,15 @@ namespace Agro.DAL.MySql.Migrations
                         },
                         new
                         {
+                            Id = 138,
+                            Code = "50-1",
+                            IsSelect = true,
+                            Name = "Касса организации",
+                            ParentPlanId = 67,
+                            StatusId = 5
+                        },
+                        new
+                        {
                             Id = 68,
                             Code = "51",
                             IsSelect = false,
@@ -2162,6 +2171,9 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int?>("AdvanceReportId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(65,30)");
 
@@ -2213,8 +2225,9 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<int>("NdsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("NumberDoc")
                         .HasColumnType("longtext");
@@ -2249,7 +2262,7 @@ namespace Agro.DAL.MySql.Migrations
                         .HasMaxLength(210)
                         .HasColumnType("varchar(210)");
 
-                    b.Property<int?>("StatusId")
+                    b.Property<int>("StatusId")
                         .HasColumnType("int");
 
                     b.Property<int?>("TaxId")
@@ -2275,7 +2288,12 @@ namespace Agro.DAL.MySql.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("varchar(25)");
 
+                    b.Property<int>("UserCreatorId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("AdvanceReportId");
 
                     b.HasIndex("BankDetailsCounterpartyId");
 
@@ -2310,6 +2328,8 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("TypePaymentId");
 
                     b.HasIndex("TypeTransactionsId");
+
+                    b.HasIndex("UserCreatorId");
 
                     b.ToTable("PaymentOrder");
                 });
@@ -2584,6 +2604,153 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("BankDetails");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Base.Status", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Statuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Черновик"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Новый"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Действующий"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Заблокировано"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Актуально"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Удален"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Архивный"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Принят"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Готов к оплате"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Оплачен"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Выставлен"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Отправлен"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "Ошибка отправки"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "Требует внимания"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Name = "Включен в реестр"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Name = "Отпаравлен на рассмотрение"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Name = "Подготовлен"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Name = "Одобрен"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Name = "Откланен"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Name = "Отказан"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Name = "Отправлено в банк"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Name = "Исполнено"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Name = "Зарегистрировано"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Name = "Введено"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Name = "Учтено"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Name = "Проведено"
+                        });
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.CheckCounterparty", b =>
@@ -4464,10 +4631,16 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int?>("AdvanceReportId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ComingTmcId")
                         .HasColumnType("int");
 
                     b.Property<int?>("DecommissioningTmcId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DocCashId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EventDate")
@@ -4480,16 +4653,25 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<int?>("InvoiceId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PaymentOrderId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AdvanceReportId");
+
                     b.HasIndex("ComingTmcId");
 
                     b.HasIndex("DecommissioningTmcId");
 
+                    b.HasIndex("DocCashId");
+
                     b.HasIndex("InvoiceId");
+
+                    b.HasIndex("PaymentOrderId");
 
                     b.HasIndex("UserId");
 
@@ -4646,6 +4828,516 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("RegistryInvoices");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Kassa.AdvanceProduct", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("AccountingPlanId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AccountingPlanNdsId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AdvanceReportId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("AmountNds")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int?>("CounterpartyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateDoc")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NameDoc")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("NdsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NumberDoc")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("TmcId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountingPlanId");
+
+                    b.HasIndex("AccountingPlanNdsId");
+
+                    b.HasIndex("AdvanceReportId");
+
+                    b.HasIndex("CounterpartyId");
+
+                    b.HasIndex("NdsId");
+
+                    b.HasIndex("TmcId");
+
+                    b.ToTable("AdvanceProduct");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Kassa.AdvanceReport", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("AmountOverspending")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("AnnexesDoc")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("AnnexesSheet")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Appointment")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("BalanceAmount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("PersonId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserCreatorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("UserCreatorId");
+
+                    b.ToTable("AdvanceReport");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Kassa.Base.ItemExpenditureOrIncome", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("TypeCashFlowId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TypeCashFlowId");
+
+                    b.ToTable("ItemsExpenditureOrIncome");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Пополнение расчетного счета"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Поступления от покупателей",
+                            TypeCashFlowId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Розничная выручка",
+                            TypeCashFlowId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Возврат кредитов и займов",
+                            TypeCashFlowId = 12
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Прочие поступления",
+                            TypeCashFlowId = 4
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Оплата поставщику (подрядчику)",
+                            TypeCashFlowId = 5
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Выплата заработной платы",
+                            TypeCashFlowId = 6
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Выдача кредитов и займов",
+                            TypeCashFlowId = 17
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Выдача под авансовый отчет",
+                            TypeCashFlowId = 5
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Прочие выплаты",
+                            TypeCashFlowId = 9
+                        });
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Kassa.Base.TypeOperationCash", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AccountingPlanId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsAccountingPlan")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int?>("ItemExpenditureOrIncomeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("TypeDocId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountingPlanId");
+
+                    b.HasIndex("ItemExpenditureOrIncomeId");
+
+                    b.HasIndex("TypeDocId");
+
+                    b.ToTable("TypesOperationCash");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccountingPlanId = 69,
+                            IsAccountingPlan = false,
+                            ItemExpenditureOrIncomeId = 1,
+                            Name = "Получение наличных в банке",
+                            TypeDocId = 31
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AccountingPlanId = 82,
+                            IsAccountingPlan = true,
+                            ItemExpenditureOrIncomeId = 2,
+                            Name = "Оплата от покупателя",
+                            TypeDocId = 31
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsAccountingPlan = true,
+                            ItemExpenditureOrIncomeId = 3,
+                            Name = "Розничная выручка",
+                            TypeDocId = 31
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AccountingPlanId = 100,
+                            IsAccountingPlan = true,
+                            Name = "Возврат от подотчетного лица",
+                            TypeDocId = 31
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AccountingPlanId = 101,
+                            IsAccountingPlan = true,
+                            ItemExpenditureOrIncomeId = 4,
+                            Name = "Возврат займа работником",
+                            TypeDocId = 31
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AccountingPlanId = 79,
+                            IsAccountingPlan = true,
+                            ItemExpenditureOrIncomeId = 5,
+                            Name = "Возврат от поставщика",
+                            TypeDocId = 31
+                        },
+                        new
+                        {
+                            Id = 7,
+                            IsAccountingPlan = true,
+                            ItemExpenditureOrIncomeId = 5,
+                            Name = "Прочий приход",
+                            TypeDocId = 31
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AccountingPlanId = 100,
+                            IsAccountingPlan = true,
+                            ItemExpenditureOrIncomeId = 9,
+                            Name = "Выдача подотчетному лицу",
+                            TypeDocId = 32
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AccountingPlanId = 79,
+                            IsAccountingPlan = true,
+                            ItemExpenditureOrIncomeId = 6,
+                            Name = "Оплата поставщику",
+                            TypeDocId = 32
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AccountingPlanId = 99,
+                            IsAccountingPlan = true,
+                            ItemExpenditureOrIncomeId = 7,
+                            Name = "Выплата заработной платы по ведомостям",
+                            TypeDocId = 32
+                        },
+                        new
+                        {
+                            Id = 11,
+                            AccountingPlanId = 99,
+                            IsAccountingPlan = true,
+                            ItemExpenditureOrIncomeId = 7,
+                            Name = "Выплата заработной платы работнику",
+                            TypeDocId = 32
+                        },
+                        new
+                        {
+                            Id = 12,
+                            AccountingPlanId = 103,
+                            IsAccountingPlan = true,
+                            ItemExpenditureOrIncomeId = 6,
+                            Name = "Выплата по договору подряда",
+                            TypeDocId = 32
+                        },
+                        new
+                        {
+                            Id = 13,
+                            AccountingPlanId = 101,
+                            IsAccountingPlan = true,
+                            ItemExpenditureOrIncomeId = 8,
+                            Name = "Выдача займа работнику",
+                            TypeDocId = 32
+                        },
+                        new
+                        {
+                            Id = 14,
+                            IsAccountingPlan = false,
+                            ItemExpenditureOrIncomeId = 1,
+                            Name = "Взнос наличными в банк",
+                            TypeDocId = 32
+                        },
+                        new
+                        {
+                            Id = 15,
+                            IsAccountingPlan = true,
+                            ItemExpenditureOrIncomeId = 10,
+                            Name = "Прочий расход",
+                            TypeDocId = 32
+                        });
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Kassa.DocCash", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AdvanceReportId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("AmountNds")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("ApplicationDoc")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("BankDetailsOrgId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CashierId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ContractId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CounterpartyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreditId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("DebitId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DirectorId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DivisionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Footing")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("FoundationDoc")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("From")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("GeneralAccountantId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("InvoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ItemExpenditureOrIncomeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NdsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PeopleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StorageLocationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeDocId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TypeOperationCashId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserCreatorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdvanceReportId");
+
+                    b.HasIndex("BankDetailsOrgId");
+
+                    b.HasIndex("CashierId");
+
+                    b.HasIndex("ContractId");
+
+                    b.HasIndex("CounterpartyId");
+
+                    b.HasIndex("CreditId");
+
+                    b.HasIndex("DebitId");
+
+                    b.HasIndex("DirectorId");
+
+                    b.HasIndex("DivisionId");
+
+                    b.HasIndex("GeneralAccountantId");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.HasIndex("ItemExpenditureOrIncomeId");
+
+                    b.HasIndex("NdsId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("PeopleId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("StorageLocationId");
+
+                    b.HasIndex("TypeDocId");
+
+                    b.HasIndex("TypeOperationCashId");
+
+                    b.HasIndex("UserCreatorId");
+
+                    b.ToTable("DocsCash");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Nds", b =>
@@ -4979,8 +5671,26 @@ namespace Agro.DAL.MySql.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("NameDp")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NameRp")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NameTp")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Patronymic")
                         .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PatronymicDp")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PatronymicRp")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PatronymicTp")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Snils")
@@ -4991,6 +5701,15 @@ namespace Agro.DAL.MySql.Migrations
 
                     b.Property<string>("Surname")
                         .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SurnameDp")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SurnameRp")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SurnameTp")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -5185,6 +5904,9 @@ namespace Agro.DAL.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<int?>("AdvanceReportId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(65,30)");
 
@@ -5215,7 +5937,12 @@ namespace Agro.DAL.MySql.Migrations
                     b.Property<int?>("DecommissioningTmcId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("DocCashId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("AdvanceReportId");
 
                     b.HasIndex("ComingTmcId");
 
@@ -5224,6 +5951,8 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasIndex("DebitId");
 
                     b.HasIndex("DecommissioningTmcId");
+
+                    b.HasIndex("DocCashId");
 
                     b.ToTable("AccountingPlanRegisters");
                 });
@@ -5355,148 +6084,6 @@ namespace Agro.DAL.MySql.Migrations
                         {
                             Id = 1,
                             LimitAmountInvoice = 20000m
-                        });
-                });
-
-            modelBuilder.Entity("Agro.DAL.Entities.Status", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Statuses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Черновик"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Новый"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Действующий"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Заблокировано"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Актуально"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Удален"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Архивный"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Принят"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Готов к оплате"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Оплачен"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Выставлен"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Name = "Отправлен"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Name = "Ошибка отправки"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Name = "Требует внимания"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Name = "Включен в реестр"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Name = "Отпаравлен на рассмотрение"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Name = "Подготовлен"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Name = "Одобрен"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Name = "Откланен"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Name = "Отказан"
-                        },
-                        new
-                        {
-                            Id = 21,
-                            Name = "Отправлено в банк"
-                        },
-                        new
-                        {
-                            Id = 22,
-                            Name = "Исполнено"
-                        },
-                        new
-                        {
-                            Id = 23,
-                            Name = "Зарегистрировано"
-                        },
-                        new
-                        {
-                            Id = 24,
-                            Name = "Введено"
-                        },
-                        new
-                        {
-                            Id = 25,
-                            Name = "Учтено"
                         });
                 });
 
@@ -5814,6 +6401,30 @@ namespace Agro.DAL.MySql.Migrations
                             Id = 28,
                             Name = "Стронирование списания",
                             TypeApplication = "ДокументСписанияТМЦ"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            Name = "Ввод остатков",
+                            TypeApplication = "ТМЦ"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            Name = "Корректировка",
+                            TypeApplication = "ТМЦ"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            Name = "Приход",
+                            TypeApplication = "Касса"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            Name = "Расход",
+                            TypeApplication = "Касса"
                         });
                 });
 
@@ -6656,7 +7267,7 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany("ChildPlans")
                         .HasForeignKey("ParentPlanId");
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -6683,7 +7294,7 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany()
                         .HasForeignKey("AccountingPlanNdsId");
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -6712,7 +7323,7 @@ namespace Agro.DAL.MySql.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -6723,7 +7334,7 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Agronomy.Department", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -6742,7 +7353,7 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany()
                         .HasForeignKey("ParentFieldId");
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -6755,7 +7366,7 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Agronomy.LandPlot", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -6770,7 +7381,7 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Bank.Base.ExpenditureItem", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -6837,7 +7448,7 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany()
                         .HasForeignKey("PaymentOrderId");
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -6870,6 +7481,10 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Bank.Pay.PaymentOrder", b =>
                 {
+                    b.HasOne("Agro.DAL.Entities.Kassa.AdvanceReport", null)
+                        .WithMany("AdvancesPp")
+                        .HasForeignKey("AdvanceReportId");
+
                     b.HasOne("Agro.DAL.Entities.BankDetails", "BankDetailsCounterparty")
                         .WithMany()
                         .HasForeignKey("BankDetailsCounterpartyId")
@@ -6922,9 +7537,11 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany()
                         .HasForeignKey("PaymentDestinationCodeId");
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
-                        .HasForeignKey("StatusId");
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Agro.DAL.Entities.TaxesType.Taxes", "Tax")
                         .WithMany()
@@ -6951,6 +7568,12 @@ namespace Agro.DAL.MySql.Migrations
                     b.HasOne("Agro.DAL.Entities.Bank.Pay.TypeTransactions", "TypeTransactions")
                         .WithMany()
                         .HasForeignKey("TypeTransactionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.User", "UserCreator")
+                        .WithMany()
+                        .HasForeignKey("UserCreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -6987,6 +7610,8 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("TypePayment");
 
                     b.Navigation("TypeTransactions");
+
+                    b.Navigation("UserCreator");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.BankDetails", b =>
@@ -7005,7 +7630,7 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany("BankDetails")
                         .HasForeignKey("OrganizationId");
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -7616,7 +8241,7 @@ namespace Agro.DAL.MySql.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -7651,7 +8276,7 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany()
                         .HasForeignKey("GroupId");
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -7689,6 +8314,10 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.History", b =>
                 {
+                    b.HasOne("Agro.DAL.Entities.Kassa.AdvanceReport", null)
+                        .WithMany("Histories")
+                        .HasForeignKey("AdvanceReportId");
+
                     b.HasOne("Agro.DAL.Entities.Warehouse.Coming.ComingTmc", null)
                         .WithMany("History")
                         .HasForeignKey("ComingTmcId");
@@ -7697,9 +8326,17 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany("History")
                         .HasForeignKey("DecommissioningTmcId");
 
+                    b.HasOne("Agro.DAL.Entities.Kassa.DocCash", null)
+                        .WithMany("Histories")
+                        .HasForeignKey("DocCashId");
+
                     b.HasOne("Agro.DAL.Entities.InvoiceEntity.Invoice", null)
                         .WithMany("History")
                         .HasForeignKey("InvoiceId");
+
+                    b.HasOne("Agro.DAL.Entities.Bank.Pay.PaymentOrder", null)
+                        .WithMany("Histories")
+                        .HasForeignKey("PaymentOrderId");
 
                     b.HasOne("Agro.DAL.Entities.User", "User")
                         .WithMany()
@@ -7722,7 +8359,7 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany("Documents")
                         .HasForeignKey("PeopleId");
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -7775,7 +8412,7 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany()
                         .HasForeignKey("SpecificationId");
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -7808,11 +8445,248 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.InvoiceEntity.RegistryInvoice", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
                     b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Kassa.AdvanceProduct", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Accounting.AccountingPlan", "AccountingPlan")
+                        .WithMany()
+                        .HasForeignKey("AccountingPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Accounting.AccountingPlan", "AccountingPlanNds")
+                        .WithMany()
+                        .HasForeignKey("AccountingPlanNdsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Kassa.AdvanceReport", null)
+                        .WithMany("Produkts")
+                        .HasForeignKey("AdvanceReportId");
+
+                    b.HasOne("Agro.DAL.Entities.Counter.Counterparty", "Counterparty")
+                        .WithMany()
+                        .HasForeignKey("CounterpartyId");
+
+                    b.HasOne("Agro.DAL.Entities.Nds", "Nds")
+                        .WithMany()
+                        .HasForeignKey("NdsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Warehouse.Tmc", "Tmc")
+                        .WithMany()
+                        .HasForeignKey("TmcId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccountingPlan");
+
+                    b.Navigation("AccountingPlanNds");
+
+                    b.Navigation("Counterparty");
+
+                    b.Navigation("Nds");
+
+                    b.Navigation("Tmc");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Kassa.AdvanceReport", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Personnel.Employee", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.User", "UserCreator")
+                        .WithMany()
+                        .HasForeignKey("UserCreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Person");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("UserCreator");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Kassa.Base.ItemExpenditureOrIncome", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Bank.Base.TypeCashFlow", "TypeCashFlow")
+                        .WithMany()
+                        .HasForeignKey("TypeCashFlowId");
+
+                    b.Navigation("TypeCashFlow");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Kassa.Base.TypeOperationCash", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Accounting.AccountingPlan", "AccountingPlan")
+                        .WithMany()
+                        .HasForeignKey("AccountingPlanId");
+
+                    b.HasOne("Agro.DAL.Entities.Kassa.Base.ItemExpenditureOrIncome", "ItemExpenditureOrIncome")
+                        .WithMany()
+                        .HasForeignKey("ItemExpenditureOrIncomeId");
+
+                    b.HasOne("Agro.DAL.Entities.TypeDoc", "TypeDoc")
+                        .WithMany()
+                        .HasForeignKey("TypeDocId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccountingPlan");
+
+                    b.Navigation("ItemExpenditureOrIncome");
+
+                    b.Navigation("TypeDoc");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Kassa.DocCash", b =>
+                {
+                    b.HasOne("Agro.DAL.Entities.Kassa.AdvanceReport", null)
+                        .WithMany("AdvancesRko")
+                        .HasForeignKey("AdvanceReportId");
+
+                    b.HasOne("Agro.DAL.Entities.BankDetails", "BankDetailsOrg")
+                        .WithMany()
+                        .HasForeignKey("BankDetailsOrgId");
+
+                    b.HasOne("Agro.DAL.Entities.Personnel.Employee", "Cashier")
+                        .WithMany()
+                        .HasForeignKey("CashierId");
+
+                    b.HasOne("Agro.DAL.Entities.Counter.Contract", "Contract")
+                        .WithMany()
+                        .HasForeignKey("ContractId");
+
+                    b.HasOne("Agro.DAL.Entities.Counter.Counterparty", "Counterparty")
+                        .WithMany()
+                        .HasForeignKey("CounterpartyId");
+
+                    b.HasOne("Agro.DAL.Entities.Accounting.AccountingPlan", "Credit")
+                        .WithMany()
+                        .HasForeignKey("CreditId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Accounting.AccountingPlan", "Debit")
+                        .WithMany()
+                        .HasForeignKey("DebitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Personnel.Employee", "Director")
+                        .WithMany()
+                        .HasForeignKey("DirectorId");
+
+                    b.HasOne("Agro.DAL.Entities.Organization.Division", "Division")
+                        .WithMany()
+                        .HasForeignKey("DivisionId");
+
+                    b.HasOne("Agro.DAL.Entities.Personnel.Employee", "GeneralAccountant")
+                        .WithMany()
+                        .HasForeignKey("GeneralAccountantId");
+
+                    b.HasOne("Agro.DAL.Entities.InvoiceEntity.Invoice", "Invoice")
+                        .WithMany()
+                        .HasForeignKey("InvoiceId");
+
+                    b.HasOne("Agro.DAL.Entities.Kassa.Base.ItemExpenditureOrIncome", "ItemExpenditureOrIncome")
+                        .WithMany()
+                        .HasForeignKey("ItemExpenditureOrIncomeId");
+
+                    b.HasOne("Agro.DAL.Entities.Nds", "Nds")
+                        .WithMany()
+                        .HasForeignKey("NdsId");
+
+                    b.HasOne("Agro.DAL.Entities.Organization.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Personnel.People", "People")
+                        .WithMany()
+                        .HasForeignKey("PeopleId");
+
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Storage.StorageLocation", "StorageLocation")
+                        .WithMany()
+                        .HasForeignKey("StorageLocationId");
+
+                    b.HasOne("Agro.DAL.Entities.TypeDoc", "TypeDoc")
+                        .WithMany()
+                        .HasForeignKey("TypeDocId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agro.DAL.Entities.Kassa.Base.TypeOperationCash", "TypeOperationCash")
+                        .WithMany()
+                        .HasForeignKey("TypeOperationCashId");
+
+                    b.HasOne("Agro.DAL.Entities.User", "UserCreator")
+                        .WithMany()
+                        .HasForeignKey("UserCreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BankDetailsOrg");
+
+                    b.Navigation("Cashier");
+
+                    b.Navigation("Contract");
+
+                    b.Navigation("Counterparty");
+
+                    b.Navigation("Credit");
+
+                    b.Navigation("Debit");
+
+                    b.Navigation("Director");
+
+                    b.Navigation("Division");
+
+                    b.Navigation("GeneralAccountant");
+
+                    b.Navigation("Invoice");
+
+                    b.Navigation("ItemExpenditureOrIncome");
+
+                    b.Navigation("Nds");
+
+                    b.Navigation("Organization");
+
+                    b.Navigation("People");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("StorageLocation");
+
+                    b.Navigation("TypeDoc");
+
+                    b.Navigation("TypeOperationCash");
+
+                    b.Navigation("UserCreator");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Organization.Division", b =>
@@ -7821,7 +8695,7 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany("Divisions")
                         .HasForeignKey("OrganizationId");
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -7836,7 +8710,7 @@ namespace Agro.DAL.MySql.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -7958,7 +8832,7 @@ namespace Agro.DAL.MySql.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -7973,7 +8847,7 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Personnel.People", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -7982,7 +8856,7 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Personnel.Post", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -7991,7 +8865,7 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Personnel.StaffList", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -8037,7 +8911,7 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany()
                         .HasForeignKey("NdsId");
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -8085,6 +8959,10 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Registers.AccountingPlanRegister", b =>
                 {
+                    b.HasOne("Agro.DAL.Entities.Kassa.AdvanceReport", null)
+                        .WithMany("AccountingPlanRegisters")
+                        .HasForeignKey("AdvanceReportId");
+
                     b.HasOne("Agro.DAL.Entities.Warehouse.Coming.ComingTmc", "ComingTmc")
                         .WithMany("AccountingPlanRegisters")
                         .HasForeignKey("ComingTmcId");
@@ -8105,6 +8983,10 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany("AccountingPlanRegisters")
                         .HasForeignKey("DecommissioningTmcId");
 
+                    b.HasOne("Agro.DAL.Entities.Kassa.DocCash", "DocCash")
+                        .WithMany("AccountingPlanRegisters")
+                        .HasForeignKey("DocCashId");
+
                     b.Navigation("ComingTmc");
 
                     b.Navigation("Credit");
@@ -8112,6 +8994,8 @@ namespace Agro.DAL.MySql.Migrations
                     b.Navigation("Debit");
 
                     b.Navigation("DecommissioningTmc");
+
+                    b.Navigation("DocCash");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Registers.TmcRegister", b =>
@@ -8194,7 +9078,7 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Storage.StorageLocation", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -8255,7 +9139,7 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany("ComingTmc")
                         .HasForeignKey("InvoiceFacturId");
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -8352,7 +9236,7 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Coming.InvoiceFactur", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -8383,7 +9267,7 @@ namespace Agro.DAL.MySql.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -8424,7 +9308,7 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Decommissioning.GroupObject", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -8484,7 +9368,7 @@ namespace Agro.DAL.MySql.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -8497,7 +9381,7 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Warehouse.Decommissioning.TypeObject", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -8512,7 +9396,7 @@ namespace Agro.DAL.MySql.Migrations
                         .WithMany()
                         .HasForeignKey("GroupObjectId");
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -8539,7 +9423,7 @@ namespace Agro.DAL.MySql.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -8576,7 +9460,7 @@ namespace Agro.DAL.MySql.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -8615,7 +9499,7 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Weight.Driver", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -8624,7 +9508,7 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Weight.Transport", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -8633,7 +9517,7 @@ namespace Agro.DAL.MySql.Migrations
 
             modelBuilder.Entity("Agro.DAL.Entities.Weight.Weight", b =>
                 {
-                    b.HasOne("Agro.DAL.Entities.Status", "Status")
+                    b.HasOne("Agro.DAL.Entities.Base.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
@@ -8684,6 +9568,11 @@ namespace Agro.DAL.MySql.Migrations
             modelBuilder.Entity("Agro.DAL.Entities.Agronomy.Department", b =>
                 {
                     b.Navigation("Fields");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Bank.Pay.PaymentOrder", b =>
+                {
+                    b.Navigation("Histories");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.CheckingCounterparty.Components.ArbitrationCasesRecord", b =>
@@ -8816,6 +9705,26 @@ namespace Agro.DAL.MySql.Migrations
             modelBuilder.Entity("Agro.DAL.Entities.InvoiceEntity.RegistryInvoice", b =>
                 {
                     b.Navigation("Invoices");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Kassa.AdvanceReport", b =>
+                {
+                    b.Navigation("AccountingPlanRegisters");
+
+                    b.Navigation("AdvancesPp");
+
+                    b.Navigation("AdvancesRko");
+
+                    b.Navigation("Histories");
+
+                    b.Navigation("Produkts");
+                });
+
+            modelBuilder.Entity("Agro.DAL.Entities.Kassa.DocCash", b =>
+                {
+                    b.Navigation("AccountingPlanRegisters");
+
+                    b.Navigation("Histories");
                 });
 
             modelBuilder.Entity("Agro.DAL.Entities.Organization.Organization", b =>

@@ -1,12 +1,12 @@
-﻿
-using Agro.DAL;
+﻿using Agro.DAL;
+using Agro.DAL.Entities;
 using Agro.DAL.Entities.Personnel;
-using Agro.Interfaces.Base.Repositories.Base;
+using Agro.Interfaces.Base.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Agro.Services.Repositories;
 
-public class PeopleRepository:IBaseRepository<People>
+public class PeopleRepository:IPeopleRepository
 {
     private readonly AgroDb _db;
 
@@ -61,5 +61,18 @@ public class PeopleRepository:IBaseRepository<People>
     public Task<DateTime> GetClosedPeriodAsync(CancellationToken cancel = default)
     {
         throw new NotImplementedException();
+    }
+
+
+    public async Task<IEnumerable<IdentityDocument>?> GetAllDocumentsAsync(int idPeople, CancellationToken cancel = default)
+    {
+        var people = await _db.People.FirstOrDefaultAsync(p => p.Id==idPeople, cancel).ConfigureAwait(false);
+        return people!.Documents;
+    }
+
+    public async Task<IdentityDocument?> GetDocumentAsync(int idPeople, CancellationToken cancel = default)
+    {
+        var people = await _db.People.FirstOrDefaultAsync(p => p.Id == idPeople, cancel).ConfigureAwait(false);
+        return people!.Documents!.Where(d => d.TypeDoc.Id == 10).FirstOrDefault(d => d.Status!.Id == 5);
     }
 }

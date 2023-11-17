@@ -5,12 +5,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows;
-using Agro.DAL.Entities;
 using Agro.DAL.Entities.Organization;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.Views.Windows.Personnel;
+using Agro.DAL.Entities.Base;
 
 namespace Agro.WPF.ViewModels.Personnel;
 public class DivisionsViewModel : ViewModel

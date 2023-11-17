@@ -9,12 +9,15 @@ using Agro.Interfaces.Base.Repositories.Base;
 using System.Windows;
 using System;
 using Agro.DAL.Entities.Personnel;
+using ControlzEx.Standard;
+using Dadata.Model;
+using Dadata;
 
 namespace Agro.WPF.ViewModels.Personnel;
 public class PeopleViewModel : ViewModel
 {
     private readonly IBaseRepository<People> _peopleRepository;
-    private readonly IBaseRepository<Status> _statusRepository;
+    private readonly IBaseRepository<DAL.Entities.Base.Status> _statusRepository;
     private string _title = null!;
     public string Title { get => _title; set => Set(ref _title, value); }
 
@@ -27,7 +30,7 @@ public class PeopleViewModel : ViewModel
 
     public object SenderModel { get; set; }= null!;
 
-    public PeopleViewModel(IBaseRepository<People> peopleRepository, IBaseRepository<Status> statusRepository)
+    public PeopleViewModel(IBaseRepository<People> peopleRepository, IBaseRepository<DAL.Entities.Base.Status> statusRepository)
     {
         _peopleRepository = peopleRepository;
         _statusRepository = statusRepository;
@@ -132,6 +135,44 @@ public class PeopleViewModel : ViewModel
             People.Documents!.Remove(Document!);
         }
     }
+
+    #region Склонение
+
+    private ICommand? _getDeclinationCommand;
+
+    public ICommand GetDeclinationCommand => _getDeclinationCommand
+        ??= new RelayCommand(OnGetDeclinationExecuted, GetDeclinationCan);
+
+    private bool GetDeclinationCan(object arg)
+    {
+        return !string.IsNullOrEmpty(People.Surname) && !string.IsNullOrEmpty(People.Name) && !string.IsNullOrEmpty(People.Patronymic);
+    }
+
+    private async void OnGetDeclinationExecuted(object obj)
+    {
+        string sours = $"{People.Surname} {People.Name} {People.Patronymic}";
+        var token = "2a41923dd0dc7765f2b1df59f31e15a326f34b5a";
+        var secret = "a652e49f451941e1bb6049970ffa78792ac3e06b";
+        var api = new CleanClientAsync(token, secret);
+        var result = await api.Clean<Fullname>(sours);
+
+        string[] rp = result.result_genitive.Split(" ");
+        People.SurnameRp = rp[0];
+        People.NameRp= rp[1];
+        People.PatronymicRp = rp[2];
+
+        string[] dp = result.result_dative.Split(" ");
+        People.SurnameDp = dp[0];
+        People.NameDp = dp[1];
+        People.PatronymicDp = dp[2];
+
+        string[] tp = result.result_ablative.Split(" ");
+        People.SurnameTp = tp[0];
+        People.NameTp = tp[1];
+        People.PatronymicTp = tp[2];
+    }
+
+    #endregion
     #endregion
 
 }

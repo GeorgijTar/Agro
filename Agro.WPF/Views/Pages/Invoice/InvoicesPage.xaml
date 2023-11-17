@@ -78,7 +78,7 @@
                 <Button BorderBrush="DarkOrange" Width="108"
                         Template="{StaticResource ButtonTemplate}" Margin="2,0"
                         Command="{Binding PrintCommand}"
-                        Visibility="{Binding VisibilityButton}">
+                        >
                     <StackPanel Orientation="Horizontal">
                         <fa5:ImageAwesome Height="12" Icon="Solid_Print"
                                           Margin="8,5"

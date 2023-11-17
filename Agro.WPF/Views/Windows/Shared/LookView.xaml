@@ -1,0 +1,78 @@
+﻿<Window x:Class="Agro.WPF.Views.Windows.Shared.LookView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Agro.WPF.Views.Windows.Shared"
+        xmlns:Wb="clr-namespace:Agro.WPF.Controls"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:dto="clr-namespace:Agro.Dto;assembly=Agro.Dto"
+        xmlns:fa5="http://schemas.fontawesome.com/icons/"
+        mc:Ignorable="d"
+             Title="{Binding Title}" Height="550" Width="1000"
+        DataContext="{Binding LookModel, Source={StaticResource Locator}}"
+        x:Name="StorageWindow">
+    <Window.Resources>
+        <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
+            <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
+                <ContentPresenter RecognizesAccessKey="True"></ContentPresenter>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Background" Value="DarkGreen"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter  Property="Background" Value="Azure" />
+                    <Setter  Property="BorderBrush" Value="DarkBlue" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style TargetType="{x:Type TextBox}"
+               BasedOn="{StaticResource TextBoxStyle}">
+            <Setter Property="Margin" Value="4 4"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <ToolBar>
+                <Button BorderBrush="DarkBlue" Width="90" Command="{Binding PrintCommand}"
+                        CommandParameter="{Binding ElementName=Wb}"
+                            Template="{StaticResource ButtonTemplate}" Margin="2,0">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Solid_Print"
+                                              Margin="8,5"
+                                              Foreground="DarkBlue" />
+                        <TextBlock Text="Печать" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+                <Button BorderBrush="DarkGreen" Width="108" Command="{Binding PreviewCommand}"
+                        CommandParameter="{Binding ElementName=Wb}"
+                            Template="{StaticResource ButtonTemplate}" Margin="2,0">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Solid_Search"
+                                              Margin="2,5"
+                                              Foreground="DarkGreen"/>
+                        <TextBlock Text="Просмотр" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+               </ToolBar>
+            <GroupBox Grid.Row="1">
+             <WebBrowser x:Name="Wb" Wb:BrowserBehavior.Html="{Binding Sours}">
+
+             </WebBrowser>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Window>

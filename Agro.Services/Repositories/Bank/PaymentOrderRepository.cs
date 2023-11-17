@@ -101,12 +101,12 @@ public class PaymentOrderRepository : IPaymentOrderRepository<PaymentOrder>
 
         if (_db.PaymentOrder
             .Where(s => s.Date.Year == DateTime.Now.Year)
-            .Any(p => p.Status!.Id != 6))
+            .Any(p => p.Status.Id != 6))
         {
-            max = await _db.PaymentOrder
-                .Where(p=>p.Status!.Id!=6)
+            max = int.Parse(await _db.PaymentOrder
+                .Where(p=>p.Status.Id!=6)
                 .Where(s=>s.Date.Year==DateTime.Now.Year)
-                .MaxAsync(p => p.Number);
+                .MaxAsync(p => p.Number));
         }
        
         return max + 1;

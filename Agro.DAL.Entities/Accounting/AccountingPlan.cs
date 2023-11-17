@@ -6,7 +6,7 @@ using Agro.DAL.Entities.Base;
 namespace Agro.DAL.Entities.Accounting;
 
 /// <summary>
-/// План счетов
+/// Счет плана счетов
 /// </summary>
 public class AccountingPlan : Entity
 {

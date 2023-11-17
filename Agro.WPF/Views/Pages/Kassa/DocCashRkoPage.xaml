@@ -1,0 +1,540 @@
+﻿<Page x:Class="Agro.WPF.Views.Pages.Kassa.DocCashRkoPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Agro.WPF.Views.Pages.Kassa"
+      xmlns:fa5="http://schemas.fontawesome.com/icons/"
+      xmlns:entities="clr-namespace:Agro.DAL.Entities;assembly=Agro.DAL.Entities"
+      mc:Ignorable="d" 
+      Title="{Binding Title}"  
+      DataContext="{Binding DocCashModel, Source={StaticResource Locator}}"
+      x:Name="DocCashRko">
+    <Page.Resources>
+        <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
+            <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
+                <ContentPresenter RecognizesAccessKey="True"></ContentPresenter>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Background" Value="DarkGreen"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter  Property="Background" Value="Azure" />
+                    <Setter  Property="BorderBrush" Value="DarkBlue" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style TargetType="{x:Type TextBox}"
+               BasedOn="{StaticResource TextBoxStyle}">
+            <Setter Property="Margin" Value="4 4"/>
+        </Style>
+        <Style TargetType="{x:Type ComboBox}"
+               BasedOn="{StaticResource ComboBoxFlatStyle}">
+        </Style>
+    </Page.Resources>
+    <Grid Margin="10" Background="LightGreen">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Номер:" Margin="5,0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Width="80" Text="{Binding DocCash.Number}" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="0" Grid.Column="2" Text="Дата:" VerticalAlignment="Center" Margin="5,0" HorizontalAlignment="Right"/>
+        <DatePicker Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" SelectedDate="{Binding DocCash.Date}"  IsEnabled="{Binding IsEnabled}"/>
+        <TextBlock Grid.Row="0" Grid.Column="5" Text="Счет учета:" VerticalAlignment="Center" Margin="5,0" HorizontalAlignment="Right"/>
+        <DockPanel Grid.Row="0" Grid.Column="6" Grid.ColumnSpan="2" Width="100" VerticalAlignment="Center">
+            <TextBox Width="60" VerticalAlignment="Center" Margin="5,0" IsReadOnly="True"
+                     Text="{Binding DocCash.Credit.Code}" ToolTip="{Binding DocCash.Debit.Name}"/>
+            <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                    BorderBrush="DarkBlue"
+                    Template="{StaticResource ButtonTemplate}" 
+                    ToolTip="Выбрать из справочника"
+                    Command="{Binding }"
+                    IsEnabled="{Binding IsEnabled}">
+                <fa5:ImageAwesome Height="16" Icon="Solid_Book"
+                                      Margin="1,1"
+                                      Foreground="DarkBlue"/>
+            </Button>
+
+        </DockPanel >
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Вид операции:" VerticalAlignment="Center" Margin="5,10,0,0" HorizontalAlignment="Right"/>
+        <ComboBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" VerticalAlignment="Center" 
+                  ItemsSource="{Binding TypeOperations}" 
+                  SelectedItem="{Binding DocCash.TypeOperationCash}" 
+                  Margin="5,10,0,0"
+                  IsEnabled="{Binding IsEnabled}"/>
+        <DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="7" Margin="5" 
+                   Visibility="{Binding IsVisibilityCounterparty}">
+            <TextBlock Text="Контрагент:" VerticalAlignment="Center" Margin="5,0" HorizontalAlignment="Right"/>
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="5,0">
+                <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                        BorderBrush="DarkBlue"
+                        Template="{StaticResource ButtonTemplate}" 
+                        ToolTip="Очистить поле"
+                        Command="{Binding ClearingCommand}" CommandParameter="Counterparty"
+                        IsEnabled="{Binding IsEnabled}">
+                    <fa5:ImageAwesome Height="16" Icon="Solid_Trash"
+                                      Margin="1,1"
+                                      Foreground="DarkBlue"/>
+                </Button>
+                <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                        BorderBrush="DarkBlue"
+                        Template="{StaticResource ButtonTemplate}" 
+                        ToolTip="Выбрать из справочника"
+                        Command="{Binding  ShowCounterpartySprCommand}"
+                        IsEnabled="{Binding IsEnabled}">
+                    <fa5:ImageAwesome Height="16" Icon="Solid_Book"
+                                      Margin="1,1"
+                                      Foreground="DarkBlue"/>
+                </Button>
+            </StackPanel>
+            <Border  CornerRadius="3" BorderThickness="1" BorderBrush="LightSteelBlue" VerticalAlignment="Center" Background="White">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="{Binding DocCash.Counterparty.Name}" Margin="5,0" FontWeight="Bold"
+                               ToolTip="{Binding DocCash.Counterparty.PayName}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding DocCash.Counterparty.Inn, StringFormat='ИНН {0}'}" Margin="5,2"/>
+                        <TextBlock Text="{Binding DocCash.Counterparty.Kpp, StringFormat='КПП {0}'}" Margin="5,2"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </DockPanel>
+        <DockPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="7" Margin="5" Visibility="{Binding IsVisibilityPeople}">
+            <TextBlock VerticalAlignment="Center" Text="{Binding NamePeople}" HorizontalAlignment="Right" Margin="5,0"/>
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="5,0">
+                <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                        BorderBrush="DarkBlue"
+                        Template="{StaticResource ButtonTemplate}" 
+                        ToolTip="Очистить поле"
+                        Command="{Binding ClearingCommand}" CommandParameter="People"
+                        IsEnabled="{Binding IsEnabled}">
+                    <fa5:ImageAwesome Height="16" Icon="Solid_Trash"
+                                      Margin="1,1"
+                                      Foreground="DarkBlue"/>
+                </Button>
+                <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                        BorderBrush="DarkBlue"
+                        Template="{StaticResource ButtonTemplate}" 
+                        ToolTip="Выбрать из справочника"
+                        Command="{Binding ShowPeopleSprCommand }"
+                        IsEnabled="{Binding IsEnabled}">
+                    <fa5:ImageAwesome Height="16" Icon="Solid_Book"
+                                      Margin="1,1"
+                                      Foreground="DarkBlue"/>
+                </Button>
+            </StackPanel>
+            <Border  CornerRadius="3" BorderThickness="1" BorderBrush="LightSteelBlue" VerticalAlignment="Center" Background="White">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding DocCash.People.Surname}" Margin="5,0"/>
+                    <TextBlock Text="{Binding DocCash.People.Name}"/>
+                    <TextBlock Text="{Binding DocCash.People.Patronymic}" Margin="5,0"/>
+                </StackPanel>
+
+            </Border>
+        </DockPanel>
+        <DockPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="7" Margin="5" Visibility="{Binding IsVisibilityBankDetailsOrg}">
+            <TextBlock VerticalAlignment="Center" Text="Банковский счет:" HorizontalAlignment="Right" Margin="5,0"/>
+            <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right" VerticalAlignment="Top"
+                    BorderBrush="DarkBlue"
+                    Template="{StaticResource ButtonTemplate}" 
+                    ToolTip="Очистить поле"
+                    Command="{Binding ClearingCommand}" CommandParameter="BankDetailsOrg"
+                    IsEnabled="{Binding IsEnabled}">
+                <fa5:ImageAwesome Height="16" Icon="Solid_Trash"
+                                  Margin="1,1"
+                                  Foreground="DarkBlue"/>
+            </Button>
+            <ComboBox ItemsSource="{Binding BankDetailsOrg}" 
+                      SelectedItem="{Binding DocCash.BankDetailsOrg}"
+                      Height="66"
+                      IsEnabled="{Binding IsEnabled}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="entities:BankDetails">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding Bs}" Margin="5,0" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding NameBank}" Margin="3,0,0,0"
+                                       Opacity="0.8" FontSize="12" FontWeight="Bold"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="БИК:" Margin="3,0"
+                                       Opacity="0.8" FontSize="12"/>
+                                <TextBlock Text="{Binding Bik}" Margin="3,0"
+                                       Opacity="0.8" FontSize="12"/>
+                                <TextBlock Text="К/сч.:" Margin="3,0"
+                                       Opacity="0.8" FontSize="12"/>
+                                <TextBlock Text="{Binding Ks}" Margin="3,0"
+                                       Opacity="0.8" FontSize="12"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </DockPanel>
+        <DockPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="7" Margin="5" Visibility="{Binding IsVisibilityStorageLocation}">
+            <TextBlock VerticalAlignment="Center" Text="Склад:" HorizontalAlignment="Right" Margin="5,0"/>
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="5,0">
+                <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                        BorderBrush="DarkBlue"
+                        Template="{StaticResource ButtonTemplate}" 
+                        ToolTip="Очистить поле"
+                        Command="{Binding ClearingCommand}" CommandParameter="StorageLocation"
+                        IsEnabled="{Binding IsEnabled}">
+                    <fa5:ImageAwesome Height="16" Icon="Solid_Trash"
+                                      Margin="1,1"
+                                      Foreground="DarkBlue"/>
+                </Button>
+                <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                        BorderBrush="DarkBlue"
+                        Template="{StaticResource ButtonTemplate}" 
+                        ToolTip="Выбрать из справочника"
+                        Command="{Binding ShowStorageLocationsSprCommand}"
+                        IsEnabled="{Binding IsEnabled}">
+                    <fa5:ImageAwesome Height="16" Icon="Solid_Book"
+                                      Margin="1,1"
+                                      Foreground="DarkBlue"/>
+                </Button>
+            </StackPanel>
+            <Border  CornerRadius="3" BorderThickness="1" BorderBrush="LightSteelBlue" VerticalAlignment="Center" Background="White">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding DocCash.StorageLocation.Name}" Margin="5,0"/>
+                </StackPanel>
+            </Border>
+        </DockPanel>
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="Сумма:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
+        <TextBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" TextAlignment="Right"
+                 Text="{Binding DocCash.Amount, StringFormat=C, 
+            ConverterCulture=Ru-ru, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 IsEnabled="{Binding IsEnabled}"/>
+        <StackPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <TextBlock  Text="Счет дебита:" Margin="5,0" VerticalAlignment="Center"/>
+            <DockPanel  Width="100" VerticalAlignment="Center">
+                <TextBox Width="60" VerticalAlignment="Center" Margin="5,0" IsReadOnly="True"
+                         Text="{Binding DocCash.Debit.Code}" ToolTip="{Binding DocCash.Debit.Name}"/>
+                <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                        BorderBrush="DarkBlue"
+                        Template="{StaticResource ButtonTemplate}" 
+                        ToolTip="Выбрать из справочника"
+                        Command="{Binding }"
+                        IsEnabled="{Binding IsEnabled}">
+                    <fa5:ImageAwesome Height="16" Icon="Solid_Book"
+                                      Margin="1,1"
+                                      Foreground="DarkBlue"/>
+                </Button>
+            </DockPanel>
+        </StackPanel>
+        <DockPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="8" Visibility="{Binding IsVisibilityContract}">
+            <TextBlock VerticalAlignment="Center" Text="Договор:" HorizontalAlignment="Right" Margin="5,0"/>
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="5,0">
+                <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                        BorderBrush="DarkBlue"
+                        Template="{StaticResource ButtonTemplate}" 
+                        ToolTip="Очистить поле"
+                        Command="{Binding ClearingCommand}" CommandParameter="Contract"
+                        IsEnabled="{Binding IsEnabled}">
+                    <fa5:ImageAwesome Height="16" Icon="Solid_Trash"
+                                      Margin="1,1"
+                                      Foreground="DarkBlue"/>
+                </Button>
+                <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                        BorderBrush="DarkBlue"
+                        Template="{StaticResource ButtonTemplate}" 
+                        ToolTip="Выбрать из справочника"
+                        Command="{Binding ShowContractSprCommand}"
+                        IsEnabled="{Binding IsEnabled}">
+                    <fa5:ImageAwesome Height="16" Icon="Solid_Book"
+                                      Margin="1,1"
+                                      Foreground="DarkBlue"/>
+                </Button>
+            </StackPanel>
+            <Border  CornerRadius="3" BorderThickness="1" BorderBrush="LightSteelBlue" VerticalAlignment="Center" Background="White">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding DocCash.Contract.Type.Name}" Margin="5,0"/>
+                    <TextBlock Text="{Binding DocCash.Contract.Number, StringFormat='№ {0}'}" Margin="5,0"/>
+                    <TextBlock Text="{Binding DocCash.Contract.Date, StringFormat='от dd.MM.yyyy'}"/>
+                </StackPanel>
+            </Border>
+        </DockPanel>
+        <DockPanel Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="8" Visibility="{Binding IsVisibilityInvoice}">
+            <TextBlock VerticalAlignment="Center" Text="Счет на оплату:" HorizontalAlignment="Right" Margin="5,0"/>
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="5,0">
+                <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                        BorderBrush="DarkBlue"
+                        Template="{StaticResource ButtonTemplate}" 
+                        ToolTip="Очистить поле"
+                        Command="{Binding  ClearingCommand}" CommandParameter="Invoice"
+                        IsEnabled="{Binding IsEnabled}">
+                    <fa5:ImageAwesome Height="16" Icon="Solid_Trash"
+                                      Margin="1,1"
+                                      Foreground="DarkBlue"/>
+                </Button>
+                <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                        BorderBrush="DarkBlue"
+                        Template="{StaticResource ButtonTemplate}" 
+                        ToolTip="Выбрать из справочника"
+                        Command="{Binding ShowInvoiceSprCommand}"
+                        IsEnabled="{Binding IsEnabled}">
+                    <fa5:ImageAwesome Height="16" Icon="Solid_Book"
+                                      Margin="1,1"
+                                      Foreground="DarkBlue"/>
+                </Button>
+            </StackPanel>
+            <Border  CornerRadius="3" BorderThickness="1" BorderBrush="LightSteelBlue" VerticalAlignment="Center" Background="White">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding DocCash.Invoice.Number, StringFormat='№ {0}'}"/>
+                    <TextBlock Text="{Binding DocCash.Invoice.DateInvoice, StringFormat=' от dd.mm.yyyy'}"/>
+                </StackPanel>
+            </Border>
+        </DockPanel>
+        <StackPanel Grid.Row="10" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="6" Visibility="{Binding IsVisibilityNds}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Ставка НДС:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
+                <ComboBox Width="200" SelectedIndex="2"
+                          ItemsSource="{Binding Nds}" 
+                          SelectedItem="{Binding DocCash.Nds}"
+                          IsEnabled="{Binding IsEnabled}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0" Text="Сумма НДС:"/>
+                <TextBox Width="200" 
+                         Text="{Binding DocCash.AmountNds, StringFormat=C, ConverterCulture=Ru-ru, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay }" 
+                         TextAlignment="Right"
+                         IsEnabled="{Binding IsEnabled}"/>
+            </StackPanel>
+        </StackPanel>
+        <TextBlock Grid.Row="12" Grid.Column="0" Text="Статья расходов:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
+        <ComboBox Grid.Row="12"  Grid.Column="1" Grid.ColumnSpan="7" 
+                  ItemsSource="{Binding ItemExpenditureOrIncomes}" 
+                  SelectedItem="{Binding DocCash.ItemExpenditureOrIncome}"
+                  IsEnabled="{Binding IsEnabled}"/>
+        <Expander Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="7"  Header="Реквизиты печатной формы" Margin="5" IsExpanded="True">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="9"/>
+                    <ColumnDefinition Width="14.687"/>
+                    <ColumnDefinition Width="63.193"/>
+                    <ColumnDefinition Width="26.807"/>
+                    <ColumnDefinition Width="479.193"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="2" Text="Выдано:" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="13,0,0,0"/>
+                <TextBox Grid.Column="3" VerticalAlignment="Center" Width="500" Margin="3,0,3,0" 
+                         Text="{Binding DocCash.From, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                         IsEnabled="{Binding IsEnabled}" Grid.ColumnSpan="2"/>
+                <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Orientation="Horizontal" Margin="0,0,0,26" Grid.RowSpan="2">
+                    <TextBlock  Text="По документу:" VerticalAlignment="Center" 
+                               HorizontalAlignment="Right" Margin="5,0"/>
+                    <TextBox  VerticalAlignment="Center" Width="500" Margin="5" 
+                             Text="{Binding DocCash.FoundationDoc, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                             IsEnabled="{Binding IsEnabled}"/>
+                </StackPanel>
+
+                <TextBlock Grid.Row="2" Grid.Column="1" Text="Основание:" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="9,0,0,0" Grid.ColumnSpan="2"/>
+                <TextBox Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" Width="500" Margin="3,10,3,0"
+                         Text="{Binding DocCash.Footing, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                         IsEnabled="{Binding IsEnabled}" Grid.ColumnSpan="2"/>
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Приложение:" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="8,0,0,0" Grid.ColumnSpan="3"/>
+                <TextBox Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" Width="500" Margin="3,5,3,0"
+                         Text="{Binding DocCash.ApplicationDoc, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                         IsEnabled="{Binding IsEnabled}" Grid.ColumnSpan="2"/>
+                <DockPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="5" Margin="0,0,0,28" Grid.RowSpan="2">
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="5,0">
+                        <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                                BorderBrush="DarkBlue"
+                                Template="{StaticResource ButtonTemplate}" 
+                                ToolTip="Очистить поле"
+                                Command="{Binding  ClearingCommand}" CommandParameter="Cashier"
+                                IsEnabled="{Binding IsEnabled}">
+                            <fa5:ImageAwesome Height="16" Icon="Solid_Trash"
+                                              Margin="1,1"
+                                              Foreground="DarkBlue"/>
+                        </Button>
+                        <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                                BorderBrush="DarkBlue"
+                                Template="{StaticResource ButtonTemplate}" 
+                                ToolTip="Выбрать из справочника"
+                                Command="{Binding ShowEmployeesCommand}"
+                                CommandParameter="Cashier"
+                                IsEnabled="{Binding IsEnabled}">
+                            <fa5:ImageAwesome Height="16" Icon="Solid_Book"
+                                              Margin="1,1"
+                                              Foreground="DarkBlue"/>
+                        </Button>
+                    </StackPanel>
+                    <TextBlock Text="Кассир:" VerticalAlignment="Center" Margin="5,0"/>
+                    <Border  CornerRadius="3" BorderThickness="1" BorderBrush="LightSteelBlue" VerticalAlignment="Center" Background="White">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding DocCash.Cashier.People.Surname}" Margin="5,0"/>
+                            <TextBlock Text="{Binding DocCash.Cashier.People.Name}"/>
+                            <TextBlock Text="{Binding DocCash.Cashier.People.Patronymic}" Margin="5,0"/>
+                        </StackPanel>
+                    </Border>
+                </DockPanel>
+                <DockPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5" Margin="0,0,0,28" Grid.RowSpan="2">
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="5,0">
+                        <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                                BorderBrush="DarkBlue"
+                                Template="{StaticResource ButtonTemplate}" 
+                                ToolTip="Очистить поле"
+                                Command="{Binding  ClearingCommand}" CommandParameter="GeneralAccountant"
+                                IsEnabled="{Binding IsEnabled}">
+                            <fa5:ImageAwesome Height="16" Icon="Solid_Trash"
+                                              Margin="1,1"
+                                              Foreground="DarkBlue"/>
+                        </Button>
+                        <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                                BorderBrush="DarkBlue"
+                                Template="{StaticResource ButtonTemplate}" 
+                                ToolTip="Выбрать из справочника"
+                                Command="{Binding ShowEmployeesCommand}"
+                                CommandParameter="GeneralAccountant"
+                                IsEnabled="{Binding IsEnabled}">
+                            <fa5:ImageAwesome Height="16" Icon="Solid_Book"
+                                              Margin="1,1"
+                                              Foreground="DarkBlue"/>
+                        </Button>
+                    </StackPanel>
+                    <TextBlock Text="Гл. бухгалтер:" VerticalAlignment="Center" Margin="5,0"/>
+                    <Border  CornerRadius="3" BorderThickness="1" BorderBrush="LightSteelBlue" VerticalAlignment="Center" Background="White">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding DocCash.GeneralAccountant.People.Surname}" Margin="5,0"/>
+                            <TextBlock Text="{Binding DocCash.GeneralAccountant.People.Name}"/>
+                            <TextBlock Text="{Binding DocCash.GeneralAccountant.People.Patronymic}" Margin="5,0"/>
+                        </StackPanel>
+                    </Border>
+                </DockPanel>
+                <DockPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="5">
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="5,0">
+                        <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                                BorderBrush="DarkBlue"
+                                Template="{StaticResource ButtonTemplate}" 
+                                ToolTip="Очистить поле"
+                                Command="{Binding  ClearingCommand}" CommandParameter="Director"
+                                IsEnabled="{Binding IsEnabled}">
+                            <fa5:ImageAwesome Height="16" Icon="Solid_Trash"
+                                              Margin="1,1"
+                                              Foreground="DarkBlue"/>
+                        </Button>
+                        <Button Width="26" Height="26" Margin="1,1,1,1" DockPanel.Dock="Right"
+                                BorderBrush="DarkBlue"
+                                Template="{StaticResource ButtonTemplate}" 
+                                ToolTip="Выбрать из справочника"
+                                Command="{Binding ShowEmployeesCommand}"
+                                CommandParameter="Director"
+                                IsEnabled="{Binding IsEnabled}">
+                            <fa5:ImageAwesome Height="16" Icon="Solid_Book"
+                                              Margin="1,1"
+                                              Foreground="DarkBlue"/>
+                        </Button>
+                    </StackPanel>
+                    <TextBlock Text="Руководитель:" VerticalAlignment="Center" Margin="5,0"/>
+                    <Border  CornerRadius="3" BorderThickness="1" BorderBrush="LightSteelBlue" VerticalAlignment="Center" Background="White">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding DocCash.Director.People.Surname}" Margin="5,0"/>
+                            <TextBlock Text="{Binding DocCash.Director.People.Name}"/>
+                            <TextBlock Text="{Binding DocCash.Director.People.Patronymic}" Margin="5,0"/>
+                        </StackPanel>
+                    </Border>
+                </DockPanel>
+            </Grid>
+        </Expander>
+        <TextBlock Grid.Row="14" Grid.Column="0" Text="Примечание:" Margin="5,0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Text="{Binding DocCash.Note}"  Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="7"
+                 IsEnabled="{Binding IsEnabled}"/>
+
+        <StackPanel Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="8" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+            <Button BorderBrush="DarkBlue" Width="108"
+                    Template="{StaticResource ButtonTemplate}"  Margin="0,2,3,15"
+                    Command="{Binding LookCommand}" CommandParameter="{Binding ElementName=DocCashRko}" >
+                <StackPanel Orientation="Horizontal">
+                    <fa5:ImageAwesome Height="18" Icon="Solid_Print"
+                                      Margin="8,5"
+                                      Foreground="DarkBlue" />
+                    <TextBlock Text="Распечатать" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                </StackPanel>
+            </Button>
+            <Button BorderBrush="DarkBlue" Width="158"
+                    Template="{StaticResource ButtonTemplate}"  Margin="0,2,3,15"
+                    Command="{Binding SaveCommand}"
+                    CommandParameter="{Binding ElementName=DocCashRko}"
+                    IsEnabled="{Binding IsEnabled}">
+                <StackPanel Orientation="Horizontal">
+                    <fa5:ImageAwesome Height="18" Icon="Solid_Save"
+                                      Margin="8,5"
+                                      Foreground="DarkBlue" />
+                    <TextBlock Text="Провести и закрыть" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                </StackPanel>
+            </Button>
+            <Button BorderBrush="DarkBlue" Width="108"
+                    Template="{StaticResource ButtonTemplate}"  Margin="0,2,3,15"
+                    Command="{Binding SaveCommand}" 
+                    CommandParameter="{Binding ElementName=DocCashRko}"
+                    IsEnabled="{Binding IsEnabled}">
+                <StackPanel Orientation="Horizontal">
+                    <fa5:ImageAwesome Height="18" Icon="Solid_Save"
+                                      Margin="8,5"
+                                      Foreground="DarkBlue" />
+                    <TextBlock Text="Сохранить" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                </StackPanel>
+            </Button>
+            <Button BorderBrush="DarkBlue" Width="108"
+                    Template="{StaticResource ButtonTemplate}" Margin="3,2,15,15"
+                    Command="{Binding CloseCommand}" 
+                    CommandParameter="{Binding ElementName=DocCashRko}">
+                <StackPanel Orientation="Horizontal">
+                    <fa5:ImageAwesome Height="18" Icon="Solid_DoorOpen"
+                                      Margin="8,5"
+                                      Foreground="DarkBlue" />
+                    <TextBlock Text="Отмена" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <StackPanel  Grid.Row="15" Grid.Column="0" Margin="10" Orientation="Horizontal">
+            <TextBlock Text="Статус:" Margin="5,0"/>
+            <TextBlock Text="{Binding DocCash.Status.Name}"/>
+            <TextBlock Text="ID:" Margin="10,0,5,0"/>
+            <TextBlock Text="{Binding DocCash.Id}"/>
+        </StackPanel>
+
+    </Grid>
+</Page>

@@ -3,6 +3,8 @@ using Agro.DAL.Entities;
 using Agro.DAL.Entities.Accounting;
 using Agro.DAL.Entities.Bank.Base;
 using Agro.DAL.Entities.Bank.Pay;
+using Agro.DAL.Entities.Base;
+using Agro.DAL.Entities.Kassa.Base;
 using Agro.DAL.Entities.Organization;
 using Agro.DAL.Entities.Storage;
 using Agro.DAL.Entities.TaxesType;
@@ -157,4 +159,12 @@ public interface IReferencesRepository
     /// <param name="cancel"></param>
     /// <returns></returns>
     public Task<IEnumerable<GroupObject>?> GetAllGroupObjectAsync(CancellationToken cancel = default);
+
+    /// <summary>
+    /// Справочник видов операций с наличными
+    /// </summary>
+    /// <param name="cancel"></param>
+    /// <returns></returns>
+    public Task<IEnumerable<TypeOperationCash>?> GetAllTypeOperationCashAsync(CancellationToken cancel = default);
 }
+

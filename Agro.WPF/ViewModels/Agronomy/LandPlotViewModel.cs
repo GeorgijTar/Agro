@@ -8,6 +8,7 @@ using Agro.DAL.Entities.Agronomy;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.ViewModels.Base;
+using Agro.DAL.Entities.Base;
 
 namespace Agro.WPF.ViewModels.Agronomy;
 

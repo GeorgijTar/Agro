@@ -114,7 +114,23 @@
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
-                   </MenuItem>
+                    <MenuItem Header="Касса">
+                        <MenuItem.Icon>
+                            <fa5:ImageAwesome Height="32" Icon="Solid_CashRegister" Foreground="DarkBlue"/>
+                        </MenuItem.Icon>
+                        <MenuItem Header="Кассовые документы" Command="{Binding ShowCashDocsCommand}">
+                            <MenuItem.Icon>
+                                <fa5:ImageAwesome Height="32" Icon="Solid_CommentDollar" Foreground="DarkBlue"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Авансовые отчеты" Command="{Binding ShowAdvanceReportsCommand}">
+                            <MenuItem.Icon>
+                                <fa5:ImageAwesome Height="32" Icon="Solid_Expand" Foreground="DarkBlue"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+                </MenuItem>
+
                 <MenuItem Header="Склад">
                     <MenuItem.Icon>
                         <fa5:ImageAwesome Height="32" Icon="Solid_Boxes" Foreground="DarkBlue"/>
@@ -232,6 +248,7 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
+                <!--<MenuItem Header="Тест" Command="{Binding TestCommand}"></MenuItem>-->
             </Menu>
         </Grid>
 

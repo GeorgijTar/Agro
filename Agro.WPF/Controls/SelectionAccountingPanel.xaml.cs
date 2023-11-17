@@ -5,10 +5,7 @@ using System.Windows.Input;
 
 namespace Agro.WPF.Controls
 {
-    /// <summary>
-    /// Логика взаимодействия для SelectionPanel.xaml
-    /// </summary>
-    public partial class SelectionAccountingPanel
+ public partial class SelectionAccountingPanel
     {
 
         #region ItemSource : IEnumerable - Элементы панели

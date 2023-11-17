@@ -1,0 +1,287 @@
+﻿<Page x:Class="Agro.WPF.Views.Pages.Kassa.DocsCashPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Agro.WPF.Views.Pages.Kassa"
+      xmlns:fa5="http://schemas.fontawesome.com/icons/"
+      xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+      mc:Ignorable="d" 
+      Title="{Binding Title}"  
+        DataContext="{Binding DocsCashModel, Source={StaticResource Locator}}"
+        x:Name="DocsCash">
+    <Page.Resources>
+        <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
+            <Border BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="2" CornerRadius="4">
+                <ContentPresenter RecognizesAccessKey="True"></ContentPresenter>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Background" Value="DarkGreen"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter  Property="Background" Value="Azure" />
+                    <Setter  Property="BorderBrush" Value="DarkBlue" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style TargetType="{x:Type TextBox}"
+               BasedOn="{StaticResource TextBoxStyle}">
+            <Setter Property="Margin" Value="4 4"/>
+        </Style>
+        <Style TargetType="{x:Type ComboBox}"
+        BasedOn="{StaticResource ComboBoxFlatStyle}">
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <ToolBar Grid.Row="0">
+                <Button BorderBrush="DarkBlue" Width="135" Command="{Binding AddPkoCommand}"
+                        Template="{StaticResource ButtonTemplate}" Margin="2,0">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Solid_PlusCircle"
+                                              Margin="8,5"
+                                              Foreground="DarkBlue" />
+                        <TextBlock Text="Создать приход" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+                <Button BorderBrush="DarkRed" Width="135" Command="{Binding AddRkoCommand}"
+                        Template="{StaticResource ButtonTemplate}" Margin="2,0">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Solid_MinusCircle"
+                                          Margin="8,5"
+                                          Foreground="DarkRed" />
+                        <TextBlock Text="Создать расход" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+                <Button BorderBrush="DarkSalmon" Width="128" Command="{Binding LookDocCashCommand}"
+                        Template="{StaticResource ButtonTemplate}" Margin="2,0">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Solid_Search"
+                                          Margin="8,5"
+                                          Foreground="DarkSalmon" />
+                        <TextBlock Text="Просмотреть" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+
+                <Button BorderBrush="DarkGreen" Width="112" Command="{Binding EditDocCashCommand}"
+                            Template="{StaticResource ButtonTemplate}" Margin="2,0">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Solid_Edit"
+                                              Margin="2,5"
+                                              Foreground="DarkGreen"/>
+                        <TextBlock Text="Редактировать" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+                <Button BorderBrush="Gray" Width="108"
+                        Template="{StaticResource ButtonTemplate}" Margin="2,0"
+                        Command="{Binding DeleteCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Solid_TrashAlt"
+                                          Margin="8,5"
+                                          Foreground="Gray"/>
+                        <TextBlock Text="Удалить" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button BorderBrush="Wheat" Width="90" Command="{Binding ShowTransactionCommand}"
+                        Template="{StaticResource ButtonTemplate}" Margin="2,0">
+                        <StackPanel Orientation="Horizontal">
+                            <fa5:ImageAwesome Height="12" Icon="Solid_Magic"
+                                          Margin="2,5"
+                                          Foreground="Wheat"/>
+                        <TextBlock Text="Проводки" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+                    <Button BorderBrush="DarkOrange" Width="70" Command="{Binding LookCommand}"
+                        Template="{StaticResource ButtonTemplate}" Margin="2,0">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Solid_Print"
+                                          Margin="2,5"
+                                          Foreground="DarkOrange"/>
+                        <TextBlock Text="Печать" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+                <Button BorderBrush="YellowGreen" Width="140"
+                        Template="{StaticResource ButtonTemplate}" Margin="2,0"
+                        Command="{Binding RefreshCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Solid_ArrowAltCircleDown"
+                                          Margin="8,5"
+                                          Foreground="YellowGreen"/>
+                        <TextBlock Text="Обновить список" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+                <Button BorderBrush="OrangeRed" Width="145"
+                        Template="{StaticResource ButtonTemplate}" Margin="2,0"
+                        Command="{Binding ClearFilterCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Height="12" Icon="Solid_Broom"
+                                          Margin="8,5"
+                                          Foreground="OrangeRed"/>
+                        <TextBlock Text="Очистить фильтр" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Button>
+                </StackPanel>
+            </ToolBar>
+            <GroupBox Grid.Row="1" Header="Фильтр" VerticalAlignment ="Top" Margin="5,0">
+                <Grid Background="AliceBlue">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Header="Дата документа">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="с " VerticalAlignment="Center"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="по " VerticalAlignment="Center"/>
+                            <DatePicker Grid.Row="0" Grid.Column="1" SelectedDate="{Binding DateOn}" VerticalAlignment="Center"/>
+                            <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding DateOff}" VerticalAlignment="Center"/>
+                        </Grid>
+
+                    </GroupBox>
+                    <GroupBox Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Header="Сумма документа" Margin="5,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="от " VerticalAlignment="Center"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" 
+                                     Text="{Binding AmountOn, 
+                                UpdateSourceTrigger=PropertyChanged}" Width="120"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="до " VerticalAlignment="Center"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" 
+                                     Text="{Binding AmountOff, 
+                                UpdateSourceTrigger=PropertyChanged}" Width="120"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Header="Параметры документа">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="300"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Статус:" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                       Margin="0,0,5,0"/>
+                           <ComboBox Grid.Row="0" Grid.Column="1"  VerticalAlignment="Center"
+                                     ItemsSource="{Binding StatusCollection}" 
+                                     SelectedItem="{Binding Status}"
+                                     SelectedIndex="0"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Тип документа:" VerticalAlignment="Center"
+                                       Margin="0,0,5,0"/>
+                            <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"
+                                      ItemsSource="{Binding TypeDocCollection}" 
+                                      SelectedItem="{Binding TypeDoc}"
+                                      SelectedIndex="0"/>
+                            <TextBlock Grid.Row="0" Grid.Column="2" Text="Вид операции" VerticalAlignment="Center" Margin="5,0"/>
+                            <ComboBox Grid.Row="0" Grid.Column="3" VerticalAlignment="Center"
+                                      ItemsSource="{Binding TypeOperationCashCollection}" 
+                                      SelectedItem="{Binding TypeOperationCash}"
+                                      SelectedIndex="0"/>
+                            <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Text="Ф.И.О." 
+                                       HorizontalAlignment="Right" Margin="5,0"/>
+                            <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Fio}"/>
+                        </Grid>
+                    </GroupBox>
+                   
+                </Grid>
+            </GroupBox>
+            <GroupBox Grid.Row="2">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Текущий остаток в кассе:"  VerticalAlignment="Center " Margin="5"/>
+                    <TextBlock VerticalAlignment="Center" Margin="5"
+                        Text="{Binding CurrentBalance, StringFormat=C2, ConverterCulture='Ru-ru'}"/>
+                </StackPanel>
+            </GroupBox>
+
+            <Grid Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <GroupBox Header="Кассовые документы" Grid.Row="0" >
+                    <DataGrid SelectedItem="{Binding SelecteDocCash}" 
+                                  AutoGenerateColumns="False"
+                                  ItemsSource="{Binding CollectionView}"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False" CanUserResizeColumns="True">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Создать" Command="{Binding AddCommand}"></MenuItem>
+                                <MenuItem Header="Редактировать" Command="{Binding EditCommand, UpdateSourceTrigger=PropertyChanged}"></MenuItem>
+                                <MenuItem Header="Удалить" Command="{Binding DeleteCommand}"></MenuItem>
+                                <Separator/>
+                                <MenuItem Header="Провести" Command="{Binding SpendCommand}"></MenuItem>
+                                <MenuItem Header="Отменить проводку" Command="{Binding CancelSpendCommand}"></MenuItem>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="MouseDoubleClick">
+                                <b:InvokeCommandAction Command="{Binding SelectRowCommand}" 
+                                                           CommandParameter="{Binding ElementName=ContractsWindow}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                        <!--Расшифровка строки-->
+                        <!--<DataGrid.RowDetailsTemplate>
+                            <DataTemplate>
+                                <TextBlock Background="Orange" Text="{Binding Fio}" TextWrapping="Wrap"
+                                           HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                            </DataTemplate>
+                        </DataGrid.RowDetailsTemplate>-->
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="40" Header="ID" Binding="{Binding Id}"/>
+                            <DataGridTextColumn Width="100" Header="Статус" Binding="{Binding Status}"/>
+                            <DataGridTextColumn Width="50" Header="Номер" Binding="{Binding Number}"/>
+                            <DataGridTextColumn Width="80" Header="Дата" Binding="{Binding Date, StringFormat=dd.MM.yyyy}"/>
+                            <DataGridTextColumn Width="150" Header="Приход" Binding="{Binding AmountIn, StringFormat=C2, ConverterCulture='Ru-ru'}" Foreground="Green" />
+                            <DataGridTextColumn Width="150" Header="Расход" Binding="{Binding AmountOut, StringFormat=C2, ConverterCulture='Ru-ru'}" Foreground="Red"/>
+                            <DataGridTextColumn Width="450" Header="Кому/От кого" Binding="{Binding From}"></DataGridTextColumn>
+                            <DataGridTextColumn Width="200" Header="Вид операции" Binding="{Binding TypeOperationCash.Name}"/>
+                            <DataGridTextColumn Width="220*" Header="Примечание" Binding="{Binding  Note}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </GroupBox>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

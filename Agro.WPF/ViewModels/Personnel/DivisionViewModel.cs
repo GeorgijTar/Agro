@@ -5,8 +5,8 @@ using System.Windows.Input;
 using System.Windows;
 using System;
 using System.Linq;
-using Agro.DAL.Entities;
 using Agro.Interfaces.Base.Repositories.Base;
+using Agro.DAL.Entities.Base;
 
 namespace Agro.WPF.ViewModels.Personnel;
 

@@ -5,13 +5,14 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Agro.DAL.Entities;
+using Agro.DAL.Entities.Base;
 using Agro.Interfaces.Base.Repositories;
 using Agro.Interfaces.Base.Repositories.Base;
 using Agro.WPF.Commands;
 using Agro.WPF.Helpers;
 using Agro.WPF.ViewModels.Base;
 using Agro.WPF.ViewModels.InvoiceVM;
+using Agro.WPF.ViewModels.Kassa;
 using Agro.WPF.Views.Pages.Contract;
 using Notification.Wpf;
 
@@ -261,11 +262,18 @@ public class ContractsViewModel : ViewModel
                     invoice.Invoice.BankDetails = SelectedContract.BankDetails;
                     invoice.Invoice.BankDetailsOrg = SelectedContract.BankDetailsOrg;
                 }
-                var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
-                if (window != null!)
-                    window.Close();
+                
                 return;
             }
+
+            if (SenderModel is DocCashViewModel docCashViewModel)
+            {
+                docCashViewModel.DocCash.Contract= SelectedContract;
+            }
+
+            var window = obj as Window ?? throw new InvalidOperationException("Нет окна для закрытия");
+            if (window != null!)
+                window.Close();
             _helperNavigation.ClosePage(TabItem);
         }
     }
